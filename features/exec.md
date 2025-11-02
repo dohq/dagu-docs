@@ -1,16 +1,29 @@
-# Track and Manage Any Command with Web UI
+# Migrating from Cron
 
-**Dagu** is a workflow engine with a Web UI. Single binary, no dependencies, runs on Linux/macOS/Windows. [Install Dagu →](/getting-started/installation)
+## Add Logging, Dashboard, and Notifications to Your Cron Jobs
 
-The `dagu exec` command wraps any shell command with persistent logging, execution history, and a web dashboard—without writing configuration files.
+If your cron jobs look like this:
+
+```bash
+0 2 * * * /usr/bin/python /home/user/backup.py >> /var/log/backup.log 2>&1
+```
+
+Run them through Dagu instead and get:
+- Persistent logs with automatic rotation
+- Web dashboard showing all runs (status, duration, exit codes)
+- Notifications on failure (email, webhooks)
+- Run history and status tracking
+- No need to change your scripts
+
+**Dagu** is a single binary workflow engine. No database, no dependencies. Runs on Linux/macOS/Windows. [Install →](/getting-started/installation)
 
 ## Basic Usage
 
 ```bash
-dagu exec -- python daily_report.py
+dagu exec -- python /home/user/backup.py
 ```
 
-This creates an in-memory workflow, executes it through Dagu's runtime, and stores the run history. All logs and metadata are preserved exactly as if you had written a YAML file.
+That's it. Check the web UI at `http://localhost:8080` to see all runs.
 
 ## Why Use This?
 
@@ -175,8 +188,6 @@ workingDir: /current/directory
 steps:
   - name: main
     command: ["python", "script.py", "--arg=value"]
-params:
-  - CMD=python script.py --arg=value
 ```
 
 With flags:
@@ -200,8 +211,6 @@ env:
 steps:
   - name: main
     command: ["python", "script.py"]
-params:
-  - CMD=python script.py
 ```
 
 This YAML is stored in the run history but **not** written to the DAGs directory. It exists only as run metadata.
@@ -248,7 +257,7 @@ While `dagu exec` doesn't support lifecycle hook flags, you can define handlers 
 # ~/.config/dagu/base.yaml
 handlerOn:
   failure:
-    command: 'curl -X POST https://alerts.example.com/webhook -d "cmd=${CMD} failed"'
+    command: 'curl -X POST https://alerts.example.com/webhook -d "dag ${DAG_NAME} failed"'
   success:
     command: 'echo "Success: ${DAG_NAME}" >> /var/log/dagu-exec.log'
   exit:
@@ -263,12 +272,7 @@ dagu exec -- python risky_script.py
 # The exit handler always runs regardless of success/failure
 ```
 
-Handlers have access to these environment variables:
-- `${CMD}` - The original command (from params)
-- `${DAG_NAME}` - Auto-generated or custom name
-- `${DAG_RUN_ID}` - The run ID
-- `${DAG_RUN_STATUS}` - Final status (succeeded, failed, canceled)
-- `${DAG_RUN_LOG_FILE}` - Path to log file
+Handlers receive the standard environment provided by Dagu, including variables such as `${DAG_NAME}`, `${DAG_RUN_ID}`, and `${DAG_RUN_LOG_FILE}`.
 
 See [Lifecycle Handlers](/writing-workflows/lifecycle-handlers) for complete documentation.
 

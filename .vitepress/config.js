@@ -25,6 +25,12 @@ const fullSidebar = [
     ],
   },
   {
+    text: "Migration",
+    items: [
+      { text: "From Cron", link: "/features/exec" },
+    ],
+  },
+  {
     text: "Writing Workflows",
     items: [
       { text: "Introduction", link: "/writing-workflows/" },
@@ -47,7 +53,6 @@ const fullSidebar = [
     text: "Features",
     items: [
       { text: "Overview", link: "/features/" },
-      { text: "Run Commands (exec)", link: "/features/exec" },
       {
         text: "Executors",
         collapsed: false,
