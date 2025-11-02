@@ -577,6 +577,13 @@ steps:
         env:
           - API_KEY=${API_KEY}
     command: python process.py
+
+  - executor:
+      type: archive
+      config:
+        source: assets.tar.gz
+        destination: ./assets
+    command: extract
 ```
 
 ### Distributed Execution

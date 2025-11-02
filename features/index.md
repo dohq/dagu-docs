@@ -19,6 +19,7 @@ Dagu provides a comprehensive set of features for building and managing workflow
 - [Executor - Docker](/features/executors/docker)
 - [Executor - SSH](/features/executors/ssh)
 - [Executor - HTTP](/features/executors/http)
+- [Executor - Archive](/features/executors/archive)
 - [Executor - Mail](/features/executors/mail)
 - [Executor - JQ](/features/executors/jq)
 - [Executor - GitHub Actions](/features/executors/github-actions)

@@ -1345,6 +1345,26 @@ steps:
 
 <div class="example-card">
 
+### Archive Extraction
+
+```yaml
+workingDir: /tmp/data
+
+steps:
+  - executor:
+      type: archive
+      config:
+        source: dataset.tar.zst
+        destination: ./dataset
+    command: extract
+```
+
+<a href="/features/executors/archive" class="learn-more">Learn more →</a>
+
+</div>
+
+<div class="example-card">
+
 ### Container Startup & Readiness
 
 ```yaml
