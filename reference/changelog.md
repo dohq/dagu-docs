@@ -16,6 +16,7 @@
 
 ### Fixed
 - Windows: Restored queued DAG execution by exporting the necessary environment variables when spawning processes from the queue runner (#1373)
+- UI: Fixed DAG rendering while zooming out (#1380)
 
 ### Contributors
 
@@ -30,6 +31,7 @@ Thanks to our contributors for this release:
 | Windows queue execution failure report and verification (#1372) | [@lvoeg](https://github.com/lvoeg) |
 | `--from-run-id` flag co-author (#1378) | [@kriyanshii](https://github.com/kriyanshii) |
 | Inline spec enqueue implementation (#1375) | [@kriyanshii](https://github.com/kriyanshii) |
+| DAG zoom out rendering fix (#1380) | [@kriyanshii](https://github.com/kriyanshii) |
 
 ## v1.23.3 (2025-10-26)
 
