@@ -1076,8 +1076,7 @@ Launches a fresh DAG run by reusing the captured parameters from a historic exec
 ```json
 {
   "dagRunId": "optional-new-id",
-  "dagName": "optional-name-override",
-  "singleton": true
+  "dagName": "optional-name-override"
 }
 ```
 
@@ -1086,9 +1085,6 @@ Launches a fresh DAG run by reusing the captured parameters from a historic exec
 |-------|------|-------------|----------|
 | dagRunId | string | Custom ID for the new run. If omitted a unique ID is generated. | No |
 | dagName | string | Override the DAG name used for the rescheduled run. Must pass DAG name validation. | No |
-| singleton | boolean | When true, skips rescheduling if the DAG already has active or queued runs and returns `409`. | No |
-
-> **Note:** The request body also accepts an experimental `definitionStrategy` field. Providing a value currently returns `400` because alternate definition selection is not yet supported.
 
 **Response (200)**:
 ```json
@@ -1098,7 +1094,7 @@ Launches a fresh DAG run by reusing the captured parameters from a historic exec
 }
 ```
 
-**Error Response (409)** - When `singleton: true` (or `maxActiveRuns` is `1`) and the DAG already has active or queued runs:
+**Error Response (409)** - When the DAG already has active or queued runs (reschedules always enforce singleton):
 ```json
 {
   "code": "max_run_reached",
