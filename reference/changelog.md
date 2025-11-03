@@ -19,6 +19,7 @@
 ### Fixed
 - Windows: Restored queued DAG execution by exporting the necessary environment variables when spawning processes from the queue runner (#1373)
 - UI: Fixed DAG rendering while zooming out (#1380)
+- Server/API: Run command/env substitution for base paths and auth credentials when wiring routes, keeping originals only if evaluation fails and logging a warning
 
 ### Contributors
 
