@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.24.0 (UNRELEASED)
+## v1.24.0 (2025-11-03)
 
 ### Added
 - API: Added optional `dagName` field to `/dags/{fileName}/start` and `/dags/{fileName}/enqueue` for overriding the DAG name used at runtime (#1365)
