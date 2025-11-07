@@ -15,6 +15,36 @@ steps:
 
 Output: `"John Doe"`
 
+## Configuration
+
+### Raw Output
+
+By default, results are returned as pretty-printed JSON. Enable raw output
+when you need jq's `-r` behavior (unquoted strings, numbers, booleans).
+
+```yaml
+steps:
+  - name: list-addresses
+    executor:
+      type: jq
+      config:
+        raw: true
+    command: '.users[].email'
+    script: |
+      {
+        "users": [
+          {"email": "alice@example.com"},
+          {"email": "bob@example.com"}
+        ]
+      }
+```
+
+Output:
+```text
+alice@example.com
+bob@example.com
+```
+
 ## Examples
 
 ### Transform Objects

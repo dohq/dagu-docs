@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.24.1 (Unreleased)
+
+### Added
+- Executors: Added a `raw` output option to the JQ executor for emitting unquoted strings and primitives (#1392)
+
+### Contributors
+
+Thanks to our contributors for this release:
+
+| Contribution                           | Contributor                              |
+| -------------------------------------- | ---------------------------------------- |
+| JQ executor raw output option (#1392) | [@kriyanshii](https://github.com/kriyanshii) |
+
 ## v1.24.0 (2025-11-03)
 
 ### Added

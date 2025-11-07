@@ -630,6 +630,35 @@ For detailed JQ executor documentation, see [JQ Executor Guide](/features/execut
 
 Process and transform JSON data using jq syntax.
 
+### Raw Output
+
+Set `config.raw: true` to mirror jq's `-r` flag and emit unquoted primitives.
+
+```yaml
+steps:
+  - name: list-emails
+    executor:
+      type: jq
+      config:
+        raw: true
+    command: '.data.users[].email'
+    script: |
+      {
+        "data": {
+          "users": [
+            {"email": "user1@example.com"},
+            {"email": "user2@example.com"}
+          ]
+        }
+      }
+```
+
+Output:
+```text
+user1@example.com
+user2@example.com
+```
+
 ### Format JSON
 
 ```yaml
