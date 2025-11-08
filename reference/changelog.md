@@ -7,6 +7,7 @@
 
 ### Fixed
 - UI: Ensure repeat-policy sub DAG run lists refresh their timestamps and counts without needing a window refocus by polling `/sub-dag-runs` while expanded (#1389)
+- Spec/UI: Stabilize default parameter ordering so Start DAG modal fields stay in place while editing (#1395)
 
 ### Contributors
 
@@ -16,6 +17,7 @@ Thanks to our contributors for this release:
 | -------------------------------------- | ---------------------------------------- |
 | JQ executor raw output option (#1392) | [@kriyanshii](https://github.com/kriyanshii) |
 | Repeat execution timestamp refresh report (#1389) | [@jeremydelattre59](https://github.com/jeremydelattre59) |
+| Parameter field reorder report (#1395) | [@mitchplze](https://github.com/mitchplze) |
 
 ## v1.24.0 (2025-11-03)
 
