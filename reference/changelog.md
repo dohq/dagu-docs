@@ -5,6 +5,7 @@
 ### Added
 - Executors: Added a `raw` output option to the JQ executor for emitting unquoted strings and primitives (#1392)
 - Installer: Added a `--working-dir` flag to place temporary files outside `/tmp`, useful on constrained systems (#1388)
+- Spec: Resolve parameter schema references relative to the process cwd, declared `workingDir`, or the DAG file location so JSON Schema files can be co-located with DAGs (#1371)
 
 ### Fixed
 - UI: Ensure repeat-policy sub DAG run lists refresh their timestamps and counts without needing a window refocus by polling `/sub-dag-runs` while expanded (#1389)
@@ -19,6 +20,7 @@ Thanks to our contributors for this release:
 | JQ executor raw output option (#1392) | [@kriyanshii](https://github.com/kriyanshii) |
 | Repeat execution timestamp refresh report (#1389) | [@jeremydelattre59](https://github.com/jeremydelattre59) |
 | Parameter field reorder report (#1395) | [@mitchplze](https://github.com/mitchplze) |
+| Param schema resolution & skip validation option (#1371) | [@thefishhat](https://github.com/thefishhat) |
 | Installer working directory flag request (#1388) | [@jeremydelattre59](https://github.com/jeremydelattre59) |
 
 ## v1.24.0 (2025-11-03)
