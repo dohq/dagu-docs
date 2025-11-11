@@ -168,6 +168,20 @@ export default withMermaid(
     cleanUrls: true,
 
     head: [
+      [
+        "meta",
+        {
+          name: "description",
+          content: "A Powerful, Portable, Local-First Workflow Engine",
+        },
+      ],
+      [
+        "meta",
+        {
+          property: "og:description",
+          content: "A Powerful, Portable, Local-First Workflow Engine",
+        },
+      ],
       ["link", { rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
       ["link", { rel: "shortcut icon", href: "/favicon.ico" }],
       ["link", { rel: "preconnect", href: "https://fonts.googleapis.com" }],
