@@ -2,6 +2,9 @@
 
 ## v1.24.3 (UNRELEASED)
 
+### Changed
+- Status: Renamed the `canceled` lifecycle label to `aborted` across the CLI, runtime, APIs, schemas, and UI so status analytics and automations reference a single canonical value.
+
 ### Fixed
 - Docker executor: Preserve step-level container entrypoints so step commands can rely on the image's default binary (#1403)
 
@@ -12,6 +15,7 @@ Thanks to our contributors for this release:
 | Contribution | Contributor |
 | --- | --- |
 | Step-level Docker executor entrypoint fix (#1403) | [@vnghia](https://github.com/vnghia) |
+| Status label rename to `aborted` | [@ghansham](https://github.com/ghansham) |
 
 ## v1.24.2
 
