@@ -5,8 +5,8 @@ layout: doc
 <img src="/dagu-logo.webp" alt="dagu Logo" style="display: block; margin: 0 auto; max-width: 100%">
 
 <div class="tagline" style="text-align: center;">
-  <h2>Lightweight Workflow Engine Alternative to Airflow & Cron</h2>
-  <p>Single binary with Web UI. Execute workflows defined in a simple, declarative YAML on a schedule. Natively support shell commands, remote execution via SSH, and docker image.</p>
+  <h2>A Powerful, Portable, Local-First Workflow Engine</h2>
+  <p>Manage complex jobs without pain. Single binary with Web UI. Execute workflows defined in a simple, declarative YAML on a cron schedule. Natively supports shell commands, remote execution via SSH, and docker images.</p>
 </div>
 
 
