@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.24.5 (UNRELEASED)
+## v1.24.5
 
 ### Changed
 - Status: Renamed the `canceled` lifecycle label to `aborted` across the CLI, runtime, APIs, schemas, and UI so status analytics and automations reference a single canonical value.
