@@ -1385,7 +1385,7 @@ dagu_dag_runs_queued_total 8
 # TYPE dagu_dag_runs_total counter
 dagu_dag_runs_total{status="succeeded"} 2493
 dagu_dag_runs_total{status="failed"} 15
-dagu_dag_runs_total{status="canceled"} 7
+dagu_dag_runs_total{status="aborted"} 7
 
 # HELP dagu_dags_total Total number of DAGs
 # TYPE dagu_dags_total gauge

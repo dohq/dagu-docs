@@ -20,4 +20,4 @@ Values are refreshed for each step, so `DAG_RUN_STEP_NAME`, `DAG_RUN_STEP_STDOUT
 | `DAG_RUN_STEP_NAME` | Current step or handler only | Name field of the step that is currently executing. | `upload-artifacts` |
 | `DAG_RUN_STEP_STDOUT_FILE` | Current step or handler only | File path backing the step’s captured stdout stream. | `/var/log/dagu/daily-backup/upload-artifacts.stdout.log` |
 | `DAG_RUN_STEP_STDERR_FILE` | Current step or handler only | File path backing the step’s captured stderr stream. | `/var/log/dagu/daily-backup/upload-artifacts.stderr.log` |
-| `DAG_RUN_STATUS` | Lifecycle handlers only | Canonical completion status (`succeeded`, `partially_succeeded`, `failed`, `canceled`). | `failed` |
+| `DAG_RUN_STATUS` | Lifecycle handlers only | Canonical completion status (`succeeded`, `partially_succeeded`, `failed`, `aborted`). | `failed` |

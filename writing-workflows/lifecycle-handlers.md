@@ -42,7 +42,7 @@ Each handler is a normal step definition. You can use `command`, `script`, `call
 - Handlers are executed sequentially and synchronously. The DAG is still considered running until they finish.
 - If a handler exits with a non-zero status, the overall DAG run ends in `failed`, even if every main step succeeded.
 - Handler logs appear alongside other steps in the run history and respect the same log retention policy.
-- Each handler receives the `DAG_RUN_STATUS` environment variable so scripts can branch on `succeeded`, `partially_succeeded`, `failed`, or `canceled`.
+- Each handler receives the `DAG_RUN_STATUS` environment variable so scripts can branch on `succeeded`, `partially_succeeded`, `failed`, or `aborted`.
 
 ## Patterns and Integrations
 

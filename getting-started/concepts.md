@@ -89,7 +89,7 @@ steps:
 - `succeeded`: All steps completed successfully
 - `partially_succeeded`: Some steps failed but execution continued (via `continueOn`)
 - `failed`: DAG execution failed
-- `canceled`: DAG was manually canceled
+- `aborted`: DAG was manually aborted
 
 ### Status Transitions
 
@@ -100,7 +100,7 @@ graph LR
     R --> S[succeeded]
     R --> PS[partially_succeeded]
     R --> F[failed]
-    R --> C[canceled]
+    R --> C[aborted]
 ```
 
 ### Step Status
@@ -110,7 +110,7 @@ graph LR
 - `succeeded`: Step completed successfully
 - `partially_succeeded`: Step completed with warnings or continue-on logic
 - `failed`: Step execution failed
-- `canceled`: Step was canceled
+- `aborted`: Step was aborted
 - `skipped`: Step was skipped (precondition not met)
 
 ### Status Hooks
