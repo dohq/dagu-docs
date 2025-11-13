@@ -145,6 +145,39 @@ steps:
   - echo "Processing"
 ```
 
+### Step Timeout (timeoutSec)
+
+Apply a per‑step cap that overrides the workflow timeout for that specific step:
+
+```yaml
+timeoutSec: 1800  # Overall DAG timeout (30m)
+
+steps:
+  - name: fast-check
+    command: curl -sf https://example.com/health
+    timeoutSec: 20    # This step fails if still running after 20s
+
+  - name: bulk-import
+    command: python import.py   # Inherits 30m DAG timeout
+
+  - name: guarded-external
+    command: bash -c 'long_unstable_call'
+    timeoutSec: 300   # Give 5m max even though DAG allows 30m
+```
+
+Behavior:
+- If a step defines `timeoutSec > 0`, a dedicated context deadline is used; it overrides the DAG-level `timeoutSec` only for that step.
+- On step timeout the process tree is terminated and the step is marked `failed` with exit code `124` (standard timeout code).
+- Omit or set `timeoutSec: 0` on a step to rely solely on the DAG timeout.
+- Use step timeouts for external calls (network, APIs, third‑party CLIs) to fail fast while letting other steps proceed.
+
+Validation:
+- `timeoutSec` must be `>= 0`; negative values are rejected during spec validation.
+
+Tips:
+- Pair with `retryPolicy` or `repeatPolicy` so transient slowdowns get another attempt instead of burning the entire DAG time budget.
+- Log messages and UI will surface both the step-level and DAG-level timeout sources when they trigger.
+
 ### Cleanup Timeout
 
 By default DAGs wait 5 seconds for cleanup before forcefully terminating steps. Increase `maxCleanUpTimeSec` if your handlers need longer.

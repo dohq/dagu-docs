@@ -1,5 +1,32 @@
 # Changelog
 
+## v1.25.0 (UNRELEASED)
+
+### Added
+ - Spec/API/UI: Added `timeoutSec` step-level field to cap individual step execution time; when set it overrides any DAG-level timeout for that step (#1412)
+
+### Contributors
+
+Thanks to our contributors for this release:
+
+| Contribution | Contributor |
+| --- | --- |
+| Step-level `timeoutSec` field (#1412) | [@kriyanshii](https://github.com/kriyanshii) |
+
+## v1.24.7
+
+### Fixed
+- Auth/API: Exempt `/api/v2/metrics` from authentication so Prometheus scrapes succeed out of the box (#1409)
+
+### Contributors
+
+Thanks to our contributors for this release:
+
+| Contribution | Contributor |
+| --- | --- |
+| OIDC issue report | [@alangrafu](https://github.com/alangrafu) [@Netmisa](https://github.com/Netmisa) |
+
+
 ## v1.24.6
 
 ### Fixed
