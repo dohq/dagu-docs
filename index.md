@@ -116,7 +116,8 @@ Visit [http://localhost:8080](http://localhost:8080)
 Break complex workflows into reusable, maintainable sub-workflows:
 
 ```yaml
-name: data-pipeline
+description: |
+  data-pipeline: Extract, transform, and load data daily with retries and parallelism.
 schedule: "0 2 * * *"  # Daily at 2 AM
 
 steps:
@@ -165,7 +166,8 @@ steps:
 Route tasks to specialized workers without managing infrastructure:
 
 ```yaml
-name: ml-training
+description: |
+  ML pipeline that preprocesses data on CPU workers and trains models on GPU workers.
 workerSelector:
   gpu: "true"
   cuda: "11.8"
