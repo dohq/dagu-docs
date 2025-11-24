@@ -36,7 +36,24 @@ Worker 1        Worker 2                Worker 3
                     │
             Shared Storage
         (DAG files, logs, state)
+
 ```
+
+### Shared Storage
+
+For distributed execution to function correctly, all nodes must have access to the same DAG definitions and be able to share execution logs.
+
+**Requirement**: Mount the entire `DAGU_HOME` directory (or at minimum, the `data/` and `logs/` subdirectories) as a shared volume (e.g., NFS) across all nodes:
+- **Coordinator**: Needs access to read DAGs (from `data/` or `dags/`) and read worker logs for the UI.
+- **Workers**: Need access to read DAGs and write execution logs.
+
+> [!IMPORTANT]
+> **Log Visibility**: If the `logs/` directory is not shared, the main server UI will not be able to display logs for tasks executed on remote workers.
+
+> [!NOTE]
+> **Future Improvement**: This shared storage requirement is a current limitation. We are working on implementing a **remote-sync** feature that will provide a centralized database and views for history data and logs, eliminating the need for NFS in the future.
+>
+> If you want support for this feature, please upvote here: [dagu-org/dagu#1260](https://github.com/dagu-org/dagu/issues/1260)
 
 ### Service Registry & Health Monitoring
 
