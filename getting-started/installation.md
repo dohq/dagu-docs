@@ -71,7 +71,7 @@ docker run -d \
   dagu start-all
 ```
 
-Visit http://localhost:8080
+Visit http://localhost:8080. See [Docker Images](/configurations/deployment/docker-images) for available tags and variants.
 
 ## Package Managers
 

@@ -33,3 +33,27 @@ For Docker-in-Docker workflows, mount the host socket and run as root:
 ```bash
 docker run -d -p 8525:8080 -v dagu-data:/var/lib/dagu -v /var/run/docker.sock:/var/run/docker.sock --user 0:0 ghcr.io/dagu-org/dagu:latest
 ```
+
+## Custom Images
+
+If your workflows require additional tools (Python, Perl, Ruby, etc.) not included in the standard images, build a custom image based on Dagu:
+
+```dockerfile
+FROM ghcr.io/dagu-org/dagu:latest
+
+# Install additional packages
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    perl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python packages if needed
+RUN pip3 install --break-system-packages requests pandas
+```
+
+Build and run:
+```bash
+docker build -t my-dagu .
+docker run -d -p 8080:8080 -v dagu-data:/var/lib/dagu my-dagu
+```
