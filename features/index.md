@@ -16,6 +16,8 @@ Dagu provides a comprehensive set of features for building and managing workflow
 
 ### Executors
 - [Executor - Shell](/features/executors/shell)
+- [Executor - Shell (macOS / Linux)](/features/executors/shell-unix)
+- [Executor - Shell (Windows)](/features/executors/shell-windows)
 - [Executor - Docker](/features/executors/docker)
 - [Executor - SSH](/features/executors/ssh)
 - [Executor - HTTP](/features/executors/http)

@@ -58,6 +58,8 @@ const fullSidebar = [
         collapsed: false,
         items: [
           { text: "Shell", link: "/features/executors/shell" },
+          { text: "Shell (macOS / Linux)", link: "/features/executors/shell-unix" },
+          { text: "Shell (Windows)", link: "/features/executors/shell-windows" },
           { text: "Docker", link: "/features/executors/docker" },
           { text: "SSH", link: "/features/executors/ssh" },
           { text: "HTTP", link: "/features/executors/http" },

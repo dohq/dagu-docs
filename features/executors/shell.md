@@ -1,134 +1,80 @@
 # Shell Executor
 
-The default executor for running system commands.
+Run system commands and scripts with the default executor.
 
-## Basic Usage
+## Configure the Shell
 
-```yaml
-shell: ["/bin/bash", "-e"]   # Default shell for all steps
-steps:
-  - echo "Hello, World!"     # Uses DAG shell
-  - shell: /usr/local/bin/zsh  # Override for one step
-    command: echo "Hello from zsh"
-```
+- **DAG defaults** (literal): set `shell` for all steps.
+  ```yaml
+  shell: ["/bin/bash", "-e", "-u"]
+  steps:
+    - command: echo "Runs with bash -e -u"
+  ```
+- **Step override** (evaluated at runtime, can reference params/secrets/outputs):
+  ```yaml
+  steps:
+    - shell: ${CUSTOM_SHELL:-/bin/zsh}
+      command: echo "Runs in the step shell"
+  ```
+- **Fallback**: if you set nothing, Dagu uses `DAGU_DEFAULT_SHELL`, then `$SHELL`, then `sh` on Unix; on Windows it prefers PowerShell, then `pwsh`, then `cmd.exe`.
+- **String or array**: `shell` accepts either `"bash -e"` or `["bash", "-e"]`; arrays avoid quoting issues.
 
-When no step-level shell is provided, Dagu runs commands through the DAG shell (or system default) and automatically adds `-e` on Unix-like shells so scripts stop on first error. If you set `shell` on a step, include `-e` yourself if you want the same errexit behavior.
+## Running Commands
 
-## Writing Scripts
+- **Inline command string** for quick one-liners or pipelines:
+  ```yaml
+  steps:
+    - echo "Hello"
+    - command: echo "Hello with key"
+    - |
+        echo "Multi-line command block"
+        echo "Runs as a script (not split into args)"
+  ```
+- **Command + args array** when you want unambiguous arguments and no shell parsing:
+  ```yaml
+  steps:
+    - command: [python3, -u, app.py, --limit, "10"]
+  ```
+- **Script block** for multi-line scripts:
+  ```yaml
+  steps:
+    - script: |
+        #!/usr/bin/env bash
+        set -e
+        echo "Multi-line script"
+  ```
+  If you omit a step-level `shell` and the script has a shebang, that interpreter is used. Otherwise the resolved shell runs the script file.
+- **Interpreter + inline script**:
+  ```yaml
+  steps:
+    - command: python3
+      script: |
+        import sys
+        print("Args:", sys.argv)
+  ```
+- **Direct execution (no shell parsing)**:
+  ```yaml
+  steps:
+    - shell: direct
+      command: [/usr/bin/python3, -u, script.py]
+  ```
+- **Working directory and env**: set `workingDir`/`dir` and `env` on the step (or DAG defaults) to control context.
 
-```yaml
-steps:
-  - shell: bash  # Specify shell (add -e yourself if you want errexit here)
-    script: |
-      echo "Running script..."
-      python process.py  # Run a Python script
-```
+## Script Behavior
 
-When `shell` is omitted, Dagu executes the script with the interpreter defined by its shebang (`#!`) if one is provided.
+- A `script:` block is written to a temp file in the working directory when possible, then removed after the step finishes.
+- If you omit a step-level `shell` and the script starts with a shebang (`#!/usr/bin/env python3`, `#!/bin/bash`, etc.), that interpreter runs the script.
+- Without a shebang, the resolved shell runs the script file. When Dagu provides the default Unix shell, it appends `-e` so the script stops on the first failing command (step-level shells are left unchanged).
+- When you set both `command` and `script`, the `command` acts as the interpreter and receives the script path (no shell wrapper) — ideal for `command: python3` with inline code.
+- Multi-line `command` strings (using YAML `|` block) are treated the same as `script:`: they are saved to a temp file and executed as a script rather than split into args.
 
-## Shell Selection
+## Built-in Safety Defaults
 
-```yaml
-steps:
-  - echo $0  # Uses DAG shell or system default
-    
-  - shell: ["bash", "-e", "-u"]  # Array form to avoid quoting flags
-    command: echo "Bash version: $BASH_VERSION"
+- **Auto `-e` on POSIX shells:** When Dagu supplies the default/DAG-level shell for sh/bash/zsh/ksh/ash/dash, it appends `-e` for both command strings and script runs. If you set a step-level shell, include `-e` yourself when desired.
+- **PowerShell scripts:** Saved as `.ps1` and prefixed with `$ErrorActionPreference = 'Stop'` and `$PSNativeCommandUseErrorActionPreference = $true` so cmdlet errors and native command failures stop execution.
+- **nix-shell:** Dagu defaults to `--pure` if you do not specify purity flags. When Dagu supplies the shell, it also prepends `set -e;` to the command string unless you already provided it.
 
-  - shell: "/usr/local/bin/fish -C 'set -e'"  # String form also accepted
-    command: echo "Using Fish shell"
-```
+## Platform-Specific Guides
 
-## Shell Arguments
-
-Both DAG- and step-level `shell` fields accept either a string (`"bash -e"`) or an array (`["bash", "-e"]`). Arrays make it easy to pass multiple flags without worrying about quoting. DAG-level values expand environment variables when the workflow loads; step-level values are evaluated at runtime, so you can reference parameters, secrets, or outputs.
-
-### Nix Shell
-
-Use nix-shell for reproducible environments with specific packages:
-
-> **Note:** nix-shell must be installed on your system separately. The Dagu binary and container image do not include nix-shell. Install Nix from [nixos.org](https://nixos.org/download.html) to use this feature.
-
-```yaml
-steps:
-  - shell: nix-shell
-    shellPackages: [python3, curl, jq]
-    command: |
-      python3 --version
-      curl --version
-      jq --version
-```
-
-#### Examples
-
-```yaml
-# Specific versions
-steps:
-  - shell: nix-shell
-    shellPackages: [python314, nodejs_24]
-    command: python3 --version && node --version
-
-# Data science stack
-steps:
-  - shell: nix-shell
-    shellPackages:
-      - python3
-      - python3Packages.pandas
-      - python3Packages.numpy
-    command: python analyze.py
-
-# Multiple tools
-steps:
-  - shell: nix-shell
-    shellPackages: [go, docker, kubectl]
-    command: |
-      go build -o app
-      docker build -t app:latest .
-```
-
-Find packages at [search.nixos.org](https://search.nixos.org/packages).
-
-## Execution Methods
-
-```yaml
-steps:
-  # Single command
-  - date +"%Y-%m-%d %H:%M:%S"
-    
-  # Multi-line command
-  - |
-      echo "Starting..."
-      echo "Processing data..."
-      echo "Done"
-      
-  # Script block
-  - script: |
-      #!/bin/bash
-      # errexit is enabled by default when you omit a step shell
-      find /data -name "*.csv" -exec process {} \;
-      
-  # Working directory
-  - workingDir: /app/src
-    command: npm install
-```
-
-Multi-line command strings are treated as inline scripts. They run without splitting into `command` and `args`, so you can include shell control flow, environment setup, or even a shebang (`#! /usr/bin/env bash`) as the first line. When no `shell` is specified, Dagu honors the shebang interpreter just like it does for the `script` field.
-
-## Environment Variables
-
-```yaml
-# Global variables
-env:
-  - ENVIRONMENT: production
-  - BASE_PATH: /data
-  - FULL_PATH: ${BASE_PATH}/input  # Variable expansion
-
-steps:
-  # Step-level variables
-  - env:
-      - API_KEY: ${API_KEY}
-    command: curl -H "X-API-Key: $API_KEY" api.example.com
-    
-  # Command substitution
-  - mkdir -p /backup/`date +%Y%m%d`
-```
+- [macOS / Linux details](./shell-unix.md) — POSIX shells, nix-shell, direct mode
+- [Windows details](./shell-windows.md) — PowerShell/pwsh, cmd.exe, direct mode
