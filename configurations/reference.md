@@ -54,7 +54,7 @@ tls:
 ui:
   navbarColor: "#1976d2"     # Hex or CSS color
   navbarTitle: "Dagu"
-  logEncodingCharset: "utf-8"
+  logEncodingCharset: "utf-8"  # Character encoding for log files (see supported encodings below)
   maxDashboardPageLimit: 100
   dags:
     sortField: "name"        # Default sort field (name/status/lastRun/schedule/suspended)
@@ -164,7 +164,7 @@ All options support `DAGU_` prefix.
 ### UI
 - `DAGU_UI_NAVBAR_COLOR` - Nav bar color
 - `DAGU_UI_NAVBAR_TITLE` - Nav bar title
-- `DAGU_UI_LOG_ENCODING_CHARSET` - Log encoding
+- `DAGU_UI_LOG_ENCODING_CHARSET` - Log file character encoding (see [Supported Log Encodings](#supported-log-encodings))
 - `DAGU_UI_MAX_DASHBOARD_PAGE_LIMIT` - Dashboard limit
 - `DAGU_UI_DAGS_SORT_FIELD` - Default DAGs page sort field
 - `DAGU_UI_DAGS_SORT_ORDER` - Default DAGs page sort order
@@ -419,6 +419,78 @@ When not specified, these paths are automatically set based on `paths.dataDir`:
 - `paths.queueDir`: `{paths.dataDir}/queue` - Stores queue data
 - `paths.procDir`: `{paths.dataDir}/proc` - Stores process data
 - `paths.executable`: Current executable path - Auto-detected from running process
+
+## Supported Log Encodings
+
+The `ui.logEncodingCharset` configuration option supports a wide range of character encodings for reading log files. This is useful when your DAG steps produce output in non-UTF-8 encodings.
+
+### Common Encodings
+
+| Encoding | Aliases | Description |
+|----------|---------|-------------|
+| `utf-8` | `utf8` | Unicode (default) |
+| `shift_jis` | `shiftjis`, `sjis`, `s-jis` | Japanese (Windows) |
+| `euc-jp` | `eucjp` | Japanese (Unix) |
+| `iso-2022-jp` | `iso2022jp` | Japanese (Email) |
+| `gb2312` | `gb-2312` | Simplified Chinese |
+| `gbk` | `cp936`, `windows-936` | Simplified Chinese (Extended) |
+| `gb18030` | | Simplified Chinese (Full) |
+| `big5` | `big-5` | Traditional Chinese |
+| `euc-kr` | `euckr`, `korean` | Korean |
+
+### ISO-8859 (Latin) Encodings
+
+| Encoding | Aliases | Description |
+|----------|---------|-------------|
+| `iso-8859-1` | `latin1`, `l1` | Western European |
+| `iso-8859-2` | `latin2`, `l2` | Central European |
+| `iso-8859-5` | `cyrillic` | Cyrillic |
+| `iso-8859-6` | `arabic` | Arabic |
+| `iso-8859-7` | `greek` | Greek |
+| `iso-8859-8` | `hebrew` | Hebrew |
+| `iso-8859-9` | `latin5`, `turkish` | Turkish |
+| `iso-8859-15` | `latin9` | Western European with Euro |
+
+### Windows Code Pages
+
+| Encoding | Aliases | Description |
+|----------|---------|-------------|
+| `windows-1250` | `cp1250` | Central European |
+| `windows-1251` | `cp1251` | Cyrillic |
+| `windows-1252` | `cp1252`, `ansi` | Western European |
+| `windows-1253` | `cp1253` | Greek |
+| `windows-1254` | `cp1254` | Turkish |
+| `windows-1255` | `cp1255` | Hebrew |
+| `windows-1256` | `cp1256` | Arabic |
+| `windows-1257` | `cp1257` | Baltic |
+| `windows-1258` | `cp1258` | Vietnamese |
+
+### Other Encodings
+
+| Encoding | Aliases | Description |
+|----------|---------|-------------|
+| `koi8-r` | `koi8r` | Russian |
+| `koi8-u` | `koi8u` | Ukrainian |
+| `macintosh` | `mac`, `macroman` | Mac Roman |
+| `ibm866` | `cp866` | DOS Cyrillic |
+| `utf-16` | `utf16`, `utf-16le` | Unicode (16-bit) |
+| `utf-16be` | `utf16be` | Unicode (16-bit Big Endian) |
+
+### Example Configuration
+
+```yaml
+# For Japanese logs (Shift_JIS encoding)
+ui:
+  logEncodingCharset: "shift_jis"
+
+# For Russian logs (KOI8-R encoding)
+ui:
+  logEncodingCharset: "koi8-r"
+
+# For legacy Windows systems
+ui:
+  logEncodingCharset: "windows-1252"
+```
 
 ## See Also
 

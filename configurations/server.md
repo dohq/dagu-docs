@@ -77,7 +77,7 @@ tls:
 ui:
   navbarColor: "#1976d2"        # Header color (hex or name)
   navbarTitle: "Dagu"           # Header title
-  logEncodingCharset: "utf-8"   # Log file encoding
+  logEncodingCharset: "utf-8"   # Log file encoding (supports 50+ encodings, see below)
   maxDashboardPageLimit: 100    # Max items on dashboard
   dags:
     sortField: "name"           # Default sort field (name/status/lastRun/schedule/suspended)
@@ -254,6 +254,33 @@ Color suggestions:
 - Production: `#ff0000` (red)
 - Staging: `#ff9800` (orange)
 - Development: `#4caf50` (green)
+
+### Log Encoding
+
+The `logEncodingCharset` option specifies the character encoding used to read log files in the UI. This is useful when your DAG steps produce output in non-UTF-8 encodings.
+
+**Common encodings:**
+- `utf-8` (default) - Unicode
+- `shift_jis`, `euc-jp` - Japanese
+- `gb2312`, `gbk`, `gb18030` - Simplified Chinese
+- `big5` - Traditional Chinese
+- `euc-kr` - Korean
+- `iso-8859-1` through `iso-8859-16` - Latin/European
+- `windows-1250` through `windows-1258` - Windows code pages
+- `koi8-r`, `koi8-u` - Cyrillic
+
+See [Configuration Reference - Supported Log Encodings](/configurations/reference#supported-log-encodings) for the complete list of 50+ supported encodings.
+
+**Example for Japanese logs:**
+```yaml
+ui:
+  logEncodingCharset: "shift_jis"
+```
+
+**Environment variable:**
+```bash
+export DAGU_UI_LOG_ENCODING_CHARSET="shift_jis"
+```
 
 ## Remote Nodes
 
