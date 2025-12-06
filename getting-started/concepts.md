@@ -224,16 +224,19 @@ Execute commands on workflow events:
 
 ```yaml
 handlerOn:
+  init:
+    command: echo "Setting up environment"  # Runs before any steps
+
   success:
     command: echo "Workflow succeeded"
-    
+
   failure:
     command: |
       echo "Workflow failed" | mail -s "Alert" admin@example.com
-      
-  cancel:
+
+  abort:
     command: echo "Cleaning up resources"
-    
+
   exit:
     command: echo "Always runs"
 ```

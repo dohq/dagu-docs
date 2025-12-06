@@ -131,11 +131,13 @@ Lifecycle handlers fire after the main steps complete and let you add notificati
 
 ```yaml
 handlerOn:
+  init:
+    command: setup-environment.sh  # Runs before any steps
   success:
     command: notify-success.sh
   failure:
     command: alert-oncall.sh "${DAG_NAME} failed"
-  cancel:
+  abort:
     command: cleanup.sh
   exit:
     command: rm -rf /tmp/dag-${DAG_RUN_ID}  # Always runs

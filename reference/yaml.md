@@ -333,11 +333,13 @@ smtp:
 
 ```yaml
 handlerOn:
+  init:
+    command: echo "Setting up"      # Runs before any steps
   success:
     command: echo "Workflow succeeded"
   failure:
     command: echo "Notifying failure"
-  cancel:
+  abort:
     command: echo "Cleaning up"
   exit:
     command: echo "Always running"

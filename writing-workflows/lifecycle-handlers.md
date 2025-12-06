@@ -6,23 +6,26 @@ Lifecycle handlers let you run extra steps after the main DAG completes. Use the
 
 | Handler | Trigger | Typical use cases |
 |---------|---------|-------------------|
+| `init` | Runs before any workflow steps (after DAG-level preconditions pass) | Setup tasks, acquire locks, validate environment |
 | `success` | All steps completed successfully, or the DAG ended in `partially_succeeded` | Deliver success notifications, enqueue downstream jobs |
 | `failure` | The DAG ended with a canonical `failed` status | Page on-call, collect diagnostics |
-| `cancel` | A stop request interrupted the run (manual stop, queue eviction, timeout cancellation) | Roll back partial work, release locks |
+| `abort` | A stop request interrupted the run (manual stop, queue eviction, timeout cancellation) | Roll back partial work, release locks |
 | `exit` | Always runs after the status-specific handler finishes (including when it fails or is skipped) | File system clean-up, archival tasks |
 
-Only the handlers you define are executed. The scheduler runs the status-specific handler first (if present) and the `exit` handler last.
+Only the handlers you define are executed. The `init` handler runs first (before any steps), then the main steps execute, then the status-specific handler runs (if present), and finally the `exit` handler runs last.
 
 ## Basic Definition
 
 ```yaml
 # dag.yaml
 handlerOn:
+  init:
+    command: acquire-lock.sh ${LOCK_NAME}   # runs before any steps
   success:
     command: notify.sh "${DAG_NAME} (${DAG_RUN_ID}) succeeded" # runs after a clean finish
   failure:
     command: alert.sh "${DAG_NAME} failed" "logs=${DAG_RUN_LOG_FILE}"
-  cancel:
+  abort:
     command: rollback.sh --lock ${LOCK_NAME}
   exit:
     command: rm -rf /tmp/${DAG_RUN_ID} # always runs
@@ -36,7 +39,8 @@ Each handler is a normal step definition. You can use `command`, `script`, `call
 
 ## Execution Model
 
-- The scheduler waits for all main steps to finish before evaluating handlers.
+- The `init` handler runs first, before any main steps. If it fails, the DAG is aborted and no steps execute.
+- The scheduler waits for all main steps to finish before evaluating status-specific handlers.
 - It chooses the status-specific handler based on the canonical DAG status (`partially_succeeded` behaves like `success`).
 - After the status-specific handler finishes (or if none was defined), the `exit` handler runs last.
 - Handlers are executed sequentially and synchronously. The DAG is still considered running until they finish.
