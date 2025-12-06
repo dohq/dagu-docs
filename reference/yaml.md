@@ -345,6 +345,8 @@ handlerOn:
     command: echo "Always running"
 ```
 
+> **Note**: Sub-DAGs (invoked via `call`) do **not** inherit `handlerOn` from base configuration. Each sub-DAG must define its own handlers explicitly. See [Lifecycle Handlers](/writing-workflows/lifecycle-handlers#sub-dag-handler-isolation) for details.
+
 ### RunConfig
 
 The `runConfig` field allows you to control user interactions when starting DAG runs:

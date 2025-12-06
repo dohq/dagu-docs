@@ -49,6 +49,8 @@ steps:
     params: "DATA=${transform.output}"
 ```
 
+> **Note**: Sub-DAGs do not inherit `handlerOn` from the base configuration. Each nested workflow should define its own lifecycle handlers if needed. See [Sub-DAG Handler Isolation](/writing-workflows/lifecycle-handlers#sub-dag-handler-isolation) for details.
+
 ### Multiple DAGs in One File
 
 Define multiple DAGs separated by `---` and call by name.

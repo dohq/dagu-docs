@@ -48,6 +48,37 @@ Each handler is a normal step definition. You can use `command`, `script`, `call
 - Handler logs appear alongside other steps in the run history and respect the same log retention policy.
 - Each handler receives the `DAG_RUN_STATUS` environment variable so scripts can branch on `succeeded`, `partially_succeeded`, `failed`, or `aborted`.
 
+## Sub-DAG Handler Isolation
+
+**Important**: Sub-DAGs (workflows invoked via `call`) do **not** inherit `handlerOn` configuration from the base DAG configuration. This design prevents unintended behavior such as:
+
+- **Double notifications**: If a parent DAG has a failure handler that sends alerts, sub-DAGs would also trigger alerts, causing duplicate notifications.
+- **Unintended cleanup**: Init, exit, or abort handlers meant for the root workflow would also run for every nested sub-DAG.
+
+Each sub-DAG should define its own handlers explicitly if lifecycle handling is needed:
+
+```yaml
+# parent.yaml
+handlerOn:
+  failure:
+    command: notify.sh "Parent DAG failed"  # Only runs for parent
+
+steps:
+  - call: child-workflow
+
+---
+# child-workflow (in same file or separate file)
+name: child-workflow
+handlerOn:
+  failure:
+    command: notify.sh "Child DAG failed"  # Define explicitly if needed
+
+steps:
+  - command: process-data.sh
+```
+
+This isolation ensures that each workflow in a hierarchy has predictable, self-contained lifecycle behavior.
+
 ## Patterns and Integrations
 
 ### Send Email with the Mail Executor
