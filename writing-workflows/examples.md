@@ -222,43 +222,6 @@ flowchart TD
 
 <div class="example-card">
 
-### Negated Preconditions
-
-```yaml
-params:
-  ENV: production
-steps:
-  # Run only when NOT in production
-  - command: echo "Running cleanup"
-    preconditions:
-      - condition: "${ENV}"
-        expected: "production"
-        negate: true
-    continueOn:
-      skipped: true
-  - command: echo "Final step"
-```
-
-```mermaid
-flowchart TD
-    A[Start] --> B{ENV == production?}
-    B --> |Yes| D[Skip cleanup]
-    B --> |No| C[Run cleanup]
-    C --> E[Final step]
-    D --> E
-    style A stroke:lightblue,stroke-width:1.6px,color:#333
-    style B stroke:lightblue,stroke-width:1.6px,color:#333
-    style C stroke:green,stroke-width:1.6px,color:#333
-    style D stroke:gray,stroke-width:1.6px,color:#333
-    style E stroke:green,stroke-width:1.6px,color:#333
-```
-
-<a href="/writing-workflows/control-flow#negated-conditions" class="learn-more">Learn more →</a>
-
-</div>
-
-<div class="example-card">
-
 ### Repeat Until Condition
 
 ```yaml

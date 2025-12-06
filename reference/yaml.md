@@ -458,29 +458,6 @@ steps:
 | `preconditions` | array | Conditions to check before execution | - |
 | `continueOn` | object | Continue workflow on certain conditions | - |
 
-#### Precondition Fields
-
-| Field | Type | Description | Default |
-|-------|------|-------------|---------|
-| `condition` | string | Expression to evaluate (env var, command substitution, or command) | Required |
-| `expected` | string | Expected value to match (supports `re:` prefix for regex) | - |
-| `negate` | boolean | Invert the condition result (run when NOT matched) | `false` |
-
-```yaml
-steps:
-  - command: echo "Deploying to production"
-    preconditions:
-      - condition: "${ENVIRONMENT}"
-        expected: "production"
-
-  # Negated condition: runs when status is NOT "success"
-  - command: echo "Handling failure"
-    preconditions:
-      - condition: "${STATUS}"
-        expected: "success"
-        negate: true
-```
-
 #### ContinueOn Fields
 
 | Field | Type | Description | Default |
