@@ -12,6 +12,37 @@ By default, Dagu stops workflow execution when a step fails (returns a non-zero 
 - Mark steps as successful despite failures
 - Build fault-tolerant workflows
 
+## Syntax
+
+The `continueOn` field supports two syntaxes:
+
+### Shorthand Syntax
+
+For simple cases, use a string value:
+
+```yaml
+steps:
+  - command: rm -rf /tmp/cache/*
+    continueOn: failed    # Continue if step fails
+
+  - command: echo "Optional"
+    continueOn: skipped   # Continue if step is skipped
+```
+
+### Object Syntax
+
+For advanced configuration with multiple options:
+
+```yaml
+steps:
+  - command: echo "Complex case"
+    continueOn:
+      failure: true
+      exitCode: [0, 1, 2]
+      output: ["WARNING", "re:^INFO:.*"]
+      markSuccess: true
+```
+
 ## Configuration Fields
 
 The `continueOn` configuration supports the following fields:
@@ -32,6 +63,12 @@ When set to `true`, the workflow continues even if the step fails with any non-z
 
 ```yaml
 steps:
+  # Shorthand syntax
+  - name: optional-cleanup
+    command: rm -rf /tmp/cache/*
+    continueOn: failed
+
+  # Object syntax (equivalent)
   - name: optional-cleanup
     command: rm -rf /tmp/cache/*
     continueOn:
@@ -44,6 +81,15 @@ When set to `true`, the workflow continues when a step is skipped due to unmet p
 
 ```yaml
 steps:
+  # Shorthand syntax
+  - name: conditional-task
+    command: echo "Processing"
+    preconditions:
+      - condition: "${ENABLE_FEATURE}"
+        expected: "true"
+    continueOn: skipped
+
+  # Object syntax (equivalent)
   - name: conditional-task
     command: echo "Processing"
     preconditions:
@@ -110,9 +156,8 @@ For steps that are nice-to-have but not critical:
 steps:
   - name: cache-warmup
     command: echo "Warming cache"
-    continueOn:
-      failure: true
-      
+    continueOn: failed
+
   - name: main-process
     command: echo "Processing"
 ```
@@ -158,9 +203,8 @@ Build workflows that degrade gracefully:
 steps:
   - name: try-optimal-method
     command: echo "Processing with optimal settings"
-    continueOn:
-      failure: true
-      
+    continueOn: failed
+
   - name: fallback-method
     command: echo "Processing with fallback settings"
     preconditions:
@@ -216,8 +260,7 @@ handlerOn:
 steps:
   - name: optional-step
     command: echo "Running optional task"
-    continueOn:
-      failure: true  # Continues, but failure handler still runs
+    continueOn: failed  # Continues, but failure handler still runs
 ```
 
 ### With Dependencies
@@ -272,18 +315,15 @@ steps:
 steps:
   - name: deploy-aws
     command: echo "Deploying to AWS"
-    continueOn:
-      failure: true  # Continue even if AWS fails
-      
+    continueOn: failed  # Continue even if AWS fails
+
   - name: deploy-gcp
     command: echo "Deploying to GCP"
-    continueOn:
-      failure: true  # Continue even if GCP fails
-      
+    continueOn: failed  # Continue even if GCP fails
+
   - name: verify-deployment
     command: echo "Verifying cloud deployment"
-    continueOn:
-      failure: false  # At least one cloud must be working
+    # No continueOn - at least one cloud must be working
 ```
 
 ### Service Health Check

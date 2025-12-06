@@ -305,8 +305,7 @@ steps:
 ```yaml
 steps:
   - command: echo "Cleaning up"
-    continueOn:
-      failure: true
+    continueOn: failed  # Shorthand syntax
   - echo "Processing"
 ```
 
@@ -326,7 +325,7 @@ steps:
 steps:
   - command: echo "Validating"
     continueOn:
-      output: 
+      output:
         - "WARNING"
         - "SKIP"
         - "re:^\[WARN\]"        # Regex: lines starting with [WARN]
@@ -342,8 +341,7 @@ steps:
     preconditions:
       - condition: "${FEATURE_FLAG}"
         expected: "enabled"
-    continueOn:
-      skipped: true  # Continue even if precondition fails
+    continueOn: skipped  # Shorthand syntax
   - echo "Processing"  # Runs regardless of optional feature
 ```
 

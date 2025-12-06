@@ -214,8 +214,7 @@ steps:
       intervalSec: 30
       
   - command: echo "Unzipping data and processing"
-    continueOn:
-      failure: true  # Continue even if this fails
+    continueOn: failed  # Continue even if this fails
       
 handlerOn:
   failure:

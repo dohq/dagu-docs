@@ -66,25 +66,24 @@ Control workflow execution flow when steps encounter errors or specific conditio
 
 ```yaml
 steps:
-  # Continue on any failure
+  # Continue on any failure (shorthand)
   - command: rm -f /tmp/cache/*
-    continueOn:
-      failure: true
-      
+    continueOn: failed
+
   # Continue on specific exit codes
   - command: echo "Checking status"
     continueOn:
       exitCode: [0, 1, 2]  # 0=success, 1=warning, 2=info
-      
+
   # Continue on output patterns
   - command: validate.sh
     continueOn:
-      output: 
+      output:
         - "WARNING"
         - "SKIP"
         - "re:^INFO:.*"      # Regex pattern
         - "re:WARN-[0-9]+"   # Another regex
-      
+
   # Mark as success when continuing
   - command: optimize.sh
     continueOn:
@@ -203,11 +202,10 @@ steps:
   # Step with graceful shutdown
   - command: server.sh
     signalOnStop: SIGTERM  # Default
-    
+
   # Always cleanup
   - command: analyze.sh
-    continueOn:
-      failure: true
-      
+    continueOn: failed
+
   - cleanup.sh  # Runs even if process fails
 ```

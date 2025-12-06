@@ -219,9 +219,8 @@ Reference step properties using IDs:
 steps:
   - id: risky
     command: 'sh -c "if [ $((RANDOM % 2)) -eq 0 ]; then echo Success; else echo Failed && exit 1; fi"'
-    continueOn:
-      failure: true
-      
+    continueOn: failed
+
   - |
       if [ "${risky.exitCode}" = "0" ]; then
         echo "Success! Output was:"
