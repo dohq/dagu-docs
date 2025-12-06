@@ -15,6 +15,14 @@ steps:
   - python process.py                  # Process data
 ```
 
+```mermaid
+graph LR
+    A[wget data.zip] --> B[unzip data.zip] --> C[python process.py]
+    style A stroke:lightblue,stroke-width:1.6px,color:#333
+    style B stroke:lightblue,stroke-width:1.6px,color:#333
+    style C stroke:lightblue,stroke-width:1.6px,color:#333
+```
+
 ### Multiple Dependencies
 
 ```yaml
@@ -30,6 +38,15 @@ steps:
     depends:
       - download-a
       - download-b
+```
+
+```mermaid
+graph TD
+    A[download-a] --> C[merge]
+    B[download-b] --> C
+    style A stroke:lime,stroke-width:1.6px,color:#333
+    style B stroke:lime,stroke-width:1.6px,color:#333
+    style C stroke:green,stroke-width:1.6px,color:#333
 ```
 
 ## Modular Workflows and Iteration Patterns
@@ -49,6 +66,16 @@ steps:
     params: "DATA=${transform.output}"
 ```
 
+```mermaid
+graph TD
+    subgraph Main[Main Workflow]
+        A{{extract.yaml}} --> B{{transform.yaml}} --> C{{load.yaml}}
+    end
+    style A stroke:lightblue,stroke-width:1.6px,color:#333
+    style B stroke:lightblue,stroke-width:1.6px,color:#333
+    style C stroke:lightblue,stroke-width:1.6px,color:#333
+```
+
 ### Multiple DAGs in One File
 
 Define multiple DAGs separated by `---` and call by name.
@@ -66,6 +93,19 @@ params:
 steps:
   - echo "Extracting ${TYPE} data"
   - echo "Transforming data"
+```
+
+```mermaid
+graph TD
+    M[Main] --> DP{{call: data-processor}}
+    subgraph data-processor
+        E["Extract TYPE data"] --> T[Transform]
+    end
+    DP -.-> E
+    style M stroke:lightblue,stroke-width:1.6px,color:#333
+    style DP stroke:lightblue,stroke-width:1.6px,color:#333
+    style E stroke:lime,stroke-width:1.6px,color:#333
+    style T stroke:lime,stroke-width:1.6px,color:#333
 ```
 
 ### Dynamic Iteration
@@ -90,6 +130,23 @@ params:
 steps:
   - echo "Processing ${FILE}"
 
+```
+
+```mermaid
+graph TD
+    A[Generate TASK_LIST] --> P{{"parallel: worker"}}
+    P --> W1[Process file1.csv]
+    P --> W2[Process file2.csv]
+    P --> W3[Process file3.csv]
+    W1 --> E[End]
+    W2 --> E
+    W3 --> E
+    style A stroke:lightblue,stroke-width:1.6px,color:#333
+    style P stroke:lightblue,stroke-width:1.6px,color:#333
+    style W1 stroke:lime,stroke-width:1.6px,color:#333
+    style W2 stroke:lime,stroke-width:1.6px,color:#333
+    style W3 stroke:lime,stroke-width:1.6px,color:#333
+    style E stroke:green,stroke-width:1.6px,color:#333
 ```
 
 ### Map-Reduce Pattern
@@ -119,6 +176,23 @@ steps:
     output: RESULT
 ```
 
+```mermaid
+graph TD
+    S[Split into CHUNKS] --> P{{"parallel: worker"}}
+    P --> C1[Process chunk1]
+    P --> C2[Process chunk2]
+    P --> C3[Process chunk3]
+    C1 --> R[Reduce MAP_RESULTS]
+    C2 --> R
+    C3 --> R
+    style S stroke:lightblue,stroke-width:1.6px,color:#333
+    style P stroke:lightblue,stroke-width:1.6px,color:#333
+    style C1 stroke:lime,stroke-width:1.6px,color:#333
+    style C2 stroke:lime,stroke-width:1.6px,color:#333
+    style C3 stroke:lime,stroke-width:1.6px,color:#333
+    style R stroke:green,stroke-width:1.6px,color:#333
+```
+
 ## Conditional Execution
 
 Run steps only when conditions are met.
@@ -133,6 +207,20 @@ steps:
         expected: "production"
 ```
 
+```mermaid
+flowchart TD
+    A[Start] --> B{ENVIRONMENT == production?}
+    B --> |Yes| C[Deploy to production]
+    B --> |No| D[Skip]
+    C --> E[End]
+    D --> E
+    style A stroke:lightblue,stroke-width:1.6px,color:#333
+    style B stroke:lightblue,stroke-width:1.6px,color:#333
+    style C stroke:green,stroke-width:1.6px,color:#333
+    style D stroke:gray,stroke-width:1.6px,color:#333
+    style E stroke:lightblue,stroke-width:1.6px,color:#333
+```
+
 ### Command Output Conditions
 
 ```yaml
@@ -141,6 +229,20 @@ steps:
     preconditions:
       - condition: "`git branch --show-current`"
         expected: "main"
+```
+
+```mermaid
+flowchart TD
+    A[Start] --> B{git branch == main?}
+    B --> |Yes| C[Deploy application]
+    B --> |No| D[Skip]
+    C --> E[End]
+    D --> E
+    style A stroke:lightblue,stroke-width:1.6px,color:#333
+    style B stroke:lightblue,stroke-width:1.6px,color:#333
+    style C stroke:green,stroke-width:1.6px,color:#333
+    style D stroke:gray,stroke-width:1.6px,color:#333
+    style E stroke:lightblue,stroke-width:1.6px,color:#333
 ```
 
 ### Regex Matching
@@ -155,7 +257,7 @@ steps:
 ```
 
 **Note**: When using regex patterns with command outputs, be aware that:
-- Lines over 64KB are automatically handled with larger buffers  
+- Lines over 64KB are automatically handled with larger buffers
 - If the total output exceeds `maxOutputSize` (default 1MB), the step will fail with an error and the output variable won't be set
 - For `continueOn.output` patterns in log files, lines up to `maxOutputSize` can be matched
 
@@ -175,6 +277,23 @@ steps:
         expected: "re:0[8-9]|1[0-7]"  # 8 AM - 5 PM
 ```
 
+```mermaid
+flowchart TD
+    S[Start] --> C1{ENVIRONMENT == production?}
+    C1 --> |No| SK[Skip]
+    C1 --> |Yes| C2{APPROVED == true?}
+    C2 --> |No| SK
+    C2 --> |Yes| C3{Hour 08-17?}
+    C3 --> |No| SK
+    C3 --> |Yes| R[Deploy application]
+    R --> E[End]
+    SK --> E
+    style S stroke:lightblue,stroke-width:1.6px,color:#333
+    style R stroke:green,stroke-width:1.6px,color:#333
+    style SK stroke:gray,stroke-width:1.6px,color:#333
+    style E stroke:lightblue,stroke-width:1.6px,color:#333
+```
+
 ### File/Directory Checks
 
 ```yaml
@@ -184,6 +303,154 @@ steps:
       - condition: "test -f /data/input.csv"
       - condition: "test -d /output"
 ```
+
+### Negated Conditions
+
+Use `negate: true` to invert the condition result. The step runs when the condition does **NOT** match:
+
+```yaml
+steps:
+  # Run cleanup only when NOT in production
+  - command: echo "Running cleanup"
+    preconditions:
+      - condition: "${ENVIRONMENT}"
+        expected: "production"
+        negate: true
+
+  # Run only when status is NOT "success"
+  - command: echo "Handling failure"
+    preconditions:
+      - condition: "${STATUS}"
+        expected: "success"
+        negate: true
+
+  # Run when a command fails (non-zero exit)
+  - command: echo "Service is down, starting it"
+    preconditions:
+      - condition: "pgrep -f my-service"
+        negate: true  # Run when pgrep fails (service not running)
+```
+
+```mermaid
+flowchart TD
+    A[Start] --> B{ENVIRONMENT == production?}
+    B --> |Yes| D[Skip - negate inverts]
+    B --> |No| C[Run cleanup]
+    C --> E[End]
+    D --> E
+    style A stroke:lightblue,stroke-width:1.6px,color:#333
+    style B stroke:lightblue,stroke-width:1.6px,color:#333
+    style C stroke:green,stroke-width:1.6px,color:#333
+    style D stroke:gray,stroke-width:1.6px,color:#333
+    style E stroke:lightblue,stroke-width:1.6px,color:#333
+```
+
+DAG-level negation:
+
+```yaml
+# Skip workflow on weekends
+preconditions:
+  - condition: "`date +%u`"
+    expected: "re:[67]"  # Saturday (6) or Sunday (7)
+    negate: true         # Run when NOT weekend
+
+steps:
+  - echo "Running weekday job"
+```
+
+```mermaid
+flowchart TD
+    A[Start DAG] --> B{Day is Sat/Sun?}
+    B --> |Yes| D[Skip DAG - negate inverts]
+    B --> |No| C[Run weekday job]
+    C --> E[End]
+    D --> E
+    style A stroke:lightblue,stroke-width:1.6px,color:#333
+    style B stroke:lightblue,stroke-width:1.6px,color:#333
+    style C stroke:green,stroke-width:1.6px,color:#333
+    style D stroke:gray,stroke-width:1.6px,color:#333
+    style E stroke:lightblue,stroke-width:1.6px,color:#333
+```
+
+### If-Else Branching Pattern
+
+Combine preconditions with `negate` to create if-else branching logic where different paths execute based on a condition:
+
+```yaml
+type: graph
+params: "status=success"
+steps:
+  - command: echo $status
+    name: check-status
+    output: STATUS
+
+  - command: echo ${STATUS}
+    name: debug-status
+    depends: check-status
+
+  # IF branch: runs when STATUS matches "success"
+  - command: echo 'Condition was true'
+    name: run-on-success
+    depends: [debug-status]
+    preconditions:
+      - condition: "${STATUS}"
+        expected: re:success
+
+  - command: echo "success-task 1"
+    name: success-task-1
+    depends: run-on-success
+    continueOn:
+      skipped: true
+
+  # ELSE branch: runs when STATUS does NOT match "success"
+  - command: echo 'Condition was false'
+    name: run-on-failure
+    depends: [debug-status]
+    preconditions:
+      - condition: "${STATUS}"
+        expected: re:success
+        negate: true
+
+  - command: echo "failure-task 1"
+    name: failure-task-1
+    depends: run-on-failure
+    continueOn:
+      skipped: true
+
+  # Join: runs after either branch completes
+  - command: echo 'Conditional flow finished.'
+    name: final-step
+    depends:
+      - success-task-1
+      - failure-task-1
+```
+
+```mermaid
+flowchart TD
+    A[check-status] --> B[debug-status]
+    B --> C{STATUS == success?}
+    C --> |Yes| D[run-on-success]
+    C --> |No| E[run-on-failure]
+    D --> F[success-task-1]
+    E --> G[failure-task-1]
+    F --> H[final-step]
+    G --> H
+    style A stroke:lightblue,stroke-width:1.6px,color:#333
+    style B stroke:lightblue,stroke-width:1.6px,color:#333
+    style C stroke:orange,stroke-width:1.6px,color:#333
+    style D stroke:green,stroke-width:1.6px,color:#333
+    style E stroke:red,stroke-width:1.6px,color:#333
+    style F stroke:green,stroke-width:1.6px,color:#333
+    style G stroke:red,stroke-width:1.6px,color:#333
+    style H stroke:lightblue,stroke-width:1.6px,color:#333
+```
+
+**Key points:**
+- Use `type: graph` to enable explicit dependency control
+- The IF branch uses a normal precondition (`expected: re:success`)
+- The ELSE branch uses the same condition with `negate: true`
+- Both branches use `continueOn: skipped: true` so downstream steps run even if the branch was skipped
+- The final step depends on both branches, ensuring it runs after whichever branch executes
 
 ## Repetition
 
@@ -203,6 +470,16 @@ steps:
       limit: 30          # Maximum 30 attempts
 ```
 
+```mermaid
+flowchart TD
+    A[nc -z localhost 8080] --> B{Exit code == 1?}
+    B --> |Yes| W[Wait 10s] --> A
+    B --> |No| N[Next step]
+    style A stroke:lightblue,stroke-width:1.6px,color:#333
+    style W stroke:lightblue,stroke-width:1.6px,color:#333
+    style N stroke:green,stroke-width:1.6px,color:#333
+```
+
 ### Repeat Until Mode
 
 The 'until' mode repeats a step until a condition becomes true.
@@ -217,6 +494,16 @@ steps:
       expected: "COMPLETED"   # Repeat UNTIL status is COMPLETED
       intervalSec: 30
       limit: 120              # Maximum 1 hour
+```
+
+```mermaid
+flowchart TD
+    S[check-job-status.sh] --> C{STATUS == COMPLETED?}
+    C --> |No| W[Wait 30s] --> S
+    C --> |Yes| Next[Proceed]
+    style S stroke:lightblue,stroke-width:1.6px,color:#333
+    style W stroke:lightblue,stroke-width:1.6px,color:#333
+    style Next stroke:green,stroke-width:1.6px,color:#333
 ```
 
 ### Conditional Repeat Patterns
@@ -269,7 +556,7 @@ steps:
       backoff: true        # true = 2.0 multiplier
       limit: 10
       # Intervals: 1s, 2s, 4s, 8s, 16s, 32s...
-      
+
   # Custom backoff multiplier with until mode
   - command: check-job-status.sh
     output: STATUS
@@ -281,7 +568,7 @@ steps:
       backoff: 1.5         # Gentler backoff
       limit: 20
       # Intervals: 5s, 7.5s, 11.25s, 16.875s...
-      
+
   # Backoff with max interval cap
   - command: curl -s https://api.example.com/status
     output: API_STATUS
@@ -310,6 +597,17 @@ steps:
   - echo "Processing"
 ```
 
+```mermaid
+flowchart TD
+    A[Cleaning up] --> B{Failed?}
+    B --> |Yes| C[Continue anyway]
+    B --> |No| C
+    C --> D[Processing]
+    style A stroke:lightblue,stroke-width:1.6px,color:#333
+    style C stroke:lightblue,stroke-width:1.6px,color:#333
+    style D stroke:green,stroke-width:1.6px,color:#333
+```
+
 ### Continue on Specific Exit Codes
 
 ```yaml
@@ -326,7 +624,7 @@ steps:
 steps:
   - command: echo "Validating"
     continueOn:
-      output: 
+      output:
         - "WARNING"
         - "SKIP"
         - "re:^\[WARN\]"        # Regex: lines starting with [WARN]
@@ -345,6 +643,19 @@ steps:
     continueOn:
       skipped: true  # Continue even if precondition fails
   - echo "Processing"  # Runs regardless of optional feature
+```
+
+```mermaid
+flowchart TD
+    A[Start] --> B{FEATURE_FLAG == enabled?}
+    B --> |Yes| C[Enable feature]
+    B --> |No| D[Skip - continueOn.skipped]
+    C --> E[Processing]
+    D --> E
+    style A stroke:lightblue,stroke-width:1.6px,color:#333
+    style C stroke:green,stroke-width:1.6px,color:#333
+    style D stroke:gray,stroke-width:1.6px,color:#333
+    style E stroke:green,stroke-width:1.6px,color:#333
 ```
 
 ### Mark as Success
@@ -371,18 +682,18 @@ steps:
         - "Analysis complete with warnings"
         - "re:Found [0-9]+ minor issues"
       markSuccess: true
-      
+
   # Graceful degradation pattern
   - command: echo "Processing with advanced settings"
     continueOn:
       failure: true
       output: ["FALLBACK REQUIRED", "re:.*not available.*"]
-      
+
   - command: echo "Processing with simple settings"
     preconditions:
       - condition: "${TRY_ADVANCED_METHOD_EXIT_CODE}"
         expected: "re:[1-9][0-9]*"
-        
+
   # Skip pattern with continuation
   - command: echo "Running feature"
     preconditions:
@@ -390,6 +701,22 @@ steps:
         expected: "true"
     continueOn:
       skipped: true  # Continue if precondition not met
+```
+
+```mermaid
+stateDiagram-v2
+    [*] --> Step
+    Step --> Next: exitCode in allowed or output matches
+    Step --> Failed: otherwise
+    Next --> [*]
+    Failed --> Next: continueOn.markSuccess
+
+    classDef step stroke:lightblue,stroke-width:1.6px,color:#333
+    classDef next stroke:green,stroke-width:1.6px,color:#333
+    classDef fail stroke:red,stroke-width:1.6px,color:#333
+    class Step step
+    class Next next
+    class Failed fail
 ```
 
 See the [Continue On Reference](/reference/continue-on) for complete documentation.
@@ -407,6 +734,20 @@ steps:
   - echo "Running daily job"
 ```
 
+```mermaid
+flowchart TD
+    A[Start DAG] --> B{Weekday?}
+    B --> |Yes| C[Run daily job]
+    B --> |No| D[Skip entire DAG]
+    C --> E[End]
+    D --> E
+    style A stroke:lightblue,stroke-width:1.6px,color:#333
+    style B stroke:lightblue,stroke-width:1.6px,color:#333
+    style C stroke:green,stroke-width:1.6px,color:#333
+    style D stroke:gray,stroke-width:1.6px,color:#333
+    style E stroke:lightblue,stroke-width:1.6px,color:#333
+```
+
 ### Skip If Already Successful
 
 ```yaml
@@ -415,4 +756,18 @@ skipIfSuccessful: true  # Skip if already ran successfully today (e.g., run manu
 
 steps:
   - echo "Syncing data"
+```
+
+```mermaid
+flowchart TD
+    A[Scheduled trigger] --> B{Already succeeded today?}
+    B --> |Yes| D[Skip run]
+    B --> |No| C[Sync data]
+    C --> E[End]
+    D --> E
+    style A stroke:lightblue,stroke-width:1.6px,color:#333
+    style B stroke:lightblue,stroke-width:1.6px,color:#333
+    style C stroke:green,stroke-width:1.6px,color:#333
+    style D stroke:gray,stroke-width:1.6px,color:#333
+    style E stroke:lightblue,stroke-width:1.6px,color:#333
 ```
