@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.26.0 (UNRELEASED)
+
+### Added
+- Spec: Added optional `negate` flag for preconditions at both DAG and step levels to invert condition evaluation (#1451)
+
+### Fixed
+- Runtime: Log tails and recent stderr now decode multiple encodings (Shift_JIS, EUC-JP, ISO-8859-1, Windows-1252, GBK, Big5, EUC-KR, UTF-8) properly based on system locale (#1449)
+- Runtime: Special environment variables (`DAG_NAME`, `DAG_RUN_ID`, `DAG_RUN_LOG_FILE`) are now properly accessible in failure handlers and executor config evaluation (#1448)
+
+## v1.25.1 (2025-12-05)
+
+### Fixed
+- Mail: Added STARTTLS and LOGIN auth support for SMTP servers (#1446)
+- Windows: Fixed bug in command construction with PowerShell/cmd.exe (#1445)
+
 ## v1.25.0 (2025-12-04)
 
 ### Added
