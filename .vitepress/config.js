@@ -99,6 +99,7 @@ const fullSidebar = [
         collapsed: false,
         items: [
           { text: "Overview", link: "/configurations/authentication" },
+          { text: "Builtin Auth (RBAC)", link: "/configurations/authentication/builtin" },
           { text: "Basic Auth", link: "/configurations/authentication/basic" },
           { text: "Token Auth", link: "/configurations/authentication/token" },
           { text: "OIDC", link: "/configurations/authentication/oidc" },
@@ -115,10 +116,6 @@ const fullSidebar = [
             link: "/configurations/authentication/oidc-keycloak",
           },
           { text: "TLS/HTTPS", link: "/configurations/authentication/tls" },
-          {
-            text: "Permissions",
-            link: "/configurations/authentication/permissions",
-          },
           {
             text: "Remote Nodes",
             link: "/configurations/authentication/remote-nodes",

@@ -53,13 +53,29 @@ permissions:
   writeDAGs: true         # Allow creating/editing/deleting DAGs
   runDAGs: true           # Allow running/stopping/retrying DAGs
 
-# Authentication (enabled when credentials are set)
+# Authentication
 auth:
+  mode: "builtin"              # "none", "builtin", or "oidc"
+
+  # Builtin auth (user management with RBAC)
+  builtin:
+    admin:
+      username: "admin"
+      password: ""             # Auto-generated if empty
+    token:
+      secret: "your-secret"    # Required for JWT signing
+      ttl: "24h"
+
+  # Basic auth (simple username/password)
   basic:
     username: "admin"
     password: "secret"
+
+  # Token auth (API token)
   token:
     value: "your-secret-token"
+
+  # OIDC auth
   oidc:
     clientId: "your-client-id"
     clientSecret: "your-client-secret"
@@ -129,9 +145,22 @@ All options support `DAGU_` prefix:
 - `DAGU_DATA_DIR` - Data
 
 **Auth:**
+- `DAGU_AUTH_MODE` - Auth mode: `none`, `builtin`, or `oidc`
+
+*Builtin Auth (RBAC):*
+- `DAGU_AUTH_TOKEN_SECRET` - JWT signing secret (required)
+- `DAGU_AUTH_TOKEN_TTL` - JWT token expiry (default: `24h`)
+- `DAGU_AUTH_ADMIN_USERNAME` - Initial admin username (default: `admin`)
+- `DAGU_AUTH_ADMIN_PASSWORD` - Initial admin password (auto-generated if empty)
+
+*Basic Auth:*
 - `DAGU_AUTH_BASIC_USERNAME` - Basic auth username
 - `DAGU_AUTH_BASIC_PASSWORD` - Basic auth password
+
+*Token Auth:*
 - `DAGU_AUTH_TOKEN` - API token
+
+*OIDC Auth:*
 - `DAGU_AUTH_OIDC_CLIENT_ID` - OIDC client ID
 - `DAGU_AUTH_OIDC_CLIENT_SECRET` - OIDC client secret
 - `DAGU_AUTH_OIDC_CLIENT_URL` - OIDC client URL
@@ -159,9 +188,14 @@ port: 443
 permissions:
   writeDAGs: false
 auth:
-  basic:
-    username: "admin"
-    password: "${ADMIN_PASSWORD}"
+  mode: builtin
+  builtin:
+    admin:
+      username: "admin"
+      password: "${ADMIN_PASSWORD}"
+    token:
+      secret: "${AUTH_TOKEN_SECRET}"
+      ttl: "24h"
 tls:
   certFile: "/etc/ssl/cert.pem"
   keyFile: "/etc/ssl/key.pem"
@@ -171,15 +205,47 @@ tls:
 ```bash
 docker run -d \
   -e DAGU_HOST=0.0.0.0 \
-  -e DAGU_AUTH_BASIC_USERNAME=admin \
-  -e DAGU_AUTH_BASIC_PASSWORD=secret \
+  -e DAGU_AUTH_MODE=builtin \
+  -e DAGU_AUTH_TOKEN_SECRET=your-secure-secret \
   -p 8080:8080 \
+  -v dagu-data:/var/lib/dagu \
   ghcr.io/dagu-org/dagu:latest
+# Admin password auto-generated on first run, check logs
 ```
 
 ## Authentication
 
+### Builtin Auth (Recommended)
+
+User management with role-based access control (RBAC). Supports multiple users with roles: `admin`, `manager`, `operator`, `viewer`.
+
+```yaml
+auth:
+  mode: builtin
+  builtin:
+    admin:
+      username: "admin"
+      password: ""  # Auto-generated if empty
+    token:
+      secret: "${AUTH_TOKEN_SECRET}"  # Required
+      ttl: "24h"
+```
+
+```bash
+# Environment variables
+export DAGU_AUTH_MODE=builtin
+export DAGU_AUTH_TOKEN_SECRET=your-secure-secret
+# Password auto-generated on first run, printed to stdout
+```
+
+On first startup, an admin user is created. If no password is set, one is auto-generated and printed to stdout. Use the web UI to manage users and change passwords.
+
+See [Builtin Authentication](authentication/builtin) for detailed setup.
+
 ### Basic Auth
+
+Simple single-user authentication without user management.
+
 ```yaml
 auth:
   basic:
@@ -207,7 +273,7 @@ auth:
     clientSecret: "${OIDC_CLIENT_SECRET}"
     clientUrl: "https://dagu.example.com"
     issuer: "https://accounts.google.com"
-    scopes: 
+    scopes:
       - "email"
     whitelist:
       - "admin@dagu.example.com" # Optional: restrict to specific emails

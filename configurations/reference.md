@@ -37,11 +37,25 @@ permissions:
   writeDAGs: true         # Create/edit/delete DAGs
   runDAGs: true           # Run/stop/retry DAGs
 
-# Authentication (enabled when credentials are set)
+# Authentication
 auth:
+  mode: "builtin"          # "none", "builtin", or "oidc"
+
+  # Builtin auth (user management with RBAC)
+  builtin:
+    admin:
+      username: "admin"
+      password: ""         # Auto-generated if empty
+    token:
+      secret: "your-secret-key"  # Required for JWT signing
+      ttl: "24h"
+
+  # Basic auth (simple username/password)
   basic:
     username: "admin"
     password: "secret"
+
+  # Token auth (API token)
   token:
     value: "your-token"
 
@@ -158,8 +172,20 @@ All options support `DAGU_` prefix.
 **Note:** The `--dagu-home` CLI flag takes precedence over the `DAGU_HOME` environment variable.
 
 ### Authentication
+- `DAGU_AUTH_MODE` - Authentication mode: `none`, `builtin`, or `oidc`
+
+#### Builtin Auth (RBAC)
+- `DAGU_AUTH_TOKEN_SECRET` - JWT signing secret (required for builtin auth)
+- `DAGU_AUTH_TOKEN_TTL` - JWT token expiry (default: `24h`)
+- `DAGU_AUTH_ADMIN_USERNAME` - Initial admin username (default: `admin`)
+- `DAGU_AUTH_ADMIN_PASSWORD` - Initial admin password (auto-generated if empty)
+- `DAGU_USERS_DIR` - User data directory (default: `{dataDir}/users`)
+
+#### Basic Auth
 - `DAGU_AUTH_BASIC_USERNAME` - Basic auth username
 - `DAGU_AUTH_BASIC_PASSWORD` - Basic auth password
+
+#### Token Auth
 - `DAGU_AUTH_TOKEN` - API token for token authentication
 
 ### TLS/HTTPS
@@ -348,9 +374,14 @@ host: 0.0.0.0
 port: 443
 
 auth:
-  basic:
-    username: admin
-    password: ${ADMIN_PASSWORD}
+  mode: builtin
+  builtin:
+    admin:
+      username: admin
+      password: ${ADMIN_PASSWORD}
+    token:
+      secret: ${AUTH_TOKEN_SECRET}
+      ttl: 24h
 
 tls:
   certFile: /etc/ssl/certs/dagu.crt
