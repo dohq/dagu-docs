@@ -172,7 +172,7 @@ All options support `DAGU_` prefix.
 **Note:** The `--dagu-home` CLI flag takes precedence over the `DAGU_HOME` environment variable.
 
 ### Authentication
-- `DAGU_AUTH_MODE` - Authentication mode: `none`, `builtin`, or `oidc`
+- `DAGU_AUTH_MODE` - Authentication mode: `none`, `builtin`, or `oidc` (default: `none`)
 
 #### Builtin Auth (RBAC)
 - `DAGU_AUTH_TOKEN_SECRET` - JWT signing secret (required for builtin auth)

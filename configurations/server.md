@@ -145,7 +145,7 @@ All options support `DAGU_` prefix:
 - `DAGU_DATA_DIR` - Data
 
 **Auth:**
-- `DAGU_AUTH_MODE` - Auth mode: `none`, `builtin`, or `oidc`
+- `DAGU_AUTH_MODE` - Auth mode: `none`, `builtin`, or `oidc` (default: `none`)
 
 *Builtin Auth (RBAC):*
 - `DAGU_AUTH_TOKEN_SECRET` - JWT signing secret (required)
