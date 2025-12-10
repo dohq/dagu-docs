@@ -1,13 +1,49 @@
 # Changelog
 
-## v1.26.0 (UNRELEASED)
+## v1.26.2 (2025-12-10)
 
 ### Added
 - Spec: Added optional `negate` flag for preconditions at both DAG and step levels to invert condition evaluation (#1451)
+- Spec: Added `init` handler field that executes after preconditions but before workflow steps - if it fails, subsequent steps are prevented from executing (#1455)
+- Spec: Added `abort` handler as canonical replacement for the deprecated `cancel` handler (#1455)
+- Spec: Added `skipBaseHandlers` option to prevent sub-DAGs from inheriting parent handler configurations (#1455)
+- Spec: Added `continueOn` shorthand syntax - users can now specify `continueOn: "skipped"` or `continueOn: "failed"` instead of verbose object definitions (#1454)
+- CLI: Added `--default-working-dir` flag to `start` and `enqueue` commands to specify a fallback working directory for DAG executions; automatically propagates to sub-DAGs (#1459)
+- Feature: Added comprehensive resource monitoring for CPU, memory, disk, and system load with in-memory retention store and API endpoint (`GET /services/resources/history`) (#1461)
+- UI: Added resource usage visualization charts on System Status page (#1461)
+- Feature: Implemented built-in JWT-based authentication system with role-based access control (RBAC) (#1463)
+  - Four-tier role hierarchy: admin, manager, operator, viewer
+  - Complete user management APIs (create, list, view, update, delete)
+  - File-backed user store with atomic writes and thread-safety
+  - Login flow, protected routes, user management UI
+- Config: Added `AUTH_MODE` environment variable supporting `none`, `builtin`, and `oidc` modes (#1463)
+
+### Changed
+- Config: Refactored configuration loader to use service-scoped loading that only loads necessary settings for each command context, improving startup performance (#1467)
+- Config: Replaced public `Global` config field with `Core` across the codebase (#1467)
+- Config: Standardized key=value parsing using `strings.Cut` instead of `strings.SplitN` (#1467)
+- API: v1 API routes are now disabled when authentication is enabled (#1463)
 
 ### Fixed
 - Runtime: Log tails and recent stderr now decode multiple encodings (Shift_JIS, EUC-JP, ISO-8859-1, Windows-1252, GBK, Big5, EUC-KR, UTF-8) properly based on system locale (#1449)
 - Runtime: Special environment variables (`DAG_NAME`, `DAG_RUN_ID`, `DAG_RUN_LOG_FILE`) are now properly accessible in failure handlers and executor config evaluation (#1448)
+- Queue: Fixed queued DAG jobs failing to process with "name or path is required" error - queue items now use lazy, file-backed loading with proper error handling (#1457, #1437)
+- UI: Disabled step retry buttons while a DAG is actively running to prevent unintended behavior (#1447)
+- Validation: Added maximum DAG name length validation (40 characters) with pre-validation on rename operations (#1469)
+- Config: Made auth mode nullable in configuration, establishing "none" as the default with runtime validation (#1469)
+- UI: Enhanced dark-mode text selection styling for input fields (#1469)
+
+### Contributors
+
+Thanks to our contributors for this release:
+
+| Contribution | Contributor |
+| --- | --- |
+| Stop step retry while DAG is running UI fix (#1447) | [@kriyanshii](https://github.com/kriyanshii) |
+| Queued DAGs not starting bug report (#1437) | [@kriyanshii](https://github.com/kriyanshii) |
+| Init handler field feedback | [@ghansham](https://github.com/ghansham) |
+
+**Full Changelog**: [v1.25.1...v1.26.0](https://github.com/dagu-org/dagu/compare/v1.25.1...v1.26.0)
 
 ## v1.25.1 (2025-12-05)
 
