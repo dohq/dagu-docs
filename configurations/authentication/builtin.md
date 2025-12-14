@@ -33,7 +33,38 @@ auth:
     token:
       secret: your-secure-random-secret-key
       ttl: 24h
+  # Optional: API token for programmatic access (works alongside JWT)
+  token:
+    value: your-api-token
 ```
+
+### Token TTL Format
+
+The `ttl` field uses Go's duration format. Valid time units are:
+
+| Unit | Description | Example |
+|------|-------------|---------|
+| `ns` | nanoseconds | `1000000ns` |
+| `us` (or `µs`) | microseconds | `1000us` |
+| `ms` | milliseconds | `1000ms` |
+| `s` | seconds | `3600s` |
+| `m` | minutes | `60m` |
+| `h` | hours | `24h` |
+
+**Note:** Days (`d`) and weeks (`w`) are **not supported**. Use hours instead.
+
+Common TTL examples:
+
+| Duration | Value |
+|----------|-------|
+| 1 hour | `1h` |
+| 8 hours | `8h` |
+| 24 hours (1 day) | `24h` |
+| 7 days | `168h` |
+| 30 days | `720h` |
+| 365 days | `8760h` |
+
+You can also combine units: `1h30m`, `2h45m30s`
 
 ### Environment Variables
 
@@ -169,6 +200,21 @@ services:
 volumes:
   dagu-data:
 ```
+
+## Important Notes
+
+- **Basic Auth Ignored**: When `auth.mode` is set to `builtin`, any `auth.basic` configuration is ignored. A warning will be logged. Use the builtin admin credentials instead.
+- **API Token Support**: API tokens (`auth.token.value`) work alongside builtin auth for programmatic access without requiring JWT login.
+
+  ```yaml
+  auth:
+    mode: builtin
+    builtin:
+      token:
+        secret: your-jwt-secret
+    token:
+      value: your-api-token  # Use with: curl -H "Authorization: Bearer your-api-token"
+  ```
 
 ## Security Notes
 
