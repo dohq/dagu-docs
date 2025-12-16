@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.27.0 (UNRELEASED)
+
+### Added
+- CLI: Added `cleanup` command for removing old DAG-run data for specified DAG-name
+
+### Contributors
+
+Thanks to our contributors for this release:
+
+| Contribution | Contributor |
+| --- | --- |
+| Cleanup feature ideation (#1481) | [@kriyanshii](https://github.com/kriyanshii), [@ghansham](https://github.com/ghansham), [@jonathonc](https://github.com/jonathonc) |
+
 ## v1.26.4 (2025-12-14)
 
 ### Added

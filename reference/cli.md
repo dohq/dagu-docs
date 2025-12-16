@@ -327,6 +327,50 @@ Display version information.
 dagu version
 ```
 
+### `cleanup`
+
+Remove old DAG run history for a specified DAG.
+
+```bash
+dagu cleanup [options] DAG_NAME
+```
+
+**Options:**
+- `--retention-days` - Number of days to retain (default: `0` = delete all)
+- `--dry-run` - Preview what would be deleted without actually deleting
+- `--yes, -y` - Skip confirmation prompt
+
+Active runs (running, queued) are never deleted for safety.
+
+```bash
+# Delete all history (with confirmation prompt)
+dagu cleanup my-workflow
+
+# Keep last 30 days of history
+dagu cleanup --retention-days 30 my-workflow
+
+# Preview what would be deleted
+dagu cleanup --dry-run my-workflow
+
+# Delete without confirmation (for scripts)
+dagu cleanup -y my-workflow
+
+# Combine options
+dagu cleanup --retention-days 7 -y my-workflow
+```
+
+**Output:**
+```
+# Dry run output
+Dry run: Would delete 5 run(s) for DAG "my-workflow":
+  - 019b1c4b-1b1e-7232-b12d-e822dac72613
+  - 019b1c4b-13e1-7251-a713-aaad60dfa88c
+  ...
+
+# Actual deletion output
+Successfully removed 5 run(s) for DAG "my-workflow"
+```
+
 ### `migrate`
 
 Migrate legacy data to new format.
