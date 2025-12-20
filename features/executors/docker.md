@@ -88,6 +88,7 @@ If the DAG has a top‑level `container:` configured, any step using the Docker 
 - Required fields:
   - Step‑level: Provide `config.image`, `config.containerName`, or both. Without either the step fails. Only `containerName` requires the container to already be running; with both set, Dagu will start the container from `image` if needed.
   - DAG‑level: `container.image` is required.
+- Container name (DAG‑level `container.name`): Must be unique. If a container with the same name already exists (running or stopped), the DAG fails with an error.
 - Volume format (DAG‑level `container.volumes`): `source:target[:ro|rw]`
   - `source` may be absolute, relative to DAG workingDir (`.` or `./...`), or `~`-expanded; otherwise it is treated as a named volume.
   - Only `ro` or `rw` are valid modes; invalid formats fail with “invalid volume format”.
@@ -109,6 +110,7 @@ The `container` field supports all Docker configuration options:
 ```yaml
 container:
   image: node:24                    # Required
+  name: my-workflow-container       # Custom container name (optional)
   pullPolicy: missing               # always, missing, never
   env:
     - NODE_ENV=production
@@ -124,6 +126,19 @@ container:
   network: host                    # Network mode
   keepContainer: true              # Keep container running
 ```
+
+### Custom Container Name
+
+```yaml
+container:
+  image: python:3.11
+  name: my-worker
+
+steps:
+  - python process.py
+```
+
+The `name` field sets a custom container name instead of a random one. The name must be unique—if a container with the same name already exists (running or stopped), the DAG fails.
 
 ### How Commands Execute with DAG-level Container
 
