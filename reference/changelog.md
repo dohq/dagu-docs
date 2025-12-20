@@ -13,7 +13,7 @@ Thanks to our contributors for this release:
 | --- | --- |
 | Cleanup feature ideation (#1481) | [@kriyanshii](https://github.com/kriyanshii), [@ghansham](https://github.com/ghansham), [@jonathonc](https://github.com/jonathonc) |
 
-## v1.26.5 (UNRELEASED)
+## v1.26.5 (2025-12-20)
 
 ### Added
 - Runtime: Add support for multi-level nested DAG execution
