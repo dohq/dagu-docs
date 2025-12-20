@@ -13,6 +13,12 @@ Thanks to our contributors for this release:
 | --- | --- |
 | Cleanup feature ideation (#1481) | [@kriyanshii](https://github.com/kriyanshii), [@ghansham](https://github.com/ghansham), [@jonathonc](https://github.com/jonathonc) |
 
+## v1.26.5 (UNRELEASED)
+
+### Added
+- Runtime: Add support for multi-level nested DAG execution
+- Spec: Add `containerName` field to DAG-level `container` field
+
 ## v1.26.4 (2025-12-14)
 
 ### Added

@@ -121,6 +121,7 @@ schedule:
 
 ```yaml
 container:
+  name: my-workflow        # Optional: custom container name
   image: python:3.11
   pullPolicy: missing      # always, missing, never
   env:

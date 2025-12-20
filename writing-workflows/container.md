@@ -70,6 +70,7 @@ Or use `DOCKER_AUTH_CONFIG` environment variable (same format as `~/.docker/conf
 
 ```yaml
 container:
+  name: my-workflow-container # Custom container name (optional)
   image: ubuntu:22.04        # Required
   pullPolicy: missing        # always | missing | never
   volumes:                   # Volume mounts
@@ -93,6 +94,7 @@ container:
 ### Validation and Errors
 
 - `image` is required.
+- `name` is optional; if specified, must be unique. If a container with the same name already exists (running or stopped), the workflow fails.
 - `volumes` must use `source:target[:ro|rw]` format; relative paths are resolved from the DAG `workingDir`; invalid formats fail.
 - `ports` accept `"80"`, `"8080:80"`, `"127.0.0.1:8080:80"`; container port may have `/tcp|udp|sctp` (default tcp); invalid formats fail.
 - `network` accepts `bridge`, `host`, `none`, `container:<name|id>`, or a custom network name.
