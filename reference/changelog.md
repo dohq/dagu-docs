@@ -1,24 +1,13 @@
 # Changelog
 
-## v1.27.0 (UNRELEASED)
+## v1.27.0 (2025-12-21)
 
 ### Added
 - CLI: Added `cleanup` command for removing old DAG-run data for specified DAG-name
-
-### Contributors
-
-Thanks to our contributors for this release:
-
-| Contribution | Contributor |
-| --- | --- |
-| Cleanup feature ideation (#1481) | [@kriyanshii](https://github.com/kriyanshii), [@ghansham](https://github.com/ghansham), [@jonathonc](https://github.com/jonathonc) |
-
-## v1.26.6 (2025-12-21)
-
-## Fixed
 - Runtime, API: Fix issues that a DAG run often fails due to max active run check
+- UI: Updated frontend design color schema and removed dark mode UI
 
-## v1.26.5 (2025-12-20)
+## v1.26.7 (2025-12-20)
 
 ### Added
 - Runtime: Add support for multi-level nested DAG execution
