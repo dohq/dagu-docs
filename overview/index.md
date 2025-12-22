@@ -11,30 +11,46 @@ Dagu executes your workflows, which are defined as a series of steps in a YAML f
 
 For example, a simple sequential DAG:
 ```yaml
+type: chain
 steps:
-  - echo "Hello, dagu!"
-  - echo "This is a second step"
+  - command: echo "Hello, dagu!"
+  - command: echo "This is a second step"
+```
+
+```mermaid
+graph LR
+    A["Hello, dagu!"] --> B["This is a second step"]
+    style A stroke:green,stroke-width:1.6px,color:#333
+    style B stroke:lime,stroke-width:1.6px,color:#333
 ```
 
 With parallel steps:
 ```yaml
-steps:
-  - echo "Step 1"
-  - 
-    - echo "Step 2a - runs in parallel"
-    - echo "Step 2b - runs in parallel"
-  - echo "Step 3 - waits for parallel steps"
-```
-
-Or with explicit dependencies:
-```yaml
 type: graph
 steps:
-  - name: step 1
-    command: echo "Hello, dagu!"
-  - name: step 2
-    command: echo "This is a second step"
-    depends: step 1
+  - id: step_1
+    command: echo "Step 1"
+  - id: step_2a
+    command: echo "Step 2a - runs in parallel"
+    depends: [step_1]
+  - id: step_2b
+    command: echo "Step 2b - runs in parallel"
+    depends: [step_1]
+  - id: step_3
+    command: echo "Step 3 - waits for parallel steps"
+    depends: [step_2a, step_2b]
+```
+
+```mermaid
+graph TD
+    A[step_1] --> B[step_2a]
+    A --> C[step_2b]
+    B --> D[step_3]
+    C --> D
+    style A stroke:green,stroke-width:1.6px,color:#333
+    style B stroke:lime,stroke-width:1.6px,color:#333
+    style C stroke:lime,stroke-width:1.6px,color:#333
+    style D stroke:lightblue,stroke-width:1.6px,color:#333
 ```
 
 ## Demo
@@ -50,30 +66,6 @@ steps:
 ![Demo Web UI](/demo-web-ui.webp)
 
 [Docs on Web UI](/overview/web-ui)
-
-## When to Use Dagu
-
-**Perfect for:**
-- Data pipelines and ETL
-- DevOps automation
-- Scheduled jobs and batch processing
-- Replacing cron with something manageable
-- Local development and testing
-
-**Not ideal for:**
-- Sub-second scheduling requirements
-- Real-time stream processing
-
-## Quick Comparison
-
-| Feature | Cron | Airflow | Dagu |
-|---------|------|---------|------|
-| Dependencies | ❌ Manual | ✅ Python only | ✅ Any language |
-| Monitoring | ❌ Log files | ✅ Web UI | ✅ Web UI |
-| Setup Time | ✅ Minutes | ❌ Hours/Days | ✅ Minutes |
-| Infrastructure | ✅ None | ❌ Database, Queue | ✅ None |
-| Error Handling | ❌ Manual | ✅ Built-in | ✅ Built-in |
-| Scheduling | ✅ Basic | ✅ Advanced | ✅ Advanced |
 
 ## Learn More
 
