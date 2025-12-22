@@ -18,34 +18,34 @@ layout: doc
 
 ## What is Dagu?
 
-**Dagu is a batteries-included workflow engine that doesn't get in your way.** Define workflows in simple YAML, execute them anywhere with a single binary, compose complex pipelines from reusable sub-workflows, and distribute tasks across workers. Do all this without requiring databases, message brokers, or code changes to your existing scripts.
+**Workflow engine built for developers who want powerful workflow orchestration without the operational overhead.**
 
-Built for developers who want powerful workflow orchestration without the operational overhead.
+Define workflows in simple YAML, execute them anywhere with a single binary, compose complex pipelines from reusable sub-workflows, and distribute tasks across workers. All without requiring databases, message brokers, or code changes to your existing scripts.
 
 ### Web UI Preview
-![Demo Web UI](/demo-web-ui.webp)
+![Demo Web UI](./assets/images/demo-web-ui.webp)
 
 ### CLI Preview
-![Demo CLI](/demo-cli.webp)
+![Demo CLI](./assets/images/demo-cli.webp)
 
 ## Why Dagu?
 
-### 🚀 Zero Dependencies
+### Single binary file installation
 **Single binary. No database, no message broker.** Deploy anywhere in seconds, from your laptop to bare metal servers to Kubernetes. Everything is stored in plain files (XDG compliant), making it transparent, portable, and easy to backup. [Learn more](/getting-started/quickstart)
 
-### 🧩 Composable Nested Workflows
+### Composable Nested Workflows
 **Build complex pipelines from reusable building blocks.** Define sub-workflows that can be called with parameters, executed in parallel, and fully monitored in the UI. See execution traces for every nested level. No black boxes. [Learn more](/writing-workflows/basics#calling-sub-dags)
 
-### 🌐 Language Agnostic
+### Declarative YAML Language - Programming Not Required
 **Use your existing scripts without modification.** No need to wrap everything in Python decorators or rewrite logic. Dagu orchestrates shell commands, Docker containers, SSH commands, or HTTP calls. Use whatever you already have. [Learn more](/writing-workflows/basics)
 
-### ⚡ Distributed Execution
+### Distributed Execution
 **Built-in queue system with intelligent task routing.** Route tasks to workers based on labels (GPU, region, compliance requirements). Automatic service registry and health monitoring included. No external coordination service needed. [Learn more](/features/distributed-execution)
 
-### 🎯 Production Ready
-**Not a toy.** Battle-tested error handling with exponential backoff retries, lifecycle hooks (onSuccess, onFailure, onExit), real-time log streaming, email notifications, Prometheus metrics, and OpenTelemetry tracing out of the box. Built-in user management with role-based access control (RBAC) for team environments. [Learn more](/configurations/operations)
+### Production Ready
+**Everything you need out of the box.** Battle-tested error handling with exponential backoff retries, lifecycle hooks (onSuccess, onFailure, onExit), real-time log streaming, email notifications, Prometheus metrics, and OpenTelemetry tracing out of the box. Built-in user management with role-based access control (RBAC) for team environments. [Learn more](/configurations/operations)
 
-### 🎨 Modern Web UI
+### Modern Web UI with RBAC
 **Beautiful UI that actually helps you debug.** Live log tailing, DAG visualization with Gantt charts, execution history with full lineage, and drill-down into nested sub-workflows. Dark mode included. [Learn more](/configurations/server)
 
 ## Quick Start
