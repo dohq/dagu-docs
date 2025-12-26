@@ -3,6 +3,8 @@
 ## v1.29.0 (UNRELEASED)
 
 ### Added
+- Spec: Added `logOutput` field at DAG and step levels to control stdout/stderr logging behavior - `separate` (default) writes to separate `.out`/`.err` files, `merged` writes both to a single `.log` file with interleaved output (#1505)
+- UI: Added wrap/unwrap toggle button in log viewer for better readability of long lines
 - **Multiple Commands per Step**: Steps can now execute multiple commands sequentially using an array syntax. This allows sharing step configuration (`env`, `workingDir`, `retryPolicy`, `preconditions`, `container`, etc.) across multiple commands instead of duplicating it across separate steps.
 
 ```yaml

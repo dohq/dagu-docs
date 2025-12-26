@@ -110,6 +110,7 @@ schedule:
 | `workingDir` | string | Working directory for the DAG. Sub-DAGs inherit parent's workingDir if not set. | Directory of DAG file (or inherited from parent for sub-DAGs) |
 | `shell` | string/array | Default shell program (and args) for all steps; accepts string (`"bash -e"`) or array (`["bash", "-e"]`). Step-level `shell` overrides. | System shell with errexit on Unix when no step shell is set |
 | `logDir` | string | Custom log directory | System default |
+| `logOutput` | string | Log output mode: `separate` (stdout/stderr to separate files) or `merged` (both to single file) | `separate` |
 | `histRetentionDays` | integer | History retention days | `30` |
 | `maxOutputSize` | integer | Max output size per step (bytes) | `1048576` |
 
@@ -469,6 +470,7 @@ steps:
 | `shell` | string/array | Shell program and args for this step; overrides DAG `shell` | DAG `shell` (system default when omitted) |
 | `stdout` | string | Redirect stdout to file | - |
 | `stderr` | string | Redirect stderr to file | - |
+| `logOutput` | string | Override DAG-level log output mode for this step | DAG's logOutput |
 | `output` | string | Capture output to variable | - |
 | `env` | array/object | Step-specific environment variables (overrides DAG-level) | - |
 | `call` | string | Name of a DAG to execute as a sub DAG-run | - |
