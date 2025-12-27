@@ -1197,6 +1197,94 @@ Fetches the log for a specific step.
 }
 ```
 
+## DAG Run Outputs Endpoint
+
+### Get DAG Run Outputs
+
+**Endpoint**: `GET /api/v2/dag-runs/{name}/{dagRunId}/outputs`
+
+Retrieves the collected outputs from a completed DAG run. Outputs are collected from steps that have an `output` field defined.
+
+**Path Parameters**:
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| name | string | DAG name |
+| dagRunId | string | DAG run ID |
+
+**Query Parameters**:
+| Parameter | Type | Description | Default |
+|-----------|------|-------------|---------|
+| remoteNode | string | Remote node name | "local" |
+
+**Response (200)**:
+```json
+{
+  "metadata": {
+    "dagName": "data-processing-pipeline",
+    "dagRunId": "20240211_140000_abc123",
+    "attemptId": "attempt_20240211_140000_001",
+    "status": "succeeded",
+    "completedAt": "2024-02-11T14:45:30Z",
+    "params": "{\"date\": \"2024-02-11\", \"env\": \"production\"}"
+  },
+  "outputs": {
+    "extractedFile": "/tmp/extracted_20240211.csv",
+    "recordCount": "50000",
+    "transformedFile": "/tmp/transformed_20240211.csv"
+  }
+}
+```
+
+**Response Fields**:
+- `metadata`: Execution context for the outputs
+  - `dagName`: Name of the executed DAG
+  - `dagRunId`: Unique identifier for the DAG run
+  - `attemptId`: Identifier for the specific execution attempt
+  - `status`: Final status of the DAG run ("succeeded", "failed", "aborted")
+  - `completedAt`: RFC3339 timestamp when execution completed
+  - `params`: JSON-serialized parameters passed to the DAG
+- `outputs`: Key-value pairs of collected outputs
+  - Keys are converted from `SCREAMING_SNAKE_CASE` to `camelCase` by default
+  - Custom keys can be specified using `output.key` in the step definition
+
+**Response when no outputs (200)**:
+```json
+{
+  "metadata": {
+    "dagName": "",
+    "dagRunId": "",
+    "attemptId": "",
+    "status": "",
+    "completedAt": "0001-01-01T00:00:00Z"
+  },
+  "outputs": {}
+}
+```
+
+**Error Response (404)**:
+```json
+{
+  "code": "not_found",
+  "message": "dag-run ID 20240211_140000_abc123 not found for DAG data-processing-pipeline"
+}
+```
+
+**Notes**:
+- Outputs are only available for completed DAG runs (succeeded, failed, or aborted)
+- Secret values in outputs are automatically masked with `*******`
+- Steps with `output.omit: true` are excluded from the outputs
+
+**Example**:
+```bash
+# Get outputs from a specific DAG run
+curl "http://localhost:8080/api/v2/dag-runs/data-processing-pipeline/20240211_140000_abc123/outputs" \
+     -H "Authorization: Bearer your-token"
+
+# Get outputs from the latest DAG run
+curl "http://localhost:8080/api/v2/dag-runs/data-processing-pipeline/latest/outputs" \
+     -H "Authorization: Bearer your-token"
+```
+
 ## Step Management Endpoints
 
 ### Update Step Status

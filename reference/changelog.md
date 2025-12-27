@@ -4,6 +4,34 @@
 
 ### Added
 - Spec: Added `logOutput` field at DAG and step levels to control stdout/stderr logging behavior - `separate` (default) writes to separate `.out`/`.err` files, `merged` writes both to a single `.log` file with interleaved output (#1505)
+- **DAG Run Outputs Collection**: Collect step outputs into a structured `outputs.json` file per DAG run. View collected outputs in the Web UI via the new Outputs tab. (#1466)
+  - Outputs are automatically collected from steps with `output` field
+  - Secret values are automatically masked in outputs
+  - Enhanced `output` field syntax supports object form with `name`, `key`, and `omit` options:
+
+```yaml
+steps:
+  # Simple string form (existing behavior)
+  - name: get-count
+    command: echo "COUNT=42"
+    output: COUNT
+
+  # Object form with custom key
+  - name: get-version
+    command: cat VERSION
+    output:
+      name: VERSION
+      key: appVersion  # Custom key in outputs.json (default: camelCase of name)
+
+  # Object form with omit
+  - name: internal-step
+    command: echo "TEMP=value"
+    output:
+      name: TEMP
+      omit: true  # Exclude from outputs.json but still usable in DAG
+```
+
+  - API endpoint: `GET /api/v2/dag-runs/{name}/{dagRunId}/outputs`
 - UI: Added wrap/unwrap toggle button in log viewer for better readability of long lines
 - **API Key Management**: Added comprehensive API key management for programmatic access with role-based permissions. API keys provide a secure alternative to static tokens with fine-grained access control.
   - Create, list, update, and delete API keys via Web UI or REST API

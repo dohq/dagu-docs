@@ -13,6 +13,7 @@ Dagu provides multiple mechanisms for passing data through workflows:
 - JSON Path References - Access nested data structures
 - Step ID References - Reference step properties and files
 - Sub DAG Outputs - Capture results from sub-workflows
+- DAG Run Outputs - Collect all outputs into a structured file for viewing and API access
 
 ## Output Variables
 
@@ -22,7 +23,7 @@ Capture command output and use it in subsequent steps:
 steps:
   - command: cat VERSION
     output: VERSION
-    
+
   - command: docker build -t myapp:${VERSION} .
 ```
 
@@ -32,6 +33,38 @@ steps:
 2. Stored in the variable name specified by `output`
 3. Available to all downstream steps via `${VARIABLE_NAME}`
 4. Trailing newlines are automatically trimmed
+5. Outputs are collected into `outputs.json` for the DAG run (see [DAG Run Outputs](#dag-run-outputs))
+
+### Advanced Output Syntax
+
+The `output` field supports both string and object forms:
+
+```yaml
+steps:
+  # Simple string form
+  - name: get-version
+    command: cat VERSION
+    output: VERSION
+
+  # Object form with custom key
+  - name: get-count
+    command: echo "TOTAL_COUNT=42"
+    output:
+      name: TOTAL_COUNT
+      key: totalItems  # Custom key in outputs.json (default: camelCase)
+
+  # Object form with omit
+  - name: internal-step
+    command: echo "TEMP=processing"
+    output:
+      name: TEMP
+      omit: true  # Usable in DAG, excluded from outputs.json
+```
+
+Object form properties:
+- `name` (required): Variable name to capture (same as string form)
+- `key`: Custom key for `outputs.json`. Default: variable name converted to camelCase (e.g., `TOTAL_COUNT` → `totalCount`)
+- `omit`: When `true`, output is usable within the DAG but excluded from `outputs.json`
 
 ### Multiple Outputs
 
@@ -380,3 +413,90 @@ steps:
       - MESSAGE: "Step level"  # This wins
     command: echo "${MESSAGE}"
 ```
+
+## DAG Run Outputs
+
+When a DAG run completes, all step outputs are collected into a structured `outputs.json` file. This provides a consolidated view of all outputs produced during execution.
+
+### Viewing Outputs
+
+Outputs can be viewed in:
+- **Web UI**: Navigate to a DAG run and click the "Outputs" tab
+- **API**: `GET /api/v2/dag-runs/{name}/{dagRunId}/outputs`
+- **File**: Located at `{data-dir}/{dag-name}/dag-runs/{date}/dag-run_{id}/attempt_{id}/outputs.json`
+
+### Output Structure
+
+The `outputs.json` file contains:
+
+```json
+{
+  "metadata": {
+    "dagName": "my-workflow",
+    "dagRunId": "abc123",
+    "attemptId": "attempt_001",
+    "status": "succeeded",
+    "completedAt": "2024-01-15T10:30:00Z",
+    "params": "{\"env\":\"prod\"}"
+  },
+  "outputs": {
+    "version": "1.2.3",
+    "recordCount": "1000",
+    "resultFile": "/data/results.json"
+  }
+}
+```
+
+### Key Naming
+
+Output keys are automatically converted from `SCREAMING_SNAKE_CASE` to `camelCase`:
+- `TOTAL_COUNT` → `totalCount`
+- `API_RESPONSE` → `apiResponse`
+- `VERSION` → `version`
+
+Use the `key` option to specify a custom key:
+
+```yaml
+output:
+  name: TOTAL_COUNT
+  key: itemCount  # Uses "itemCount" instead of "totalCount"
+```
+
+### Secret Masking
+
+Output values containing secrets are automatically masked with `*******`. This applies to any secret defined in the DAG's `secrets` section:
+
+```yaml
+secrets:
+  - name: API_KEY
+    provider: env
+    key: MY_API_KEY
+
+steps:
+  - name: call-api
+    command: echo "Response with ${API_KEY}"
+    output: RESPONSE  # API_KEY value will be masked in outputs.json
+```
+
+### Excluding Outputs
+
+Use `omit: true` to exclude specific outputs from `outputs.json` while still making them available within the DAG:
+
+```yaml
+steps:
+  - name: get-temp-token
+    command: get-token.sh
+    output:
+      name: TEMP_TOKEN
+      omit: true  # Not saved to outputs.json
+
+  - name: use-token
+    command: curl -H "Token: ${TEMP_TOKEN}" https://api.example.com
+```
+
+### Use Cases
+
+- **Audit trail**: Track what each DAG run produced
+- **Debugging**: Inspect outputs from completed runs
+- **Integration**: Fetch outputs via API for downstream systems
+- **Reporting**: Generate reports from aggregated outputs
