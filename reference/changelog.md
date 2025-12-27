@@ -5,6 +5,29 @@
 ### Added
 - Spec: Added `logOutput` field at DAG and step levels to control stdout/stderr logging behavior - `separate` (default) writes to separate `.out`/`.err` files, `merged` writes both to a single `.log` file with interleaved output (#1505)
 - UI: Added wrap/unwrap toggle button in log viewer for better readability of long lines
+- **API Key Management**: Added comprehensive API key management for programmatic access with role-based permissions. API keys provide a secure alternative to static tokens with fine-grained access control.
+  - Create, list, update, and delete API keys via Web UI or REST API
+  - Role-based permissions (admin, manager, operator, viewer) per key
+  - Usage tracking with `lastUsedAt` timestamp
+  - Secure key generation with bcrypt hashing
+  - Keys use `dagu_` prefix for easy identification
+  - Web UI management at Settings > API Keys (admin only)
+  - Full REST API at `/api/v2/api-keys` endpoints
+
+```bash
+# Create an API key
+curl -X POST http://localhost:8080/api/v2/api-keys \
+  -H "Authorization: Bearer $JWT_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "ci-pipeline", "role": "operator"}'
+
+# Use the API key
+curl -H "Authorization: Bearer dagu_your-key-here" \
+  http://localhost:8080/api/v2/dags
+```
+
+Requires builtin authentication mode (`auth.mode: builtin`). See [API Keys documentation](/configurations/authentication/api-keys) for details.
+
 - **Multiple Commands per Step**: Steps can now execute multiple commands sequentially using an array syntax. This allows sharing step configuration (`env`, `workingDir`, `retryPolicy`, `preconditions`, `container`, etc.) across multiple commands instead of duplicating it across separate steps.
 
 ```yaml

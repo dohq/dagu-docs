@@ -8,6 +8,7 @@ Builtin authentication provides user management with role-based access control (
 - **Role-Based Access Control**: Four roles with different permission levels
 - **JWT Authentication**: Secure token-based authentication
 - **Password Management**: Users can change their own passwords; admins can reset any user's password
+- **API Key Management**: Create and manage API keys for programmatic access with role-based permissions
 
 ## Roles
 
@@ -223,6 +224,33 @@ volumes:
 - **Token Expiry**: Tokens expire after the configured TTL (default: 24 hours)
 - **V1 API**: The V1 API is disabled when builtin auth is enabled (use V2 API)
 
+## API Key Management
+
+Builtin authentication includes full API key management capabilities. API keys provide programmatic access with role-based permissions, ideal for CI/CD pipelines, automation scripts, and service-to-service communication.
+
+### Quick Start
+
+```bash
+# Create an API key via the API (requires admin JWT token)
+curl -X POST http://localhost:8080/api/v2/api-keys \
+  -H "Authorization: Bearer $JWT_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "ci-pipeline", "role": "operator"}'
+
+# Use the API key
+curl -H "Authorization: Bearer dagu_your-api-key-here" \
+  http://localhost:8080/api/v2/dags
+```
+
+### Key Features
+
+- **Role Assignment**: Each API key has its own role (admin, manager, operator, viewer)
+- **Usage Tracking**: See when each key was last used
+- **Web UI Management**: Create and manage keys from Settings > API Keys
+- **Secure Storage**: Keys are hashed; the full key is only shown once at creation
+
+For detailed documentation, see [API Keys](api-keys).
+
 ## Comparison with Other Auth Methods
 
 | Feature | Basic Auth | Token Auth | OIDC | Builtin |
@@ -231,4 +259,5 @@ volumes:
 | Role-Based Access | No | No | External | Yes |
 | Password Change | No | No | External | Yes |
 | Multiple Users | No | No | Yes | Yes |
+| API Key Management | No | No | No | Yes |
 | Self-Hosted | Yes | Yes | No | Yes |

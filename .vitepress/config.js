@@ -100,6 +100,7 @@ const fullSidebar = [
         items: [
           { text: "Overview", link: "/configurations/authentication" },
           { text: "Builtin Auth (RBAC)", link: "/configurations/authentication/builtin" },
+          { text: "API Keys", link: "/configurations/authentication/api-keys" },
           { text: "Basic Auth", link: "/configurations/authentication/basic" },
           { text: "Token Auth", link: "/configurations/authentication/token" },
           { text: "OIDC", link: "/configurations/authentication/oidc" },

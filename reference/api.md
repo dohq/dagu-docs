@@ -8,11 +8,15 @@
 
 ### Authentication
 
-The API supports three authentication methods:
+The API supports multiple authentication methods:
 
+- **API Keys**: Include `Authorization: Bearer dagu_<key>` header (requires Builtin Auth)
+- **JWT Token**: Include `Authorization: Bearer <jwt-token>` header (from login endpoint)
+- **Static Token**: Include `Authorization: Bearer <token>` header (configured via `auth.token.value`)
 - **Basic Auth**: Include `Authorization: Basic <base64(username:password)>` header
-- **Bearer Token**: Include `Authorization: Bearer <token>` header
 - **No Authentication**: When auth is disabled (default for local development)
+
+API keys are recommended for programmatic access as they support role-based permissions. See [API Keys](/configurations/authentication/api-keys) for details.
 
 ## System Endpoints
 
@@ -2105,6 +2109,202 @@ curl -X POST "http://localhost:8080/api/v2/dags/data-processing-pipeline/suspend
 | 409 | Conflict | Resource already exists (e.g., DAG name conflict) |
 | 500 | Internal Error | Server-side processing error |
 | 503 | Service Unavailable | Server unhealthy or scheduler not responding |
+
+## API Key Endpoints
+
+API key management endpoints require Builtin Authentication mode and admin role.
+
+### List API Keys
+
+**Endpoint**: `GET /api/v2/api-keys`
+
+Retrieves all API keys. Requires admin role.
+
+**Response (200)**:
+```json
+{
+  "apiKeys": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "name": "ci-pipeline",
+      "description": "API key for CI/CD pipeline",
+      "role": "operator",
+      "keyPrefix": "dagu_7Kq",
+      "createdAt": "2024-02-11T12:00:00Z",
+      "updatedAt": "2024-02-11T12:00:00Z",
+      "createdBy": "admin-user-id",
+      "lastUsedAt": "2024-02-11T15:30:00Z"
+    }
+  ]
+}
+```
+
+### Create API Key
+
+**Endpoint**: `POST /api/v2/api-keys`
+
+Creates a new API key. Requires admin role.
+
+**Request Body**:
+```json
+{
+  "name": "ci-pipeline",
+  "description": "API key for CI/CD pipeline",
+  "role": "operator"
+}
+```
+
+**Request Fields**:
+| Field | Type | Description | Required |
+|-------|------|-------------|----------|
+| name | string | Human-readable name (1-100 chars) | Yes |
+| description | string | Optional description (max 500 chars) | No |
+| role | string | Role: "admin", "manager", "operator", "viewer" | Yes |
+
+**Response (201)**:
+```json
+{
+  "apiKey": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "ci-pipeline",
+    "description": "API key for CI/CD pipeline",
+    "role": "operator",
+    "keyPrefix": "dagu_7Kq",
+    "createdAt": "2024-02-11T12:00:00Z",
+    "updatedAt": "2024-02-11T12:00:00Z",
+    "createdBy": "admin-user-id"
+  },
+  "key": "dagu_7Kq9mXxN3pLwR5tY2vZa8bCdEfGhJk4n6sUwXy0zA1B"
+}
+```
+
+::: warning
+The `key` field contains the full API key secret and is **only returned once** at creation time. Store it securely.
+:::
+
+**Error Response (409)**:
+```json
+{
+  "code": "already_exists",
+  "message": "API key with this name already exists"
+}
+```
+
+### Get API Key
+
+**Endpoint**: `GET /api/v2/api-keys/{keyId}`
+
+Retrieves a specific API key by ID. Requires admin role.
+
+**Response (200)**:
+```json
+{
+  "apiKey": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "ci-pipeline",
+    "description": "API key for CI/CD pipeline",
+    "role": "operator",
+    "keyPrefix": "dagu_7Kq",
+    "createdAt": "2024-02-11T12:00:00Z",
+    "updatedAt": "2024-02-11T12:00:00Z",
+    "createdBy": "admin-user-id",
+    "lastUsedAt": "2024-02-11T15:30:00Z"
+  }
+}
+```
+
+**Error Response (404)**:
+```json
+{
+  "code": "not_found",
+  "message": "API key not found"
+}
+```
+
+### Update API Key
+
+**Endpoint**: `PATCH /api/v2/api-keys/{keyId}`
+
+Updates an API key's metadata. Requires admin role.
+
+**Request Body**:
+```json
+{
+  "name": "production-ci",
+  "description": "Updated description",
+  "role": "manager"
+}
+```
+
+All fields are optional. Only provided fields are updated.
+
+**Response (200)**:
+```json
+{
+  "apiKey": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "name": "production-ci",
+    "description": "Updated description",
+    "role": "manager",
+    "keyPrefix": "dagu_7Kq",
+    "createdAt": "2024-02-11T12:00:00Z",
+    "updatedAt": "2024-02-11T16:00:00Z",
+    "createdBy": "admin-user-id",
+    "lastUsedAt": "2024-02-11T15:30:00Z"
+  }
+}
+```
+
+**Error Response (409)**:
+```json
+{
+  "code": "already_exists",
+  "message": "API key with this name already exists"
+}
+```
+
+### Delete API Key
+
+**Endpoint**: `DELETE /api/v2/api-keys/{keyId}`
+
+Deletes (revokes) an API key. Requires admin role.
+
+**Response (204)**: No content
+
+**Error Response (404)**:
+```json
+{
+  "code": "not_found",
+  "message": "API key not found"
+}
+```
+
+### Example: Full API Key Workflow
+
+```bash
+# 1. Login as admin to get JWT token
+TOKEN=$(curl -s -X POST http://localhost:8080/api/v2/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "admin", "password": "admin-password"}' | jq -r '.token')
+
+# 2. Create an API key
+API_KEY=$(curl -s -X POST http://localhost:8080/api/v2/api-keys \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "automation", "role": "operator"}' | jq -r '.key')
+
+echo "Created API key: $API_KEY"
+
+# 3. Use the API key for subsequent requests
+curl -H "Authorization: Bearer $API_KEY" \
+  http://localhost:8080/api/v2/dags
+
+# 4. Start a DAG with the API key
+curl -X POST http://localhost:8080/api/v2/dags/my-dag/start \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"params": "{\"env\": \"production\"}"}'
+```
 
 ## Workers Endpoints
 
