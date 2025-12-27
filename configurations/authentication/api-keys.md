@@ -123,6 +123,21 @@ deploy:
     DAGU_API_KEY: $DAGU_API_KEY
 ```
 
+### Remote Node Access
+
+API keys can authenticate requests from other Dagu servers configured as [remote nodes](remote-nodes). This enables managing multiple Dagu instances from a single UI with role-based access control.
+
+```yaml
+# On the main server, configure a remote node using an API key
+remoteNodes:
+  - name: production
+    apiBaseURL: https://prod.example.com/api/v2
+    isAuthToken: true
+    authToken: dagu_7Kq9mXxN3pLwR5tY2vZa8bCdEfGhJk4n6sUwXy0zA1B
+```
+
+See [Remote Nodes Authentication](remote-nodes) for complete setup instructions.
+
 ## API Key Roles
 
 API keys inherit the same role-based permissions as users:
