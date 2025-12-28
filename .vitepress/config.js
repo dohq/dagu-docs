@@ -101,6 +101,7 @@ const fullSidebar = [
           { text: "Overview", link: "/configurations/authentication" },
           { text: "Builtin Auth (RBAC)", link: "/configurations/authentication/builtin" },
           { text: "API Keys", link: "/configurations/authentication/api-keys" },
+          { text: "Webhooks", link: "/configurations/authentication/webhooks" },
           { text: "Basic Auth", link: "/configurations/authentication/basic" },
           { text: "Token Auth", link: "/configurations/authentication/token" },
           { text: "OIDC", link: "/configurations/authentication/oidc" },

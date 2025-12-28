@@ -11,12 +11,13 @@
 The API supports multiple authentication methods:
 
 - **API Keys**: Include `Authorization: Bearer dagu_<key>` header (requires Builtin Auth)
+- **Webhooks**: Include `Authorization: Bearer dagu_wh_<token>` header for triggering specific DAGs (requires Builtin Auth)
 - **JWT Token**: Include `Authorization: Bearer <jwt-token>` header (from login endpoint)
 - **Static Token**: Include `Authorization: Bearer <token>` header (configured via `auth.token.value`)
 - **Basic Auth**: Include `Authorization: Basic <base64(username:password)>` header
 - **No Authentication**: When auth is disabled (default for local development)
 
-API keys are recommended for programmatic access as they support role-based permissions. See [API Keys](/configurations/authentication/api-keys) for details.
+API keys are recommended for general programmatic access as they support role-based permissions. See [API Keys](/configurations/authentication/api-keys) for details. For triggering specific DAGs from external systems, see [Webhooks](/configurations/authentication/webhooks).
 
 ## System Endpoints
 
@@ -2392,6 +2393,289 @@ curl -X POST http://localhost:8080/api/v2/dags/my-dag/start \
   -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"params": "{\"env\": \"production\"}"}'
+```
+
+## Webhook Endpoints
+
+Webhooks allow external systems to trigger DAG executions via HTTP with DAG-specific tokens. Unlike API keys which provide general API access, webhooks are designed for integration with external services like CI/CD pipelines, GitHub, Slack, etc.
+
+Webhook management endpoints require Builtin Authentication mode and admin role.
+
+### Trigger DAG via Webhook
+
+**Endpoint**: `POST /api/v2/webhooks/{fileName}`
+
+Triggers a DAG execution using a webhook token. This endpoint uses webhook token authentication instead of regular API authentication.
+
+**Path Parameters**:
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| fileName | string | DAG file name |
+
+**Request Headers**:
+| Header | Description |
+|--------|-------------|
+| Authorization | `Bearer <webhook-token>` |
+
+**Request Body** (optional):
+```json
+{
+  "dagRunId": "custom-run-id",
+  "payload": {"key": "value"}
+}
+```
+
+**Request Fields**:
+| Field | Type | Description | Required |
+|-------|------|-------------|----------|
+| dagRunId | string | Custom run ID for idempotency | No |
+| payload | object | Data passed to DAG as WEBHOOK_PAYLOAD env var | No |
+
+**Response (200)**:
+```json
+{
+  "dagRunId": "20240211_120000_abc123",
+  "dagName": "my-dag"
+}
+```
+
+**Error Response (401)** - Missing or invalid token:
+```json
+{
+  "code": "unauthorized",
+  "message": "Invalid or missing webhook token"
+}
+```
+
+**Error Response (403)** - Webhook disabled:
+```json
+{
+  "code": "forbidden",
+  "message": "Webhook is disabled"
+}
+```
+
+**Error Response (404)** - DAG or webhook not found:
+```json
+{
+  "code": "not_found",
+  "message": "DAG not found"
+}
+```
+
+**Error Response (409)** - Duplicate dagRunId:
+```json
+{
+  "code": "already_exists",
+  "message": "DAG run with this ID already exists"
+}
+```
+
+### List All Webhooks
+
+**Endpoint**: `GET /api/v2/webhooks`
+
+Retrieves all webhooks. Requires admin role.
+
+**Response (200)**:
+```json
+{
+  "webhooks": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "dagName": "my-dag",
+      "tokenPrefix": "dagu_wh_7Kq",
+      "enabled": true,
+      "createdAt": "2024-02-11T12:00:00Z",
+      "updatedAt": "2024-02-11T12:00:00Z",
+      "createdBy": "admin-user-id",
+      "lastUsedAt": "2024-02-11T15:30:00Z"
+    }
+  ]
+}
+```
+
+### Get DAG Webhook
+
+**Endpoint**: `GET /api/v2/dags/{fileName}/webhook`
+
+Retrieves the webhook for a specific DAG. Requires admin role.
+
+**Response (200)**:
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "dagName": "my-dag",
+  "tokenPrefix": "dagu_wh_7Kq",
+  "enabled": true,
+  "createdAt": "2024-02-11T12:00:00Z",
+  "updatedAt": "2024-02-11T12:00:00Z",
+  "createdBy": "admin-user-id",
+  "lastUsedAt": "2024-02-11T15:30:00Z"
+}
+```
+
+**Error Response (404)**:
+```json
+{
+  "code": "not_found",
+  "message": "Webhook not found for this DAG"
+}
+```
+
+### Create DAG Webhook
+
+**Endpoint**: `POST /api/v2/dags/{fileName}/webhook`
+
+Creates a webhook for a DAG. Requires admin role. Each DAG can only have one webhook.
+
+**Response (201)**:
+```json
+{
+  "webhook": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "dagName": "my-dag",
+    "tokenPrefix": "dagu_wh_7Kq",
+    "enabled": true,
+    "createdAt": "2024-02-11T12:00:00Z",
+    "updatedAt": "2024-02-11T12:00:00Z",
+    "createdBy": "admin-user-id"
+  },
+  "token": "dagu_wh_7Kq9mXxN3pLwR5tY2vZa8bCdEfGhJk4n6sUwXy0zA1B"
+}
+```
+
+::: warning
+The `token` field contains the full webhook token and is **only returned once** at creation time. Store it securely.
+:::
+
+**Error Response (404)** - DAG not found:
+```json
+{
+  "code": "not_found",
+  "message": "DAG not found"
+}
+```
+
+**Error Response (409)** - Webhook already exists:
+```json
+{
+  "code": "already_exists",
+  "message": "Webhook already exists for this DAG"
+}
+```
+
+### Delete DAG Webhook
+
+**Endpoint**: `DELETE /api/v2/dags/{fileName}/webhook`
+
+Deletes the webhook for a DAG. Requires admin role.
+
+**Response (204)**: No content
+
+**Error Response (404)**:
+```json
+{
+  "code": "not_found",
+  "message": "Webhook not found"
+}
+```
+
+### Regenerate Webhook Token
+
+**Endpoint**: `POST /api/v2/dags/{fileName}/webhook/regenerate`
+
+Regenerates the token for a webhook. The old token is immediately invalidated. Requires admin role.
+
+**Response (200)**:
+```json
+{
+  "webhook": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "dagName": "my-dag",
+    "tokenPrefix": "dagu_wh_9Xz",
+    "enabled": true,
+    "createdAt": "2024-02-11T12:00:00Z",
+    "updatedAt": "2024-02-11T16:00:00Z",
+    "createdBy": "admin-user-id"
+  },
+  "token": "dagu_wh_9XzNewTokenGeneratedHereAfterRegeneration"
+}
+```
+
+**Error Response (404)**:
+```json
+{
+  "code": "not_found",
+  "message": "Webhook not found"
+}
+```
+
+### Toggle Webhook
+
+**Endpoint**: `POST /api/v2/dags/{fileName}/webhook/toggle`
+
+Enables or disables a webhook without regenerating the token. Requires admin role.
+
+**Request Body**:
+```json
+{
+  "enabled": false
+}
+```
+
+**Response (200)**:
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "dagName": "my-dag",
+  "tokenPrefix": "dagu_wh_7Kq",
+  "enabled": false,
+  "createdAt": "2024-02-11T12:00:00Z",
+  "updatedAt": "2024-02-11T16:00:00Z",
+  "createdBy": "admin-user-id",
+  "lastUsedAt": "2024-02-11T15:30:00Z"
+}
+```
+
+**Error Response (404)**:
+```json
+{
+  "code": "not_found",
+  "message": "Webhook not found"
+}
+```
+
+### Example: Using Webhooks
+
+```bash
+# 1. Login as admin to get JWT token
+TOKEN=$(curl -s -X POST http://localhost:8080/api/v2/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "admin", "password": "admin-password"}' | jq -r '.token')
+
+# 2. Create a webhook for a DAG
+WEBHOOK=$(curl -s -X POST http://localhost:8080/api/v2/dags/my-dag/webhook \
+  -H "Authorization: Bearer $TOKEN")
+
+WEBHOOK_TOKEN=$(echo $WEBHOOK | jq -r '.token')
+echo "Webhook token: $WEBHOOK_TOKEN"
+
+# 3. Trigger the DAG using the webhook
+curl -X POST http://localhost:8080/api/v2/webhooks/my-dag \
+  -H "Authorization: Bearer $WEBHOOK_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"payload": {"branch": "main", "commit": "abc123"}}'
+
+# 4. Regenerate token if compromised
+curl -X POST http://localhost:8080/api/v2/dags/my-dag/webhook/regenerate \
+  -H "Authorization: Bearer $TOKEN"
+
+# 5. Disable webhook temporarily
+curl -X POST http://localhost:8080/api/v2/dags/my-dag/webhook/toggle \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"enabled": false}'
 ```
 
 ## Workers Endpoints

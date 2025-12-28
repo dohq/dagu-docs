@@ -6,6 +6,7 @@ Configure authentication and access control for your Dagu instance.
 
 - [Builtin Authentication](authentication/builtin) - User management with role-based access control (RBAC)
 - [API Keys](authentication/api-keys) - Programmatic access with role-based permissions (requires Builtin Auth)
+- [Webhooks](authentication/webhooks) - DAG-specific tokens for external integrations (requires Builtin Auth)
 - [Basic Authentication](authentication/basic) - Simple username and password authentication
 - [Token Authentication](authentication/token) - API token-based authentication
 - [OIDC Authentication](authentication/oidc) - OpenID Connect authentication
@@ -73,6 +74,7 @@ auth:
 |--------|----------|
 | **Builtin** | Multiple users with different permission levels, self-hosted user management |
 | **API Keys** | CI/CD pipelines, automation with role-based access (requires Builtin Auth) |
+| **Webhooks** | External integrations (GitHub, Slack, CI/CD) to trigger specific DAGs (requires Builtin Auth) |
 | **Basic** | Single user, simple setup, no user management needed |
 | **Token** | Simple API-only access, legacy automation scripts |
 | **OIDC** | Enterprise SSO integration (Google, Auth0, Keycloak) |

@@ -56,6 +56,29 @@ curl -H "Authorization: Bearer dagu_your-key-here" \
 
 Requires builtin authentication mode (`auth.mode: builtin`). See [API Keys documentation](/configurations/authentication/api-keys) for details.
 
+- **Webhook Management**: Added DAG-specific webhooks for triggering workflow executions from external systems like CI/CD pipelines, GitHub, and Slack.
+  - Create, regenerate, enable/disable, and delete webhooks via Web UI or REST API
+  - DAG-specific tokens (one webhook per DAG) with `dagu_wh_` prefix
+  - Payload passthrough via `WEBHOOK_PAYLOAD` environment variable
+  - Idempotent execution support with custom `dagRunId`
+  - Usage tracking with `lastUsedAt` timestamp
+  - Secure token storage with bcrypt hashing
+  - Full REST API at `/api/v2/webhooks` and `/api/v2/dags/{fileName}/webhook` endpoints
+
+```bash
+# Create a webhook for a DAG
+curl -X POST http://localhost:8080/api/v2/dags/my-dag/webhook \
+  -H "Authorization: Bearer $JWT_TOKEN"
+
+# Trigger DAG via webhook with payload
+curl -X POST http://localhost:8080/api/v2/webhooks/my-dag \
+  -H "Authorization: Bearer dagu_wh_your-webhook-token" \
+  -H "Content-Type: application/json" \
+  -d '{"payload": {"branch": "main", "commit": "abc123"}}'
+```
+
+Requires builtin authentication mode (`auth.mode: builtin`). See [Webhooks documentation](/configurations/authentication/webhooks) for details.
+
 - **Multiple Commands per Step**: Steps can now execute multiple commands sequentially using an array syntax. This allows sharing step configuration (`env`, `workingDir`, `retryPolicy`, `preconditions`, `container`, etc.) across multiple commands instead of duplicating it across separate steps.
 
 ```yaml
