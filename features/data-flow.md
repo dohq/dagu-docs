@@ -48,14 +48,14 @@ steps:
 
   # Object form with custom key
   - name: get-count
-    command: echo "TOTAL_COUNT=42"
+    command: echo "42"
     output:
       name: TOTAL_COUNT
       key: totalItems  # Custom key in outputs.json (default: camelCase)
 
   # Object form with omit
   - name: internal-step
-    command: echo "TEMP=processing"
+    command: echo "processing"
     output:
       name: TEMP
       omit: true  # Usable in DAG, excluded from outputs.json

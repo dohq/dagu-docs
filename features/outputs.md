@@ -192,9 +192,9 @@ Outputs are stored at:
     "params": "{\"env\":\"prod\",\"batch_size\":100}"
   },
   "outputs": {
-    "version": "VERSION=1.2.3",
-    "recordCount": "RECORD_COUNT=1000",
-    "duration": "DURATION=120s"
+    "version": "1.2.3",
+    "recordCount": "1000",
+    "duration": "120s"
   }
 }
 ```

@@ -13,7 +13,7 @@
 steps:
   # Simple string form (existing behavior)
   - name: get-count
-    command: echo "COUNT=42"
+    command: echo "42"
     output: COUNT
 
   # Object form with custom key
@@ -25,7 +25,7 @@ steps:
 
   # Object form with omit
   - name: internal-step
-    command: echo "TEMP=value"
+    command: echo "processing"
     output:
       name: TEMP
       omit: true  # Exclude from outputs.json but still usable in DAG
