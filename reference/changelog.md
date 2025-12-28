@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.29.0 (UNRELEASED)
+## v1.29.0 (2025-12-28)
 
 ### Added
 - Spec: Added `logOutput` field at DAG and step levels to control stdout/stderr logging behavior - `separate` (default) writes to separate `.out`/`.err` files, `merged` writes both to a single `.log` file with interleaved output (#1505)
