@@ -75,6 +75,7 @@ const fullSidebar = [
       { text: "Scheduling", link: "/features/scheduling" },
       { text: "Execution Control", link: "/features/execution-control" },
       { text: "Data Flow", link: "/features/data-flow" },
+      { text: "DAG Run Outputs", link: "/features/outputs" },
       { text: "Queue System", link: "/features/queues" },
       { text: "Notifications", link: "/features/notifications" },
       { text: "Email Notifications", link: "/features/email-notifications" },
