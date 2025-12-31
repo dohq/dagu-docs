@@ -78,6 +78,8 @@
 
 ### Fixed
 
+- **Config Path Resolution**: All configuration paths (DAGsDir, LogDir, DataDir, etc.) are now resolved to absolute paths at load time with proper error handling. Previously, path resolution failures were silently logged and the original unresolved path was used, which could cause mysterious runtime failures. Now, if any config path cannot be resolved to an absolute path, configuration loading fails with a clear error message.
+
 - **Multiple dotenv files**: Fixed loading of multiple `.env` files. Previously, only the first file was processed. Now all files are loaded sequentially, with later files overriding values from earlier ones. Duplicate file paths are automatically deduplicated. Note: `.env` is always prepended to the list unless `dotenv: []` is specified. (#1519)
 
   ```yaml
