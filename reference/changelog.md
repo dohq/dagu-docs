@@ -4,6 +4,15 @@
 
 ### Added
 
+- **Per-DAG Prometheus Metrics**: Enhanced observability with granular per-DAG metrics and histograms. (#1411)
+  - `dagu_dag_runs_currently_running_by_dag` - Running count per DAG
+  - `dagu_dag_runs_queued_by_dag` - Queue depth per DAG
+  - `dagu_dag_runs_total_by_dag` - Run counts by DAG and status
+  - `dagu_dag_run_duration_seconds` - Duration histogram per DAG
+  - `dagu_queue_wait_seconds` - Queue wait time histogram per DAG
+
+  See [Prometheus Metrics](/features/prometheus-metrics) for full documentation.
+
 - **Container Exec Mode**: Execute commands in already-running containers instead of creating new ones. This enables running workflows in containers started by Docker Compose or other orchestration tools. (#1515)
 
   **String form** - exec with container's default settings:
@@ -44,7 +53,7 @@
   metrics: "public"
   ```
 
-  See [Metrics Endpoint](/configurations/server#metrics-endpoint) for Prometheus configuration examples.
+  See [Prometheus Metrics](/features/prometheus-metrics) for configuration examples.
 
 ### Fixed
 
