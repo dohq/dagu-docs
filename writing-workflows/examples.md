@@ -1273,6 +1273,72 @@ steps:
 
 <div class="example-card">
 
+### Exec Into Existing Container
+
+```yaml
+# Run commands in an already-running container
+container: my-app-container
+
+steps:
+  - command: php artisan migrate
+  - command: php artisan cache:clear
+```
+
+<a href="/writing-workflows/container#exec-mode-use-existing-container" class="learn-more">Learn more →</a>
+
+</div>
+
+<div class="example-card">
+
+### Exec Mode with Overrides
+
+```yaml
+# Override user and working directory
+container:
+  exec: my-app-container
+  user: root
+  workingDir: /var/www
+  env:
+    - APP_DEBUG=true
+
+steps:
+  - command: composer install
+  - command: chown -R www-data:www-data storage
+```
+
+<a href="/writing-workflows/container#exec-mode-use-existing-container" class="learn-more">Learn more →</a>
+
+</div>
+
+<div class="example-card">
+
+### Mixed Exec and Image Mode
+
+```yaml
+steps:
+  # Exec into app container
+  - name: maintenance-mode
+    container: my-app
+    command: php artisan down
+
+  # Run migration in fresh container
+  - name: migrate
+    container:
+      image: my-app:latest
+    command: php artisan migrate
+
+  # Exec back into app container
+  - name: restart
+    container: my-app
+    command: php artisan up
+```
+
+<a href="/features/executors/docker#mixed-mode-example" class="learn-more">Learn more →</a>
+
+</div>
+
+<div class="example-card">
+
 ### GitHub Actions (Experimental)
 
 ```yaml

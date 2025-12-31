@@ -57,9 +57,11 @@ steps:
 For detailed Docker executor documentation, see [Docker Executor Guide](/features/executors/docker).
 :::
 
-Run commands in Docker containers for isolation and reproducibility.
+Run commands in Docker containers for isolation and reproducibility. The `container` field supports two modes:
+- **Image mode**: Create a new container from a Docker image
+- **Exec mode**: Execute commands in an already-running container
 
-### Step-Level Container (Recommended)
+### Image Mode (Create New Container)
 
 Use the `container` field to run a step in its own container:
 
@@ -74,6 +76,28 @@ steps:
 ::: tip
 The container is automatically removed after execution. Set `keepContainer: true` to preserve it.
 :::
+
+### Exec Mode (Use Existing Container)
+
+Execute commands in an already-running container:
+
+```yaml
+steps:
+  # String form - exec with container's defaults
+  - name: run-migration
+    container: my-app-container
+    command: php artisan migrate
+
+  # Object form with overrides
+  - name: admin-task
+    container:
+      exec: my-app-container
+      user: root
+      workingDir: /app
+    command: chown -R app:app /data
+```
+
+Exec mode is ideal for running commands in containers started by Docker Compose or other orchestration tools.
 
 ### Image Pull Options
 

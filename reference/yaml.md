@@ -118,12 +118,24 @@ schedule:
 
 | Field | Type | Description | Default |
 |-------|------|-------------|---------|
-| `container` | object | Default container configuration for all steps | - |
+| `container` | string/object | Container configuration. Can be a string (existing container name to exec into) or an object (container configuration with `exec` or `image` field). | - |
+
+The `container` field supports two modes:
+- **Image mode**: Create a new container from a Docker image (`image` field required)
+- **Exec mode**: Execute in an existing running container (`exec` field or string form)
+
+#### String Form (Exec Mode)
+
+```yaml
+container: my-running-container  # Exec into existing container with defaults
+```
+
+#### Object Form - Image Mode
 
 ```yaml
 container:
   name: my-workflow        # Optional: custom container name
-  image: python:3.11
+  image: python:3.11       # Required for image mode
   pullPolicy: missing      # always, missing, never
   env:
     - API_KEY=${API_KEY}
@@ -143,12 +155,33 @@ container:
   keepContainer: false     # Keep container after DAG run
 ```
 
-> Note: A DAG‑level `container` is started once and kept alive while the
-> workflow runs; each step executes via `docker exec` inside that container.
-> This means step commands do not pass through the image’s `ENTRYPOINT`/`CMD`.
-> If your image’s entrypoint dispatches subcommands, invoke it explicitly in
+#### Object Form - Exec Mode
+
+```yaml
+container:
+  exec: my-running-container  # Required for exec mode
+  user: root                  # Optional: override user
+  workingDir: /app            # Optional: override working directory
+  env:                        # Optional: additional environment variables
+    - DEBUG=true
+```
+
+#### Field Availability by Mode
+
+| Field | Exec Mode | Image Mode |
+|-------|-----------|------------|
+| `exec` | **Required** | Not allowed |
+| `image` | Not allowed | **Required** |
+| `user`, `workingDir`, `env` | Optional | Optional |
+| All other fields | Not allowed | Optional |
+
+> Note: A DAG‑level `container` is started once (image mode) or attached to (exec mode)
+> and kept alive while the workflow runs; each step executes via `docker exec` inside that container.
+> This means step commands do not pass through the image's `ENTRYPOINT`/`CMD`.
+> If your image's entrypoint dispatches subcommands, invoke it explicitly in
 > the step command (see [Execution Model and Entrypoint Behavior](/writing-workflows/container#execution-model-and-entrypoint-behavior)).
-> Readiness waiting (running/healthy and optional logPattern) times out after
+> For exec mode, the container must be running; Dagu waits up to 120 seconds.
+> For image mode, readiness waiting (running/healthy and optional logPattern) times out after
 > 120 seconds with a clear error including the last known state.
 
 ### Secrets
@@ -630,12 +663,13 @@ steps:
 
 | Field | Type | Description | Default |
 |-------|------|-------------|---------|
-| `container` | object | Container configuration for this step | - |
+| `container` | string/object | Container configuration for this step. Can be a string (exec mode) or object (exec or image mode). | - |
 
 Use the `container` field to run a step in its own container:
 
 ```yaml
 steps:
+  # Image mode - create new container
   - name: run-in-container
     container:
       image: python:3.11
@@ -644,10 +678,23 @@ steps:
       env:
         - API_KEY=${API_KEY}
     command: python process.py
+
+  # Exec mode - string form
+  - name: run-migration
+    container: my-app-container
+    command: php artisan migrate
+
+  # Exec mode - object form with overrides
+  - name: admin-task
+    container:
+      exec: my-app-container
+      user: root
+      workingDir: /app
+    command: chown -R app:app /data
 ```
 
 ::: tip
-The step-level `container` field uses the same format as DAG-level container configuration.
+The step-level `container` field uses the same format as DAG-level container configuration, supporting both image mode and exec mode.
 :::
 
 ::: warning

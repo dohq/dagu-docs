@@ -2,7 +2,13 @@
 
 Run workflow steps in Docker containers for isolated, reproducible execution.
 
+The `container` field supports two modes:
+- **Image mode**: Create a new container from a Docker image
+- **Exec mode**: Execute commands in an already-running container
+
 ## DAG-Level Container
+
+### Image Mode (Create New Container)
 
 Use the `container` field at the DAG level to run all steps in a shared container:
 
@@ -20,7 +26,41 @@ steps:
   - command: python process.py /data/input.csv
 ```
 
+### Exec Mode (Use Existing Container)
+
+Execute commands in a container that's already running (e.g., started by Docker Compose):
+
+```yaml
+# Simple string form - use container's default settings
+container: my-app-container
+
+steps:
+  - command: php artisan migrate
+  - command: php artisan cache:clear
+```
+
+```yaml
+# Object form with overrides
+container:
+  exec: my-app-container
+  user: root
+  workingDir: /var/www
+  env:
+    - APP_DEBUG=true
+
+steps:
+  - command: composer install
+  - command: php artisan optimize
+```
+
+Exec mode is useful when:
+- Your application runs in containers managed by Docker Compose
+- You need to run maintenance commands in service containers
+- Development workflows where containers are already running
+
 ## Step-Level Container
+
+### Image Mode
 
 Use the `container` field directly on a step for per-step container configuration:
 
@@ -45,9 +85,61 @@ steps:
       - build
 ```
 
+### Exec Mode
+
+Steps can also exec into existing containers:
+
+```yaml
+steps:
+  # String form
+  - name: run-migration
+    container: my-database-container
+    command: psql -c "SELECT 1"
+
+  # Object form with overrides
+  - name: admin-task
+    container:
+      exec: my-app-container
+      user: root
+    command: chown -R app:app /data
+```
+
+### Mixed Mode Example
+
+Combine exec and image modes in the same workflow:
+
+```yaml
+steps:
+  # Exec into existing app container
+  - name: prepare-app
+    container: my-app
+    command: php artisan down
+
+  # Run migrations in a fresh container
+  - name: migrate
+    container:
+      image: my-app:latest
+      volumes:
+        - ./migrations:/migrations
+    command: php artisan migrate --force
+
+  # Exec back into the app container
+  - name: restart-app
+    container: my-app
+    command: php artisan up
+```
+
 ### Configuration Options
 
-Both DAG-level and step-level `container` fields support the same options:
+The `container` field accepts a string (exec mode) or object (exec or image mode).
+
+#### String Form (Exec Mode)
+
+```yaml
+container: my-running-container  # Exec into existing container
+```
+
+#### Object Form - Image Mode
 
 ```yaml
 container:
@@ -68,6 +160,34 @@ container:
   network: bridge
   keepContainer: true         # Keep container after workflow (DAG-level only)
 ```
+
+#### Object Form - Exec Mode
+
+```yaml
+container:
+  exec: my-running-container  # Required: name of existing container
+  user: root                  # Optional: override user
+  workingDir: /app            # Optional: override working directory
+  env:                        # Optional: additional environment variables
+    - DEBUG=true
+```
+
+#### Field Availability
+
+| Field | Exec Mode | Image Mode |
+|-------|-----------|------------|
+| `exec` | **Required** | Not allowed |
+| `image` | Not allowed | **Required** |
+| `user` | Optional | Optional |
+| `workingDir` | Optional | Optional |
+| `env` | Optional | Optional |
+| `name` | Not allowed | Optional |
+| `pullPolicy` | Not allowed | Optional |
+| `volumes` | Not allowed | Optional |
+| `ports` | Not allowed | Optional |
+| `network` | Not allowed | Optional |
+| `platform` | Not allowed | Optional |
+| `keepContainer` | Not allowed | Optional |
 
 ### Step Container Overrides DAG Container
 
@@ -94,7 +214,14 @@ steps:
 
 ## Validation and Errors
 
-- **Required fields**: `container.image` is required for both DAG-level and step-level containers.
+### Common Rules
+
+- **Mutual exclusivity**: `exec` and `image` are mutually exclusive; specifying both causes an error.
+- **Required field**: Either `exec` or `image` must be specified (or use string form for exec).
+
+### Image Mode
+
+- **Required fields**: `container.image` is required.
 - **Container name**: Must be unique. If a container with the same name already exists (running or stopped), the DAG fails.
 - **Volume format**: `source:target[:ro|rw]`
   - `source` may be absolute, relative to DAG workingDir (`.` or `./...`), or `~`-expanded; otherwise it is treated as a named volume.
@@ -103,6 +230,12 @@ steps:
 - **Network**: Accepts `bridge`, `host`, `none`, `container:<name|id>`, or a custom network name.
 - **Restart policy** (DAG-level): `no`, `always`, `unless-stopped`.
 - **Platform**: `linux/amd64`, `linux/arm64`, etc.
+
+### Exec Mode
+
+- **Container must exist**: The specified container must exist and be running. Dagu waits up to 120 seconds for the container to be in running state.
+- **Invalid fields**: Fields like `volumes`, `ports`, `network`, `pullPolicy`, `name`, etc. cannot be used with `exec` and will cause validation errors.
+- **Allowed overrides**: Only `user`, `workingDir`, and `env` can be specified to override the container's defaults.
 
 ### DAG-Level Startup Options
 

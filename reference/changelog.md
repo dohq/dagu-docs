@@ -1,5 +1,37 @@
 # Changelog
 
+## v1.30.0 (UNRELEASED)
+
+### Added
+
+- **Container Exec Mode**: Execute commands in already-running containers instead of creating new ones. This enables running workflows in containers started by Docker Compose or other orchestration tools. (#1515)
+
+  **String form** - exec with container's default settings:
+  ```yaml
+  container: my-running-container
+
+  steps:
+    - command: php artisan migrate
+    - command: php artisan cache:clear
+  ```
+
+  **Object form** - with user, workingDir, and env overrides:
+  ```yaml
+  container:
+    exec: my-running-container
+    user: root
+    workingDir: /var/www
+    env:
+      - APP_DEBUG=true
+
+  steps:
+    - command: composer install
+  ```
+
+  Exec mode works at both DAG-level and step-level. The container must be running; Dagu waits up to 120 seconds for the container to be in running state.
+
+  See [Container Field](/writing-workflows/container#exec-mode-use-existing-container) for full documentation.
+
 ## v1.29.0 (2025-12-28)
 
 ### Added
