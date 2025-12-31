@@ -41,6 +41,11 @@
 
   See [Container Field](/writing-workflows/container#exec-mode-use-existing-container) for full documentation.
 
+- **Worker ID Tracking**: Added worker ID tracking to DAG runs for distributed setups. Users can now see which worker executed their jobs in both the DAG runs list and detail views. (#1500)
+  - Local execution displays `local` as the worker ID
+  - Distributed execution displays the worker ID (format: `{hostname}@{pid}`)
+  - Worker ID is shown in the DAG runs table and run details panel
+
 ### Changed
 
 - **Metrics Endpoint Access Control**: The `/api/v2/metrics` endpoint now requires authentication by default for improved security. Configure `metrics: "public"` or set `DAGU_SERVER_METRICS=public` to restore the previous public access behavior. When private, use API tokens or basic auth for Prometheus scraping. (#1411)
