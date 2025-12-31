@@ -823,11 +823,11 @@ steps:
 # Specify single dotenv file
 dotenv: .env
 
-# Or specify multiple candidate files (only the first found is used)
+# Load multiple files (all files loaded, later override earlier)
 dotenv:
-  - .env
+  - .env.defaults
   - .env.local
-  - configs/.env.prod
+  - .env.production
 
 steps:
   - command: echo "Database: ${DATABASE_URL}"

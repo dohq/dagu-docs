@@ -775,25 +775,25 @@ steps:
 The `dotenv` field allows loading environment variables from `.env` files:
 
 ```yaml
-# Default behavior - loads .env file if it exists
-# No dotenv field needed, defaults to [".env"]
-
 # Load specific .env file
 dotenv: .env.production
 
-# Load multiple .env files (later files override earlier ones)
+# Load multiple .env files (all files loaded, later override earlier)
 dotenv:
   - .env.defaults
   - .env.local
 
-# Disable .env loading
+# Disable all .env loading
 dotenv: []
 ```
 
-**Important Notes:**
-- If `dotenv` is not specified, Dagu automatically tries to load `.env` file
+**Loading behavior:**
+- If `dotenv` is not specified, Dagu loads `.env` by default
+- When files are specified, `.env` is automatically prepended to the list (and deduplicated if already included)
+- All files are loaded sequentially in order
+- Variables from later files override variables from earlier files
+- Missing files are silently skipped
 - Files are loaded relative to the DAG's `workingDir`
-- Later files in the array override variables from earlier files
 - System environment variables take precedence over .env file variables
 - .env files are loaded at DAG startup, before any steps execute
 

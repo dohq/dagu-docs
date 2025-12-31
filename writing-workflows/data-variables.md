@@ -89,23 +89,25 @@ steps:
 
 ## Dotenv Files
 
-Specify `.env` files to load environment variables from. By default, Dagu loads `.env` if it exists.
+Specify `.env` files to load environment variables from.
 
 ```yaml
 dotenv: .env  # Load a single dotenv file
 
-# Or load multiple files - later files override earlier ones
+# Load multiple files - all files are loaded, later override earlier
 dotenv:
   - .env.defaults     # Loaded first
   - .env.local        # Overrides .env.defaults
   - .env.production   # Overrides both
 ```
 
-When multiple files are specified:
+**Loading behavior:**
+- If `dotenv` is not specified, Dagu loads `.env` by default
+- When files are specified, `.env` is automatically prepended to the list (and deduplicated if already included)
 - All files are loaded sequentially in order
 - Variables from later files override variables from earlier files
-- Duplicate file paths are automatically deduplicated
 - Missing files are silently skipped
+- To disable all dotenv loading (including `.env`), use `dotenv: []`
 
 Files can be specified as:
 - Absolute paths
@@ -114,7 +116,7 @@ Files can be specified as:
 - Relative to the user's home directory
 
 ```yaml
-# Disable dotenv loading
+# Disable dotenv loading entirely
 dotenv: []
 ```
 

@@ -34,14 +34,14 @@
 
 ### Fixed
 
-- **Multiple dotenv files**: Fixed loading of multiple `.env` files. Previously, only the first file was processed. Now all files are loaded sequentially, with later files overriding values from earlier ones. Duplicate file paths are automatically deduplicated. (#1519)
+- **Multiple dotenv files**: Fixed loading of multiple `.env` files. Previously, only the first file was processed. Now all files are loaded sequentially, with later files overriding values from earlier ones. Duplicate file paths are automatically deduplicated. Note: `.env` is always prepended to the list unless `dotenv: []` is specified. (#1519)
 
   ```yaml
   # All files are now loaded, with later files overriding earlier ones
   dotenv:
-    - .env.defaults    # Loaded first
-    - .env.local       # Overrides .env.defaults
-    - .env.production  # Overrides both
+    - .env.defaults    # .env loaded first (auto-prepended), then this
+    - .env.local       # Overrides earlier files
+    - .env.production  # Overrides all earlier files
   ```
 
 ## v1.29.0 (2025-12-28)
