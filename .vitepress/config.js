@@ -79,6 +79,7 @@ const fullSidebar = [
       { text: "Queue System", link: "/features/queues" },
       { text: "Notifications", link: "/features/notifications" },
       { text: "Email Notifications", link: "/features/email-notifications" },
+      { text: "Prometheus Metrics", link: "/features/prometheus-metrics" },
       { text: "OpenTelemetry", link: "/features/opentelemetry" },
       {
         text: "Distributed Execution",
