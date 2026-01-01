@@ -226,6 +226,7 @@ ssh:
   password: "${SSH_PASSWORD}" # Optional; prefer keys for security
   strictHostKey: true  # Optional, defaults to true for security
   knownHostFile: ~/.ssh/known_hosts  # Optional, defaults to ~/.ssh/known_hosts
+  shell: /bin/bash     # Optional: shell for remote command execution
 ```
 
 When configured at the DAG level, all steps using SSH executor will inherit these settings:
@@ -236,12 +237,13 @@ ssh:
   user: deploy
   host: app.example.com
   key: ~/.ssh/deploy_key
+  shell: /bin/bash  # Commands wrapped in shell
 
 steps:
   # These steps inherit the DAG-level SSH configuration
   - command: systemctl status myapp
   - command: systemctl restart myapp
-  
+
   # Step-level config overrides DAG-level
   - executor:
       type: ssh
@@ -249,6 +251,7 @@ steps:
         user: backup      # Override user
         host: db.example.com  # Override host
         key: ~/.ssh/backup_key  # Override key
+        shell: /bin/sh    # Override shell
     command: mysqldump mydb > backup.sql
 ```
 

@@ -16,6 +16,7 @@ ssh:
   password: ${SSH_PASSWORD}  # Optional; prefer keys
   strictHostKey: true  # Default: true for security
   knownHostFile: ~/.ssh/known_hosts  # Default: ~/.ssh/known_hosts
+  shell: /bin/bash  # Optional: wrap commands in shell for variable expansion
 
 steps:
   # All SSH steps inherit DAG-level configuration
@@ -33,6 +34,7 @@ steps:
         user: ubuntu
         ip: 192.168.1.100
         key: /home/user/.ssh/id_rsa
+        shell: /bin/bash  # Optional: wrap commands in shell
     command: echo "Hello from remote server"
 ```
 
@@ -49,6 +51,7 @@ steps:
 | `password` | No | - | Password (not recommended) |
 | `strictHostKey` | No | `true` | Enable host key verification |
 | `knownHostFile` | No | `~/.ssh/known_hosts` | Known hosts file path |
+| `shell` | No | - | Shell for remote command execution (e.g., `/bin/bash`) |
 
 ### Step-Level Fields
 
@@ -61,8 +64,34 @@ steps:
 | `password` | No | - | Password (not recommended) |
 | `strictHostKey` | No | `true` | Enable host key verification |
 | `knownHostFile` | No | `~/.ssh/known_hosts` | Known hosts file path |
+| `shell` | No | - | Shell for remote command execution (e.g., `/bin/bash`) |
 
 Note: Password authentication is supported at both DAG and step level, but key-based authentication is strongly recommended.
+
+### Shell Configuration
+
+When `shell` is specified, commands are wrapped and executed through the shell on the remote server:
+
+```yaml
+ssh:
+  user: deploy
+  host: app.example.com
+  shell: /bin/bash  # Commands wrapped as: /bin/bash -c 'command'
+
+steps:
+  - command: echo $HOME && ls -la  # Shell features like pipes, variables work
+```
+
+Without `shell`, commands are executed directly without shell interpretation. Use `shell` when you need:
+- Shell variable expansion (`$HOME`, `$PATH`)
+- Command chaining (`&&`, `||`, `;`)
+- Pipes (`|`) and redirections (`>`, `<`)
+- Glob patterns (`*.txt`)
+
+**Shell Priority:**
+1. Step-level SSH config `shell` (highest priority)
+2. DAG-level SSH config `shell`
+3. Step-level `shell` field (fallback for convenience)
 
 ### SSH Key Auto-Detection
 

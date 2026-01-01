@@ -4,6 +4,20 @@
 
 ### Added
 
+- **SSH Shell Configuration**: Added `shell` field to SSH executor configuration for wrapping remote commands in a shell. This enables shell features like variable expansion, pipes, and command chaining on remote servers. Supports both DAG-level and step-level configuration, with step-level `shell` field as a fallback for convenience.
+
+  ```yaml
+  ssh:
+    user: deploy
+    host: app.example.com
+    shell: /bin/bash  # Commands wrapped as: /bin/bash -c 'command'
+
+  steps:
+    - command: echo $HOME && ls -la  # Shell features now work
+  ```
+
+  See [SSH Executor](/features/executors/ssh) for full documentation.
+
 - **Per-DAG Prometheus Metrics**: Enhanced observability with granular per-DAG metrics and histograms. (#1411)
   - `dagu_dag_runs_currently_running_by_dag` - Running count per DAG
   - `dagu_dag_runs_queued_by_dag` - Queue depth per DAG
