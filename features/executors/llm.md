@@ -121,8 +121,10 @@ steps:
 
 The `followup` step receives the full conversation history from `setup`, including the assistant's response.
 
-::: info
-When multiple dependencies provide history, messages are merged in dependency order. Duplicate system messages are deduplicated (only the first is kept).
+::: info Message Inheritance Rules
+- **Transitive history**: Each step saves its complete conversation (inherited + own + response). When step C depends on B which depends on A, C receives all messages from A→B→C.
+- **Multiple dependencies**: Messages are merged in the order listed in `depends`. Example: `depends: [step1, step2]` merges step1's history first, then step2's.
+- **System message deduplication**: Only the **first** system message is kept. Later system messages from dependencies or the step itself are discarded.
 :::
 
 ### Disable History
@@ -237,6 +239,42 @@ The LLM executor automatically retries on transient errors:
 - **Backoff multiplier**: 2.0
 
 Retryable errors include rate limits (429), server errors (5xx), and network timeouts.
+
+## Saved Message Format
+
+When `history: true`, conversations are persisted with metadata:
+
+```json
+{
+  "steps": {
+    "ask": [
+      {"role": "user", "content": "What is 2+2?"},
+      {
+        "role": "assistant",
+        "content": "4",
+        "metadata": {
+          "provider": "openai",
+          "model": "gpt-4o",
+          "promptTokens": 12,
+          "completionTokens": 1,
+          "totalTokens": 13
+        }
+      }
+    ]
+  }
+}
+```
+
+Metadata is only attached to assistant responses and includes:
+- `provider`: The LLM provider used
+- `model`: The model identifier
+- `promptTokens`, `completionTokens`, `totalTokens`: Token usage statistics
+
+::: tip
+Messages are always saved regardless of the `history` setting:
+- `history: true` - Saves full conversation (inherited + step messages + response)
+- `history: false` - Saves only this step's messages + response (no inherited messages)
+:::
 
 ## Notes
 
