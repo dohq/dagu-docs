@@ -43,8 +43,43 @@ The `local` provider works with any OpenAI-compatible API including Ollama, vLLM
 | `maxTokens` | int | (provider default) | Maximum tokens to generate |
 | `topP` | float | (provider default) | Nucleus sampling (0.0-1.0) |
 | `baseURL` | string | (provider default) | Custom API endpoint |
-| `apiKey` | string | (from env) | API key override |
+| `apiKeyName` | string | (from provider) | Environment variable name for API key |
 | `stream` | bool | `true` | Stream response tokens |
+| `thinking` | object | (none) | Extended thinking/reasoning configuration |
+
+### Thinking Configuration (`thinking` field)
+
+Enable extended thinking/reasoning mode for more thorough, accurate responses on complex tasks:
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `enabled` | bool | `false` | Enable thinking mode |
+| `effort` | string | `medium` | Reasoning depth: `low`, `medium`, `high`, `xhigh` |
+| `budgetTokens` | int | (from effort) | Explicit token budget (provider-specific) |
+| `includeInOutput` | bool | `false` | Include thinking blocks in stdout |
+
+**Provider Support:**
+
+| Provider | Implementation | Notes |
+|----------|---------------|-------|
+| Anthropic | `thinking.budget_tokens` | Claude 3.7+, Claude 4 models |
+| OpenAI | `reasoning.effort` | o1, o3, GPT-5 models |
+| Gemini | `thinkingLevel` / `thinkingBudget` | Gemini 2.5+, Gemini 3 models |
+| OpenRouter | Unified `reasoning` | Auto-mapped to underlying provider |
+| Local | Pass-through | For OpenAI-compatible reasoning models |
+
+**Effort Level Mapping:**
+
+| Effort | Anthropic Budget | Description |
+|--------|-----------------|-------------|
+| `low` | 1,024 tokens | Quick reasoning |
+| `medium` | 4,096 tokens | Balanced (default) |
+| `high` | 16,384 tokens | Thorough analysis |
+| `xhigh` | 65,536 tokens | Maximum depth (OpenAI GPT-5.2+ only) |
+
+::: warning
+When thinking is enabled for OpenAI reasoning models, `temperature` and `topP` are automatically disabled as these models don't support them.
+:::
 
 ### Messages (`messages` field)
 
@@ -60,15 +95,18 @@ The `messages` field is a step-level field (not inside `llm`) containing the con
 Define LLM defaults at the DAG level to share configuration across multiple chat steps:
 
 ```yaml
-# DAG-level defaults
+# DAG-level defaults (including thinking mode)
 llm:
-  provider: openai
-  model: gpt-4o
+  provider: anthropic
+  model: claude-sonnet-4-20250514
   system: "You are a helpful assistant."
   temperature: 0.7
+  thinking:
+    enabled: true
+    effort: medium
 
 steps:
-  # This step inherits the DAG-level llm config
+  # This step inherits the DAG-level llm config (including thinking)
   - type: chat
     messages:
       - role: user
@@ -77,11 +115,11 @@ steps:
   # This step overrides DAG-level config
   - type: chat
     llm:
-      provider: anthropic
-      model: claude-sonnet-4-20250514
+      provider: openai
+      model: gpt-4o
     messages:
       - role: user
-        content: "Different provider and model"
+        content: "Different provider and model (no thinking)"
 ```
 
 ::: warning Full Override Pattern
@@ -201,7 +239,7 @@ steps:
       provider: openai
       model: gpt-4o
       baseURL: "https://my-proxy.example.com/v1"
-      apiKey: "${CUSTOM_API_KEY}"
+      apiKeyName: CUSTOM_API_KEY
     messages:
       - role: user
         content: "Hello!"
@@ -260,6 +298,49 @@ steps:
     messages:
       - role: user
         content: "What is the capital of France?"
+```
+
+### Extended Thinking Mode
+
+Enable deeper reasoning for complex tasks:
+
+```yaml
+steps:
+  # Using effort level (recommended)
+  - type: chat
+    llm:
+      provider: anthropic
+      model: claude-sonnet-4-20250514
+      thinking:
+        enabled: true
+        effort: high
+    messages:
+      - role: user
+        content: "Analyze the security implications of this code..."
+
+  # Using explicit token budget
+  - type: chat
+    llm:
+      provider: anthropic
+      model: claude-sonnet-4-20250514
+      thinking:
+        enabled: true
+        budgetTokens: 16384
+    messages:
+      - role: user
+        content: "Solve this complex optimization problem..."
+
+  # OpenAI reasoning model
+  - type: chat
+    llm:
+      provider: openai
+      model: o3
+      thinking:
+        enabled: true
+        effort: high
+    messages:
+      - role: user
+        content: "Prove this mathematical theorem..."
 ```
 
 ## Error Handling
