@@ -6,8 +6,7 @@ Execute Large Language Model (LLM) requests to AI providers like OpenAI, Anthrop
 
 ```yaml
 steps:
-  - name: ask-question
-    type: chat
+  - type: chat
     llm:
       provider: openai
       model: gpt-4o
@@ -70,15 +69,13 @@ llm:
 
 steps:
   # This step inherits the DAG-level llm config
-  - name: ask1
-    type: chat
+  - type: chat
     messages:
       - role: user
         content: "What is 2+2?"
 
   # This step overrides DAG-level config
-  - name: ask2
-    type: chat
+  - type: chat
     llm:
       provider: anthropic
       model: claude-sonnet-4-20250514
@@ -116,8 +113,7 @@ secrets:
     key: OPENAI_API_KEY
 
 steps:
-  - name: generate
-    type: chat
+  - type: chat
     llm:
       provider: openai
       model: gpt-4o
@@ -136,8 +132,7 @@ params:
   - LANGUAGE: "Spanish"
 
 steps:
-  - name: translate
-    type: chat
+  - type: chat
     llm:
       provider: anthropic
       model: claude-sonnet-4-20250514
@@ -188,8 +183,7 @@ The `followup` step receives the full conversation history from `setup`, includi
 
 ```yaml
 steps:
-  - name: local-inference
-    type: chat
+  - type: chat
     llm:
       provider: local
       model: llama3
@@ -202,8 +196,7 @@ steps:
 
 ```yaml
 steps:
-  - name: custom-api
-    type: chat
+  - type: chat
     llm:
       provider: openai
       model: gpt-4o
@@ -218,8 +211,7 @@ steps:
 
 ```yaml
 steps:
-  - name: no-stream
-    type: chat
+  - type: chat
     llm:
       provider: openai
       model: gpt-4o
@@ -235,8 +227,7 @@ The response is written to stdout and can be captured with `output`:
 
 ```yaml
 steps:
-  - name: generate
-    type: chat
+  - type: chat
     llm:
       provider: openai
       model: gpt-4o
@@ -245,16 +236,14 @@ steps:
         content: "Generate a JSON object with name and age fields."
     output: CHAT_RESPONSE
 
-  - name: process
-    command: echo "${CHAT_RESPONSE}" | jq '.name'
+  - command: echo "${CHAT_RESPONSE}" | jq '.name'
 ```
 
 ### Temperature Control
 
 ```yaml
 steps:
-  - name: creative
-    type: chat
+  - type: chat
     llm:
       provider: openai
       model: gpt-4o
@@ -263,8 +252,7 @@ steps:
       - role: user
         content: "Write a creative story opening."
 
-  - name: precise
-    type: chat
+  - type: chat
     llm:
       provider: openai
       model: gpt-4o

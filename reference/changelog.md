@@ -97,8 +97,7 @@
 
   ```yaml
   steps:
-    - name: ask
-      type: chat
+    - type: chat
       llm:
         provider: openai
         model: gpt-4o

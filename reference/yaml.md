@@ -279,8 +279,7 @@ llm:
   temperature: 0.7
 
 steps:
-  - name: ask
-    type: chat
+  - type: chat
     messages:
       - role: user
         content: "What is 2+2?"
@@ -767,8 +766,7 @@ steps:
 
 ```yaml
 steps:
-  - name: ask
-    type: chat
+  - type: chat
     llm:
       provider: openai
       model: gpt-4o

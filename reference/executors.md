@@ -720,8 +720,7 @@ Execute requests to Large Language Model providers.
 
 ```yaml
 steps:
-  - name: ask
-    type: chat
+  - type: chat
     llm:
       provider: openai
       model: gpt-4o
@@ -779,8 +778,7 @@ params:
   - TOPIC: "quantum computing"
 
 steps:
-  - name: explain
-    type: chat
+  - type: chat
     llm:
       provider: anthropic
       model: claude-sonnet-4-20250514
@@ -793,8 +791,7 @@ steps:
 
 ```yaml
 steps:
-  - name: local
-    type: chat
+  - type: chat
     llm:
       provider: local
       model: llama3
@@ -815,14 +812,12 @@ llm:
   temperature: 0.7
 
 steps:
-  - name: ask1
-    type: chat
+  - type: chat
     messages:
       - role: user
         content: "First question"
 
-  - name: ask2
-    type: chat
+  - type: chat
     llm:
       provider: anthropic
       model: claude-sonnet-4-20250514
