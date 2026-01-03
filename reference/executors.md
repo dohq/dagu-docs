@@ -8,7 +8,7 @@ Executors extend Dagu's capabilities beyond simple shell commands. Available exe
 - [Docker](/features/executors/docker) - Run commands in Docker containers
 - [SSH](/features/executors/ssh) - Execute commands on remote hosts
 - [HTTP](/features/executors/http) - Make HTTP requests
-- [LLM](/features/executors/llm) - Execute LLM requests (OpenAI, Anthropic, Gemini, etc.)
+- [Chat](/features/executors/chat) - Execute LLM requests (OpenAI, Anthropic, Gemini, etc.)
 - [Archive](/features/executors/archive) - Extract, create, and list archive files
 - [Mail](/features/executors/mail) - Send emails
 - [JQ](/features/executors/jq) - Process JSON data
@@ -708,20 +708,20 @@ steps:
       ]
 ```
 
-## LLM Executor
+## Chat Executor
 
 ::: info
-For detailed LLM executor documentation, see [LLM Executor Guide](/features/executors/llm).
+For detailed chat executor documentation, see [Chat Executor Guide](/features/executors/chat).
 :::
 
 Execute requests to Large Language Model providers.
 
-### Basic LLM Request
+### Basic Chat Request
 
 ```yaml
 steps:
   - name: ask
-    llm:
+    chat:
       provider: openai
       model: gpt-4o
       messages:
@@ -747,7 +747,7 @@ type: graph
 
 steps:
   - name: setup
-    llm:
+    chat:
       provider: openai
       model: gpt-4o
       messages:
@@ -758,7 +758,7 @@ steps:
 
   - name: followup
     depends: [setup]
-    llm:
+    chat:
       provider: openai
       model: gpt-4o
       messages:
@@ -776,7 +776,7 @@ params:
 
 steps:
   - name: explain
-    llm:
+    chat:
       provider: anthropic
       model: claude-sonnet-4-20250514
       messages:
@@ -789,7 +789,7 @@ steps:
 ```yaml
 steps:
   - name: local
-    llm:
+    chat:
       provider: local
       model: llama3
       messages:
@@ -892,7 +892,7 @@ steps:
 - [Docker Executor](/features/executors/docker) - Container execution guide
 - [SSH Executor](/features/executors/ssh) - Remote execution guide
 - [HTTP Executor](/features/executors/http) - API interaction guide
-- [LLM Executor](/features/executors/llm) - LLM integration guide
+- [Chat Executor](/features/executors/chat) - LLM integration guide
 - [Mail Executor](/features/executors/mail) - Email notification guide
 - [JQ Executor](/features/executors/jq) - JSON processing guide
 - [Writing Workflows](/writing-workflows/) - Using executors in workflows

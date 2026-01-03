@@ -82,12 +82,12 @@
   - Includes the Schema Docs sidebar for easy reference while viewing specs
   - New API endpoint: `GET /dag-runs/{name}/{dagRunId}/spec`
 
-- **LLM Executor**: Added a new executor for integrating Large Language Models into workflows. Supports OpenAI, Anthropic, Google Gemini, OpenRouter, and local models (Ollama, vLLM).
+- **Chat Executor**: Added a new executor for integrating Large Language Models into workflows. Supports OpenAI, Anthropic, Google Gemini, OpenRouter, and local models (Ollama, vLLM).
 
   ```yaml
   steps:
     - name: ask
-      llm:
+      chat:
         provider: openai
         model: gpt-4o
         messages:
@@ -103,7 +103,7 @@
   - **Multiple providers**: `openai`, `anthropic`, `gemini`, `openrouter`, `local`
   - **Automatic retry**: Retries on rate limits and transient errors with exponential backoff
 
-  See [LLM Executor](/features/executors/llm) for full documentation.
+  See [Chat Executor](/features/executors/chat) for full documentation.
 
 ### Changed
 

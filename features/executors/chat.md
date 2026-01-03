@@ -1,4 +1,4 @@
-# LLM Executor
+# Chat Executor
 
 Execute Large Language Model (LLM) requests to AI providers like OpenAI, Anthropic, Google Gemini, OpenRouter, and local models.
 
@@ -7,7 +7,7 @@ Execute Large Language Model (LLM) requests to AI providers like OpenAI, Anthrop
 ```yaml
 steps:
   - name: ask-question
-    llm:
+    chat:
       provider: openai
       model: gpt-4o
       messages:
@@ -34,7 +34,7 @@ The `local` provider works with any OpenAI-compatible API including Ollama, vLLM
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `provider` | string | `openai` | LLM provider to use |
+| `provider` | string | (required) | LLM provider to use |
 | `model` | string | (required) | Model identifier |
 | `messages` | array | `[]` | Messages to send |
 | `temperature` | float | (provider default) | Randomness (0.0-2.0) |
@@ -42,7 +42,6 @@ The `local` provider works with any OpenAI-compatible API including Ollama, vLLM
 | `topP` | float | (provider default) | Nucleus sampling (0.0-1.0) |
 | `baseURL` | string | (provider default) | Custom API endpoint |
 | `apiKey` | string | (from env) | API key override |
-| `history` | bool | `true` | Inherit messages from dependencies |
 | `stream` | bool | `true` | Stream response tokens |
 
 ### Message Format
@@ -64,7 +63,7 @@ secrets:
 
 steps:
   - name: generate
-    llm:
+    chat:
       provider: openai
       model: gpt-4o
       messages:
@@ -83,7 +82,7 @@ params:
 
 steps:
   - name: translate
-    llm:
+    chat:
       provider: anthropic
       model: claude-sonnet-4-20250514
       messages:
@@ -93,14 +92,14 @@ steps:
 
 ### Multi-turn Conversation
 
-When `history: true` (default), steps inherit conversation history from their dependencies:
+Steps automatically inherit conversation history from their dependencies:
 
 ```yaml
 type: graph
 
 steps:
   - name: setup
-    llm:
+    chat:
       provider: openai
       model: gpt-4o
       messages:
@@ -111,7 +110,7 @@ steps:
 
   - name: followup
     depends: [setup]
-    llm:
+    chat:
       provider: openai
       model: gpt-4o
       messages:
@@ -128,29 +127,12 @@ The `followup` step receives the full conversation history from `setup`, includi
 - **Retry persistence**: Messages are stored at the DAG run level (not per-attempt), so conversation history survives retries. If step A succeeds and step B fails, retrying will allow step B to access step A's messages.
 :::
 
-### Disable History
-
-Set `history: false` to start a fresh conversation:
-
-```yaml
-steps:
-  - name: independent
-    depends: [previous-step]
-    llm:
-      provider: openai
-      model: gpt-4o
-      history: false
-      messages:
-        - role: user
-          content: "This is a new conversation."
-```
-
 ### Local Model (Ollama)
 
 ```yaml
 steps:
   - name: local-inference
-    llm:
+    chat:
       provider: local
       model: llama3
       messages:
@@ -163,7 +145,7 @@ steps:
 ```yaml
 steps:
   - name: custom-api
-    llm:
+    chat:
       provider: openai
       model: gpt-4o
       baseURL: "https://my-proxy.example.com/v1"
@@ -178,7 +160,7 @@ steps:
 ```yaml
 steps:
   - name: no-stream
-    llm:
+    chat:
       provider: openai
       model: gpt-4o
       stream: false
@@ -194,16 +176,16 @@ The response is written to stdout and can be captured with `output`:
 ```yaml
 steps:
   - name: generate
-    llm:
+    chat:
       provider: openai
       model: gpt-4o
       messages:
         - role: user
           content: "Generate a JSON object with name and age fields."
-    output: LLM_RESPONSE
+    output: CHAT_RESPONSE
 
   - name: process
-    command: echo "${LLM_RESPONSE}" | jq '.name'
+    command: echo "${CHAT_RESPONSE}" | jq '.name'
 ```
 
 ### Temperature Control
@@ -211,7 +193,7 @@ steps:
 ```yaml
 steps:
   - name: creative
-    llm:
+    chat:
       provider: openai
       model: gpt-4o
       temperature: 1.5
@@ -220,7 +202,7 @@ steps:
           content: "Write a creative story opening."
 
   - name: precise
-    llm:
+    chat:
       provider: openai
       model: gpt-4o
       temperature: 0.1
@@ -231,7 +213,7 @@ steps:
 
 ## Error Handling
 
-The LLM executor automatically retries on transient errors:
+The chat executor automatically retries on transient errors:
 
 - **Timeout**: 5 minutes per request
 - **Max retries**: 3
@@ -243,27 +225,23 @@ Retryable errors include rate limits (429), server errors (5xx), and network tim
 
 ## Saved Message Format
 
-When `history: true`, conversations are persisted with metadata:
+Conversations are persisted with metadata:
 
 ```json
-{
-  "steps": {
-    "ask": [
-      {"role": "user", "content": "What is 2+2?"},
-      {
-        "role": "assistant",
-        "content": "4",
-        "metadata": {
-          "provider": "openai",
-          "model": "gpt-4o",
-          "promptTokens": 12,
-          "completionTokens": 1,
-          "totalTokens": 13
-        }
-      }
-    ]
+[
+  {"role": "user", "content": "What is 2+2?"},
+  {
+    "role": "assistant",
+    "content": "4",
+    "metadata": {
+      "provider": "openai",
+      "model": "gpt-4o",
+      "promptTokens": 12,
+      "completionTokens": 1,
+      "totalTokens": 13
+    }
   }
-}
+]
 ```
 
 Metadata is only attached to assistant responses and includes:
@@ -271,16 +249,10 @@ Metadata is only attached to assistant responses and includes:
 - `model`: The model identifier
 - `promptTokens`, `completionTokens`, `totalTokens`: Token usage statistics
 
-::: tip
-Messages are always saved regardless of the `history` setting:
-- `history: true` - Saves full conversation (inherited + step messages + response)
-- `history: false` - Saves only this step's messages + response (no inherited messages)
-:::
-
 ## Notes
 
-- The executor type is inferred from the `llm` field (no need for `type: llm`)
-- Configuration goes in the `llm` field, not in `executor.config`
+- The executor type is inferred from the `chat` field (no need for `type: chat`)
+- Configuration goes in the `chat` field, not in `executor.config`
 - API keys are read from environment variables by default
 - Response tokens are streamed to stdout by default
-- The full conversation (including response) is saved when `history: true`
+- The full conversation (inherited + step messages + response) is saved after each step
