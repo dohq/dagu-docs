@@ -10,9 +10,10 @@ Lifecycle handlers let you run extra steps after the main DAG completes. Use the
 | `success` | All steps completed successfully, or the DAG ended in `partially_succeeded` | Deliver success notifications, enqueue downstream jobs |
 | `failure` | The DAG ended with a canonical `failed` status | Page on-call, collect diagnostics |
 | `abort` | A stop request interrupted the run (manual stop, queue eviction, timeout cancellation) | Roll back partial work, release locks |
+| `wait` | The DAG has paused waiting for human approval (HITL) | Notify approvers, send Slack messages |
 | `exit` | Always runs after the status-specific handler finishes (including when it fails or is skipped) | File system clean-up, archival tasks |
 
-Only the handlers you define are executed. The `init` handler runs first (before any steps), then the main steps execute, then the status-specific handler runs (if present), and finally the `exit` handler runs last.
+Only the handlers you define are executed. The `init` handler runs first (before any steps), then the main steps execute, then the status-specific handler runs (if present), and finally the `exit` handler runs last. The `wait` handler is special: it runs when the workflow pauses for approval, before the workflow completes.
 
 ## Basic Definition
 
@@ -27,6 +28,8 @@ handlerOn:
     command: alert.sh "${DAG_NAME} failed" "logs=${DAG_RUN_LOG_FILE}"
   abort:
     command: rollback.sh --lock ${LOCK_NAME}
+  wait:
+    command: notify-approvers.sh "${DAG_WAITING_STEPS}" # runs when waiting for approval
   exit:
     command: rm -rf /tmp/${DAG_RUN_ID} # always runs
 
@@ -115,5 +118,24 @@ handlerOn:
     command: |
       find /tmp/${DAG_RUN_ID} -maxdepth 1 -type f -delete
 ```
+
+### Notify on Wait (HITL Approval)
+
+When using [HITL steps](/features/executors/hitl) for human-in-the-loop approval, notify stakeholders:
+
+```yaml
+handlerOn:
+  wait:
+    command: notify-slack.sh "Approval needed: ${DAG_WAITING_STEPS}"
+
+steps:
+  - command: ./deploy.sh staging
+  - type: hitl
+    config:
+      prompt: "Approve production?"
+  - command: ./deploy.sh production
+```
+
+The `DAG_WAITING_STEPS` environment variable contains a comma-separated list of step names currently waiting for approval.
 
 For the complete schema, refer to the [YAML specification](/reference/yaml#lifecycle-handlers). Combine handlers with the techniques from [Error Handling](/writing-workflows/error-handling) and [Data & Variables](/writing-workflows/data-variables) to build robust workflow lifecycles.

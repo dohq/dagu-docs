@@ -93,6 +93,39 @@
 
   See [Email Notifications](/features/email-notifications#wait-status-notifications) for details.
 
+- **HITL (Human-in-the-Loop)**: Added `hitl` executor for pausing workflows until human approval. Enables approval gates where manual review is required before proceeding.
+
+  ```yaml
+  steps:
+    - command: ./deploy.sh staging
+    - type: hitl
+      config:
+        prompt: "Approve production?"
+        input: [APPROVED_BY]
+        required: [APPROVED_BY]
+    - command: ./deploy.sh production
+  ```
+
+  Key features:
+  - Pause workflow execution for human review
+  - Collect parameters from approvers as environment variables
+  - Approve via web UI or REST API
+
+  See [HITL](/features/executors/hitl) for full documentation.
+
+- **Wait Handler**: Added `handlerOn.wait` lifecycle handler that executes when a workflow enters wait status.
+
+  ```yaml
+  handlerOn:
+    wait:
+      command: notify-slack.sh "${DAG_WAITING_STEPS}"
+
+  steps:
+    - type: hitl
+  ```
+
+  See [Lifecycle Handlers](/writing-workflows/lifecycle-handlers) for full documentation.
+
 - **Chat Executor**: Added a new executor for integrating Large Language Models into workflows. Supports OpenAI, Anthropic, Google Gemini, OpenRouter, and local models (Ollama, vLLM).
 
   ```yaml

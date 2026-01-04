@@ -443,6 +443,8 @@ handlerOn:
     command: echo "Notifying failure"
   abort:
     command: echo "Cleaning up"
+  wait:
+    command: echo "Waiting for approval: ${DAG_WAITING_STEPS}"
   exit:
     command: echo "Always running"
 ```
@@ -793,6 +795,30 @@ steps:
 - `content`: Message content (supports `${VAR}` substitution)
 
 See [Chat Executor](/features/executors/chat) for full documentation.
+
+### HITL (Human in the Loop)
+
+| Field | Type | Description | Default |
+|-------|------|-------------|---------|
+| `type` | string | Set to `hitl` for approval gate steps | - |
+| `config.prompt` | string | Message displayed to the approver | - |
+| `config.input` | string[] | Parameter names to collect from approver | - |
+| `config.required` | string[] | Required parameters (subset of input) | - |
+
+```yaml
+steps:
+  - command: ./deploy.sh staging
+  - type: hitl
+    config:
+      prompt: "Approve production?"
+      input: [APPROVED_BY]
+      required: [APPROVED_BY]
+  - command: ./deploy.sh production
+```
+
+HITL steps pause workflow execution until approval is granted via UI or API. Collected inputs become environment variables in subsequent steps.
+
+See [HITL](/features/executors/hitl) for full documentation.
 
 ### Distributed Execution
 

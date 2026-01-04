@@ -12,6 +12,7 @@ Executors extend Dagu's capabilities beyond simple shell commands. Available exe
 - [Archive](/features/executors/archive) - Extract, create, and list archive files
 - [Mail](/features/executors/mail) - Send emails
 - [JQ](/features/executors/jq) - Process JSON data
+- [HITL](/features/executors/hitl) - Human-in-the-loop approval gates
 - [GitHub Actions (_experimental_)](/features/executors/github-actions) - Run marketplace actions locally with nektos/act
 
 ::: tip
@@ -828,6 +829,46 @@ steps:
 
 When a step specifies `llm:`, it completely replaces DAG-level config (no field merging).
 
+## HITL (Human in the Loop)
+
+::: info
+For detailed HITL documentation, see [HITL Guide](/features/executors/hitl).
+:::
+
+Pause workflow execution until human approval is granted. This enables human-in-the-loop (HITL) workflows where manual review or authorization is required before proceeding.
+
+### Basic Usage
+
+```yaml
+steps:
+  - command: ./deploy.sh staging
+  - type: hitl
+  - command: ./deploy.sh production
+```
+
+### With Prompt and Inputs
+
+```yaml
+steps:
+  - command: ./deploy.sh staging
+  - type: hitl
+    config:
+      prompt: "Approve production deployment?"
+      input: [APPROVED_BY, RELEASE_NOTES]
+      required: [APPROVED_BY]
+  - command: |
+      echo "Approved by: ${APPROVED_BY}"
+      ./deploy.sh production
+```
+
+### Configuration Options
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `prompt` | string | Message displayed to the approver |
+| `input` | string[] | Parameter names to collect from approver |
+| `required` | string[] | Parameters that must be provided (subset of `input`) |
+
 ## DAG Executor
 
 ::: info
@@ -926,4 +967,5 @@ steps:
 - [Chat Executor](/features/executors/chat) - LLM integration guide
 - [Mail Executor](/features/executors/mail) - Email notification guide
 - [JQ Executor](/features/executors/jq) - JSON processing guide
+- [HITL](/features/executors/hitl) - Human-in-the-loop approval guide
 - [Writing Workflows](/writing-workflows/) - Using executors in workflows
