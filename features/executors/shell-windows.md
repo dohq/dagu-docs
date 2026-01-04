@@ -1,4 +1,4 @@
-# Shell Executor (Windows)
+# Shell (Windows)
 
 Run commands and scripts on Windows using PowerShell, pwsh, or cmd.exe.
 

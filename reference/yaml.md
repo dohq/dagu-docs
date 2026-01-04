@@ -513,7 +513,7 @@ Commands run in order and stop on first failure. Retries restart from the first 
 
 **Trade-off:** You lose the ability to retry or resume from the middle of the command list.
 
-**Supported executors:** shell, command, docker, container, ssh
+**Supported step types:** shell, command, docker, container, ssh
 
 **Not supported:** jq, http, archive, mail, github_action, dag (configuration rejected at parse time)
 
@@ -741,11 +741,12 @@ The step-level `container` field uses the same format as DAG-level container con
 When using `container`, you cannot use `executor` or `script` fields on the same step.
 :::
 
-### Executor Configuration
+### Step Type Configuration
 
 | Field | Type | Description | Default |
 |-------|------|-------------|---------|
-| `executor` | object | Executor configuration | Shell executor |
+| `type` | string | Step type (ssh, http, jq, mail, etc.) | shell |
+| `config` | object | Step type-specific configuration | - |
 
 ```yaml
 steps:
@@ -756,7 +757,7 @@ steps:
     command: extract
 ```
 
-### Chat Executor (LLM)
+### Chat (LLM)
 
 | Field | Type | Description | Default |
 |-------|------|-------------|---------|

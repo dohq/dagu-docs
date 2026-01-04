@@ -54,7 +54,7 @@ const fullSidebar = [
     items: [
       { text: "Overview", link: "/features/" },
       {
-        text: "Executors",
+        text: "Step Types",
         collapsed: false,
         items: [
           { text: "Shell", link: "/features/executors/shell" },
@@ -160,7 +160,7 @@ const fullSidebar = [
         text: "Special Variables",
         link: "/reference/special-environment-variables",
       },
-      { text: "Executors", link: "/reference/executors" },
+      { text: "Step Types", link: "/reference/executors" },
     ],
   },
 ];

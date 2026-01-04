@@ -14,17 +14,17 @@ Dagu provides a comprehensive set of features for building and managing workflow
 - [Scheduling with Cron Expressions](/features/scheduling)
 - [Secrets Management](/writing-workflows/secrets)
 
-### Executors
-- [Executor - Shell](/features/executors/shell)
-- [Executor - Shell (macOS / Linux)](/features/executors/shell-unix)
-- [Executor - Shell (Windows)](/features/executors/shell-windows)
-- [Executor - Docker](/features/executors/docker)
-- [Executor - SSH](/features/executors/ssh)
-- [Executor - HTTP](/features/executors/http)
-- [Executor - Archive](/features/executors/archive)
-- [Executor - Mail](/features/executors/mail)
-- [Executor - JQ](/features/executors/jq)
-- [Executor - GitHub Actions](/features/executors/github-actions)
+### Step Types
+- [Shell](/features/executors/shell)
+- [Shell (macOS / Linux)](/features/executors/shell-unix)
+- [Shell (Windows)](/features/executors/shell-windows)
+- [Docker](/features/executors/docker)
+- [SSH](/features/executors/ssh)
+- [HTTP](/features/executors/http)
+- [Archive](/features/executors/archive)
+- [Mail](/features/executors/mail)
+- [JQ](/features/executors/jq)
+- [GitHub Actions](/features/executors/github-actions)
 
 ## Authentication & Authorization
 - [Authentication Options](/configurations/authentication)

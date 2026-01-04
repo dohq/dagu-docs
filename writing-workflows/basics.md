@@ -66,13 +66,13 @@ steps:
 
 Auto-generated names follow the pattern `{type}_{number}`:
 - `cmd_N` - Command steps
-- `script_N` - Script steps  
-- `http_N` - HTTP executor steps
-- `dag_N` - DAG executor steps
+- `script_N` - Script steps
+- `http_N` - HTTP steps
+- `dag_N` - DAG steps
 - `container_N` - Docker/container steps
-- `ssh_N` - SSH executor steps
-- `mail_N` - Mail executor steps
-- `jq_N` - JQ executor steps
+- `ssh_N` - SSH steps
+- `mail_N` - Mail steps
+- `jq_N` - JQ steps
 
 For parallel steps (see below), the pattern is `parallel_{group}_{type}_{index}`.
 
@@ -126,7 +126,7 @@ Commands run in order and stop on first failure. Retries restart from the first 
 
 **Trade-off:** You lose the ability to retry or resume from the middle of the command list. If you need granular control over individual command retries, use separate steps.
 
-**Supported executors:** shell, command, docker, container, ssh
+**Supported step types:** shell, command, docker, container, ssh
 
 **Not supported:** jq, http, archive, mail, github_action, dag (these only accept single commands)
 

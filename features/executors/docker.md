@@ -1,4 +1,4 @@
-# Docker Executor
+# Docker
 
 Run workflow steps in Docker containers for isolated, reproducible execution.
 

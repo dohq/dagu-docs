@@ -109,7 +109,7 @@ waitMail:
 
 This is useful for workflows that require human approval before continuing execution. The email will include details about the DAG and which steps are waiting.
 
-## Mail Executor
+## Mail Step Type
 
 Send custom emails as workflow steps:
 

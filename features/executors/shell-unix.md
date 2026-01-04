@@ -1,4 +1,4 @@
-# Shell Executor (macOS / Linux)
+# Shell (macOS / Linux)
 
 Run commands and scripts on Unix-like systems (macOS, Linux, BSD).
 

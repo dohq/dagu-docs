@@ -1,4 +1,4 @@
-# Chat Executor
+# Chat
 
 Execute Large Language Model (LLM) requests to AI providers like OpenAI, Anthropic, Google Gemini, OpenRouter, and local models.
 

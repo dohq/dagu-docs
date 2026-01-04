@@ -1,4 +1,4 @@
-# JQ Executor
+# JQ
 
 Process and transform JSON data using jq.
 

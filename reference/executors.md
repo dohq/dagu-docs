@@ -1,8 +1,8 @@
-# Executors Reference
+# Step Types Reference
 
 ## Overview
 
-Executors extend Dagu's capabilities beyond simple shell commands. Available executors:
+Step types extend Dagu's capabilities beyond simple shell commands. Available step types:
 
 - [Shell](/features/executors/shell) (default) - Execute shell commands
 - [Docker](/features/executors/docker) - Run commands in Docker containers
@@ -16,16 +16,16 @@ Executors extend Dagu's capabilities beyond simple shell commands. Available exe
 - [GitHub Actions (_experimental_)](/features/executors/github-actions) - Run marketplace actions locally with nektos/act
 
 ::: tip
-For detailed documentation on each executor, click the links above to visit the feature pages.
+For detailed documentation on each step type, click the links above to visit the feature pages.
 :::
 
-## Shell Executor (Default)
+## Shell (Default)
 
 ::: info
-For detailed Shell executor documentation, see [Shell Executor Guide](/features/executors/shell).
+For detailed Shell step type documentation, see [Shell Guide](/features/executors/shell).
 :::
 
-The default executor runs commands in the system shell. Set a DAG-level `shell` to pick the program and flags once; steps inherit it unless you override them.
+The default step type runs commands in the system shell. Set a DAG-level `shell` to pick the program and flags once; steps inherit it unless you override them.
 
 ```yaml
 shell: ["/bin/bash", "-e"]  # Default shell for the workflow
@@ -53,10 +53,10 @@ steps:
     command: echo "Uses zsh"
 ```
 
-## Docker Executor
+## Docker
 
 ::: info
-For detailed Docker executor documentation, see [Docker Executor Guide](/features/executors/docker).
+For detailed Docker step type documentation, see [Docker Guide](/features/executors/docker).
 :::
 
 Run commands in Docker containers for isolation and reproducibility. The `container` field supports two modes:
@@ -159,10 +159,10 @@ steps:
     command: python process.py /container/data
 ```
 
-## GitHub Actions Executor
+## GitHub Actions
 
 ::: info
-For the full guide, see [GitHub Actions Executor](/features/executors/github-actions).
+For the full guide, see [GitHub Actions](/features/executors/github-actions).
 :::
 
 Run marketplace actions (e.g. `actions/checkout@v4`) inside Dagu steps.
@@ -266,10 +266,10 @@ steps:
     command: postgres
 ```
 
-## SSH Executor
+## SSH
 
 ::: info
-For detailed SSH executor documentation, see [SSH Executor Guide](/features/executors/ssh).
+For detailed SSH step type documentation, see [SSH Guide](/features/executors/ssh).
 :::
 
 Execute commands on remote hosts over SSH.
@@ -327,10 +327,10 @@ steps:
       echo "Backup complete"
 ```
 
-## HTTP Executor
+## HTTP
 
 ::: info
-For detailed HTTP executor documentation, see [HTTP Executor Guide](/features/executors/http).
+For detailed HTTP step type documentation, see [HTTP Guide](/features/executors/http).
 :::
 
 Make HTTP requests to APIs and web services.
@@ -425,10 +425,10 @@ steps:
     command: echo "${API_RESPONSE}" | jq '.data[]'
 ```
 
-## Archive Executor
+## Archive
 
 ::: info
-For detailed Archive executor documentation, see [Archive Executor Guide](/features/executors/archive).
+For detailed Archive step type documentation, see [Archive Guide](/features/executors/archive).
 :::
 
 Manipulate archives without shelling out to `tar`, `zip`, or other external tools.
@@ -472,10 +472,10 @@ steps:
     output: ARCHIVE_INDEX
 ```
 
-## Mail Executor
+## Mail
 
 ::: info
-For detailed Mail executor documentation, see [Mail Executor Guide](/features/executors/mail).
+For detailed Mail step type documentation, see [Mail Guide](/features/executors/mail).
 :::
 
 Send emails for notifications and alerts.
@@ -559,10 +559,10 @@ steps:
           </html>
 ```
 
-## JQ Executor
+## JQ
 
 ::: info
-For detailed JQ executor documentation, see [JQ Executor Guide](/features/executors/jq).
+For detailed JQ step type documentation, see [JQ Guide](/features/executors/jq).
 :::
 
 Process and transform JSON data using jq syntax.
@@ -691,10 +691,10 @@ steps:
       ]
 ```
 
-## Chat Executor
+## Chat
 
 ::: info
-For detailed chat executor documentation, see [Chat Executor Guide](/features/executors/chat).
+For detailed Chat step type documentation, see [Chat Guide](/features/executors/chat).
 :::
 
 Execute requests to Large Language Model providers.
@@ -858,10 +858,10 @@ HITL steps can be approved or rejected via the Web UI or REST API:
 - **Approval**: The step succeeds and execution continues
 - **Rejection**: The step enters `Rejected` status, the DAG status becomes `Rejected`, and dependent steps are aborted
 
-## DAG Executor
+## DAG (Subworkflow)
 
 ::: info
-DAG executor allows running other workflows as steps. See [Nested Workflows](/writing-workflows/control-flow#nested-workflows).
+The DAG step type allows running other workflows as steps. See [Nested Workflows](/writing-workflows/control-flow#nested-workflows).
 :::
 
 Execute other workflows as steps, enabling workflow composition.
@@ -949,12 +949,12 @@ steps:
 
 ## See Also
 
-- [Shell Executor](/features/executors/shell) - Shell command execution details
-- [Docker Executor](/features/executors/docker) - Container execution guide
-- [SSH Executor](/features/executors/ssh) - Remote execution guide
-- [HTTP Executor](/features/executors/http) - API interaction guide
-- [Chat Executor](/features/executors/chat) - LLM integration guide
-- [Mail Executor](/features/executors/mail) - Email notification guide
-- [JQ Executor](/features/executors/jq) - JSON processing guide
+- [Shell](/features/executors/shell) - Shell command execution details
+- [Docker](/features/executors/docker) - Container execution guide
+- [SSH](/features/executors/ssh) - Remote execution guide
+- [HTTP](/features/executors/http) - API interaction guide
+- [Chat](/features/executors/chat) - LLM integration guide
+- [Mail](/features/executors/mail) - Email notification guide
+- [JQ](/features/executors/jq) - JSON processing guide
 - [HITL](/features/executors/hitl) - Human-in-the-loop approval guide
-- [Writing Workflows](/writing-workflows/) - Using executors in workflows
+- [Writing Workflows](/writing-workflows/) - Using step types in workflows

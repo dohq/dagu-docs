@@ -1,4 +1,4 @@
-# Archive Executor
+# Archive
 
 Work with archive files directly from a DAG step without relying on shell utilities. The executor is built on top of [`github.com/mholt/archives`](https://github.com/mholt/archives) and streams data for efficiency.
 

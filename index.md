@@ -249,7 +249,7 @@ handlerOn:
     command: cleanup-temp-files.sh  # Always runs
 ```
 
-### [Builtin Executors](/reference/executors)
+### [Step Types](/reference/executors)
 
 Execute tasks in different ways.
 

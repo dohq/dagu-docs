@@ -1,4 +1,4 @@
-# Mail Executor
+# Mail
 
 Send emails from your workflows for notifications, alerts, and reports.
 

@@ -1,6 +1,6 @@
-# Shell Executor
+# Shell
 
-Run system commands and scripts with the default executor.
+Run system commands and scripts with the default step type.
 
 ## Configure the Shell
 

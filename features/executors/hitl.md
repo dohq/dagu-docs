@@ -1,6 +1,6 @@
 # HITL (Human in the Loop)
 
-Pause workflow execution until human approval is granted. The `hitl` executor enables human-in-the-loop (HITL) workflows where manual review or authorization is required before proceeding.
+Pause workflow execution until human approval is granted. The `hitl` step type enables human-in-the-loop (HITL) workflows where manual review or authorization is required before proceeding.
 
 ## Basic Usage
 
@@ -209,4 +209,4 @@ This information is visible in the Web UI and accessible via the REST API.
 
 - [Lifecycle Handlers](/writing-workflows/lifecycle-handlers) - Execute handlers on wait status
 - [Email Notifications](/features/email-notifications) - Configure wait status emails
-- [Executors Reference](/reference/executors) - All available executors
+- [Step Types Reference](/reference/executors) - All available step types

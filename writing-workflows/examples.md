@@ -1199,7 +1199,7 @@ steps:
 
 </div>
 
-## Executors & Integrations
+## Step Types & Integrations
 
 <div class="examples-grid">
 
@@ -1582,7 +1582,7 @@ steps:
 
 <div class="example-card">
 
-### Mail Executor
+### Mail
 
 ```yaml
 smtp:

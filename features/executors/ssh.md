@@ -1,4 +1,4 @@
-# SSH Executor
+# SSH
 
 Execute commands on remote servers via SSH.
 
@@ -153,5 +153,5 @@ Instead of duplicating the SSH executor config, `preconditions`, `retryPolicy`, 
 
 ## See Also
 
-- [Docker Executor](/features/executors/docker) - Container execution
-- [Shell Executor](/features/executors/shell) - Local commands
+- [Docker](/features/executors/docker) - Container execution
+- [Shell](/features/executors/shell) - Local commands

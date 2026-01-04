@@ -1,4 +1,4 @@
-# GitHub Actions Executor
+# GitHub Actions
 
 Run individual GitHub Actions inside Dagu by delegating execution to [nektos/act](https://github.com/nektos/act). This executor is currently **experimental**, so APIs and behaviour may change in upcoming releases. Expect to provide feedback before depending on it for production use.
 

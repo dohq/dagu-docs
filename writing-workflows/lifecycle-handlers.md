@@ -84,7 +84,7 @@ This isolation ensures that each workflow in a hierarchy has predictable, self-c
 
 ## Patterns and Integrations
 
-### Send Email with the Mail Executor
+### Send Email with the Mail Step Type
 
 ```yaml
 handlerOn:

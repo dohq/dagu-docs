@@ -140,7 +140,7 @@ handlerOn:
     command: log-partial.sh "Some steps partially succeeded"
 ```
 
-## Executors
+## Step Types
 
 ### Shell (Default)
 
@@ -154,7 +154,7 @@ steps:
     command: echo "Using zsh"
 ```
 
-See [Shell Executor](/features/executors/shell) for more details.
+See [Shell](/features/executors/shell) for more details.
 
 ### Docker
 
@@ -170,7 +170,7 @@ steps:
   - command: python script.py
 ```
 
-See [Docker Executor](/features/executors/docker) for more details.
+See [Docker](/features/executors/docker) for more details.
 
 ### SSH
 
@@ -186,7 +186,7 @@ steps:
   - command: echo "Running remote script"
 ```
 
-See [SSH Executor](/features/executors/ssh) for more details.
+See [SSH](/features/executors/ssh) for more details.
 
 ### HTTP
 
@@ -202,7 +202,7 @@ steps:
         Authorization: Bearer ${API_TOKEN}
 ```
 
-See [HTTP Executor](/features/executors/http) for more details.
+See [HTTP](/features/executors/http) for more details.
 
 ## Scheduling
 

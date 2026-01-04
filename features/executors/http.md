@@ -1,4 +1,4 @@
-# HTTP Executor
+# HTTP
 
 Execute HTTP requests to web services and APIs.
 
