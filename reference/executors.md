@@ -835,7 +835,7 @@ When a step specifies `llm:`, it completely replaces DAG-level config (no field 
 For detailed HITL documentation, see [HITL Guide](/features/executors/hitl).
 :::
 
-Pause workflow execution until human approval is granted. This enables human-in-the-loop (HITL) workflows where manual review or authorization is required before proceeding.
+Pause workflow execution until human approval or rejection. This enables human-in-the-loop (HITL) workflows where manual review or authorization is required before proceeding.
 
 ### Basic Usage
 
@@ -868,6 +868,13 @@ steps:
 | `prompt` | string | Message displayed to the approver |
 | `input` | string[] | Parameter names to collect from approver |
 | `required` | string[] | Parameters that must be provided (subset of `input`) |
+
+### Approval and Rejection
+
+HITL steps can be approved or rejected via the Web UI or REST API:
+
+- **Approval**: The step succeeds and execution continues
+- **Rejection**: The step enters `Rejected` status, the DAG status becomes `Rejected`, and dependent steps are aborted
 
 ## DAG Executor
 
