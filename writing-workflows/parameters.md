@@ -174,16 +174,3 @@ params:
 steps:
   - command: echo "Deploying to ${ENVIRONMENT} with DB ${DB_HOST}"
 ```
-
-## Enforcing Run ID Format
-
-Ensure consistent run ID naming:
-
-```yaml
-runConfig:
-  disableParamEdit: false  # Parameters can be changed
-  disableRunIdEdit: true   # Must use auto-generated run IDs
-
-steps:
-  - command: echo "Auditing run ${DAG_RUN_ID}"
-```
