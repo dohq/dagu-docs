@@ -1,45 +1,55 @@
 # What is Dagu?
 
 <div style="text-align: center; margin: 2rem 0;">
-  <img src="/logo.webp" alt="Dagu mascot - a squirrel pilot" style="max-width: 280px; height: auto;" />
+  <img src="/logo.webp" alt="Dagu" style="max-width: 280px; height: auto;" />
 </div>
 
-**Workflow engine built for developers who want powerful workflow orchestration without the operational overhead.**
+Dagu is a self-contained workflow engine for orchestrating shell commands, containers, and remote tasks. Define workflows in declarative YAML, execute them with a single binary, and compose complex pipelines from reusable sub-workflows. No database, message broker, or external dependencies required.
 
-Define workflows in simple YAML, execute them anywhere with a single binary, compose complex pipelines from reusable sub-workflows, and distribute tasks across workers. All without requiring databases, message brokers, or code changes to your existing scripts. Dagu is a lightweight alternative to Cron, Airflow, Rundeck, etc.
+## Key Capabilities
 
-### How it Works
-Dagu executes your workflows, which are defined as a series of steps in a YAML file. These steps form a Directed Acyclic Graph (DAG), ensuring a clear and predictable flow of execution.
+- **Single binary deployment** - Install and run without external services
+- **Declarative YAML** - JSON Schema validation with clear error messages
+- **Composable workflows** - Nest sub-DAGs with parameters to unlimited depth
+- **Distributed execution** - Route tasks to workers via labels (GPU, region, etc.)
+- **Built-in scheduling** - Cron expressions with start/stop/restart support
+- **Web UI** - Monitor, control, and debug workflows in real-time
 
-For example, a simple sequential DAG:
+## How It Works
+
+Dagu executes workflows defined as steps in YAML. Steps form a Directed Acyclic Graph (DAG), ensuring predictable execution order.
+
+### Sequential Execution
+
 ```yaml
 type: chain
 steps:
-  - command: echo "Hello, dagu!"
-  - command: echo "This is a second step"
+  - command: echo "Step 1"
+  - command: echo "Step 2"
 ```
 
 ```mermaid
 graph LR
-    A["Hello, dagu!"] --> B["This is a second step"]
+    A["Step 1"] --> B["Step 2"]
     style A stroke:green,stroke-width:1.6px,color:#333
     style B stroke:lime,stroke-width:1.6px,color:#333
 ```
 
-With parallel steps:
+### Parallel Execution
+
 ```yaml
 type: graph
 steps:
   - id: step_1
     command: echo "Step 1"
   - id: step_2a
-    command: echo "Step 2a - runs in parallel"
+    command: echo "Step 2a"
     depends: [step_1]
   - id: step_2b
-    command: echo "Step 2b - runs in parallel"
+    command: echo "Step 2b"
     depends: [step_1]
   - id: step_3
-    command: echo "Step 3 - waits for parallel steps"
+    command: echo "Step 3"
     depends: [step_2a, step_2b]
 ```
 
@@ -55,22 +65,75 @@ graph TD
     style D stroke:lightblue,stroke-width:1.6px,color:#333
 ```
 
+## Architecture Overview
+
+```mermaid
+graph TB
+    subgraph Interfaces["User Interfaces"]
+        CLI[CLI]
+        UI[Web UI]
+        API[REST API]
+    end
+
+    subgraph Engine["Core Engine"]
+        SCH[Scheduler]
+        AGT[Agent]
+        EXE[Executors]
+    end
+
+    subgraph Distributed["Distributed Mode"]
+        COORD[Coordinator]
+        W1["Worker 1"]
+        WN["Worker N"]
+    end
+
+    CLI --> AGT
+    UI --> AGT
+    API --> AGT
+    SCH --> AGT
+    AGT --> EXE
+    SCH -.->|gRPC| COORD
+    COORD --> W1
+    COORD --> WN
+```
+
+**Local mode**: CLI, Web UI, or API triggers the Agent, which runs steps via Executors.
+
+**Distributed mode**: Scheduler dispatches work to a Coordinator, which routes tasks to Workers based on label selectors (e.g., `gpu=true`, `region=us-east`).
+
+See [Architecture](/overview/architecture) for details.
+
+## Built-in Step Types
+
+| Type | Description |
+|------|-------------|
+| `command` | Shell commands (bash, sh, PowerShell, cmd) |
+| `docker` | Container execution with volume mounts and registry auth |
+| `ssh` | Remote command execution via SSH |
+| `http` | HTTP/REST API requests |
+| `jq` | JSON query and transformation |
+| `mail` | Email notifications with attachments |
+| `dag` | Sub-workflow execution (hierarchical composition) |
+
+See [Step Types Reference](/reference/executors) for configuration details.
+
 ## Demo
 
-**CLI Demo**: Create a simple DAG workflow and execute it using the command line interface.
+**CLI**: Create and execute workflows from the command line.
 
-![Demo CLI](/demo-cli.webp)
+![CLI Demo](/demo-cli.webp)
 
-**Web UI Demo**: Create and manage workflows using the web interface, including real-time monitoring and control.
+[CLI Documentation](/overview/cli)
 
-[Docs on CLI](/overview/cli)
+**Web UI**: Monitor executions, view logs, and manage workflows visually.
 
-![Demo Web UI](/demo-web-ui.webp)
+![Web UI Demo](/demo-web-ui.webp)
 
-[Docs on Web UI](/overview/web-ui)
+[Web UI Documentation](/overview/web-ui)
 
 ## Learn More
 
-- [Quick Start Guide](/getting-started/quickstart) - Up and running in 2 minutes
-- [Core Concepts](/getting-started/concepts) - Understand how Dagu works
+- [Quick Start](/getting-started/quickstart) - Running in minutes
+- [Core Concepts](/getting-started/concepts) - Workflows, steps, and dependencies
+- [Architecture](/overview/architecture) - System internals and distributed execution
 - [Examples](/writing-workflows/examples) - Ready-to-use workflow patterns
