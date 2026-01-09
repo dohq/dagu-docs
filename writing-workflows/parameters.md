@@ -4,8 +4,10 @@ Make workflows dynamic and reusable with runtime parameters.
 
 ## Parameter Definition
 
+Dagu supports multiple formats for defining parameters:
+
 ```yaml
-# Named parameters
+# Named parameters (array of maps)
 params:
   - ENVIRONMENT: dev
   - PORT: 8080
@@ -13,6 +15,20 @@ params:
 
 # Positional parameters (accessed as $1, $2, ...)
 params: first second third
+
+# Named parameters (key=value string)
+params: ENVIRONMENT=dev PORT=8080 DEBUG=false
+
+# Array of strings
+params:
+  - ENVIRONMENT=dev
+  - PORT=8080
+
+# JSON object format
+params: '{"ENVIRONMENT": "dev", "PORT": 8080, "DEBUG": false}'
+
+# JSON array format (positional)
+params: '["first", "second", "third"]'
 
 # JSON Schema validation
 params:

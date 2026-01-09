@@ -41,6 +41,14 @@ The command's stdout (trimmed) becomes the output value in `outputs.json`:
 }
 ```
 
+### Dollar Prefix
+
+The dollar prefix is optional and equivalent to the bare name:
+
+```yaml
+output: $MY_VAR  # Equivalent to: output: MY_VAR
+```
+
 ### Object Form
 
 For more control, use the object form with additional options:

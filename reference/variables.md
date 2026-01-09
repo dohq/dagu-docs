@@ -242,17 +242,24 @@ steps:
   - command: |
       if [ "${risky.exitCode}" = "0" ]; then
         echo "Success! Output was:"
-        cat ${risky.stdout}
+        cat ${risky.stdout}  # Read content from file path
       else
         echo "Failed with code ${risky.exitCode}"
-        cat ${risky.stderr}
+        cat ${risky.stderr}  # Read content from file path
       fi
 ```
 
 Available properties:
-- `${id.exitCode}` - Exit code of the step
+- `${id.exitCode}` - Exit code of the step (as a string, e.g., `"0"` or `"1"`)
+- `${id.exit_code}` - Alternative snake_case syntax for exit code
 - `${id.stdout}` - Path to stdout log file
 - `${id.stderr}` - Path to stderr log file
+
+> **Important**: `${id.stdout}` and `${id.stderr}` return **file paths**, not the actual output content.
+>
+> - To read content: use `cat ${id.stdout}`
+> - To capture output for later steps: use the `output:` field instead
+> - Substring slicing like `${id.stdout:0:5}` operates on the **file path string**, not file content
 
 ## Variable Precedence
 

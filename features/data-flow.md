@@ -218,22 +218,24 @@ steps:
     command: 'sh -c "if [ $((RANDOM % 2)) -eq 0 ]; then echo Success; else echo Failed && exit 1; fi"'
     continueOn:
       failure: true
-      
+
   - command: |
       if [ "${risky.exitCode}" = "0" ]; then
         echo "Success! Checking output..."
-        cat ${risky.stdout}
+        cat ${risky.stdout}  # Read content from the file
       else
         echo "Failed with code ${risky.exitCode}"
         echo "Error log:"
-        cat ${risky.stderr}
+        cat ${risky.stderr}  # Read content from the file
       fi
 ```
 
 Available properties:
-- `${id.exitCode}` - Exit code of the step
+- `${id.exitCode}` - Exit code of the step (as a string, e.g., `"0"` or `"1"`)
 - `${id.stdout}` - Path to stdout log file
 - `${id.stderr}` - Path to stderr log file
+
+> **Important**: `${id.stdout}` and `${id.stderr}` return **file paths**, not the actual output content. Use `cat ${id.stdout}` to read the content. To capture output content directly into a variable for use in subsequent steps, use the `output:` field instead.
 
 ## Sub DAG Outputs
 
@@ -390,29 +392,25 @@ steps:
 
 ## Variable Resolution Order
 
-Variables are resolved in this precedence (highest to lowest):
+Variables are resolved with step-level taking highest precedence:
 
-1. **Step-level environment**
-2. **Output variables** from dependencies
-3. **DAG-level parameters**
-4. **DAG-level environment**
-5. **dotenv files**
-6. **Base configuration**
-7. **System environment**
+1. **Step-level environment** - Overrides everything
+2. **Output variables** - From completed steps
+3. **Secrets** - From `secrets:` block
+4. **DAG-level environment** - Includes `env:` and `dotenv` files
 
 Example:
 ```yaml
 env:
   - MESSAGE: "DAG level"
 
-params:
-  - MESSAGE: "Param default"
-
 steps:
   - env:
       - MESSAGE: "Step level"  # This wins
     command: echo "${MESSAGE}"
 ```
+
+For detailed precedence rules including interpolation vs runtime environment, see [Variables Reference](/reference/variables#variable-precedence).
 
 ## DAG Run Outputs
 

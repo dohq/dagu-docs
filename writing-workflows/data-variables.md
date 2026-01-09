@@ -91,6 +91,8 @@ steps:
 
 Specify `.env` files to load environment variables from.
 
+> **Note**: If `dotenv` is not specified, Dagu automatically loads `.env` from the working directory. To disable this default behavior, use `dotenv: []`.
+
 ```yaml
 dotenv: .env  # Load a single dotenv file
 
@@ -114,6 +116,31 @@ Files can be specified as:
 - Relative to the DAG file directory
 - Relative to the base config directory
 - Relative to the user's home directory
+
+### Dynamic Paths
+
+Dotenv paths support variable expansion and command substitution:
+
+```yaml
+dotenv:
+  - ${HOME}/.config/app/.env
+  - "`pwd`/.env.local"
+  - .env.${ENVIRONMENT}  # e.g., .env.production
+```
+
+### Loading Order
+
+Dotenv files are loaded **before** secrets resolution, allowing secrets to reference dotenv variables:
+
+```yaml
+# .env contains: SECRET_FILE_PATH=/etc/secrets/token
+dotenv: .env
+
+secrets:
+  - name: TOKEN
+    provider: file
+    key: ${SECRET_FILE_PATH}  # Expanded from dotenv
+```
 
 ```yaml
 # Disable dotenv loading entirely
@@ -266,7 +293,7 @@ type: graph
 steps:
   - id: extract  # Short identifier
     command: python extract.py
-    output: DATA
+    output: DATA  # Captures stdout content into DATA variable
 
   - id: validate
     command: python validate.py
@@ -276,15 +303,17 @@ steps:
   - command: |
       # Reference step properties using IDs
       echo "Exit code: ${extract.exitCode}"
-      echo "Stdout path: ${extract.stdout}"
-      echo "Stderr path: ${extract.stderr}"
+      echo "Stdout file: ${extract.stdout}"
+      cat ${extract.stdout}  # Read content from the file
     depends: validate
 ```
 
 Available step properties when using ID references:
 - `${id.stdout}`: Path to stdout file
-- `${id.stderr}`: Path to stderr file  
-- `${id.exitCode}`: Exit code of the step
+- `${id.stderr}`: Path to stderr file
+- `${id.exitCode}`: Exit code of the step (as a string)
+
+> **Important**: `${id.stdout}` and `${id.stderr}` return **file paths**, not the actual output content. Use `cat ${id.stdout}` to read the content. To capture output content directly into a variable, use the `output:` field instead.
 
 ## Command Substitution
 

@@ -85,6 +85,47 @@ steps:
   - command: python process.py --output ${OUTPUT_DIR}
 ```
 
+### Supported Formats
+
+Dagu supports multiple formats for defining environment variables:
+
+```yaml
+# Format 1: Array of Maps (preserves order)
+env:
+  - KEY1: value1
+  - KEY2: value2
+  - KEY3: ${KEY1}_suffix  # Can reference earlier vars
+
+# Format 2: Simple Map (order not guaranteed)
+env:
+  KEY1: value1
+  KEY2: value2
+
+# Format 3: Array of KEY=value strings
+env:
+  - KEY1=value1
+  - KEY2=value2
+
+# Format 4: Mixed format
+env:
+  - KEY1: value1
+  - KEY2=value2
+  - KEY3: ${KEY1}
+```
+
+**Note**: The array format (Format 1) preserves order, which matters when later variables reference earlier ones. The simple map format (Format 2) does not guarantee order.
+
+### Non-String Values
+
+Non-string values (integers, booleans, floats) are automatically converted to strings:
+
+```yaml
+env:
+  - PORT: 8080           # Becomes "8080"
+  - ENABLED: true        # Becomes "true"
+  - RATIO: 0.75          # Becomes "0.75"
+```
+
 ### Variable Expansion
 
 Reference other variables using `${VAR}` or `$VAR` syntax. Earlier variables in the list can be referenced by later ones:
@@ -164,7 +205,25 @@ Dagu supports several expansion patterns:
 | `${VAR}` | Basic substitution | `${HOME}` → `/home/user` |
 | `$VAR` | Short form | `$HOME` → `/home/user` |
 | `${VAR:-default}` | Default if unset | `${PORT:-8080}` → `8080` |
+| `${VAR:?error}` | Error if unset | `${REQUIRED:?Must be set}` |
+| `${VAR:+alt}` | Alternate value if set | `${DEBUG:+--verbose}` |
 | `${VAR:0:5}` | Substring (offset:length) | `${DATE:0:4}` → year portion |
+
+### Literal Values (No Expansion)
+
+Single quotes prevent variable expansion:
+
+```yaml
+command: echo '${NOT_EXPANDED}'  # Outputs literal: ${NOT_EXPANDED}
+```
+
+### Escaped Backticks
+
+To use literal backticks without command substitution:
+
+```yaml
+command: echo "Literal backtick: \`not a command\`"
+```
 
 For full syntax including JSON path access and step output references, see [Variables Reference](/reference/variables).
 
