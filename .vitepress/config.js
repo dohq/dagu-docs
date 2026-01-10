@@ -78,6 +78,15 @@ const fullSidebar = [
           },
         ],
       },
+      {
+        text: "ETL",
+        collapsed: false,
+        items: [
+          { text: "Overview", link: "/features/etl/" },
+          { text: "PostgreSQL", link: "/features/etl/postgresql" },
+          { text: "SQLite", link: "/features/etl/sqlite" },
+        ],
+      },
       { text: "Scheduling", link: "/features/scheduling" },
       { text: "Execution Control", link: "/features/execution-control" },
       { text: "Data Flow", link: "/features/data-flow" },

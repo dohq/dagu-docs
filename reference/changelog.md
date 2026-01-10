@@ -1,5 +1,32 @@
 # Changelog
 
+## v1.31.0 (UNRELEASED)
+
+### Added
+
+- **SQL Executor**: New step types for database operations with PostgreSQL and SQLite support. Execute queries, import data from CSV/TSV/JSONL, and export results in multiple formats.
+
+  ```yaml
+  steps:
+    - name: query-users
+      type: postgres
+      config:
+        dsn: "postgres://user:pass@localhost:5432/mydb"
+      command: "SELECT * FROM users WHERE active = true"
+      output: USERS
+  ```
+
+  **Key Features:**
+  - PostgreSQL and SQLite drivers
+  - Parameterized queries for SQL injection prevention
+  - Transaction support with isolation levels
+  - Data import from CSV, TSV, JSONL files
+  - Output formats: JSONL, JSON, CSV
+  - Advisory locks (PostgreSQL) and file locks (SQLite)
+  - Connection pooling and timeout configuration
+
+  See [ETL](/features/etl/) for full documentation.
+
 ## v1.30.0 (2026-01-04)
 
 ### Added

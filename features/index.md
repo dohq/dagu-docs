@@ -26,6 +26,11 @@ Dagu provides a comprehensive set of features for building and managing workflow
 - [JQ](/features/executors/jq)
 - [GitHub Actions](/features/executors/github-actions)
 
+### ETL & SQL
+- [Overview](/features/etl/) - SQL queries and data operations
+- [PostgreSQL](/features/etl/postgresql) - PostgreSQL database operations
+- [SQLite](/features/etl/sqlite) - SQLite database operations
+
 ## Authentication & Authorization
 - [Authentication Options](/configurations/authentication)
 - [Web UI Configuration](/configurations/server)
