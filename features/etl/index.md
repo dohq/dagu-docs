@@ -12,17 +12,26 @@ Execute SQL queries and data operations directly in your workflows.
 ## Basic Usage
 
 ```yaml
+secrets:
+  - name: DB_PASSWORD
+    provider: env           # Read from environment variable
+    key: POSTGRES_PASSWORD  # Source variable name
+
 steps:
   - name: query-users
     type: postgres
     config:
-      dsn: "postgres://user:pass@localhost:5432/mydb"
+      dsn: "postgres://user:${DB_PASSWORD}@localhost:5432/mydb"
     command: "SELECT id, name, email FROM users WHERE active = true"
     output: USERS  # Capture results to variable
 ```
 
 ::: tip Output Destination
 Query results are written to **stdout** by default. Use `output: VAR_NAME` to capture results into an environment variable for use in subsequent steps. For large results, use `streaming: true` with `outputFile` to write directly to a file.
+:::
+
+::: info Secrets
+Secrets are automatically masked in logs. Use `provider: file` for Kubernetes/Docker secrets. See [Secrets](/writing-workflows/secrets) for details.
 :::
 
 ## Key Features
@@ -77,11 +86,16 @@ Query results are written to **stdout** by default. Use `output: VAR_NAME` to ca
 Import data from files into database tables:
 
 ```yaml
+secrets:
+  - name: DB_PASSWORD
+    provider: env
+    key: POSTGRES_PASSWORD
+
 steps:
   - name: import-csv
     type: postgres
     config:
-      dsn: "postgres://user:pass@localhost:5432/mydb"
+      dsn: "postgres://user:${DB_PASSWORD}@localhost:5432/mydb"
       import:
         inputFile: /data/users.csv
         table: users

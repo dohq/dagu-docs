@@ -5,11 +5,16 @@ Execute queries and data operations against PostgreSQL databases.
 ## Basic Usage
 
 ```yaml
+secrets:
+  - name: DB_PASSWORD
+    provider: env
+    key: POSTGRES_PASSWORD
+
 steps:
   - name: query-users
     type: postgres
     config:
-      dsn: "postgres://user:password@localhost:5432/mydb"
+      dsn: "postgres://user:${DB_PASSWORD}@localhost:5432/mydb"
     command: "SELECT id, name, email FROM users"
     output: USERS  # Capture results to variable
 ```
