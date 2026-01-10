@@ -11,7 +11,12 @@ steps:
     config:
       dsn: "postgres://user:password@localhost:5432/mydb"
     command: "SELECT id, name, email FROM users"
+    output: USERS  # Capture results to variable
 ```
+
+::: tip Output Destination
+Query results are written to **stdout** by default (JSONL format). Use `output: VAR_NAME` to capture results into an environment variable. For large results, use `streaming: true` with `outputFile`.
+:::
 
 ## Connection String
 

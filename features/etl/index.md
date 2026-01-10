@@ -18,8 +18,12 @@ steps:
     config:
       dsn: "postgres://user:pass@localhost:5432/mydb"
     command: "SELECT id, name, email FROM users WHERE active = true"
-    output: USERS
+    output: USERS  # Capture results to variable
 ```
+
+::: tip Output Destination
+Query results are written to **stdout** by default. Use `output: VAR_NAME` to capture results into an environment variable for use in subsequent steps. For large results, use `streaming: true` with `outputFile` to write directly to a file.
+:::
 
 ## Key Features
 
