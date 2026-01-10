@@ -239,7 +239,8 @@ dagu worker --worker.labels region=us-east-1 --worker.coordinator-host=coordinat
 ### Requirements
 
 - **DAG Definitions**: Workers receive DAG definitions via gRPC when tasks are dispatched. Workers do **not** need access to the `dags/` directory.
-- **Execution State**: Workers need shared access to the `data/` directory (dag-runs, queue, proc) to write execution state that the main instance can read.
-- **Logs**: Workers need shared access to the `logs/` directory for the Web UI to display execution logs.
-- Shared storage can be provided via NFS, cloud storage (EFS, GCS, Azure Files), or distributed filesystems.
-- Workers execute DAGs using the same file-based storage system described above.
+- **Storage**: Workers can operate in two modes:
+  - **Shared Filesystem**: Workers write status and logs directly to shared storage (NFS, EFS, Azure Files)
+  - **Shared Nothing**: Workers send status and logs to the coordinator via gRPC (no shared storage required)
+
+See [Workers](/features/workers/) for detailed deployment documentation.

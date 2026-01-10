@@ -27,6 +27,16 @@
 
   See [ETL](/features/etl/) for full documentation.
 
+- **Shared-Nothing Worker Architecture**: Workers can now operate without shared filesystem access. Enables deployment in Kubernetes, multi-cloud, and containerized environments where NFS/shared volumes are not available.
+
+  **Key Features:**
+  - **Static Discovery**: Configure workers with `--worker.coordinators=host:port` for direct coordinator connection
+  - **Status Pushing**: Workers send execution status to coordinator via `ReportStatus` gRPC call
+  - **Log Streaming**: Workers stream stdout/stderr to coordinator via `StreamLogs` gRPC call (32KB buffer, 64KB flush threshold)
+  - **Zombie Detection**: Coordinator automatically marks tasks as FAILED when workers become unresponsive (30s heartbeat timeout)
+
+  See [Workers](/features/workers/) for deployment options and configuration.
+
 ## v1.30.0 (2026-01-04)
 
 ### Added

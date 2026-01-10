@@ -39,30 +39,30 @@ Worker 1        Worker 2                Worker 3
 
 ```
 
-### Shared Storage
+### Storage Options
 
-For distributed execution to function correctly, nodes must share execution state and logs. **DAG definitions do not need to be shared** - they are transmitted to workers via gRPC when tasks are dispatched.
+Dagu supports two deployment modes for distributed workers:
 
-**Requirement**: Mount the `data/` and `logs/` subdirectories (or the entire `DAGU_HOME` directory) as a shared volume (e.g., NFS) across all nodes:
-- **Main Instance**: Needs access to read DAGs (from `dags/`), write execution state, and read worker logs for the UI.
-- **Workers**: Need access to write execution state (dag-runs) and write execution logs. Workers receive DAG definitions via gRPC and do not need access to the `dags/` directory.
+| Mode | Description |
+|------|-------------|
+| [Shared Filesystem](./workers/shared-filesystem) | Workers share storage with coordinator via NFS/shared volumes |
+| [Shared Nothing](./workers/shared-nothing) | Workers communicate status and logs via gRPC (no shared storage) |
 
-> [!IMPORTANT]
-> **Log Visibility**: If the `logs/` directory is not shared, the main server UI will not be able to display logs for tasks executed on remote workers.
+See [Workers](./workers/) for detailed documentation on each deployment mode.
 
-> [!NOTE]
-> **Future Improvement**: This shared storage requirement is a current limitation. We are working on implementing a **remote-sync** feature that will provide a centralized database and views for history data and logs, eliminating the need for NFS in the future.
->
-> If you want support for this feature, please upvote here: [dagu-org/dagu#1260](https://github.com/dagu-org/dagu/issues/1260)
+**DAG definitions do not need to be shared** in either mode - they are transmitted to workers via gRPC when tasks are dispatched.
 
 ### Service Registry & Health Monitoring
 
 The distributed execution system features automatic service registry and health monitoring:
 
 - **File-based Service Registry**: Workers automatically register themselves in a shared service registry directory
-- **Heartbeat Mechanism**: Workers send regular heartbeats (every 10 seconds by default)
+- **Dual Heartbeat Mechanism**:
+  - Service registry: Workers update registry files every 10 seconds
+  - Coordinator: Workers send gRPC heartbeats every 1 second (for task coordination and cancellation)
 - **Automatic Failover**: Tasks are automatically redistributed if a worker becomes unhealthy
 - **Dynamic Scaling**: Add or remove workers at runtime without coordinator restart
+- **Zombie Detection**: Coordinator marks tasks as failed when worker heartbeats become stale (>30 seconds)
 
 ## Setting Up Distributed Execution
 

@@ -101,6 +101,15 @@ const fullSidebar = [
         collapsed: false,
         items: [
           { text: "Overview", link: "/features/distributed-execution" },
+          {
+            text: "Workers",
+            collapsed: false,
+            items: [
+              { text: "Overview", link: "/features/workers/" },
+              { text: "Shared Filesystem", link: "/features/workers/shared-filesystem" },
+              { text: "Shared Nothing", link: "/features/workers/shared-nothing" },
+            ],
+          },
           { text: "Worker Labels", link: "/features/worker-labels" },
         ],
       },
