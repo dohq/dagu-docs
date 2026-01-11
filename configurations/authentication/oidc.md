@@ -14,9 +14,24 @@ For most use cases, we recommend using **builtin auth mode with OIDC enabled** i
 
 See [Builtin Authentication - OIDC/SSO Login](/configurations/authentication/builtin#oidcsso-login) for the recommended setup.
 
-## Standalone OIDC Mode (Legacy)
+## Standalone OIDC Mode
 
-Standalone OIDC mode (`auth.mode: oidc`) is available for simple setups where you don't need Dagu's user management features. All authenticated OIDC users have full access.
+Standalone OIDC mode (`auth.mode: oidc`) is available for simple setups where you don't need Dagu's user management features.
+
+**Important**: All authenticated OIDC users are granted **admin role** with full access. There is no role-based access control in this mode. Use [Builtin + OIDC mode](/configurations/authentication/builtin#oidcsso-login) if you need RBAC.
+
+### Limitations
+
+Standalone OIDC mode has the following limitations compared to [Builtin + OIDC mode](/configurations/authentication/builtin#oidcsso-login):
+
+| Feature | Standalone OIDC | Builtin + OIDC |
+|---------|-----------------|----------------|
+| Role-based access control | No (all users are admin) | Yes (4 roles) |
+| User management | No | Yes |
+| Role mapping from IdP | No | Yes |
+| API key management | No | Yes |
+| Domain-based filtering | No | Yes |
+| Configurable session TTL | No (24h fixed) | Yes |
 
 ## Configuration
 
@@ -60,7 +75,7 @@ dagu start-all
 - **clientSecret**: OAuth2 client secret (required)  
 - **clientUrl**: Base URL of your Dagu instance, used for callback (required)
 - **issuer**: OIDC provider URL (required)
-- **scopes**: OAuth2 scopes to request (optional, defaults vary by provider)
+- **scopes**: OAuth2 scopes to request (default: `["openid", "profile", "email"]`)
 - **whitelist**: Email addresses allowed to authenticate (optional)
 
 OIDC is automatically enabled when clientId, clientSecret, and issuer are provided.

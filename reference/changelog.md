@@ -22,7 +22,7 @@
       defaultRole: viewer
   ```
 
-  Key features: auto-signup on first login, role mapping from IdP groups, email domain filtering, customizable login button. See [Builtin Authentication](/configurations/authentication/builtin#oidcsso-login) for details.
+  Key features: auto-signup on first login, role mapping from IdP groups, email domain filtering, email whitelist, customizable login button. See [Builtin Authentication](/configurations/authentication/builtin#oidcsso-login) for details.
 
 - **SQL Executor**: New step types for database operations with PostgreSQL and SQLite support. Execute queries, import data from CSV/TSV/JSONL, and export results in multiple formats.
 

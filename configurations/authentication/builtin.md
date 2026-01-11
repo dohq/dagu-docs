@@ -276,6 +276,7 @@ auth:
     autoSignup: true
     defaultRole: viewer
     allowedDomains: ["company.com"]
+    whitelist: ["partner@external.com"]
     buttonLabel: "Login with SSO"
 ```
 
@@ -309,6 +310,7 @@ export DAGU_AUTH_OIDC_BUTTON_LABEL="Login with SSO"
 | `autoSignup` | Auto-create users on first OIDC login | `false` |
 | `defaultRole` | Role assigned to new auto-created users | `viewer` |
 | `allowedDomains` | Email domains allowed to authenticate | All domains |
+| `whitelist` | Specific email addresses always allowed (bypasses domain filter) | None |
 | `buttonLabel` | Text displayed on the SSO login button | `"Login with SSO"` |
 
 ### Auto-Signup
@@ -328,6 +330,19 @@ oidc:
 ```
 
 Users with emails outside these domains will be denied access.
+
+### Email Whitelist
+
+Use `whitelist` to allow specific email addresses regardless of domain restrictions:
+
+```yaml
+oidc:
+  enabled: true
+  allowedDomains: ["company.com"]
+  whitelist: ["partner@external.com", "contractor@other.com"]
+```
+
+Whitelist takes precedence over `allowedDomains`. If an email is in the whitelist, it is always allowed even if its domain is not in `allowedDomains`.
 
 ### Role Mapping
 
