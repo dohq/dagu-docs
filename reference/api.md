@@ -491,6 +491,77 @@ Creates and starts a DAG run with optional parameters.
 }
 ```
 
+### Start DAG (Synchronous)
+
+**Endpoint**: `POST /api/v2/dags/{fileName}/start-sync`
+
+Creates and starts a DAG run, waits for it to complete (or timeout), and returns the full execution details. This is useful for automation scripts and CI/CD pipelines that need to wait for a DAG to finish before proceeding.
+
+**Request Body**:
+```json
+{
+  "timeout": 300,
+  "params": "{\"env\": \"production\"}",
+  "dagRunId": "custom-run-id",
+  "dagName": "sync-execution",
+  "singleton": false
+}
+```
+
+**Request Fields**:
+| Field | Type | Description | Required |
+|-------|------|-------------|----------|
+| timeout | integer | Maximum seconds to wait for completion (1-86400) | **Yes** |
+| params | string | JSON string of parameters | No |
+| dagRunId | string | Custom run ID | No |
+| dagName | string | Override the DAG name used for this run | No |
+| singleton | boolean | If true, prevent starting if DAG is already running (returns 409) | No |
+
+**Response (200)** - DAG completed or reached waiting status:
+```json
+{
+  "dagRun": {
+    "rootDAGRunName": "my-dag",
+    "rootDAGRunId": "20240101_120000_abc123",
+    "dagRunId": "20240101_120000_abc123",
+    "name": "my-dag",
+    "status": 4,
+    "statusLabel": "succeeded",
+    "startedAt": "2024-01-01T12:00:00Z",
+    "finishedAt": "2024-01-01T12:00:05Z",
+    "log": "/logs/my-dag.log",
+    "params": "{}",
+    "nodes": [
+      {
+        "step": {"name": "step1", "command": "echo hello"},
+        "status": 4,
+        "statusLabel": "succeeded",
+        "startedAt": "2024-01-01T12:00:01Z",
+        "finishedAt": "2024-01-01T12:00:02Z"
+      }
+    ]
+  }
+}
+```
+
+**Response (408)** - Timeout waiting for completion:
+```json
+{
+  "code": "timeout",
+  "message": "timeout waiting for DAG my-dag to complete after 300 seconds"
+}
+```
+
+**Response (409)** - When `singleton: true` and DAG is already running:
+```json
+{
+  "code": "already_exists",
+  "message": "DAG my-dag is already running (singleton mode)"
+}
+```
+
+> **Note:** If the DAG reaches a "waiting" status (e.g., a human-in-the-loop step requires approval), the endpoint returns immediately with the current status instead of waiting for the timeout.
+
 ### Enqueue DAG
 
 **Endpoint**: `POST /api/v2/dags/{fileName}/enqueue`

@@ -23,6 +23,22 @@
   ```
 
   Key features: auto-signup on first login, role mapping from IdP groups, email domain filtering, email whitelist, customizable login button. See [Builtin Authentication](/configurations/authentication/builtin#oidcsso-login) for details.
+- **Synchronous Execution API**: New endpoint `POST /api/v2/dags/{fileName}/start-sync` that executes a DAG and waits for completion before returning. Returns full execution details including all node statuses. Useful for automation scripts, CI/CD pipelines, and any scenario where you need to wait for a DAG to finish.
+
+  ```bash
+  curl -X POST "http://localhost:8080/api/v2/dags/my-dag/start-sync" \
+    -H "Content-Type: application/json" \
+    -d '{"timeout": 300, "params": "{}"}'
+  ```
+
+  **Key Features:**
+  - Required `timeout` parameter (1-86400 seconds) prevents indefinite waits
+  - Returns full `DAGRunDetails` with all node statuses on completion
+  - Returns HTTP 408 on timeout with error details
+  - Returns immediately when DAG reaches "waiting" status (human approval needed)
+  - Supports all existing options: `params`, `dagRunId`, `dagName`, `singleton`
+
+  See [REST API Reference](/reference/api#start-dag-synchronous) for full documentation.
 
 - **SQL Executor**: New step types for database operations with PostgreSQL and SQLite support. Execute queries, import data from CSV/TSV/JSONL, and export results in multiple formats.
 
