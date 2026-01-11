@@ -12,7 +12,23 @@ For most use cases, we recommend using **builtin auth mode with OIDC enabled** i
 - Role mapping from IdP groups
 - Auto-signup for new users
 
-See [Builtin Authentication - OIDC/SSO Login](/configurations/authentication/builtin#oidcsso-login) for the recommended setup.
+```yaml
+auth:
+  mode: builtin
+  builtin:
+    token:
+      secret: your-jwt-secret
+  oidc:
+    enabled: true
+    clientId: your-client-id
+    clientSecret: your-client-secret
+    clientUrl: https://dagu.example.com
+    issuer: https://accounts.google.com
+    autoSignup: true
+    defaultRole: viewer
+```
+
+See [Builtin Authentication - OIDC/SSO Login](/configurations/authentication/builtin#oidcsso-login) for full documentation.
 
 ## Standalone OIDC Mode
 
