@@ -4,6 +4,18 @@
 
 ### Added
 
+- **System Status Page**: New admin-only page consolidating system health monitoring in one place.
+
+  **Features:**
+  - Scheduler service status with all instances
+  - Coordinator service status with all instances
+  - Worker status with health, pollers, and running tasks
+  - Resource usage charts (CPU, Memory, Disk, Load)
+
+  **Dashboard Cleanup:** Removed Workers Summary and System Resources sections from the main dashboard to reduce clutter. These are now available in the dedicated System Status page.
+
+  Access via the navigation menu under "Overview" (admin users only).
+
 - **OIDC Integration for Builtin Auth (Recommended)**: Added OIDC/SSO login capability under builtin authentication mode. This is now the recommended way to use OIDC with Dagu, as it combines SSO convenience with full user management and RBAC.
 
   ```yaml
