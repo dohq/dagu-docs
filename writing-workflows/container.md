@@ -107,12 +107,26 @@ Or use `DOCKER_AUTH_CONFIG` environment variable (same format as `~/.docker/conf
 
 ## Shell Wrapper
 
-Wraps step commands with a shell interpreter to enable pipes, redirects, and command chaining.
+The `shell` field wraps step commands with a shell interpreter to enable **shell operators** like pipes, redirects, and command chaining. This provides a **DRY (Don't Repeat Yourself)** approach - instead of wrapping each command individually, configure the shell once at the container level.
 
+### Why Use Shell Wrapper?
+
+**Without `shell` (repetitive wrapping):**
 ```yaml
 container:
   image: alpine:latest
-  shell: ["/bin/sh", "-c"]
+
+steps:
+  - command: sh -c "cat data.csv | cut -d',' -f2 | sort | uniq > unique.txt"
+  - command: sh -c "npm install && npm test"
+  - command: sh -c "npm run build || exit 1"
+```
+
+**With `shell` (DRY approach):**
+```yaml
+container:
+  image: alpine:latest
+  shell: ["/bin/sh", "-c"]  # Configure once
 
 steps:
   - command: cat data.csv | cut -d',' -f2 | sort | uniq > unique.txt
@@ -120,24 +134,114 @@ steps:
   - command: npm run build || exit 1
 ```
 
-**Format:** Array where the first element is the shell path, remaining elements are flags, and the step command is appended as the final argument. The command array is joined with spaces.
+### Supported Shell Features
+
+When `shell` is configured, your commands can use:
+
+- **Pipes**: `|` - Pass output from one command to another
+- **Command chaining**: `&&`, `||`, `;` - Execute multiple commands conditionally
+- **Redirects**: `>`, `>>`, `<` - Redirect input/output
+- **Variable expansion**: `$VAR`, `${VAR}` - Use shell variables
+- **Globbing**: `*.txt`, `**/*.js` - File pattern matching
+
+```yaml
+container:
+  image: alpine:latest
+  shell: ["/bin/sh", "-c"]
+
+steps:
+  # Pipes
+  - command: echo "hello world" | tr a-z A-Z
+
+  # Command chaining
+  - command: mkdir -p build && cd build && cmake ..
+
+  # Redirects
+  - command: cat data.txt | grep ERROR > errors.log
+
+  # Variable expansion
+  - command: echo "User is $USER"
+```
+
+### Format
+
+**Array format:** `[shell_path, ...flags, command_flag]`
+
+- **First element**: Path to shell executable (`/bin/sh`, `/bin/bash`, etc.)
+- **Middle elements** (optional): Shell flags (`-e`, `-o errexit`, etc.)
+- **Last element**: Command flag is **auto-added** if not present (`-c`, `-Command`, `/c`, `--run`)
 
 **Examples:**
 ```yaml
-shell: ["/bin/sh", "-c"]
+# Simple - auto-adds -c
+shell: ["/bin/sh"]
+
+# With flags - auto-adds -c at the end
+shell: ["/bin/bash", "-e", "-x"]
+
+# Bash strict mode - -c already present
 shell: ["/bin/bash", "-o", "errexit", "-o", "pipefail", "-c"]
+
+# PowerShell - auto-adds -Command
+shell: ["powershell"]
+
+# Windows cmd - auto-adds /c
+shell: ["cmd.exe"]
 ```
 
-**Exec mode:**
+### Cross-Platform Support
+
+The shell field automatically detects and adds the correct command flag for different shells:
+
+| Shell Type | Auto-Added Flag | Example |
+|------------|----------------|---------|
+| Unix shells (`sh`, `bash`, `zsh`) | `-c` | `["/bin/bash"]` → `["/bin/bash", "-c"]` |
+| PowerShell (`powershell`, `pwsh`) | `-Command` | `["powershell"]` → `["powershell", "-Command"]` |
+| Windows cmd | `/c` | `["cmd.exe"]` → `["cmd.exe", "/c"]` |
+| Nix shell | `--run` | `["nix-shell"]` → `["nix-shell", "--run"]` |
+
+### Exec Mode Example
+
+Works in both image mode and exec mode:
+
 ```yaml
 container:
   exec: my-running-container
   shell: ["/bin/bash", "-c"]
+
+steps:
+  - command: composer install && php artisan migrate
+  - command: npm run build || echo "Build failed"
 ```
 
-**Notes:**
-- Only affects step commands, not container startup commands
-- Without `shell`, commands use Docker exec form without shell interpretation
+### Bash Strict Mode
+
+Enable error handling and debugging flags for robust shell scripts:
+
+```yaml
+container:
+  image: ubuntu:22.04
+  shell: ["/bin/bash", "-o", "errexit", "-o", "xtrace", "-o", "pipefail", "-c"]
+
+steps:
+  # Exit immediately if any command fails
+  - command: npm install && npm run build && npm test
+
+  # Print commands before execution (debug)
+  - command: echo "Starting deployment" && deploy.sh
+```
+
+**Flags explained:**
+- `-o errexit` (or `-e`): Exit immediately if any command fails
+- `-o xtrace` (or `-x`): Print commands before executing (useful for debugging)
+- `-o pipefail`: Return exit code of the first failed command in a pipeline
+
+### Important Notes
+
+- **Only affects step commands**: The `shell` wrapper is applied to your workflow step commands, not to container startup commands
+- **Without `shell`**: Commands execute in Docker exec form without shell interpretation (operators like `&&` won't work)
+- **Command joining**: Commands are joined with spaces, so shell operators work naturally
+- **Quoting**: If your command arguments contain spaces, quote them in YAML: `command: echo "hello world"`
 
 ## Configuration Options
 

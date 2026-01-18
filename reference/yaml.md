@@ -153,6 +153,7 @@ container:
   logPattern: "Ready to accept connections"  # optional regex
   restartPolicy: unless-stopped              # optional: no|always|unless-stopped
   keepContainer: false     # Keep container after DAG run
+  shell: ["/bin/bash", "-c"]  # Optional: shell wrapper for step commands (enables pipes, &&, etc.)
 ```
 
 #### Object Form - Exec Mode
@@ -164,6 +165,7 @@ container:
   workingDir: /app            # Optional: override working directory
   env:                        # Optional: additional environment variables
     - DEBUG=true
+  shell: ["/bin/sh", "-c"]    # Optional: shell wrapper for step commands
 ```
 
 #### Field Availability by Mode
@@ -172,7 +174,7 @@ container:
 |-------|-----------|------------|
 | `exec` | **Required** | Not allowed |
 | `image` | Not allowed | **Required** |
-| `user`, `workingDir`, `env` | Optional | Optional |
+| `user`, `workingDir`, `env`, `shell` | Optional | Optional |
 | All other fields | Not allowed | Optional |
 
 > Note: A DAG‑level `container` is started once (image mode) or attached to (exec mode)
