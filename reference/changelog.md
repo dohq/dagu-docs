@@ -4,6 +4,20 @@
 
 ### Added
 
+- **Container Shell Wrapper**: New `shell` field wraps step commands with a shell interpreter, enabling pipes, redirects, and command chaining without manual wrapping. Available in both image and exec modes.
+
+  ```yaml
+  container:
+    image: alpine:latest
+    shell: ["/bin/sh", "-c"]
+
+  steps:
+    - command: cat file.txt | grep error | wc -l
+    - command: npm install && npm test
+  ```
+
+  Format: array where first element is the shell path, remaining elements are flags, and the step command is appended as the final argument. See [Container Field](/writing-workflows/container#shell-wrapper) for details.
+
 - **Major UI Redesign**: Complete redesign of the user interface with improved dark mode support, modernized color palette, and streamlined navigation. Enhanced visual hierarchy across all pages including DAG lists, execution views, system status, and admin pages.
 
 - **LLM Secret Masking**: Secrets defined in the `secrets` block are now automatically masked before being sent to LLM providers in chat steps. This prevents accidental exposure of sensitive values to external AI APIs while still allowing secrets to be used in message content via `${VAR}` substitution.

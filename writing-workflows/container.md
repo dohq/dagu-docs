@@ -105,6 +105,40 @@ steps:
 
 Or use `DOCKER_AUTH_CONFIG` environment variable (same format as `~/.docker/config.json`).
 
+## Shell Wrapper
+
+Wraps step commands with a shell interpreter to enable pipes, redirects, and command chaining.
+
+```yaml
+container:
+  image: alpine:latest
+  shell: ["/bin/sh", "-c"]
+
+steps:
+  - command: cat data.csv | cut -d',' -f2 | sort | uniq > unique.txt
+  - command: npm install && npm test
+  - command: npm run build || exit 1
+```
+
+**Format:** Array where the first element is the shell path, remaining elements are flags, and the step command is appended as the final argument. The command array is joined with spaces.
+
+**Examples:**
+```yaml
+shell: ["/bin/sh", "-c"]
+shell: ["/bin/bash", "-o", "errexit", "-o", "pipefail", "-c"]
+```
+
+**Exec mode:**
+```yaml
+container:
+  exec: my-running-container
+  shell: ["/bin/bash", "-c"]
+```
+
+**Notes:**
+- Only affects step commands, not container startup commands
+- Without `shell`, commands use Docker exec form without shell interpretation
+
 ## Configuration Options
 
 The container field accepts either a string (exec mode) or an object (exec or image mode).
@@ -139,6 +173,7 @@ container:
   logPattern: "Ready"        # optional regex; wait for log pattern
   restartPolicy: unless-stopped  # optional Docker restart policy (no|always|unless-stopped)
   keepContainer: true        # Keep after workflow
+  shell: ["/bin/bash", "-c"] # Shell wrapper for step commands
 ```
 
 ```yaml
@@ -149,6 +184,7 @@ container:
   workingDir: /app            # Optional: override working directory
   env:                        # Optional: additional environment variables
     - DEBUG=true
+  shell: ["/bin/sh", "-c"]    # Shell wrapper for step commands
 ```
 
 ### Field Availability by Mode
@@ -160,6 +196,7 @@ container:
 | `user` | N/A | Optional | Optional |
 | `workingDir` | N/A | Optional | Optional |
 | `env` | N/A | Optional | Optional |
+| `shell` | N/A | Optional | Optional |
 | `name` | N/A | Not allowed | Optional |
 | `pullPolicy` | N/A | Not allowed | Optional |
 | `volumes` | N/A | Not allowed | Optional |
@@ -193,7 +230,11 @@ container:
 **Exec mode:**
 - The container must exist and be running; Dagu waits up to 120 seconds for the container to be running.
 - Fields like `volumes`, `ports`, `network`, `pullPolicy`, etc. cannot be used with `exec` (they're only valid when creating a new container).
-- Only `user`, `workingDir`, and `env` can override the container's defaults.
+- Only `user`, `workingDir`, `env`, and `shell` can override the container's defaults.
+
+**Shell field:**
+- Non-empty array: first element is shell path, last element is command flag (e.g., `-c`)
+- Available in both image and exec modes
 
 ## Multiple Commands
 
