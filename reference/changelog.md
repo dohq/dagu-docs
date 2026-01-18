@@ -79,6 +79,36 @@
 
   See [ETL](/features/etl/) for full documentation.
 
+- **Redis Executor**: New step type for Redis operations with support for all major Redis commands, pipelines, transactions, Lua scripts, and distributed locking.
+
+  ```yaml
+  redis:
+    host: localhost
+    port: 6379
+    password: ${REDIS_PASSWORD}
+
+  steps:
+    - name: cache-lookup
+      type: redis
+      config:
+        command: GET
+        key: user:${USER_ID}
+      output: CACHED_USER
+  ```
+
+  **Key Features:**
+  - All major Redis data types (strings, hashes, lists, sets, sorted sets, streams)
+  - DAG-level connection defaults (steps inherit connection settings)
+  - Pipeline and transaction support (MULTI/EXEC)
+  - Lua script execution with EVALSHA optimization
+  - Distributed locking for coordination
+  - Connection modes: Standalone, Sentinel, Cluster
+  - TLS support with certificate configuration
+  - Global connection pooling for workers
+  - Output formats: JSON, JSONL, raw, CSV
+
+  See [Redis](/features/executors/redis) for full documentation.
+
 - **PostgreSQL Connection Pool Management for Workers**: Added global PostgreSQL connection pool configuration at the worker level to prevent connection exhaustion when multiple DAGs run concurrently in shared-nothing mode.
 
   ```yaml

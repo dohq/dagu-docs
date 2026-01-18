@@ -288,6 +288,45 @@ When configured at the DAG level, all chat steps inherit the LLM configuration. 
 
 See [Chat Executor](/features/executors/chat) for full documentation.
 
+### Redis Configuration
+
+| Field | Type | Description | Default |
+|-------|------|-------------|---------|
+| `redis` | object | Default Redis configuration for all redis steps | - |
+
+```yaml
+redis:
+  host: localhost
+  port: 6379
+  password: ${REDIS_PASSWORD}
+  db: 0
+
+steps:
+  - name: cache-lookup
+    type: redis
+    config:
+      command: GET
+      key: cache:user:${USER_ID}
+    output: CACHED_DATA
+```
+
+When configured at the DAG level, all redis steps inherit the connection settings. Step-level config values override DAG-level defaults (field-level merging).
+
+**Available fields:**
+- `url` - Redis URL (`redis://user:pass@host:port/db`)
+- `host` - Redis host (alternative to URL)
+- `port` - Redis port (default: 6379)
+- `password` - Authentication password
+- `username` - ACL username (Redis 6+)
+- `db` - Database number (0-15)
+- `tls` - Enable TLS connection
+- `mode` - Connection mode: `standalone`, `sentinel`, `cluster`
+- `sentinelMaster` - Sentinel master name
+- `sentinelAddrs` - Sentinel addresses
+- `clusterAddrs` - Cluster node addresses
+
+See [Redis Executor](/features/executors/redis) for full documentation.
+
 ### Working Directory and Volume Resolution
 
 When using container volumes with relative paths, the paths are resolved relative to the DAG's `workingDir`:

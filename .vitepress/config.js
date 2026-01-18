@@ -71,6 +71,7 @@ const fullSidebar = [
           { text: "Archive", link: "/features/executors/archive" },
           { text: "Mail", link: "/features/executors/mail" },
           { text: "JQ", link: "/features/executors/jq" },
+          { text: "Redis", link: "/features/executors/redis" },
           { text: "HITL (Human in the Loop)", link: "/features/executors/hitl" },
           {
             text: "GitHub Actions",

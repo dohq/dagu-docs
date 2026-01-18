@@ -12,6 +12,7 @@ Step types extend Dagu's capabilities beyond simple shell commands. Available st
 - [Archive](/features/executors/archive) - Extract, create, and list archive files
 - [Mail](/features/executors/mail) - Send emails
 - [JQ](/features/executors/jq) - Process JSON data
+- [Redis](/features/executors/redis) - Execute Redis commands and operations
 - [HITL](/features/executors/hitl) - Human-in-the-loop approval gates
 - [GitHub Actions (_experimental_)](/features/executors/github-actions) - Run marketplace actions locally with nektos/act
 
@@ -676,7 +677,7 @@ steps:
   - name: analyze-logs
     type: jq
     command: |
-      group_by(.level) | 
+      group_by(.level) |
       map({
         level: .[0].level,
         count: length,
@@ -689,6 +690,133 @@ steps:
         {"level": "ERROR", "message": "Timeout occurred"},
         {"level": "INFO", "message": "Process completed"}
       ]
+```
+
+## Redis
+
+::: info
+For detailed Redis step type documentation, see [Redis Guide](/features/executors/redis).
+:::
+
+Execute commands against Redis servers.
+
+### Basic Usage
+
+```yaml
+steps:
+  - name: ping
+    type: redis
+    config:
+      host: localhost
+      port: 6379
+      command: PING
+```
+
+### DAG-Level Configuration
+
+Define connection defaults at the DAG level:
+
+```yaml
+redis:
+  host: localhost
+  port: 6379
+  password: ${REDIS_PASSWORD}
+
+steps:
+  - name: set-value
+    type: redis
+    config:
+      command: SET
+      key: mykey
+      value: "hello"
+
+  - name: get-value
+    type: redis
+    config:
+      command: GET
+      key: mykey
+    output: RESULT
+```
+
+### String Operations
+
+```yaml
+steps:
+  - name: cache-user
+    type: redis
+    config:
+      command: SET
+      key: user:${USER_ID}
+      value: '{"name": "John", "email": "john@example.com"}'
+
+  - name: get-user
+    type: redis
+    config:
+      command: GET
+      key: user:${USER_ID}
+    output: USER_DATA
+```
+
+### Hash Operations
+
+```yaml
+steps:
+  - name: set-user-field
+    type: redis
+    config:
+      command: HSET
+      key: user:1
+      field: email
+      value: "john@example.com"
+
+  - name: get-all-fields
+    type: redis
+    config:
+      command: HGETALL
+      key: user:1
+    output: USER_HASH
+```
+
+### Pipeline Operations
+
+```yaml
+steps:
+  - name: batch-ops
+    type: redis
+    config:
+      pipeline:
+        - command: SET
+          key: key1
+          value: "value1"
+        - command: SET
+          key: key2
+          value: "value2"
+        - command: MGET
+          keys: ["key1", "key2"]
+```
+
+### Connection Modes
+
+```yaml
+# Standalone (default)
+redis:
+  host: localhost
+  port: 6379
+
+# Sentinel
+redis:
+  mode: sentinel
+  sentinelMaster: mymaster
+  sentinelAddrs:
+    - sentinel1:26379
+    - sentinel2:26379
+
+# Cluster
+redis:
+  mode: cluster
+  clusterAddrs:
+    - node1:6379
+    - node2:6379
 ```
 
 ## Chat
@@ -956,5 +1084,6 @@ steps:
 - [Chat](/features/executors/chat) - LLM integration guide
 - [Mail](/features/executors/mail) - Email notification guide
 - [JQ](/features/executors/jq) - JSON processing guide
+- [Redis](/features/executors/redis) - Redis operations guide
 - [HITL](/features/executors/hitl) - Human-in-the-loop approval guide
 - [Writing Workflows](/writing-workflows/) - Using step types in workflows
