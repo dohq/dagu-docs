@@ -4,6 +4,8 @@
 
 ### Added
 
+- **Major UI Redesign**: Complete redesign of the user interface with improved dark mode support, modernized color palette, and streamlined navigation. Enhanced visual hierarchy across all pages including DAG lists, execution views, system status, and admin pages.
+
 - **LLM Secret Masking**: Secrets defined in the `secrets` block are now automatically masked before being sent to LLM providers in chat steps. This prevents accidental exposure of sensitive values to external AI APIs while still allowing secrets to be used in message content via `${VAR}` substitution.
 
 - **System Status Page**: New admin-only page consolidating system health monitoring in one place.
@@ -131,6 +133,8 @@
   See [Audit Logging](/configurations/server#audit-logging) for details.
 
 ### Fixed
+
+- **Sub-DAG Spec View**: Fixed "file not found" error when viewing the spec tab for sub-DAG runs in the UI. Added dedicated API endpoint `/dag-runs/{name}/{dagRunId}/sub-dag-runs/{subDAGRunId}/spec` that properly retrieves specs from the parent-child storage hierarchy.
 
 - **Container Step Output Capture**: Fixed an issue where `container.command` was not executed when specified inside the container block without a top-level `command` field. Now `container.command` is properly used as the command to run, and output is correctly captured.
 
