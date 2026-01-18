@@ -8,7 +8,24 @@ The chat executor supports function calling (also known as tool use), allowing t
 2. Reference tools in `llm.tools` array
 3. LLM automatically calls tools when needed
 4. Tool results feed back into conversation
-5. Process repeats until LLM provides final response (up to `maxToolIterations`)
+5. Process repeats until termination condition is met
+
+### Execution Termination
+
+The chat step finishes in one of two ways:
+
+**1. Normal Completion (Recommended Path)**
+- LLM returns a response **without tool calls**
+- This is the final answer to the user's question
+- Conversation is saved and step completes successfully
+
+**2. Max Iterations Reached**
+- Loop hits `maxToolIterations` limit (default: 10)
+- Last assistant message content is returned as output
+- Warning logged: `"Max tool iterations reached"`
+- Step still completes successfully (not treated as error)
+
+Both scenarios result in successful step completion. The step only fails if the LLM request itself encounters an error.
 
 ## Basic Example
 
@@ -224,8 +241,9 @@ All major providers support tool calling with automatic API mapping:
 - Conversation continues even if tool fails
 
 **Iteration Limits:**
-- When `maxToolIterations` is reached, the last LLM response is returned
-- Warning logged but execution completes normally
+- When `maxToolIterations` is reached, the last assistant message is written to stdout
+- If no assistant message exists, outputs: `"[Max tool iterations (N) reached. The LLM may not have provided a complete response.]"`
+- Warning logged but step completes successfully (not as error)
 - Increase `maxToolIterations` for complex multi-step tasks
 
 ## Best Practices
