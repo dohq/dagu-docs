@@ -19,7 +19,9 @@ steps:
 | `query` | URL parameters | `page: "1"` |
 | `body` | Request body | `{"name": "value"}` |
 | `timeout` | Timeout in seconds | `30` |
-| `silent` | Return body only | `true` |
+| `silent` | Return body only (suppress status/headers on success) | `true` |
+| `debug` | Enable debug mode (logs request/response details) | `true` |
+| `json` | Format output as structured JSON | `true` |
 | `skipTLSVerify` | Skip TLS certificate verification | `true` |
 
 ## Examples
@@ -75,6 +77,32 @@ steps:
 
   - name: process
     command: echo "${USER_DATA}" | jq '.email'
+```
+
+### JSON Output Mode
+
+Use `json: true` to get structured JSON output including status code and headers:
+
+```yaml
+steps:
+  - name: api-call
+    type: http
+    config:
+      json: true
+      silent: true
+    command: GET https://api.example.com/data
+    output: RESPONSE
+```
+
+Output format:
+```json
+{
+  "status_code": 200,
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": {"key": "value"}
+}
 ```
 
 ### Error Handling

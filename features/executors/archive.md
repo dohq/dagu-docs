@@ -110,7 +110,7 @@ steps:
       source: dataset.tar.zst
       destination: ./data
       include:
-        - command: "**/*.csv"
+        - "**/*.csv"
       stripComponents: 1
     command: extract
 ```
@@ -149,7 +149,7 @@ steps:
       destination: ./decrypted
       password: ${ARCHIVE_PASSWORD}
       include:
-        - command: "**/*.csv"
+        - "**/*.csv"
       overwrite: true
     command: extract
 ```

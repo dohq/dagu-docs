@@ -25,11 +25,19 @@ Dagu provides a comprehensive set of features for building and managing workflow
 - [Mail](/features/executors/mail)
 - [JQ](/features/executors/jq)
 - [GitHub Actions](/features/executors/github-actions)
+- [Human in the Loop (HITL)](/features/executors/hitl)
+- [S3](/features/executors/s3)
+- [Redis](/features/executors/redis)
 
 ### ETL & SQL
 - [Overview](/features/etl/) - SQL queries and data operations
 - [PostgreSQL](/features/etl/postgresql) - PostgreSQL database operations
 - [SQLite](/features/etl/sqlite) - SQLite database operations
+
+### Chat & AI Agents
+- [Overview](/features/chat/) - LLM conversations and AI agents
+- [Basic Chat](/features/chat/basics) - Simple LLM conversations
+- [Tool Calling](/features/chat/tool-calling) - AI agents with DAG-based tools
 
 ## Authentication & Authorization
 - [Authentication Options](/configurations/authentication)
@@ -43,5 +51,8 @@ Dagu provides a comprehensive set of features for building and managing workflow
 
 ## Advanced Features
 - [Distributed Execution](/features/distributed-execution)
-- [Workers](/features/worker-labels)
+- [Workers Overview](/features/workers/)
+- [Worker Labels](/features/worker-labels)
+- [Shared Filesystem Mode](/features/workers/shared-filesystem)
+- [Shared Nothing Mode](/features/workers/shared-nothing)
 - [Queue](/features/queues)
