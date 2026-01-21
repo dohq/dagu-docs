@@ -578,9 +578,9 @@ When enabled, the following events are recorded:
 
 ### Storage
 
-Audit logs are stored as daily JSONL files in `{dataDir}/audit/`:
+Audit logs are stored as daily JSONL files in `{adminLogsDir}/audit/`:
 ```
-~/.local/share/dagu/data/audit/
+~/.local/share/dagu/logs/admin/audit/
 ├── 2025-01-10.jsonl
 ├── 2025-01-11.jsonl
 └── ...
