@@ -590,7 +590,7 @@ steps:
 | `call` | string | Name of a DAG to execute as a sub DAG-run | - |
 | `params` | string/object | Parameters passed to sub DAGs (`run`) or executor-specific inputs (e.g., GitHub Actions `with:` map) | - |
 
-> ℹ️ The legacy `run` field is still accepted for backward compatibility until v1.24.0, but it will be removed in a future release. Prefer `call` for new workflows.
+> ℹ️ The legacy `run` field is deprecated. Use `call` for new workflows.
 
 `shell` accepts either a string (e.g., `"bash -e"`) or an array (e.g., `["bash", "-e"]`). DAG-level values expand environment variables when the workflow loads; step-level values are evaluated at runtime so you can reference parameters, secrets, or previous outputs.
 

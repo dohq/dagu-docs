@@ -229,35 +229,11 @@ steps:
 
 ## Environment Variables
 
-### System Environment Security
-
-Dagu filters environment variables passed to step processes for security:
-- System variables work in DAG YAML for expansion: `${VAR}`
-- Only filtered variables are passed to step execution environment
-- **Whitelisted:** `PATH`, `HOME`, `LANG`, `TZ`, `SHELL`
-- **Allowed Prefixes:** `DAGU_*`, `LC_*`, `DAG_*`
-
-To make other variables available in step processes, define them in `env`.
-
-### Global Environment
+Define environment variables at DAG-level or step-level:
 
 ```yaml
 env:
   - API_KEY: secret123
-  - ENV: production
-  - AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}  # Explicit reference required
-
-steps:
-  - name: use-env
-    command: echo "Running in $ENV"
-```
-
-### Step-Level Environment
-
-Steps can have their own environment variables that override DAG-level ones:
-
-```yaml
-env:
   - ENV: production
 
 steps:
@@ -265,21 +241,11 @@ steps:
     command: echo "Running in $ENV"
     env:
       - ENV: development  # Overrides DAG-level
-      - TEST_FLAG: true
-    # Output: Running in development
 ```
 
-### Load from .env Files
-
-```yaml
-dotenv:
-  - .env
-  - .env.production
-
-steps:
-  - name: use-dotenv
-    command: echo $DATABASE_URL
-```
+::: tip
+Dagu filters system environment variables for security. See [Environment Variables](/writing-workflows/environment-variables) for details on filtering, inheritance, and `.env` file support.
+:::
 
 ## Capturing Output
 

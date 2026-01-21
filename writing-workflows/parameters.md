@@ -73,7 +73,7 @@ params:
 ⚠️ **Important**: The following keywords are reserved and cannot be used as parameter names:
 - `schema` - References the JSON Schema file
 
-Using these as parameter names could possibly cause parsing errors.
+Using these as parameter names will cause parsing errors (e.g., `schema` will be interpreted as a schema file path instead of a parameter value).
 
 ### Example JSON Schema
 

@@ -443,4 +443,4 @@ roleMapping:
 | Role Mapping from IdP | No | No | No | Yes |
 | Self-Hosted | Yes | Yes | Yes | Yes |
 
-**Recommendation**: Use `auth.mode: builtin` for production deployments. Enable OIDC under builtin mode for SSO while retaining full user management and RBAC capabilities.
+Builtin mode (`auth.mode: builtin`) is suitable for production deployments that require user management and RBAC. Enable OIDC under builtin mode for SSO while retaining full user management capabilities.

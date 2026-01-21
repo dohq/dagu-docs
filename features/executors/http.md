@@ -105,6 +105,14 @@ Output format:
 }
 ```
 
+### Exit Codes
+
+| HTTP Status | Exit Code | Description |
+|-------------|-----------|-------------|
+| 2xx | 0 | Success |
+| 4xx, 5xx | 1 | Client/server error |
+| Timeout/network error | 1 | Connection failed |
+
 ### Error Handling
 
 ```yaml

@@ -757,11 +757,11 @@ steps:
   - command: echo "Processing main task"
 handlerOn:
   success:
-    echo "SUCCESS - Workflow completed"
+    command: echo "SUCCESS - Workflow completed"
   failure:
-    echo "FAILURE - Cleaning up failed workflow"
+    command: echo "FAILURE - Cleaning up failed workflow"
   exit:
-    echo "EXIT - Always cleanup"
+    command: echo "EXIT - Always cleanup"
 ```
 
 ```mermaid
@@ -1854,7 +1854,7 @@ steps:
     mailOnError: true
 ```
 
-<a href="/features/notifications#email" class="learn-more">Learn more →</a>
+<a href="/features/email-notifications" class="learn-more">Learn more →</a>
 
 </div>
 

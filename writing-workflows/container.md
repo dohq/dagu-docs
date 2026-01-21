@@ -6,6 +6,10 @@ The `container` field supports two modes:
 - **Image mode**: Create a new container from an image
 - **Exec mode**: Execute commands in an existing running container
 
+::: warning Entrypoint Not Used for Steps
+When using DAG-level `container`, steps run via `docker exec` in a long-lived container. Your image's `ENTRYPOINT`/`CMD` is **not** invoked for step commands. See [Execution Model](#execution-model-and-entrypoint-behavior) for details.
+:::
+
 ## Basic Usage
 
 ### Image Mode (Create New Container)
@@ -107,7 +111,7 @@ Or use `DOCKER_AUTH_CONFIG` environment variable (same format as `~/.docker/conf
 
 ## Shell Wrapper
 
-The `shell` field wraps step commands with a shell interpreter to enable **shell operators** like pipes, redirects, and command chaining. This provides a **DRY (Don't Repeat Yourself)** approach - instead of wrapping each command individually, configure the shell once at the container level.
+The `shell` field wraps step commands with a shell interpreter to enable shell operators like pipes, redirects, and command chaining. Configure the shell once at the container level instead of wrapping each command individually.
 
 ### Why Use Shell Wrapper?
 
@@ -122,7 +126,7 @@ steps:
   - command: sh -c "npm run build || exit 1"
 ```
 
-**With `shell` (DRY approach):**
+**With `shell` (configured once):**
 ```yaml
 container:
   image: alpine:latest

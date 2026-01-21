@@ -102,7 +102,6 @@ const fullSidebar = [
       { text: "Data Flow", link: "/features/data-flow" },
       { text: "DAG Run Outputs", link: "/features/outputs" },
       { text: "Queue System", link: "/features/queues" },
-      { text: "Notifications", link: "/features/notifications" },
       { text: "Email Notifications", link: "/features/email-notifications" },
       { text: "Prometheus Metrics", link: "/features/prometheus-metrics" },
       { text: "OpenTelemetry", link: "/features/opentelemetry" },

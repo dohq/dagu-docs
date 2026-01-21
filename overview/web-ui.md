@@ -31,6 +31,11 @@ dagu start-all
 Custom host/port:
 ```bash
 dagu start-all --host 0.0.0.0 --port 9000
+
+# Or via environment variables
+export DAGU_HOST=0.0.0.0
+export DAGU_PORT=9000
+dagu start-all
 ```
 
 ## Dashboard

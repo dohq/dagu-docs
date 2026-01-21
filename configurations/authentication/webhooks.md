@@ -280,7 +280,16 @@ Configure GitHub to send repository events to Dagu:
    - **Content type**: `application/json`
    - **Secret**: (not used, authentication via Bearer token)
 
-Note: For GitHub webhooks, you'll need to configure a reverse proxy or middleware to add the Authorization header, as GitHub doesn't support Bearer token authentication directly.
+Note: For GitHub webhooks, you'll need to configure a reverse proxy to add the Authorization header, as GitHub doesn't support Bearer token authentication directly.
+
+**Nginx example:**
+```nginx
+location /api/v2/webhooks/github-events {
+    proxy_pass http://localhost:8080;
+    proxy_set_header Authorization "Bearer YOUR_API_TOKEN";
+    proxy_set_header Host $host;
+}
+```
 
 ### Slack Commands
 

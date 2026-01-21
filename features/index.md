@@ -46,7 +46,7 @@ Dagu provides a comprehensive set of features for building and managing workflow
 ## Monitoring & Observability
 - [Prometheus Metrics](/features/prometheus-metrics)
 - [OpenTelemetry Tracing](/features/opentelemetry)
-- [Error Notifications](/features/notifications)
+- [Email Notifications](/features/email-notifications)
 - [Remote Instance Management](/configurations/remote-nodes)
 
 ## Advanced Features

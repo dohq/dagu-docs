@@ -567,7 +567,7 @@ steps:
       source: ./logs
       destination: logs-backup.tar.gz
       include:
-        - command: "**/*.log"
+        - "**/*.log"
     command: create
 ```
 
@@ -625,8 +625,8 @@ steps:
 
         Generated at: ${TIMESTAMP}
       attachments:
-        - command: /tmp/daily-report.pdf
-        - command: /tmp/summary.csv
+        - /tmp/daily-report.pdf
+        - /tmp/summary.csv
 ```
 
 ### Multiple Recipients
@@ -637,9 +637,9 @@ steps:
     type: mail
     config:
       to:
-        - command: ops@company.com
-        - command: alerts@company.com
-        - command: oncall@company.com
+        - ops@company.com
+        - alerts@company.com
+        - oncall@company.com
       from: dagu@company.com
       subject: "[ALERT] Process Failed"
       message: |

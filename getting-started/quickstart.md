@@ -214,7 +214,7 @@ steps:
       intervalSec: 30
       
   - command: echo "Unzipping data and processing"
-    continueOn: failed  # Continue even if this fails
+    continueOn: failed  # Continue even if this fails (DAG ends as partially_succeeded)
       
 handlerOn:
   failure:

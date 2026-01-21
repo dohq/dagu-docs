@@ -121,10 +121,10 @@ steps:
     command: echo "Validating"
     continueOn:
       output:
-        - command: "WARNING"                    # Literal string match (substring)
-        - command: "SKIP"                      # Another literal string
-        - command: "re:^INFO:.*"               # Regex: lines starting with "INFO:"
-        - command: "re:WARN-[0-9]+"            # Regex: WARN- followed by numbers
+        - "WARNING"                    # Literal string match (substring)
+        - "SKIP"                       # Another literal string
+        - "re:^INFO:.*"                # Regex: lines starting with "INFO:"
+        - "re:WARN-[0-9]+"             # Regex: WARN- followed by numbers
 ```
 
 **Pattern Matching Rules:**
@@ -222,9 +222,9 @@ steps:
     command: kubectl rollout status deployment/app
     continueOn:
       output:
-        - command: "re:Waiting for.*replicas"
-        - command: "re:deployment.*not found"
-        - command: "Unable to connect"
+        - "re:Waiting for.*replicas"
+        - "re:deployment.*not found"
+        - "Unable to connect"
       exitCode: [1]
       
   - name: handle-deployment-issue
@@ -301,8 +301,8 @@ steps:
     command: echo "Running migration"
     continueOn:
       output:
-        - command: "re:WARNING:.*already exists"
-        - command: "re:NOTICE:.*will be created"
+        - "re:WARNING:.*already exists"
+        - "re:NOTICE:.*will be created"
       exitCode: [0, 1]  # 1 might indicate warnings
       
   - name: verify-migration

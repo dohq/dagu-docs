@@ -22,6 +22,8 @@ steps:
 
 ## SMTP Configuration
 
+Configure SMTP at DAG-level for all mail steps. For global configuration, see [Email Notifications](/features/email-notifications#smtp-configuration).
+
 ### Common Providers
 
 ```yaml
@@ -56,9 +58,9 @@ steps:
   - type: mail
     config:
       to:
-        - command: team@example.com
-        - command: manager@example.com
-        - command: stakeholders@example.com
+        - team@example.com
+        - manager@example.com
+        - stakeholders@example.com
       from: noreply@example.com
       subject: "Daily Report Ready"
       message: "The daily report has been generated."

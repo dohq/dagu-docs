@@ -85,7 +85,7 @@ auth:
     scopes: ["openid", "profile", "email"]
     whitelist: ["admin@example.com"]
     # Builtin-specific fields (only used when mode: builtin)
-    enabled: true                    # Enable OIDC under builtin auth
+    # enabled: true                  # Optional - auto-enabled when required fields are set
     autoSignup: true                 # Auto-create users on first login
     defaultRole: "viewer"            # Role for new users
     allowedDomains: ["company.com"]  # Allowed email domains
@@ -100,7 +100,7 @@ tls:
 ui:
   navbarColor: "#1976d2"        # Header color (hex or name)
   navbarTitle: "Dagu"           # Header title
-  logEncodingCharset: "utf-8"   # Log file encoding (supports 50+ encodings, see below)
+  logEncodingCharset: "utf-8"   # Log file encoding (see reference for supported encodings)
   maxDashboardPageLimit: 100    # Max items on dashboard
   dags:
     sortField: "name"           # Default sort field (name/status/lastRun/schedule/suspended)
@@ -242,7 +242,7 @@ docker run -d \
 
 ## Authentication
 
-### Builtin Auth (Recommended)
+### Builtin Auth
 
 User management with role-based access control (RBAC). Supports multiple users with roles: `admin`, `manager`, `operator`, `viewer`.
 

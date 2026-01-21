@@ -345,4 +345,4 @@ groups:
 
 - [OpenTelemetry Tracing](/features/opentelemetry) - Distributed tracing for DAG execution
 - [Server Configuration](/configurations/server) - Server settings including metrics access
-- [Notifications](/features/notifications) - Alert notifications for DAG failures
+- [Email Notifications](/features/email-notifications) - Alert notifications for DAG failures

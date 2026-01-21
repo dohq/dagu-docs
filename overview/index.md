@@ -10,7 +10,7 @@ Dagu is a self-contained workflow engine for orchestrating shell commands, conta
 
 - **Single binary deployment** - Install and run without external services
 - **Declarative YAML** - JSON Schema validation with clear error messages
-- **Composable workflows** - Nest sub-DAGs with parameters to unlimited depth
+- **Composable workflows** - Nest sub-DAGs with parameters (depth limited only by available memory)
 - **Distributed execution** - Route tasks to workers via labels (GPU, region, etc.)
 - **Built-in scheduling** - Cron expressions with start/stop/restart support
 - **Web UI** - Monitor, control, and debug workflows in real-time

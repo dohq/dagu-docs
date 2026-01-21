@@ -8,7 +8,7 @@ Distributed execution allows you to:
 
 - Route tasks to workers based on labels (GPU, memory, region, etc.)
 - Run tasks in specific regions for compliance or performance
-- Add workers to handle increased load
+- Scale by running additional `dagu worker` processes
 - Route tasks to workers with specific hardware capabilities
 
 ## Architecture
