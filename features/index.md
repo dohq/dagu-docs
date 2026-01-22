@@ -50,6 +50,7 @@ Dagu provides a comprehensive set of features for building and managing workflow
 - [Remote Instance Management](/configurations/remote-nodes)
 
 ## Advanced Features
+- [Git Sync](/features/git-sync) - Synchronize DAGs with a Git repository
 - [Distributed Execution](/features/distributed-execution)
 - [Workers Overview](/features/workers/)
 - [Worker Labels](/features/worker-labels)

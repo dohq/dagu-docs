@@ -255,6 +255,8 @@
 
   See [Audit Logging](/configurations/server#audit-logging) for details.
 
+- **Git Sync**: Synchronize DAG definitions with a Git repository. See [Git Sync](/features/git-sync).
+
 ### Fixed
 
 - **Sub-DAG Spec View**: Fixed "file not found" error when viewing the spec tab for sub-DAG runs in the UI. Added dedicated API endpoint `/dag-runs/{name}/{dagRunId}/sub-dag-runs/{subDAGRunId}/spec` that properly retrieves specs from the parent-child storage hierarchy.
