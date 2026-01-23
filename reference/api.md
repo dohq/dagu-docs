@@ -68,7 +68,7 @@ Retrieves DAG definitions with optional filtering by name and tags.
 | page | integer | Page number (1-based) | 1 |
 | perPage | integer | Items per page (max 1000) | 50 |
 | name | string | Filter DAGs by name | - |
-| tag | string | Filter DAGs by tag | - |
+| tag | string | Filter by tags. Comma-separated. Syntax: `key` (any value), `key=value` (exact), `!key` (negation). AND logic. | - |
 | remoteNode | string | Remote node name | "local" |
 
 **Response (200)**:

@@ -237,6 +237,30 @@
 
 - **DAG Runs Tag Filter**: Filter DAG runs by tags in the UI and API. Select multiple tags to filter runs from DAGs that have ALL specified tags (AND logic). Available via the new `tags` query parameter on `/api/v2/dag-runs` endpoint (comma-separated).
 
+- **Key-Value Tags**: Tags now support key-value pairs in addition to simple tags. Multiple YAML formats supported:
+
+  ```yaml
+  # Map notation
+  tags:
+    env: prod
+    team: platform
+
+  # Array with key=value strings
+  tags:
+    - env=prod
+    - critical
+
+  # Space-separated string
+  tags: "env=prod team=platform"
+  ```
+
+  Tag filtering supports three modes:
+  - `env` - matches any tag with key `env` (regardless of value)
+  - `env=prod` - matches exact key-value pair
+  - `!env` - matches if key `env` does NOT exist
+
+  Values are normalized to lowercase. See [Tags](/features/tags) for details.
+
 - **Shared-Nothing Worker Architecture**: Workers can now operate without shared filesystem access. Enables deployment in Kubernetes, multi-cloud, and containerized environments where NFS/shared volumes are not available.
 
   **Key Features:**
