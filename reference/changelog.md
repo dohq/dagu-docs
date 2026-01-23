@@ -134,6 +134,40 @@
 
   See [REST API Reference](/reference/api#start-dag-synchronous) for full documentation.
 
+- **SFTP Executor**: New step type for transferring files between local and remote servers via SFTP. Supports upload and download of files and directories, with atomic uploads using temporary files to prevent partial transfers.
+
+  ```yaml
+  ssh:
+    user: deploy
+    host: server.example.com
+
+  steps:
+    - name: upload-config
+      type: sftp
+      config:
+        direction: upload
+        source: /local/config.yaml
+        destination: /remote/config.yaml
+  ```
+
+  See [SFTP](/features/executors/sftp) for full documentation.
+
+- **SSH Bastion Host Support**: SSH executor now supports connecting through a jump/bastion host for accessing servers in private networks.
+
+  ```yaml
+  ssh:
+    user: deploy
+    host: private-server.internal
+    bastion:
+      host: bastion.example.com
+      user: jump-user
+      key: ~/.ssh/bastion_key
+  ```
+
+  See [SSH - Bastion Host](/features/executors/ssh#bastion-host) for full documentation.
+
+- **SSH Connection Timeout**: Added `timeout` field to SSH configuration (default: 30s) for controlling connection timeouts.
+
 - **S3 Executor**: New step type for S3 operations with support for AWS S3 and S3-compatible services (MinIO, Google Cloud Storage, DigitalOcean Spaces, Backblaze B2).
 
   ```yaml

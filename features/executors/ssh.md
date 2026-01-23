@@ -17,6 +17,7 @@ ssh:
   strictHostKey: true  # Default: true for security
   knownHostFile: ~/.ssh/known_hosts  # Default: ~/.ssh/known_hosts
   shell: "/bin/bash -e"  # Optional: string or array syntax for shell + args (DAG-level only)
+  timeout: 60s  # Connection timeout (default: 30s)
 
 steps:
   # All SSH steps inherit DAG-level configuration
@@ -45,12 +46,14 @@ steps:
 |-------|----------|---------|-------------|
 | `user` | Yes | - | SSH username |
 | `host` | Yes | - | Hostname or IP address |
-| `port` | No | "22" | SSH port |
+| `port` | No | `22` | SSH port |
 | `key` | No | Auto-detect | Private key path (see below) |
 | `password` | No | - | Password (not recommended) |
 | `strictHostKey` | No | `true` | Enable host key verification |
 | `knownHostFile` | No | `~/.ssh/known_hosts` | Known hosts file path |
 | `shell` | No | - | Shell for remote command execution (string or array, e.g., `"/bin/bash -e"` or `["/bin/bash","-e"]`) |
+| `timeout` | No | `30s` | Connection timeout (e.g., `30s`, `1m`) |
+| `bastion` | No | - | Bastion/jump host configuration (see below) |
 
 ### Step-Level Fields
 
@@ -58,12 +61,14 @@ steps:
 |-------|----------|---------|-------------|
 | `user` | Yes | - | SSH username |
 | `host` | Yes | - | Hostname or IP address |
-| `port` | No | "22" | SSH port |
+| `port` | No | `22` | SSH port |
 | `key` | No | Auto-detect | Private key path (see below) |
 | `password` | No | - | Password (not recommended) |
 | `strictHostKey` | No | `true` | Enable host key verification |
 | `knownHostFile` | No | `~/.ssh/known_hosts` | Known hosts file path |
 | `shell` | No | - | Shell for remote command execution (string form only; e.g., `"/bin/bash -e"`) |
+| `timeout` | No | `30s` | Connection timeout |
+| `bastion` | No | - | Bastion/jump host configuration |
 
 Note: Password authentication is supported at both DAG and step level, but key-based authentication is strongly recommended.
 
@@ -104,6 +109,48 @@ If no key is specified, Dagu automatically tries these default SSH keys in order
 2. `~/.ssh/id_ecdsa`
 3. `~/.ssh/id_ed25519`
 4. `~/.ssh/id_dsa`
+
+## Bastion Host
+
+Connect through a jump host:
+
+```yaml
+ssh:
+  user: deploy
+  host: private-server.internal
+  bastion:
+    host: bastion.example.com
+    user: jump-user
+    key: ~/.ssh/bastion_key
+
+steps:
+  - command: hostname
+```
+
+Step-level bastion:
+
+```yaml
+steps:
+  - type: ssh
+    config:
+      user: deploy
+      host: private-server.internal
+      bastion:
+        host: bastion.example.com
+        user: jump-user
+        key: ~/.ssh/bastion_key
+    command: hostname
+```
+
+### Bastion Fields
+
+| Field | Required | Default | Description |
+|-------|----------|---------|-------------|
+| `host` | Yes | - | Bastion hostname |
+| `port` | No | `22` | Bastion SSH port |
+| `user` | Yes | - | Bastion username |
+| `key` | No | Auto-detect | Bastion private key path |
+| `password` | No | - | Bastion password |
 
 ## Multiple Commands
 
@@ -153,5 +200,6 @@ Instead of duplicating the SSH executor config, `preconditions`, `retryPolicy`, 
 
 ## See Also
 
+- [SFTP](/features/executors/sftp) - File transfer via SFTP
 - [Docker](/features/executors/docker) - Container execution
 - [Shell](/features/executors/shell) - Local commands
