@@ -198,24 +198,40 @@ steps:
 
 ## Variable Expansion Syntax
 
-Dagu supports several expansion patterns:
+### Basic Syntax
+
+These patterns work in all contexts:
 
 | Pattern | Description | Example |
 |---------|-------------|---------|
-| `${VAR}` | Basic substitution | `${HOME}` → `/home/user` |
-| `$VAR` | Short form | `$HOME` → `/home/user` |
-| `${VAR:-default}` | Default if unset | `${PORT:-8080}` → `8080` |
-| `${VAR:?error}` | Error if unset | `${REQUIRED:?Must be set}` |
-| `${VAR:+alt}` | Alternate value if set | `${DEBUG:+--verbose}` |
-| `${VAR:0:5}` | Substring (offset:length) | `${DATE:0:4}` → year portion |
+| `${VAR}` | Braced substitution | `${HOME}` → `/home/user` |
+| `$VAR` | Simple substitution | `$HOME` → `/home/user` |
+| `'$VAR'` | Single-quoted (no expansion) | `'$VAR'` → `'$VAR'` |
 
-### Literal Values (No Expansion)
+### Unknown Variable Handling
 
-Single quotes prevent variable expansion:
+What happens when a variable is not defined depends on the execution context:
 
-```yaml
-command: echo '${NOT_EXPANDED}'  # Outputs literal: ${NOT_EXPANDED}
-```
+| Context | Behavior | Example |
+|---------|----------|---------|
+| Local shell execution (default) | Unknown vars become empty | `$UNDEFINED` → `` |
+| SSH without `shell` configured | Unknown vars preserved | `$UNDEFINED` → `$UNDEFINED` |
+
+When shell expansion is disabled (e.g., SSH executor without `shell`), unknown variables pass through to the remote shell unchanged.
+
+### Shell Expansion Syntax (Local Execution Only)
+
+When executing commands locally with the default shell executor, Dagu uses POSIX shell expansion via [mvdan.cc/sh](https://github.com/mvdan/sh). These patterns work only in that context:
+
+| Pattern | Description |
+|---------|-------------|
+| `${VAR:-default}` | Use `default` if VAR is unset or empty |
+| `${VAR:=default}` | Set VAR to `default` if unset or empty |
+| `${VAR:?message}` | Error with `message` if VAR is unset or empty |
+| `${VAR:+alternate}` | Use `alternate` if VAR is set and non-empty |
+| `${VAR:offset:length}` | Substring extraction |
+
+These patterns do **not** work when shell expansion is disabled (e.g., SSH executor without `shell` configured). In those cases, only basic `$VAR` and `${VAR}` syntax is supported.
 
 ### Escaped Backticks
 
@@ -225,7 +241,7 @@ To use literal backticks without command substitution:
 command: echo "Literal backtick: \`not a command\`"
 ```
 
-For full syntax including JSON path access and step output references, see [Variables Reference](/reference/variables).
+For JSON path access and step output references, see [Variables Reference](/reference/variables).
 
 ## Precedence Summary
 
@@ -278,52 +294,6 @@ steps:
   - command: ./deploy.sh
     # API_TOKEN is available but masked in logs
 ```
-
-## Best Practices
-
-1. **Use array format for order-dependent variables**
-   ```yaml
-   env:
-     - BASE: /opt/app
-     - CONFIG: ${BASE}/config.yaml  # Must come after BASE
-   ```
-
-2. **Use base config for organization-wide defaults**
-   ```yaml
-   # ~/.config/dagu/base.yaml
-   env:
-     - ENVIRONMENT: production
-     - NOTIFY_CHANNEL: "#ops-alerts"
-   ```
-
-3. **Prefix custom variables for clarity**
-   ```yaml
-   env:
-     - APP_DATA_DIR: /var/data
-     - APP_LOG_LEVEL: info
-   ```
-
-4. **Keep sensitive values in secrets, not env**
-   ```yaml
-   # Avoid
-   env:
-     - API_KEY: sk-12345...
-
-   # Prefer
-   secrets:
-     - name: API_KEY
-       provider: env
-       key: MY_API_KEY
-   ```
-
-5. **Use step-level env for step-specific overrides**
-   ```yaml
-   steps:
-     - name: verbose-step
-       env:
-         - DEBUG: "true"
-       command: ./script.sh
-   ```
 
 ## See Also
 

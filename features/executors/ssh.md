@@ -102,6 +102,45 @@ Without `shell`, commands are executed directly without shell interpretation. Us
 - DAG-level `ssh.shell` or the step-level `shell` field accept either string or array syntax, which is parsed into the executable plus argument list.
 - Step-level SSH executor configs (`executor.config.shell`) currently accept **string form only** because the configuration map is decoded into a string. Use quoted strings such as `"/bin/bash -eo pipefail"` there.
 
+### Variable Expansion Behavior
+
+When `shell` is **not** configured, Dagu disables local shell expansion. This affects how variables are handled:
+
+- Variables defined in Dagu (`env`, `params`, step outputs) are expanded before sending to remote
+- Variables **not** defined in Dagu are preserved as-is and passed to the remote shell
+
+```yaml
+ssh:
+  user: deploy
+  host: app.example.com
+  # No shell configured
+
+env:
+  - DAGU_VAR: from_dagu
+
+steps:
+  - command: |
+      REMOTE_VAR=remote_value
+      echo ${DAGU_VAR}     # Expanded by Dagu → "from_dagu"
+      echo ${REMOTE_VAR}   # Preserved → ${REMOTE_VAR} executed on remote
+```
+
+This allows you to write shell scripts that use local variables without Dagu replacing them with empty strings:
+
+```yaml
+steps:
+  - type: ssh
+    config:
+      user: deploy
+      host: app.example.com
+    command: |
+      for FILE in *.log; do
+        echo "Processing ${FILE}"  # ${FILE} preserved for remote shell
+      done
+```
+
+When `shell` **is** configured, Dagu performs full shell expansion locally before sending to the remote. Unknown variables become empty strings (standard POSIX shell behavior).
+
 ### SSH Key Auto-Detection
 
 If no key is specified, Dagu automatically tries these default SSH keys in order:

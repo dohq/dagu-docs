@@ -51,6 +51,31 @@ env:
   - CONFIG_FILE: ${INPUT_DIR}/config.yaml
 ```
 
+### Unknown Variable Handling
+
+When a variable is referenced but not defined in Dagu's context, the behavior depends on the execution mode:
+
+**Shell expansion enabled (default for local execution):**
+Unknown variables become empty strings. This is standard POSIX shell behavior.
+
+**Shell expansion disabled (SSH executor without `shell` configured):**
+Unknown variables are preserved as-is. This allows remote shells to expand their own variables.
+
+```yaml
+# Example: SSH without shell configured
+steps:
+  - type: ssh
+    config:
+      user: deploy
+      host: remote.example.com
+      # No shell configured - shell expansion disabled
+    command: |
+      FOO=bar
+      echo ${FOO}  # Preserved as ${FOO}, executed on remote shell
+```
+
+In this example, `${FOO}` is not defined in Dagu's env/params, so it passes through unchanged to the remote shell where it gets expanded.
+
 ### Loading from .env Files
 
 Load variables from dotenv files:
