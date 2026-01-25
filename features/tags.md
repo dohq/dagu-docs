@@ -1,6 +1,6 @@
 # Tags
 
-Categorize and filter DAGs using tags.
+Categorize and filter DAGs and DAG runs using tags.
 
 ## Overview
 
@@ -42,19 +42,19 @@ tags:
 
 ## API Filtering
 
-Filter DAGs and runs using the `tags` query parameter.
+Filter DAGs and DAG runs using the `tags` query parameter.
 
 ### Filter Syntax
 
 | Syntax | Description |
 |--------|-------------|
-| `key` | Match any DAG with this key (any value) |
+| `key` | Match any item with this key (any value) |
 | `key=value` | Match exact key-value pair |
-| `!key` | Match DAGs WITHOUT this key |
+| `!key` | Match items WITHOUT this key |
 
 Multiple filters use AND logic.
 
-### Examples
+### DAG Filtering
 
 ```bash
 # DAGs with "env" key (any value)
@@ -73,16 +73,21 @@ GET /api/v2/dags?tags=!deprecated
 GET /api/v2/dags?tags=env=prod,team,!deprecated
 ```
 
-### CLI
+### DAG Runs Filtering
+
+Filter runs from DAGs that have the specified tags:
 
 ```bash
-# List DAGs with tag filter
-dagu list --tags env=prod
+# Runs from DAGs with "env" key
+GET /api/v2/dag-runs?tags=env
 
-# Start a run with tag filter
-dagu start workflow.yaml --tags team=platform
+# Runs from DAGs with env=prod
+GET /api/v2/dag-runs?tags=env=prod
+
+# Runs from DAGs with env=prod AND team key
+GET /api/v2/dag-runs?tags=env=prod,team
 ```
 
 ## UI
 
-The tag search input accepts the same filter syntax. Type `env=prod` or `!deprecated` to filter the DAG list.
+The tag filter dropdown is available on both the DAG list and DAG runs pages. Select tags to filter; multiple tags use AND logic.

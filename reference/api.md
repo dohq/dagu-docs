@@ -68,7 +68,7 @@ Retrieves DAG definitions with optional filtering by name and tags.
 | page | integer | Page number (1-based) | 1 |
 | perPage | integer | Items per page (max 1000) | 50 |
 | name | string | Filter DAGs by name | - |
-| tag | string | Filter by tags. Comma-separated. Syntax: `key` (any value), `key=value` (exact), `!key` (negation). AND logic. | - |
+| tags | string | Filter by tags. Comma-separated. Syntax: `key` (any value), `key=value` (exact), `!key` (negation). AND logic. | - |
 | remoteNode | string | Remote node name | "local" |
 
 **Response (200)**:
@@ -804,6 +804,7 @@ Retrieves all DAG runs with optional filtering.
 | fromDate | integer | Unix timestamp start | - |
 | toDate | integer | Unix timestamp end | - |
 | dagRunId | string | Filter by run ID | - |
+| tags | string | Filter by DAG tags. Comma-separated. Same syntax as DAG filtering: `key` (any value), `key=value` (exact), `!key` (negation). AND logic. | - |
 | remoteNode | string | Remote node name | "local" |
 
 **Note**: This endpoint does not support pagination. All matching results are returned.
@@ -2225,7 +2226,7 @@ curl "http://localhost:8080/api/v2/dag-runs?name=data-processing-pipeline&page=2
      -H "Authorization: Bearer your-token"
 
 # Search for DAGs with specific tags
-curl "http://localhost:8080/api/v2/dags?tag=production&page=1&perPage=50" \
+curl "http://localhost:8080/api/v2/dags?tags=production&page=1&perPage=50" \
      -H "Authorization: Bearer your-token"
 
 # Get running DAG runs
