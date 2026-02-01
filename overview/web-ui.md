@@ -242,6 +242,28 @@ Worker: gpu-worker-01
 Labels: [gpu=true] [cuda=11.8] [memory=64G] [region=us-east-1]
 ```
 
+## Agent
+
+Tsumugi is an AI assistant that helps create, review, debug, and manage DAG workflows through a chat interface.
+
+### Accessing the Agent
+
+Click the **Agent** button at the bottom-right corner of any page.
+
+### Capabilities
+
+- Create and edit DAG YAML files
+- Execute shell commands (with approval for dangerous operations)
+- Read files and look up DAG schema documentation
+- Navigate to UI pages
+- Search the web for documentation
+
+### Configuration
+
+Configure the agent at `/settings/agent` (requires admin role).
+
+See [Agent](/features/agent/) for complete documentation.
+
 ## Terminal
 
 The web-based terminal allows executing shell commands directly from the Dagu UI.

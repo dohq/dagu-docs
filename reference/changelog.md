@@ -18,6 +18,8 @@
 
 ### Added
 
+- **Agent (Tsumugi)**: AI assistant integrated into the Web UI for workflow management. Tsumugi helps create, review, debug, and manage DAG workflows through an interactive chat interface. Supports multiple LLM providers (Anthropic, OpenAI, Google, OpenRouter, local models). Features include shell command execution with approval for dangerous operations, file reading/editing, DAG schema lookup, UI navigation, and web search. See [Agent](/features/agent/) for details.
+
 - **Trigger Type Visibility**: DAG runs now display how they were initiated (scheduler, manual, webhook, subdag, retry). The trigger type is shown in the DAG runs list and detail views with distinct icons and labels. Available via the `triggerType` field in the API response.
 
 - **LLM Model Fallback**: `model` field accepts array of model objects. First is primary, rest are fallbacks tried in order on any error. Per-model overrides for `temperature`, `maxTokens`, `topP`, `baseURL`, `apiKeyName`. See [Model Fallback](/features/chat/basics#model-fallback).

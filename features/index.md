@@ -39,6 +39,10 @@ Dagu provides a comprehensive set of features for building and managing workflow
 - [Basic Chat](/features/chat/basics) - Simple LLM conversations
 - [Tool Calling](/features/chat/tool-calling) - AI agents with DAG-based tools
 
+### Agent
+- [Overview](/features/agent/) - AI assistant (Tsumugi) in the Web UI
+- [Tools Reference](/features/agent/tools) - Available tools and parameters
+
 ## Authentication & Authorization
 - [Authentication Options](/configurations/authentication)
 - [Web UI Configuration](/configurations/server)

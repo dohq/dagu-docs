@@ -98,6 +98,14 @@ const fullSidebar = [
           { text: "Tool Calling", link: "/features/chat/tool-calling" },
         ],
       },
+      {
+        text: "Agent",
+        collapsed: false,
+        items: [
+          { text: "Overview", link: "/features/agent/" },
+          { text: "Tools Reference", link: "/features/agent/tools" },
+        ],
+      },
       { text: "Scheduling", link: "/features/scheduling" },
       { text: "Execution Control", link: "/features/execution-control" },
       { text: "Data Flow", link: "/features/data-flow" },
