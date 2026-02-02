@@ -60,6 +60,7 @@ Access payload fields directly using Dagu's JSON field access syntax:
 
 ```yaml
 name: webhook-triggered-dag
+type: graph
 steps:
   - name: deploy
     command: |
