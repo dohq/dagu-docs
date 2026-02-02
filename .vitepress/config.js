@@ -116,6 +116,7 @@ const fullSidebar = [
       { text: "Prometheus Metrics", link: "/features/prometheus-metrics" },
       { text: "OpenTelemetry", link: "/features/opentelemetry" },
       { text: "Git Sync", link: "/features/git-sync" },
+      { text: "Self-Upgrade", link: "/features/upgrade" },
       {
         text: "Distributed Execution",
         collapsed: false,
