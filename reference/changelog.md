@@ -2,6 +2,10 @@
 
 ## v1.31.0 (UNRELEASED)
 
+### Changed
+
+- **DAG Type Validation**: DAGs with `type: chain` (the default) no longer allow the `depends` field on steps. Chain execution runs steps sequentially in definition order, making explicit dependencies redundant. To use the `depends` field for custom execution order, set `type: graph` explicitly. This change prevents confusion between chain's implicit sequential ordering and graph's explicit dependency-based execution.
+
 ### Removed
 
 - **API v1**: The legacy v1 API (`/api/v1/*`) has been completely removed from the codebase. All clients should migrate to the v2 API (`/api/v2/*`). The v1 API was previously disabled when authentication was enabled (v1.26.2), and is now fully removed.

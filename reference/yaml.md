@@ -54,6 +54,36 @@ handlerOn:
 | `tags` | string/object/array | Tags for categorization. Supports key-value pairs. See [Tags](/features/tags). | `[]` |
 | `group` | string | Group name for organization | - |
 
+### Execution Type
+
+| Field | Type | Description | Default |
+|-------|------|-------------|---------|
+| `type` | string | Execution type: `chain` or `graph` | `chain` |
+
+- **`chain`** (default): Steps execute sequentially in the order defined. Each step implicitly depends on the previous step. The `depends` field is **not allowed** in chain mode.
+- **`graph`**: Steps execute based on explicit dependencies defined by the `depends` field. Steps without dependencies can run in parallel (up to `maxActiveSteps`).
+
+```yaml
+# Chain mode (default) - sequential execution
+steps:
+  - command: echo "First"
+  - command: echo "Second"   # Waits for First
+  - command: echo "Third"    # Waits for Second
+
+---
+
+# Graph mode - dependency-based execution
+type: graph
+steps:
+  - name: fetch-a
+    command: curl https://api.example.com/a
+  - name: fetch-b
+    command: curl https://api.example.com/b
+  - name: merge
+    command: ./merge.sh
+    depends: [fetch-a, fetch-b]  # Runs after both complete
+```
+
 ### Scheduling Fields
 
 | Field | Type | Description | Default |

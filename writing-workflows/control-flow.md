@@ -15,7 +15,11 @@ steps:
   - command: python process.py                  # Process data
 ```
 
-### Multiple Dependencies
+> **Note**: The above example uses the default `type: chain`, where steps run sequentially in order. To use explicit `depends` declarations for parallel or custom execution order, set `type: graph` at the DAG level.
+
+### Explicit Dependencies (Graph Mode)
+
+Use `type: graph` when you need parallel execution or custom dependency relationships:
 
 ```yaml
 type: graph
