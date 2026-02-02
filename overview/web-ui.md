@@ -145,6 +145,14 @@ The execution history page shows past execution results and logs, providing a co
 - Identify patterns and issues
 - Performance trends
 
+::: tip CLI Alternative
+View execution history from the command line with `dagu history`:
+- Faster for scripting and automation
+- Export to JSON for analysis: `dagu history --format json`
+- Advanced filtering: `dagu history --status failed --last 7d --tags prod`
+- See [CLI Reference](/reference/cli#history) for details
+:::
+
 ## Execution Log
 
 The execution log view shows detailed logs and standard output of each execution and step, helping you debug and monitor workflow behavior.

@@ -108,6 +108,33 @@ dagu status my-workflow.yaml
 # or check log files in the configured log directory
 ```
 
+#### View Execution History
+
+The `history` command displays past DAG executions with filtering and export capabilities:
+
+```bash
+# View recent runs
+dagu history my-workflow
+
+# Debug recent failures
+dagu history my-workflow --status failed --last 7d
+
+# Export to JSON for analysis
+dagu history --format json --limit 500 > history.json
+
+# Filter by tags (AND logic)
+dagu history --tags "prod,critical"
+```
+
+**Key features:**
+- Default: last 30 days, 100 results
+- Date filters: absolute (`--from`/`--to`) or relative (`--last 7d`)
+- Status filters: `succeeded`, `failed`, `running`, etc. (with aliases)
+- Output: table (default) or JSON
+- Run IDs never truncated
+
+See [`history` reference](/reference/cli#history) for all options.
+
 ### Testing and Validation
 
 #### Validate DAG Specification

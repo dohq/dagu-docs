@@ -163,6 +163,103 @@ Steps:
 ```
 
 
+### `history`
+
+Display execution history of DAG runs with filtering and pagination.
+
+**Usage:**
+```bash
+dagu history [flags] [DAG_NAME]
+```
+
+**Flags:**
+- `--from` - Start date/time in UTC (formats: `2006-01-02` or `2006-01-02T15:04:05Z`)
+- `--to` - End date/time in UTC (formats: `2006-01-02` or `2006-01-02T15:04:05Z`)
+- `--last` - Relative time period (examples: `7d`, `24h`, `1w`, `30d`). Cannot combine with `--from`/`--to`
+- `--status` - Filter by status: `running`, `succeeded`, `failed`, `aborted`, `queued`, `waiting`, `rejected`, `not_started`, `partially_succeeded`
+  - Aliases: `success` (succeeded), `failure` (failed), `canceled`/`cancelled`/`cancel` (aborted)
+- `--run-id` - Filter by run ID (partial match supported)
+- `--tags` - Filter by tags, comma-separated with AND logic (e.g., `prod,critical`)
+- `--format`, `-f` - Output format: `table` (default) or `json`
+- `--limit`, `-l` - Max results (default: `100`, max: `1000`)
+
+**Default Behavior:**
+- Shows last 30 days of runs
+- Table format with columns: DAG NAME, RUN ID, STATUS, STARTED (UTC), DURATION, PARAMS
+- Sorted newest first
+- Limit 100 results
+- **Run IDs are never truncated**
+
+**Examples:**
+
+```bash
+# All runs from last 30 days
+dagu history
+
+# Specific DAG runs
+dagu history my-workflow
+
+# Recent failures for debugging
+dagu history my-workflow --status failed --last 7d
+
+# Date range query
+dagu history --from 2026-01-01 --to 2026-01-31
+
+# JSON export for analysis
+dagu history --format json --limit 500 > history.json
+
+# Tag filtering (AND logic)
+dagu history --tags "prod,critical"
+
+# Combined filters
+dagu history my-workflow --status failed --last 24h --limit 10
+```
+
+**Output (table):**
+```
+DAG NAME      RUN ID                                STATUS     STARTED (UTC)        DURATION  PARAMS
+my-workflow   019c1ca4-ba96-7599-80c9-773862801abc  Succeeded  2026-02-02 04:38:03  2m30s     -
+my-workflow   019c1ca3-f123-4567-89ab-cdef01234567  Failed     2026-02-01 14:22:15  45s       env=prod
+```
+
+**Output (JSON):**
+```json
+[
+  {
+    "name": "my-workflow",
+    "dagRunId": "019c1ca4-ba96-7599-80c9-773862801abc",
+    "status": "succeeded",
+    "startedAt": "2026-02-02T04:38:03Z",
+    "finishedAt": "2026-02-02T04:40:33Z",
+    "duration": "2m30s",
+    "params": "",
+    "tags": ["prod", "backend"],
+    "workerId": "",
+    "error": ""
+  }
+]
+```
+
+**Error Examples:**
+```bash
+# Conflicting flags
+$ dagu history --last 7d --from 2026-01-01
+Error: cannot use --last with --from or --to
+
+# Invalid status
+$ dagu history --status invalid
+Error: invalid status 'invalid'. Valid values: running, succeeded, failed, ...
+
+# Date validation
+$ dagu history --from 2026-02-01 --to 2026-01-01
+Error: --from date (2026-02-01) must be before --to date (2026-01-01)
+```
+
+**See Also:**
+- [`status`](#status) - Current run status
+- [`cleanup`](#cleanup) - Remove old run history
+
+
 ### `server`
 
 Start the web UI server.

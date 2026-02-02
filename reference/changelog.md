@@ -22,6 +22,15 @@
 
 - **Trigger Type Visibility**: DAG runs now display how they were initiated (scheduler, manual, webhook, subdag, retry). The trigger type is shown in the DAG runs list and detail views with distinct icons and labels. Available via the `triggerType` field in the API response.
 
+- **CLI History Command**: New `dagu history` command displays execution history for DAG runs with comprehensive filtering (by date, status, tags, run ID), pagination (limit support up to 1000 results), and multiple output formats (table, JSON). Essential for debugging patterns, monitoring workflows, and exporting run data. Features:
+  - Date filtering: absolute (`--from`/`--to`) or relative (`--last 7d`, `24h`, `1w`)
+  - Status filtering: all execution states with aliases (e.g., `success` → `succeeded`)
+  - Tag filtering: comma-separated with AND logic
+  - Run ID search: partial matching support
+  - Default: last 30 days, 100 results, table format
+  - **Run IDs never truncated** for reliable copy-paste
+  - See [CLI Reference](/reference/cli#history) for full documentation.
+
 - **LLM Model Fallback**: `model` field accepts array of model objects. First is primary, rest are fallbacks tried in order on any error. Per-model overrides for `temperature`, `maxTokens`, `topP`, `baseURL`, `apiKeyName`. See [Model Fallback](/features/chat/basics#model-fallback).
 
 - **Container Shell Wrapper**: New `shell` field wraps step commands with a shell interpreter, enabling pipes, redirects, and command chaining without manual wrapping. Available in both image and exec modes.

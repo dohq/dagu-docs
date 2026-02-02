@@ -266,6 +266,25 @@ Deletes:
 - Status files (.jsonl)
 - Sub DAG logs
 
+#### Viewing Run History
+
+Before cleaning up logs, review execution history with `dagu history`:
+
+```bash
+# Preview what cleanup would affect
+dagu history my-workflow --limit 100
+
+# Check run status before deletion
+dagu history my-workflow --from 2025-01-01 --to 2025-12-31
+```
+
+The `history` command helps:
+- Identify which runs to keep/delete
+- Verify cleanup results
+- Export run metadata before cleanup: `dagu history --format json`
+
+See [`history` CLI reference](/reference/cli#history) and [`cleanup` command](/reference/cli#cleanup).
+
 ### Alerting
 
 #### Email

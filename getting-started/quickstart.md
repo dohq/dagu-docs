@@ -130,7 +130,43 @@ docker run --rm \
 
 :::
 
-### 4. View in the UI
+### 4. View Execution History
+
+Check past runs of your workflow:
+
+::: code-group
+
+```bash [Binary]
+# View recent runs
+dagu history hello
+
+# View last 50 runs
+dagu history hello --limit 50
+
+# Export to JSON
+dagu history hello --format json
+```
+
+```bash [Docker]
+# View recent runs
+docker run --rm \
+  -v ~/.dagu:/var/lib/dagu \
+  ghcr.io/dagu-org/dagu:latest \
+  dagu history hello
+```
+
+:::
+
+The history command shows:
+- Run ID (never truncated - safe to copy-paste)
+- Status (succeeded, failed, running, etc.)
+- Start time (UTC)
+- Duration
+- Parameters
+
+For more filtering options, see the [CLI reference](/reference/cli#history).
+
+### 5. View in the UI
 
 ::: code-group
 
