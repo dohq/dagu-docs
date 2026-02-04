@@ -215,9 +215,9 @@ What happens when a variable is not defined depends on the execution context:
 | Context | Behavior | Example |
 |---------|----------|---------|
 | Local shell execution (default) | Unknown vars become empty | `$UNDEFINED` → `` |
-| SSH without `shell` configured | Unknown vars preserved | `$UNDEFINED` → `$UNDEFINED` |
+| Non-shell executors (docker, http, ssh, jq, mail, etc.) | OS-only vars preserved as-is | `$HOME` → `$HOME` |
 
-When shell expansion is disabled (e.g., SSH executor without `shell`), unknown variables pass through to the remote shell unchanged.
+For non-shell executors, OS-only variables not defined in the DAG scope pass through unchanged to the target environment (container, remote shell, etc.), which resolves them. DAG-scoped variables (env, params, secrets, step outputs) are still expanded normally.
 
 ### Shell Expansion Syntax (Local Execution Only)
 
@@ -231,7 +231,7 @@ When executing commands locally with the default shell executor, Dagu uses POSIX
 | `${VAR:+alternate}` | Use `alternate` if VAR is set and non-empty |
 | `${VAR:offset:length}` | Substring extraction |
 
-These patterns do **not** work when shell expansion is disabled (e.g., SSH executor without `shell` configured). In those cases, only basic `$VAR` and `${VAR}` syntax is supported.
+These patterns do **not** work for non-shell executors (docker, http, ssh, jq, mail, etc.). In those cases, only basic `$VAR` and `${VAR}` syntax is supported, and OS-only variables pass through unchanged to the target environment.
 
 ### Escaped Backticks
 

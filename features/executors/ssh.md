@@ -104,28 +104,23 @@ Without `shell`, commands are executed directly without shell interpretation. Us
 
 ### Variable Expansion Behavior
 
-When `shell` is **not** configured, Dagu disables local shell expansion. This affects how variables are handled:
-
-- Variables defined in Dagu (`env`, `params`, step outputs) are expanded before sending to remote
-- Variables **not** defined in Dagu are preserved as-is and passed to the remote shell
+Dagu expands only **DAG-scoped variables** (env, params, secrets, step outputs) before sending commands to the remote host. OS-only variables (e.g., `$HOME`, `$USER`, `$PATH`) are **not** expanded locally — they pass through unchanged, letting the remote shell resolve them. This applies regardless of whether `shell` is configured.
 
 ```yaml
 ssh:
   user: deploy
   host: app.example.com
-  # No shell configured
 
 env:
-  - DAGU_VAR: from_dagu
+  - DEPLOY_BRANCH: main
 
 steps:
   - command: |
-      REMOTE_VAR=remote_value
-      echo ${DAGU_VAR}     # Expanded by Dagu → "from_dagu"
-      echo ${REMOTE_VAR}   # Preserved → ${REMOTE_VAR} executed on remote
+      cd $HOME/app              # $HOME NOT expanded — remote shell resolves it
+      git checkout ${DEPLOY_BRANCH}  # Expanded by Dagu — defined in DAG env
 ```
 
-This allows you to write shell scripts that use local variables without Dagu replacing them with empty strings:
+This allows you to write shell scripts that use remote variables without Dagu replacing them:
 
 ```yaml
 steps:
@@ -139,7 +134,21 @@ steps:
       done
 ```
 
-When `shell` **is** configured, Dagu performs full shell expansion locally before sending to the remote. Unknown variables become empty strings (standard POSIX shell behavior).
+To use a local OS value in SSH commands, explicitly import it via the DAG-level `env:` block:
+
+```yaml
+env:
+  - LOCAL_HOME: ${HOME}  # Import local $HOME into DAG scope
+
+steps:
+  - type: ssh
+    config:
+      user: deploy
+      host: app.example.com
+    command: echo "Local home was ${LOCAL_HOME}, remote home is $HOME"
+```
+
+The `shell` field controls whether POSIX shell expansion features (default values, parameter substitution like `${VAR:-default}`) are available — it does not affect whether OS variables are expanded.
 
 ### SSH Key Auto-Detection
 

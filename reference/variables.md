@@ -53,28 +53,30 @@ env:
 
 ### Unknown Variable Handling
 
-When a variable is referenced but not defined in Dagu's context, the behavior depends on the execution mode:
+When a variable is referenced but not defined in Dagu's context, the behavior depends on the execution context:
 
-**Shell expansion enabled (default for local execution):**
+**Shell expansion enabled (default for local shell execution):**
 Unknown variables become empty strings. This is standard POSIX shell behavior.
 
-**Shell expansion disabled (SSH executor without `shell` configured):**
-Unknown variables are preserved as-is. This allows remote shells to expand their own variables.
+**Non-shell executors (docker, http, ssh, jq, mail, etc.):**
+OS-only variables not defined in the DAG scope are preserved as-is, letting the target environment resolve them. DAG-scoped variables (env, params, secrets, step outputs) are still expanded normally.
 
 ```yaml
-# Example: SSH without shell configured
+# Example: Non-shell executor (SSH)
+env:
+  - DEPLOY_BRANCH: main
+
 steps:
   - type: ssh
     config:
       user: deploy
       host: remote.example.com
-      # No shell configured - shell expansion disabled
     command: |
-      FOO=bar
-      echo ${FOO}  # Preserved as ${FOO}, executed on remote shell
+      cd $HOME/app                    # $HOME preserved — remote shell resolves it
+      git checkout ${DEPLOY_BRANCH}   # Expanded by Dagu — defined in DAG env
 ```
 
-In this example, `${FOO}` is not defined in Dagu's env/params, so it passes through unchanged to the remote shell where it gets expanded.
+In this example, `$HOME` is not defined in the DAG scope, so it passes through unchanged to the remote shell. `${DEPLOY_BRANCH}` is defined in the DAG `env:`, so Dagu expands it before sending.
 
 ### Loading from .env Files
 
@@ -329,8 +331,12 @@ and when constructing the step process environment.
    ```
 
 6. **Process environment fallback**
-   System environment variables are used only if the key is not set by any of
-   the sources above, and are still subject to filtering at execution time.
+   For shell commands, system environment variables are used if the key is not
+   set by any of the sources above, and are still subject to filtering at
+   execution time. For non-shell executors (docker, http, ssh, jq, mail, etc.),
+   OS environment is **not** used as a fallback during variable interpolation —
+   only DAG-scoped sources (levels 1–5) are checked. OS-only variables pass
+   through unchanged, letting the target environment resolve them.
 
 ### Step process environment precedence (lowest to highest)
 

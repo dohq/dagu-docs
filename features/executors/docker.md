@@ -379,6 +379,17 @@ steps:
   - command: cat /etc/alpine-release
 ```
 
+::: tip OS Variables
+OS environment variables not defined in the DAG `env:` block (like `$HOME`, `$PATH`)
+are **not** expanded by Dagu. They pass through to the container as-is. To use a local
+OS value, explicitly import it in the DAG-level `env:` block:
+
+```yaml
+env:
+  - HOST_HOME: ${HOME}  # Import local $HOME into DAG scope
+```
+:::
+
 ## Output Handling
 
 Capture step output to variables or redirect to files:
