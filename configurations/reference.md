@@ -26,6 +26,7 @@ terminal:
 # Audit Logging
 audit:
   enabled: true           # Enable audit logging (default: true)
+  retentionDays: 7        # Days to keep audit logs (default: 7, 0 = keep forever)
 
 # Directories (must be under "paths" key)
 paths:
@@ -187,6 +188,7 @@ All options support `DAGU_` prefix.
 
 ### Audit Logging
 - `DAGU_AUDIT_ENABLED` - Enable audit logging (default: `true`)
+- `DAGU_AUDIT_RETENTION_DAYS` - Days to keep audit logs (default: `7`, `0` = keep forever)
 
 ### Directories
 - `DAGU_HOME` - Set all directories to this path (can be overridden by `--dagu-home` flag)

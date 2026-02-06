@@ -116,6 +116,7 @@ terminal:
 # Audit Logging
 audit:
   enabled: true               # Enable audit logging (default: true)
+  retentionDays: 7            # Days to keep audit logs (default: 7, 0 = keep forever)
 
 # Queue System
 queues:
@@ -198,6 +199,7 @@ All options support `DAGU_` prefix:
 
 **Audit Logging:**
 - `DAGU_AUDIT_ENABLED` - Enable audit logging (default: `true`)
+- `DAGU_AUDIT_RETENTION_DAYS` - Days to keep audit logs (default: `7`, `0` = keep forever)
 
 ## Common Setups
 
@@ -567,7 +569,18 @@ audit:
 Or via environment variable:
 ```bash
 export DAGU_AUDIT_ENABLED=false
+export DAGU_AUDIT_RETENTION_DAYS=30
 ```
+
+### Retention
+
+Audit log files are automatically cleaned up based on the `retentionDays` setting:
+
+- **Default**: 7 days
+- **Disable cleanup**: Set to `0` to keep logs forever
+- Cleanup runs on startup, then every 24 hours
+- Dates are evaluated in UTC
+- Only files matching the `YYYY-MM-DD.jsonl` naming pattern are affected
 
 ### Logged Events
 
