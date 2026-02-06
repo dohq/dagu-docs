@@ -390,6 +390,11 @@ env:
 ```
 :::
 
+::: tip Literal Dollar Signs
+To emit a literal `$` in non-shell container commands or config fields, escape it as `\$`.
+If you configure `container.shell`, Dagu leaves `\$` intact and the shell handles the escape.
+:::
+
 ## Output Handling
 
 Capture step output to variables or redirect to files:

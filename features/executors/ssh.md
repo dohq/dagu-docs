@@ -134,6 +134,10 @@ steps:
       done
 ```
 
+To emit a literal `$` in SSH commands or config fields, escape it as `\$`. When `shell` is
+configured, the remote shell handles the escape; without `shell`, Dagu unescapes it before
+sending.
+
 To use a local OS value in SSH commands, explicitly import it via the DAG-level `env:` block:
 
 ```yaml
