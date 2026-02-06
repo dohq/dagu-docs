@@ -425,6 +425,31 @@
 
 - **Sub-DAG Error Masking in Parallel Execution**: Fixed an issue where sub-DAG failures produced the cryptic error "no results available for node status determination" instead of the actual cause. When a child subprocess fails before writing status data, the error is now properly propagated with process exit details and captured stderr. Affected `node.go`, `dag_runner.go`, `parallel.go`, and `dag.go`.
 
+- **Windows Process Timeout and Subprocess Termination**: Fixed `timeoutSec` not being enforced on Windows. The command executor's `Run()` method blocked on `cmd.Wait()` without responding to context cancellation, causing processes to run past their timeout. Refactored to run `cmd.Wait()` asynchronously with a `select` on context cancellation, and updated `KillProcessGroup()` on Windows to use `killProcessTree()` for complete subprocess tree termination. Returns exit code 124 on timeout. (#1635)
+
+### Contributors
+
+Thanks to our contributors for this release:
+
+| Contribution | Contributor |
+| --- | --- |
+| Windows process timeout and subprocess tree termination fix (#1635), tag sorting fix (#1617) | [@prods](https://github.com/prods) |
+| Production-ready Helm chart for Kubernetes deployment (#1613), tag-wise search for DAG runs feature request (#1494) | [@kriyanshii](https://github.com/kriyanshii) |
+| Queue count display fix (#1602), queue count bug report (#1601) | [@sahalisro-blip](https://github.com/sahalisro-blip) |
+| Dollar sign escape feature request (#1628) | [@sbartczak-aleno](https://github.com/sbartczak-aleno) |
+| `maxActiveSteps` bug report (#1619), false cyclic plan detection bug report (#1618) | [@waterworthd-cim](https://github.com/waterworthd-cim) |
+| Step name character limit in parallel execution bug report (#1631) | [@dev-epices](https://github.com/dev-epices) |
+| Trigger type visibility feature request (#1610) | [@kevinsimper](https://github.com/kevinsimper) |
+| SSH `workingDir` bug report (#1596), merged log output feature request (#1505) | [@Kirandeep-Singh-Khehra](https://github.com/Kirandeep-Singh-Khehra) |
+| Container shell wrapper feature request (#1589) | [@bagemt](https://github.com/bagemt) |
+| LLM chat content-type bug report (#1574) | [@insanity54](https://github.com/insanity54) |
+| Mail settings environment variable bug report (#1557) | [@abylon-io](https://github.com/abylon-io) |
+| Helm chart feature request (#1492) | [@artemklevtsov](https://github.com/artemklevtsov) |
+| Key-value tags feature request (#1495), community support across multiple issues | [@ghansham](https://github.com/ghansham) |
+| DAG run result field feature request (#1466) | [@Kaiden0001](https://github.com/Kaiden0001) |
+| Worker ID visibility feature request (#1500) | [@berkaydedeoglu](https://github.com/berkaydedeoglu) |
+| Live demo documentation fix (#1560) | [@evanzhang87](https://github.com/evanzhang87) |
+
 ## v1.30.0 (2026-01-04)
 
 ### Added
