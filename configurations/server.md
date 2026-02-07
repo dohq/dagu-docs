@@ -109,6 +109,10 @@ ui:
 # Latest Status Configuration
 latestStatusToday: true         # Show only today's latest status
 
+# Execution Mode
+defaultExecutionMode: "local"      # "local" (default) or "distributed"
+                                    # When "distributed", all DAGs dispatch to workers
+
 # Terminal Configuration
 terminal:
   enabled: false              # Enable web-based terminal (default: false)

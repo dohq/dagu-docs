@@ -100,6 +100,9 @@ ui:
 
 latestStatusToday: true      # Show only today's status
 
+# Execution
+defaultExecutionMode: "local"  # "local" (default) or "distributed"
+
 # Queues
 queues:
   enabled: true          # Default: true
@@ -258,6 +261,9 @@ Builtin-specific OIDC settings (only used when `auth.mode=builtin`):
 
 ### Queue
 - `DAGU_QUEUE_ENABLED` - Enable queue system (default: true)
+
+### Execution
+- `DAGU_DEFAULT_EXECUTION_MODE` - Default execution mode: `local` (default) or `distributed`. When `distributed`, all DAGs are dispatched to workers through the coordinator, even without an explicit `workerSelector`. Use `workerSelector: local` in a DAG to override.
 
 ### Coordinator
 - `DAGU_COORDINATOR_HOST` - Coordinator bind address (default: `127.0.0.1`)
@@ -478,6 +484,8 @@ coordinator:
   host: 0.0.0.0
   port: 50055
 
+defaultExecutionMode: distributed  # Dispatch all DAGs to workers
+
 # Worker configuration
 worker:
   id: gpu-worker-01
@@ -511,6 +519,7 @@ peer:
 - `host`: `127.0.0.1`
 - `port`: `8080`
 - `metrics`: `private`
+- `defaultExecutionMode`: `local`
 - `terminal.enabled`: `false`
 - `audit.enabled`: `true`
 

@@ -64,6 +64,43 @@ The distributed execution system features automatic service registry and health 
 - **Dynamic Scaling**: Add or remove workers at runtime without coordinator restart
 - **Zombie Detection**: Coordinator marks tasks as failed when worker heartbeats become stale (>30 seconds)
 
+## How Dispatch Decisions Work
+
+Every execution path in Dagu — API, CLI, scheduler, queue, and sub-DAG steps — uses a single function (`ShouldDispatchToCoordinator`) to decide whether a DAG runs locally or is dispatched to a worker. This guarantees consistent behavior regardless of how a run is triggered.
+
+### Decision Priority
+
+The dispatch decision evaluates these rules in order, stopping at the first match:
+
+| Priority | Condition | Result |
+|----------|-----------|--------|
+| 1 | `workerSelector: local` is set | **Local** — always runs on the main instance |
+| 2 | No coordinator is configured | **Local** — distributed execution is unavailable |
+| 3 | `workerSelector` has labels (e.g., `gpu: "true"`) | **Dispatch** — sent to a matching worker |
+| 4 | `defaultExecutionMode: distributed` is set | **Dispatch** — sent to any available worker |
+| 5 | None of the above | **Local** — runs on the main instance |
+
+### Execution Paths
+
+All of the following entry points evaluate the same decision logic:
+
+| Trigger | Description |
+|---------|-------------|
+| API start | Immediate execution from the UI or API |
+| API retry | Retrying a failed run from the UI or API |
+| CLI `dagu start` | Running a DAG from the command line |
+| Scheduler | Cron-triggered scheduled runs |
+| Queue consumer | Dequeuing a previously enqueued run |
+| Sub-DAG step | A `call` step executing a child DAG |
+
+### Queue Behavior
+
+When a DAG run is enqueued (via API, webhook, or scheduler), it always enters the local queue first with status `queued`. The queue processor dequeues items respecting `maxConcurrency`, and only at dequeue time does it evaluate the dispatch decision. This means distributed runs are still subject to queue concurrency limits — the queue acts as a gate before dispatch, not after.
+
+### Sub-DAG Dispatch
+
+Each sub-DAG independently evaluates the dispatch decision. A DAG running locally can dispatch a child to a worker (if the child has `workerSelector` labels), and a DAG running on a worker can force a child to run locally (if the child has `workerSelector: local`). Parent and child dispatch decisions are completely independent.
+
 ## Setting Up Distributed Execution
 
 ### Step 1: Start the Coordinator
@@ -203,6 +240,8 @@ steps:
 ```
 
 Setting `workerSelector` to the string `"local"` overrides both the server default and any label-based routing, forcing the DAG to execute on the main instance.
+
+See [How Dispatch Decisions Work](#how-dispatch-decisions-work) for the complete priority order.
 
 ## Configuration
 
