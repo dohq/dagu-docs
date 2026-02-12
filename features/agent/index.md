@@ -54,11 +54,11 @@ For `local` provider, set `baseUrl` to your local endpoint (e.g., `http://localh
 
 ## Chat Interface
 
-### Conversations
+### Sessions
 
-- Each conversation is persisted per user
-- Select previous conversations from the dropdown in the header
-- Click **+** to start a new conversation
+- Each session is persisted per user
+- Select previous sessions from the dropdown in the header
+- Click **+** to start a new session
 
 ### DAG Context
 
@@ -114,4 +114,4 @@ See [Tools Reference](/features/agent/tools) for parameters and examples.
 
 - [Tools Reference](/features/agent/tools)
 - [Web UI](/overview/web-ui)
-- [Chat & AI Agents](/features/chat/) - LLM conversations in DAG workflows
+- [Chat & AI Agents](/features/chat/) - LLM sessions in DAG workflows

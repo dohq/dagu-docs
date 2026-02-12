@@ -35,8 +35,8 @@ Dagu provides a comprehensive set of features for building and managing workflow
 - [SQLite](/features/etl/sqlite) - SQLite database operations
 
 ### Chat & AI Agents
-- [Overview](/features/chat/) - LLM conversations and AI agents
-- [Basic Chat](/features/chat/basics) - Simple LLM conversations
+- [Overview](/features/chat/) - LLM sessions and AI agents
+- [Basic Chat](/features/chat/basics) - Simple LLM sessions
 - [Tool Calling](/features/chat/tool-calling) - AI agents with DAG-based tools
 
 ### Agent

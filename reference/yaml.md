@@ -830,7 +830,7 @@ steps:
 |-------|------|-------------|---------|
 | `type` | string | Set to `chat` for LLM-based steps | - |
 | `llm` | object | LLM configuration (provider, model, system prompt) | - |
-| `messages` | array | Conversation messages for chat steps | - |
+| `messages` | array | Session messages for chat steps | - |
 
 ```yaml
 steps:

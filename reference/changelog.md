@@ -74,7 +74,7 @@
 
 - **LLM Secret Masking**: Secrets defined in the `secrets` block are now automatically masked before being sent to LLM providers in chat steps. This prevents accidental exposure of sensitive values to external AI APIs while still allowing secrets to be used in message content via `${VAR}` substitution.
 
-- **LLM Tool Calling**: Chat executor now supports function calling / tool use, enabling AI agents to execute workflows as tools during conversations. Tools are defined as DAGs with automatic parameter discovery from `defaultParams`.
+- **LLM Tool Calling**: Chat executor now supports function calling / tool use, enabling AI agents to execute workflows as tools during sessions. Tools are defined as DAGs with automatic parameter discovery from `defaultParams`.
 
   ```yaml
   # Main DAG that uses the tool
@@ -510,7 +510,7 @@ Thanks to our contributors for this release:
   **Key Features:**
   - **Multi-provider support**: OpenAI, Anthropic, Gemini, OpenRouter, and local OpenAI-compatible APIs (aliases: `ollama`, `vllm`, `llama` map to `local`)
   - **DAG-level configuration**: Define `llm:` at DAG level to share settings across multiple chat steps
-  - **Multi-turn conversations**: Steps inherit conversation history from dependencies via `depends`, enabling context-aware AI workflows
+  - **Multi-turn sessions**: Steps inherit session history from dependencies via `depends`, enabling context-aware AI workflows
   - **Extended thinking mode**: Enable deeper reasoning with `thinking.enabled` and effort levels (`low`, `medium`, `high`, `xhigh`)
   - **Streaming output**: Response tokens stream to stdout by default (disable with `stream: false`)
   - **Automatic retry**: Exponential backoff on transient errors (rate limits, server errors, timeouts)
@@ -641,7 +641,7 @@ Thanks to our contributors for this release:
   ```
 
   Key features:
-  - **Multi-turn conversations**: Steps inherit conversation history from dependencies
+  - **Multi-turn sessions**: Steps inherit session history from dependencies
   - **Variable substitution**: Message content supports `${VAR}` syntax
   - **Streaming**: Response tokens are streamed to stdout by default
   - **Multiple providers**: `openai`, `anthropic`, `gemini`, `openrouter`, `local`

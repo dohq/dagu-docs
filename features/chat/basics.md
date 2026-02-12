@@ -85,7 +85,7 @@ When thinking is enabled for OpenAI reasoning models, `temperature` and `topP` a
 
 ### Messages (`messages` field)
 
-The `messages` field is a step-level field (not inside `llm`) containing the conversation messages.
+The `messages` field is a step-level field (not inside `llm`) containing the session messages.
 
 | Field | Description |
 |-------|-------------|
@@ -181,9 +181,9 @@ steps:
         content: "Explain ${TOPIC} in ${LANGUAGE}."
 ```
 
-### Multi-turn Conversation
+### Multi-turn Session
 
-Steps automatically inherit conversation history from their dependencies:
+Steps automatically inherit session history from their dependencies:
 
 ```yaml
 type: graph
@@ -210,13 +210,13 @@ steps:
         content: "Now multiply that by 3."
 ```
 
-The `followup` step receives the full conversation history from `setup`, including the assistant's response.
+The `followup` step receives the full session history from `setup`, including the assistant's response.
 
 ::: info Message Inheritance Rules
-- **Transitive history**: Each step saves its complete conversation (inherited + own + response). When step C depends on B which depends on A, C receives all messages from A→B→C.
+- **Transitive history**: Each step saves its complete session (inherited + own + response). When step C depends on B which depends on A, C receives all messages from A→B→C.
 - **Multiple dependencies**: Messages are merged in the order listed in `depends`. Example: `depends: [step1, step2]` merges step1's history first, then step2's.
 - **System message deduplication**: Only the **first** system message is kept. Later system messages from dependencies or the step itself are discarded.
-- **Retry persistence**: Messages are stored at the DAG run level (not per-attempt), so conversation history survives retries. If step A succeeds and step B fails, retrying will allow step B to access step A's messages.
+- **Retry persistence**: Messages are stored at the DAG run level (not per-attempt), so session history survives retries. If step A succeeds and step B fails, retrying will allow step B to access step A's messages.
 :::
 
 ### Local Model (Ollama)
@@ -515,7 +515,7 @@ llm:
 
 ## Saved Message Format
 
-Conversations are persisted with metadata:
+Sessions are persisted with metadata:
 
 ```json
 [
@@ -561,7 +561,7 @@ steps:
         content: "Check if this token is valid: ${API_TOKEN}"
 ```
 
-The `${API_TOKEN}` value is substituted in the message content, but the actual secret is replaced with `*******` before being sent to the LLM provider. The saved conversation history retains the original content for debugging.
+The `${API_TOKEN}` value is substituted in the message content, but the actual secret is replaced with `*******` before being sent to the LLM provider. The saved session history retains the original content for debugging.
 
 ## Notes
 
@@ -569,6 +569,6 @@ The `${API_TOKEN}` value is substituted in the message content, but the actual s
 - The `llm` field is designed to be reusable for future executor types like `agent`
 - API keys are read from environment variables by default
 - Response tokens are streamed to stdout by default
-- The full conversation (inherited + step messages + response) is saved after each step
+- The full session (inherited + step messages + response) is saved after each step
 - Secrets are automatically masked before sending to LLM providers
 - For AI agents with tool calling capabilities, see [Tool Calling](/features/chat/tool-calling)

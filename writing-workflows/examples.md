@@ -1719,7 +1719,7 @@ Steps inherit LLM config from DAG level.
 
 <div class="example-card">
 
-### Multi-turn Conversation
+### Multi-turn Session
 
 ```yaml
 steps:
@@ -1740,9 +1740,9 @@ steps:
         content: "Now multiply that by 3."
 ```
 
-Steps inherit conversation history from previous steps.
+Steps inherit session history from previous steps.
 
-<a href="/features/chat/#multi-turn-conversation" class="learn-more">Learn more →</a>
+<a href="/features/chat/#multi-turn-session" class="learn-more">Learn more →</a>
 
 </div>
 

@@ -964,7 +964,7 @@ steps:
 
 Aliases `ollama`, `vllm`, and `llama` map to `local`.
 
-### Multi-turn Conversation
+### Multi-turn Session
 
 ```yaml
 type: graph
@@ -991,7 +991,7 @@ steps:
         content: "Now multiply that by 3."
 ```
 
-Steps inherit conversation history from dependencies.
+Steps inherit session history from dependencies.
 
 ### Variable Substitution
 

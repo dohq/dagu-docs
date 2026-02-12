@@ -6,8 +6,8 @@ Execute Large Language Model (LLM) requests and build AI agents that can use too
 
 | Feature | Description |
 |---------|-------------|
-| [Basic Chat](/features/chat/basics) | Simple LLM conversations with OpenAI, Anthropic, Gemini, and more |
-| [Tool Calling](/features/chat/tool-calling) | AI agents that execute DAG workflows as tools during conversations |
+| [Basic Chat](/features/chat/basics) | Simple LLM sessions with OpenAI, Anthropic, Gemini, and more |
+| [Tool Calling](/features/chat/tool-calling) | AI agents that execute DAG workflows as tools during sessions |
 
 ## Quick Start
 
@@ -69,7 +69,7 @@ steps:
 ## Key Features
 
 - **Multi-Provider Support** - Switch between OpenAI, Anthropic, Gemini, and local models
-- **Conversation History** - Automatic message inheritance between dependent steps
+- **Session History** - Automatic message inheritance between dependent steps
 - **Extended Thinking** - Enable reasoning mode for complex tasks (Anthropic, OpenAI, Gemini)
 - **Secret Masking** - Automatic masking of sensitive values before sending to LLM
 - **Tool Calling** - Build AI agents that execute workflows as function calls
@@ -97,7 +97,7 @@ steps:
 
 ## Examples
 
-### Multi-turn Conversation
+### Multi-turn Session
 
 ```yaml
 type: graph
@@ -124,7 +124,7 @@ steps:
         content: "Now multiply that by 3."
 ```
 
-The `followup` step automatically inherits conversation history from `setup`.
+The `followup` step automatically inherits session history from `setup`.
 
 ### DAG-Level Configuration
 
@@ -151,7 +151,7 @@ Both steps inherit the DAG-level LLM configuration.
 
 ## See Also
 
-- [Basic Chat](/features/chat/basics) - Complete reference for simple LLM conversations
+- [Basic Chat](/features/chat/basics) - Complete reference for simple LLM sessions
 - [Tool Calling](/features/chat/tool-calling) - Build AI agents with DAG-based tools
 - [Secrets](/writing-workflows/secrets) - Secure handling of API keys
 - [Variables](/reference/variables) - Dynamic content in messages

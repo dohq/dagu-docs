@@ -1,13 +1,13 @@
 # Tool Calling
 
-The chat executor supports function calling (also known as tool use), allowing the LLM to execute DAG workflows as tools during conversations. This enables building AI agents that can perform actions, query data, and interact with external systems.
+The chat executor supports function calling (also known as tool use), allowing the LLM to execute DAG workflows as tools during sessions. This enables building AI agents that can perform actions, query data, and interact with external systems.
 
 ## How It Works
 
 1. Define tool DAGs with `name`, `description`, and `defaultParams`
 2. Reference tools in `llm.tools` array
 3. LLM automatically calls tools when needed
-4. Tool results feed back into conversation
+4. Tool results feed back into session
 5. Process repeats until termination condition is met
 
 ### Execution Termination
@@ -17,7 +17,7 @@ The chat step finishes in one of two ways:
 **1. Normal Completion (Recommended Path)**
 - LLM returns a response **without tool calls**
 - This is the final answer to the user's question
-- Conversation is saved and step completes successfully
+- Session is saved and step completes successfully
 
 **2. Max Iterations Reached**
 - Loop hits `maxToolIterations` limit (default: 10)
@@ -238,7 +238,7 @@ All major providers support tool calling with automatic API mapping:
 **Tool Execution Failures:**
 - DAG execution errors are passed to LLM as tool error messages
 - LLM can retry, adjust parameters, or try alternative approaches
-- Conversation continues even if tool fails
+- Session continues even if tool fails
 
 **Iteration Limits:**
 - When `maxToolIterations` is reached, the last assistant message is written to stdout
@@ -315,10 +315,10 @@ The LLM orchestrates the multi-step data pipeline by calling tools in sequence.
 - Tool calling requires streaming to be disabled automatically (handled internally)
 - Tool DAGs execute in the same working directory as the parent DAG
 - Tool execution creates standard sub-DAG runs visible in UI
-- Conversation history includes all tool calls and results
+- Session history includes all tool calls and results
 - Tool results are visible in the message history for debugging
 
 ## See Also
 
-- [Basic Chat](/features/chat/basics) - Simple LLM conversations without tools
+- [Basic Chat](/features/chat/basics) - Simple LLM sessions without tools
 - [Chat Overview](/features/chat/) - All chat capabilities and providers

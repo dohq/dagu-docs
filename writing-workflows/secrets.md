@@ -95,4 +95,4 @@ steps:
         content: "Analyze this connection string: postgres://user:${DB_PASSWORD}@db/prod"
 ```
 
-In this example, `${DB_PASSWORD}` is substituted in the message for your reference, but the actual secret value is replaced with `*******` before being sent to OpenAI. The saved conversation history (messages.json) retains the original content for debugging purposes.
+In this example, `${DB_PASSWORD}` is substituted in the message for your reference, but the actual secret value is replaced with `*******` before being sent to OpenAI. The saved session history (messages.json) retains the original content for debugging purposes.
