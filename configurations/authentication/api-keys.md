@@ -4,7 +4,7 @@ API keys provide programmatic access to the Dagu API with role-based permissions
 
 ## Features
 
-- **Role-Based Access Control**: Each API key has its own role assignment (admin, manager, operator, viewer)
+- **Role-Based Access Control**: Each API key has its own role assignment (admin, manager, developer, operator, viewer)
 - **Key Management**: Create, update, and delete API keys through the web UI or API
 - **Usage Tracking**: Track when each API key was last used
 - **Secure Storage**: Keys are hashed with bcrypt before storage; the full key is only shown once at creation
@@ -145,7 +145,8 @@ API keys inherit the same role-based permissions as users:
 | Role | Permissions |
 |------|-------------|
 | `admin` | Full access including user and API key management |
-| `manager` | Create, edit, delete, run, and stop DAGs |
+| `manager` | Create, edit, delete, run, and stop DAGs; can view audit logs |
+| `developer` | Create, edit, delete, run, and stop DAGs |
 | `operator` | Run and stop DAGs (execute only) |
 | `viewer` | Read-only access to DAGs and execution history |
 

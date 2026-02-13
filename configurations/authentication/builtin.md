@@ -5,7 +5,7 @@ Builtin authentication provides user management with role-based access control (
 ## Features
 
 - **User Management**: Create, update, and delete users through the web UI
-- **Role-Based Access Control**: Four roles with different permission levels
+- **Role-Based Access Control**: Five roles with different permission levels
 - **JWT Authentication**: Secure token-based authentication
 - **Password Management**: Users can change their own passwords; admins can reset any user's password
 - **API Key Management**: Create and manage API keys for programmatic access with role-based permissions
@@ -15,7 +15,8 @@ Builtin authentication provides user management with role-based access control (
 | Role | Permissions |
 |------|-------------|
 | `admin` | Full access including user management |
-| `manager` | Create, edit, delete, run, and stop DAGs |
+| `manager` | Create, edit, delete, run, and stop DAGs; can view audit logs |
+| `developer` | Create, edit, delete, run, and stop DAGs |
 | `operator` | Run and stop DAGs (execute only) |
 | `viewer` | Read-only access to DAGs and execution history |
 
@@ -266,7 +267,7 @@ curl -H "Authorization: Bearer dagu_your-api-key-here" \
 
 ### Key Features
 
-- **Role Assignment**: Each API key has its own role (admin, manager, operator, viewer)
+- **Role Assignment**: Each API key has its own role (admin, manager, developer, operator, viewer)
 - **Usage Tracking**: See when each key was last used
 - **Web UI Management**: Create and manage keys from Settings > API Keys
 - **Secure Storage**: Keys are hashed; the full key is only shown once at creation
@@ -388,7 +389,7 @@ oidc:
     groupsClaim: groups           # Claim containing user's groups
     groupMappings:
       admins: admin               # IdP group -> Dagu role
-      developers: manager
+      developers: developer
       ops: operator
       everyone: viewer
     roleAttributeStrict: false    # Deny login if no role matched
@@ -411,7 +412,7 @@ oidc:
 ```yaml
 roleMapping:
   defaultRole: viewer
-  roleAttributePath: 'if (.groups | contains(["admins"])) then "admin" elif (.groups | contains(["devs"])) then "manager" else "viewer" end'
+  roleAttributePath: 'if (.groups | contains(["admins"])) then "admin" elif (.groups | contains(["devs"])) then "developer" else "viewer" end'
 ```
 
 ### How It Works
