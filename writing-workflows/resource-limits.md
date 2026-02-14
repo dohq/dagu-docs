@@ -55,9 +55,9 @@ queues:
   enabled: true
   config:
     - name: heavy-jobs
-      maxConcurrency: 2
+      max_concurrency: 2
     - name: light-jobs
-      maxConcurrency: 10
+      max_concurrency: 10
 ```
 
 ```yaml

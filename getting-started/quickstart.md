@@ -52,7 +52,7 @@ When you first start Dagu with an empty DAGs directory, it automatically creates
 - `example-05-nested-workflows.yaml` - Nested sub-workflows
 - `example-06-container-workflow.yaml` - Container-based workflows
 
-To skip creating these examples, set `DAGU_SKIP_EXAMPLES=true` or add `skipExamples: true` to your config file.
+To skip creating these examples, set `DAGU_SKIP_EXAMPLES=true` or add `skip_examples: true` to your config file.
 :::
 
 ### 1. Create a workflow

@@ -129,11 +129,11 @@ API keys can authenticate requests from other Dagu servers configured as [remote
 
 ```yaml
 # On the main server, configure a remote node using an API key
-remoteNodes:
+remote_nodes:
   - name: production
-    apiBaseURL: https://prod.example.com/api/v1
-    isAuthToken: true
-    authToken: dagu_7Kq9mXxN3pLwR5tY2vZa8bCdEfGhJk4n6sUwXy0zA1B
+    api_base_url: https://prod.example.com/api/v1
+    is_auth_token: true
+    auth_token: dagu_7Kq9mXxN3pLwR5tY2vZa8bCdEfGhJk4n6sUwXy0zA1B
 ```
 
 See [Remote Nodes Authentication](remote-nodes) for complete setup instructions.

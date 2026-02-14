@@ -140,11 +140,11 @@ In shared-nothing mode (when `worker.coordinators` is configured), workers use a
 worker:
   id: "worker-gpu-01"
   max_active_runs: 100
-  postgresPool:
-    maxOpenConns: 25       # Total connections across ALL PostgreSQL DSNs
-    maxIdleConns: 5        # Idle connections per DSN
-    connMaxLifetime: 300   # Connection lifetime in seconds
-    connMaxIdleTime: 60    # Idle connection timeout in seconds
+  postgres_pool:
+    max_open_conns: 25       # Total connections across ALL PostgreSQL DSNs
+    max_idle_conns: 5        # Idle connections per DSN
+    conn_max_lifetime: 300   # Connection lifetime in seconds
+    conn_max_idle_time: 60    # Idle connection timeout in seconds
 ```
 
 This applies only in shared-nothing mode and only to PostgreSQL. SQLite always uses 1 connection per step.

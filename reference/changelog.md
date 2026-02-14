@@ -26,6 +26,8 @@
 
 - **Static API Token (`auth.token`)**: The `auth.token.value` configuration field and `DAGU_AUTH_TOKEN` environment variable have been removed. Use API keys (builtin auth mode) or basic auth instead. API keys provide role-based access control and usage tracking. See [API Keys](/configurations/authentication/api-keys) for migration.
 
+- **Basic Auth Flat Fields**: The top-level `is_basic_auth`, `basic_auth_username`, and `basic_auth_password` configuration fields have been removed. Use the nested `auth.basic` structure with an explicit `enabled` field instead. The legacy `DAGU_BASICAUTH_*` environment variables have also been removed; use `DAGU_AUTH_BASIC_ENABLED`, `DAGU_AUTH_BASIC_USERNAME`, and `DAGU_AUTH_BASIC_PASSWORD`.
+
 - **Deprecated YAML Fields**: The following deprecated fields have been removed from the YAML spec. Migrate to the replacement fields:
 
   | Removed Field | Replacement | Context |
@@ -37,6 +39,8 @@
   | `container.workDir` | `container.working_dir` | Container working directory |
 
 ### Added
+
+- **Explicit Basic Auth Enabled Field**: Basic authentication now requires an explicit `enabled: true` field under `auth.basic` instead of being implicitly enabled when username and password are set. Environment variable: `DAGU_AUTH_BASIC_ENABLED`.
 
 - **Coordinator Enabled Config**: New `coordinator.enabled` config option (default: `true`) and `DAGU_COORDINATOR_ENABLED` environment variable to explicitly enable or disable the coordinator service. When disabled, `start-all` skips the coordinator and DAGs are never dispatched to workers. Accepts `true`/`false`/`1`/`0`.
 - **Self-Upgrade Command**: New `dagu upgrade` command for in-place binary updates with SHA256 verification, backup support, and cross-platform compatibility. See [Self-Upgrade](/features/upgrade) for details.
@@ -160,12 +164,12 @@
         secret: your-jwt-secret
     oidc:
       enabled: true
-      clientId: your-client-id
-      clientSecret: your-client-secret
-      clientUrl: https://dagu.example.com
+      client_id: your-client-id
+      client_secret: your-client-secret
+      client_url: https://dagu.example.com
       issuer: https://accounts.google.com
-      autoSignup: true
-      defaultRole: viewer
+      auto_signup: true
+      default_role: viewer
   ```
 
   Key features: auto-signup on first login, role mapping from IdP groups, email domain filtering, email whitelist, customizable login button. See [Builtin Authentication](/configurations/authentication/builtin#oidcsso-login) for details.
@@ -306,11 +310,11 @@
 
   ```yaml
   worker:
-    postgresPool:
-      maxOpenConns: 25       # Total connections across ALL PostgreSQL DSNs
-      maxIdleConns: 5        # Idle connections per DSN
-      connMaxLifetime: 300   # Connection lifetime in seconds
-      connMaxIdleTime: 60    # Idle connection timeout in seconds
+    postgres_pool:
+      max_open_conns: 25       # Total connections across ALL PostgreSQL DSNs
+      max_idle_conns: 5        # Idle connections per DSN
+      conn_max_lifetime: 300   # Connection lifetime in seconds
+      conn_max_idle_time: 60    # Idle connection timeout in seconds
   ```
 
   **Key Features:**
@@ -400,7 +404,7 @@
     enabled: true
     config:
       - name: my-queue
-        maxConcurrency: 3
+        max_concurrency: 3
 
   # In your DAG file
   name: my-dag

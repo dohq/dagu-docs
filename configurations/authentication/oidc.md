@@ -20,13 +20,13 @@ auth:
       secret: your-jwt-secret
   oidc:
     # OIDC is auto-enabled when all required fields are set
-    clientId: your-client-id
-    clientSecret: your-client-secret
-    clientUrl: https://dagu.example.com
+    client_id: your-client-id
+    client_secret: your-client-secret
+    client_url: https://dagu.example.com
     issuer: https://accounts.google.com
-    # autoSignup defaults to true
-    roleMapping:
-      defaultRole: viewer
+    # auto_signup defaults to true
+    role_mapping:
+      default_role: viewer
 ```
 
 See [Builtin Authentication - OIDC/SSO Login](/configurations/authentication/builtin#oidcsso-login) for full documentation.
@@ -59,9 +59,9 @@ Standalone OIDC mode has the following limitations compared to [Builtin + OIDC m
 auth:
   mode: oidc  # Standalone OIDC mode
   oidc:
-    clientId: "your-client-id"
-    clientSecret: "your-client-secret"
-    clientUrl: "http://localhost:8080"
+    client_id: "your-client-id"
+    client_secret: "your-client-secret"
+    client_url: "http://localhost:8080"
     issuer: "https://accounts.google.com"
     scopes:
       - "openid"
@@ -88,23 +88,23 @@ dagu start-all
 
 ## Configuration Fields
 
-- **clientId**: OAuth2 client ID from your OIDC provider (required)
-- **clientSecret**: OAuth2 client secret (required)  
-- **clientUrl**: Base URL of your Dagu instance, used for callback (required)
+- **client_id**: OAuth2 client ID from your OIDC provider (required)
+- **client_secret**: OAuth2 client secret (required)
+- **client_url**: Base URL of your Dagu instance, used for callback (required)
 - **issuer**: OIDC provider URL (required)
 - **scopes**: OAuth2 scopes to request (default: `["openid", "profile", "email"]`)
 - **whitelist**: Email addresses allowed to authenticate (optional)
 
-OIDC is automatically enabled when clientId, clientSecret, and issuer are provided.
+OIDC is automatically enabled when client_id, client_secret, and issuer are provided.
 
 ## Callback URL
 
 The OIDC callback URL is automatically configured as:
 ```
-{clientUrl}/oidc-callback
+{client_url}/oidc-callback
 ```
 
-For example, if `clientUrl` is `http://localhost:8080`, the callback URL is:
+For example, if `client_url` is `http://localhost:8080`, the callback URL is:
 ```
 http://localhost:8080/oidc-callback
 ```
@@ -159,9 +159,9 @@ auth:
   mode: oidc
   # OIDC for web UI
   oidc:
-    clientId: "web-client"
-    clientSecret: "secret"
-    clientUrl: "https://dagu.example.com"
+    client_id: "web-client"
+    client_secret: "secret"
+    client_url: "https://dagu.example.com"
     issuer: "https://auth.example.com"
 
   # Token for API access (works alongside OIDC)

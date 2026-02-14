@@ -220,7 +220,7 @@ Metrics available at `/api/v1/metrics`:
 
 ```yaml
 # config.yaml
-logFormat: json    # text or json
+log_format: json    # text or json
 debug: true       # Debug mode
 paths:
   log_dir: /var/log/dagu

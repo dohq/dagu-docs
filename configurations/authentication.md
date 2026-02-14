@@ -45,6 +45,7 @@ Simple single-user authentication without user management.
 ```yaml
 auth:
   basic:
+    enabled: true
     username: admin
     password: secure-password
 ```
@@ -69,12 +70,12 @@ auth:
       secret: your-jwt-secret
   oidc:
     enabled: true
-    clientId: "your-client-id"
-    clientSecret: "your-client-secret"
-    clientUrl: "http://localhost:8080"
+    client_id: "your-client-id"
+    client_secret: "your-client-secret"
+    client_url: "http://localhost:8080"
     issuer: "https://accounts.google.com"
-    autoSignup: true
-    defaultRole: viewer
+    auto_signup: true
+    default_role: viewer
 ```
 
 **Standalone OIDC** (simple setup, all users get admin role):
@@ -83,9 +84,9 @@ auth:
 auth:
   mode: oidc
   oidc:
-    clientId: "your-client-id"
-    clientSecret: "your-client-secret"
-    clientUrl: "http://localhost:8080"
+    client_id: "your-client-id"
+    client_secret: "your-client-secret"
+    client_url: "http://localhost:8080"
     issuer: "https://accounts.google.com"
 ```
 

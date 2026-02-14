@@ -631,7 +631,7 @@ steps:
 ### Force Local Execution
 
 ```yaml
-# When defaultExecutionMode is "distributed", use worker_selector: local
+# When default_execution_mode is "distributed", use worker_selector: local
 # to keep specific DAGs on the main instance
 worker_selector: local
 
@@ -1879,9 +1879,9 @@ queues:
   enabled: true
   config:
     - name: "critical"
-      maxConcurrency: 5
+      max_concurrency: 5
     - name: "batch"
-      maxConcurrency: 1
+      max_concurrency: 1
 
 # DAG file
 queue: "critical"  # Assign to queue for concurrency control

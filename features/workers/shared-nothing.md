@@ -110,7 +110,7 @@ coordinator:
   advertise: dagu-coordinator.default.svc.cluster.local
 
 paths:
-  dataDir: "/var/lib/dagu/data"   # Local storage for status
+  data_dir: "/var/lib/dagu/data"   # Local storage for status
   log_dir: "/var/lib/dagu/logs"    # Local storage for logs
 
 ---
@@ -123,11 +123,11 @@ worker:
   labels:
     gpu: "true"
     region: "us-east-1"
-  postgresPool:
-    maxOpenConns: 25       # Total connections across ALL PostgreSQL DSNs
-    maxIdleConns: 5        # Per-DSN idle connections
-    connMaxLifetime: 300   # Seconds
-    connMaxIdleTime: 60    # Seconds
+  postgres_pool:
+    max_open_conns: 25       # Total connections across ALL PostgreSQL DSNs
+    max_idle_conns: 5        # Per-DSN idle connections
+    conn_max_lifetime: 300   # Seconds
+    conn_max_idle_time: 60    # Seconds
 ```
 
 ### Environment Variables
@@ -162,17 +162,17 @@ The global PostgreSQL connection pool:
 
 ```yaml
 worker:
-  postgresPool:
-    maxOpenConns: 25       # Hard limit across ALL PostgreSQL DSNs
-    maxIdleConns: 5        # Per-DSN idle connection limit
-    connMaxLifetime: 300   # Max connection age (seconds)
-    connMaxIdleTime: 60    # Max idle time before closure (seconds)
+  postgres_pool:
+    max_open_conns: 25       # Hard limit across ALL PostgreSQL DSNs
+    max_idle_conns: 5        # Per-DSN idle connection limit
+    conn_max_lifetime: 300   # Max connection age (seconds)
+    conn_max_idle_time: 60    # Max idle time before closure (seconds)
 ```
 
-Size `maxOpenConns` based on your PostgreSQL server's `max_connections`:
+Size `max_open_conns` based on your PostgreSQL server's `max_connections`:
 
 ```
-worker.postgresPool.maxOpenConns = PostgreSQL max_connections / number_of_workers / 2
+worker.postgres_pool.max_open_conns = PostgreSQL max_connections / number_of_workers / 2
 ```
 
 Example: PostgreSQL with `max_connections: 100`, 4 workers → per-worker limit: `100 / 4 / 2 = 12` (leaving headroom).

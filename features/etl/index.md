@@ -56,7 +56,7 @@ Connection pooling is **not configurable per-step**:
 - **Non-worker mode**: Uses fixed defaults (1 connection per step)
 - **Worker mode** (shared-nothing): Managed by global pool configuration at the worker level
 
-For distributed workers running multiple concurrent DAGs, configure PostgreSQL connection pooling via [`worker.postgresPool`](/features/workers/shared-nothing#postgresql-connection-pool-management) to prevent connection exhaustion.
+For distributed workers running multiple concurrent DAGs, configure PostgreSQL connection pooling via [`worker.postgres_pool`](/features/workers/shared-nothing#postgresql-connection-pool-management) to prevent connection exhaustion.
 :::
 
 ### Execution

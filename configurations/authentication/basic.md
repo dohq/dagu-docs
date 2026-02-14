@@ -10,6 +10,7 @@ Username and password authentication for Dagu.
 # ~/.config/dagu/config.yaml
 auth:
   basic:
+    enabled: true
     username: admin
     password: secure-password
 ```
@@ -17,6 +18,7 @@ auth:
 ### Environment Variables
 
 ```bash
+export DAGU_AUTH_BASIC_ENABLED=true
 export DAGU_AUTH_BASIC_USERNAME=admin
 export DAGU_AUTH_BASIC_PASSWORD=secure-password
 
@@ -29,13 +31,10 @@ dagu start-all
 
 ```bash
 # Using environment variables
-export DAGU_USERNAME=admin
-export DAGU_PASSWORD=secure-password
+export DAGU_AUTH_BASIC_ENABLED=true
+export DAGU_AUTH_BASIC_USERNAME=admin
+export DAGU_AUTH_BASIC_PASSWORD=secure-password
 dagu status
-
-# Or use legacy variables
-export DAGU_BASICAUTH_USERNAME=admin
-export DAGU_BASICAUTH_PASSWORD=secure-password
 ```
 
 ### API Access
@@ -51,6 +50,6 @@ curl -H "Authorization: Basic $(echo -n admin:secure-password | base64)" \
 
 ## Notes
 
-- Basic authentication is enabled when both username and password are set
-- Empty username or password disables basic authentication
+- Basic authentication is enabled when `enabled: true` is set along with both username and password
+- Set `enabled: false` or omit the `enabled` field to disable basic authentication
 - Credentials are checked on every request

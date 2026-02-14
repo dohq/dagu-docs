@@ -68,7 +68,7 @@ tunnel:
   tailscale:
     # Auth key for headless authentication (optional)
     # Generate at: https://login.tailscale.com/admin/settings/keys
-    authKey: "tskey-auth-xxxxx"
+    auth_key: "tskey-auth-xxxxx"
 
     # Machine name in tailnet (default: "dagu")
     hostname: "dagu"
@@ -80,20 +80,20 @@ tunnel:
     https: false
 
     # State directory (default: ~/.dagu_data/tailscale)
-    stateDir: ""
+    state_dir: ""
 
   # Allow terminal access via tunnel (default: false)
-  allowTerminal: false
+  allow_terminal: false
 
   # IP allowlist (empty = allow all)
-  allowedIPs: []
+  allowed_ips: []
 
   # Rate limiting for authentication
-  rateLimiting:
+  rate_limiting:
     enabled: false
-    loginAttempts: 5        # Max attempts per window
-    windowSeconds: 300      # 5 minutes
-    blockDurationSeconds: 900  # 15 minutes
+    login_attempts: 5        # Max attempts per window
+    window_seconds: 300      # 5 minutes
+    block_duration_seconds: 900  # 15 minutes
 ```
 
 ## Environment Variables
@@ -101,16 +101,16 @@ tunnel:
 | Variable | Config Key |
 |----------|------------|
 | `DAGU_TUNNEL_ENABLED` | `tunnel.enabled` |
-| `DAGU_TUNNEL_TAILSCALE_AUTH_KEY` | `tunnel.tailscale.authKey` |
+| `DAGU_TUNNEL_TAILSCALE_AUTH_KEY` | `tunnel.tailscale.auth_key` |
 | `DAGU_TUNNEL_TAILSCALE_HOSTNAME` | `tunnel.tailscale.hostname` |
 | `DAGU_TUNNEL_TAILSCALE_FUNNEL` | `tunnel.tailscale.funnel` |
 | `DAGU_TUNNEL_TAILSCALE_HTTPS` | `tunnel.tailscale.https` |
-| `DAGU_TUNNEL_TAILSCALE_STATE_DIR` | `tunnel.tailscale.stateDir` |
-| `DAGU_TUNNEL_ALLOW_TERMINAL` | `tunnel.allowTerminal` |
-| `DAGU_TUNNEL_RATE_LIMITING_ENABLED` | `tunnel.rateLimiting.enabled` |
-| `DAGU_TUNNEL_RATE_LIMITING_LOGIN_ATTEMPTS` | `tunnel.rateLimiting.loginAttempts` |
-| `DAGU_TUNNEL_RATE_LIMITING_WINDOW_SECONDS` | `tunnel.rateLimiting.windowSeconds` |
-| `DAGU_TUNNEL_RATE_LIMITING_BLOCK_DURATION_SECONDS` | `tunnel.rateLimiting.blockDurationSeconds` |
+| `DAGU_TUNNEL_TAILSCALE_STATE_DIR` | `tunnel.tailscale.state_dir` |
+| `DAGU_TUNNEL_ALLOW_TERMINAL` | `tunnel.allow_terminal` |
+| `DAGU_TUNNEL_RATE_LIMITING_ENABLED` | `tunnel.rate_limiting.enabled` |
+| `DAGU_TUNNEL_RATE_LIMITING_LOGIN_ATTEMPTS` | `tunnel.rate_limiting.login_attempts` |
+| `DAGU_TUNNEL_RATE_LIMITING_WINDOW_SECONDS` | `tunnel.rate_limiting.window_seconds` |
+| `DAGU_TUNNEL_RATE_LIMITING_BLOCK_DURATION_SECONDS` | `tunnel.rate_limiting.block_duration_seconds` |
 
 ## Modes
 

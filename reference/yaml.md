@@ -909,7 +909,7 @@ steps:
   - command: python train_model.py
 ```
 
-To force a DAG to run locally even when `defaultExecutionMode` is `distributed`, use the string `"local"`:
+To force a DAG to run locally even when `default_execution_mode` is `distributed`, use the string `"local"`:
 
 ```yaml
 # Always runs on the main instance
@@ -923,7 +923,7 @@ steps:
 - Label values are case-sensitive strings
 - Steps without `worker_selector` can run on any available worker
 - If no workers match the selector, the task waits until a matching worker is available
-- `worker_selector: local` overrides `defaultExecutionMode` and forces local execution
+- `worker_selector: local` overrides `default_execution_mode` and forces local execution
 
 See [Distributed Execution](/features/distributed-execution) for complete documentation.
 

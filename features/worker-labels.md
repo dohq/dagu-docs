@@ -80,7 +80,7 @@ Setting `worker_selector` on an unsupported step type produces a validation erro
 
 ## `worker_selector: local`
 
-Setting `worker_selector` to the string `"local"` (case-insensitive) forces the DAG to run on the main instance, regardless of the `defaultExecutionMode` setting. This sets `ForceLocal=true` in the dispatch decision.
+Setting `worker_selector` to the string `"local"` (case-insensitive) forces the DAG to run on the main instance, regardless of the `default_execution_mode` setting. This sets `ForceLocal=true` in the dispatch decision.
 
 ```yaml
 worker_selector: local

@@ -72,8 +72,8 @@ Configure default sorting in `config.yaml`:
 ```yaml
 ui:
   dags:
-    sortField: "lastRun"  # Default sort field
-    sortOrder: "desc"     # Default sort order (asc/desc)
+    sort_field: "lastRun"  # Default sort field
+    sort_order: "desc"     # Default sort order (asc/desc)
 ```
 
 Or via environment variables:
@@ -172,10 +172,10 @@ Edit workflows directly in the browser:
 - Save with validation
 
 ### Permissions
-Requires `writeDAGs` permission:
+Requires `write_dags` permission:
 ```yaml
 permissions:
-  writeDAGs: true
+  write_dags: true
 ```
 
 ## Search
@@ -333,18 +333,18 @@ See [Audit Logging Configuration](/configurations/server#audit-logging) for more
 ```yaml
 # config.yaml
 ui:
-  navbarColor: "#00D9FF"
-  navbarTitle: "My Workflows"
+  navbar_color: "#00D9FF"
+  navbar_title: "My Workflows"
 ```
 
 ### Display Options
 ```yaml
 ui:
-  maxDashboardPageLimit: 100  # Items per page
-  logEncodingCharset: utf-8   # Log encoding
+  max_dashboard_page_limit: 100  # Items per page
+  log_encoding_charset: utf-8   # Log encoding
   dags:
-    sortField: "name"         # Default sort field
-    sortOrder: "asc"          # Default sort order
+    sort_field: "name"         # Default sort field
+    sort_order: "asc"          # Default sort order
 ```
 
 ## Remote Nodes
@@ -352,13 +352,13 @@ ui:
 Monitor multiple Dagu instances:
 
 ```yaml
-remoteNodes:
+remote_nodes:
   - name: staging
-    apiBaseURL: https://staging.example.com/api/v1
-    
+    api_base_url: https://staging.example.com/api/v1
+
   - name: production
-    apiBaseURL: https://prod.example.com/api/v1
-    authToken: ${PROD_TOKEN}
+    api_base_url: https://prod.example.com/api/v1
+    auth_token: ${PROD_TOKEN}
 ```
 
 ### Features
@@ -370,8 +370,8 @@ remoteNodes:
 ### HTTPS Setup
 ```yaml
 tls:
-  certFile: /path/to/cert.pem
-  keyFile: /path/to/key.pem
+  cert_file: /path/to/cert.pem
+  key_file: /path/to/key.pem
 ```
 
 ### CORS Configuration

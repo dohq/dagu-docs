@@ -8,20 +8,20 @@ Configure authentication for connecting to remote Dagu instances.
 
 ```yaml
 # ~/.config/dagu/config.yaml
-remoteNodes:
+remote_nodes:
   - name: production
-    apiBaseURL: https://prod.example.com/api/v1
-    isBasicAuth: true
-    basicAuthUsername: admin
-    basicAuthPassword: prod-password
+    api_base_url: https://prod.example.com/api/v1
+    is_basic_auth: true
+    basic_auth_username: admin
+    basic_auth_password: prod-password
 
   - name: staging
-    apiBaseURL: https://staging.example.com/api/v1
-    isAuthToken: true
-    authToken: staging-api-token
+    api_base_url: https://staging.example.com/api/v1
+    is_auth_token: true
+    auth_token: staging-api-token
 
   - name: development
-    apiBaseURL: http://dev.example.com:8080/api/v1
+    api_base_url: http://dev.example.com:8080/api/v1
     # No auth configured - anonymous access
 ```
 
@@ -30,12 +30,12 @@ remoteNodes:
 ### Basic Authentication
 
 ```yaml
-remoteNodes:
+remote_nodes:
   - name: remote1
-    apiBaseURL: https://remote1.example.com/api/v1
-    isBasicAuth: true
-    basicAuthUsername: admin
-    basicAuthPassword: secure-password
+    api_base_url: https://remote1.example.com/api/v1
+    is_basic_auth: true
+    basic_auth_username: admin
+    basic_auth_password: secure-password
 ```
 
 ### Token Authentication
@@ -43,11 +43,11 @@ remoteNodes:
 Use for static tokens or [API Keys](api-keys).
 
 ```yaml
-remoteNodes:
+remote_nodes:
   - name: remote2
-    apiBaseURL: https://remote2.example.com/api/v1
-    isAuthToken: true
-    authToken: api-token-for-remote2
+    api_base_url: https://remote2.example.com/api/v1
+    is_auth_token: true
+    auth_token: api-token-for-remote2
 ```
 
 ### API Key Authentication
@@ -55,11 +55,11 @@ remoteNodes:
 When the remote node uses [Builtin Authentication](builtin) with [API Keys](api-keys), you can use an API key as the auth token. API keys provide role-based access control, allowing fine-grained permissions for remote node access.
 
 ```yaml
-remoteNodes:
+remote_nodes:
   - name: production
-    apiBaseURL: https://prod.example.com/api/v1
-    isAuthToken: true
-    authToken: dagu_7Kq9mXxN3pLwR5tY2vZa8bCdEfGhJk4n6sUwXy0zA1B
+    api_base_url: https://prod.example.com/api/v1
+    is_auth_token: true
+    auth_token: dagu_7Kq9mXxN3pLwR5tY2vZa8bCdEfGhJk4n6sUwXy0zA1B
 ```
 
 The remote node will recognize the `dagu_` prefix and validate it as an API key, applying the key's assigned role permissions.
@@ -68,20 +68,20 @@ The remote node will recognize the `dagu_` prefix and validate it as an API key,
 Use environment variables to avoid storing API keys in configuration files:
 
 ```yaml
-remoteNodes:
+remote_nodes:
   - name: production
-    apiBaseURL: https://prod.example.com/api/v1
-    isAuthToken: true
-    authToken: ${PROD_API_KEY}
+    api_base_url: https://prod.example.com/api/v1
+    is_auth_token: true
+    auth_token: ${PROD_API_KEY}
 ```
 :::
 
 ### No Authentication
 
 ```yaml
-remoteNodes:
+remote_nodes:
   - name: local-dev
-    apiBaseURL: http://localhost:8081/api/v1
+    api_base_url: http://localhost:8081/api/v1
     # No auth fields - anonymous access
 ```
 
@@ -125,11 +125,11 @@ On Server A, add Server B as a remote node:
 auth:
   mode: builtin
 
-remoteNodes:
+remote_nodes:
   - name: server-b
-    apiBaseURL: http://server-b:8080/api/v1
-    isAuthToken: true
-    authToken: dagu_7Kq9mXxN3pLwR5tY2vZa8bCdEfGhJk4n6sUwXy0zA1B
+    api_base_url: http://server-b:8080/api/v1
+    is_auth_token: true
+    auth_token: dagu_7Kq9mXxN3pLwR5tY2vZa8bCdEfGhJk4n6sUwXy0zA1B
 ```
 
 ### Step 3: Access Server B from Server A's UI
@@ -150,10 +150,10 @@ remoteNodes:
 ### Skip TLS Verification
 
 ```yaml
-remoteNodes:
+remote_nodes:
   - name: self-signed
-    apiBaseURL: https://internal.example.com/api/v1
-    skipTLSVerify: true
-    isAuthToken: true
-    authToken: token
+    api_base_url: https://internal.example.com/api/v1
+    skip_tls_verify: true
+    is_auth_token: true
+    auth_token: token
 ```

@@ -28,31 +28,31 @@ Location: `~/.config/dagu/config.yaml`
 # Server Configuration
 host: "127.0.0.1"         # Web UI binding host
 port: 8080                # Web UI binding port
-basePath: ""              # Base path for reverse proxy (e.g., "/dagu")
-apiBasePath: "/api/v1"    # API endpoint base path
+base_path: ""              # Base path for reverse proxy (e.g., "/dagu")
+api_base_path: "/api/v1"    # API endpoint base path
 tz: "Asia/Tokyo"          # Server timezone
 debug: false              # Debug mode
-logFormat: "text"         # Log format: "text" or "json"
+log_format: "text"         # Log format: "text" or "json"
 headless: false           # Run without Web UI
 metrics: "private"        # Metrics endpoint access: "private" (default) or "public"
 
 # Directory Paths (must be under "paths" key)
 paths:
-  dagsDir: "~/.config/dagu/dags"                    # DAG definitions
+  dags_dir: "~/.config/dagu/dags"                    # DAG definitions
   log_dir: "~/.local/share/dagu/logs"                # Log files
-  dataDir: "~/.local/share/dagu/data"               # Application data
-  suspendFlagsDir: "~/.local/share/dagu/suspend"    # Suspend flags
-  adminLogsDir: "~/.local/share/dagu/logs/admin"    # Admin logs
-  baseConfig: "~/.config/dagu/base.yaml"            # Base configuration
-  dagRunsDir: ""                                    # Auto: {dataDir}/dag-runs
-  queueDir: ""                                      # Auto: {dataDir}/queue
-  procDir: ""                                       # Auto: {dataDir}/proc
+  data_dir: "~/.local/share/dagu/data"               # Application data
+  suspend_flags_dir: "~/.local/share/dagu/suspend"    # Suspend flags
+  admin_logs_dir: "~/.local/share/dagu/logs/admin"    # Admin logs
+  base_config: "~/.config/dagu/base.yaml"            # Base configuration
+  dagRunsDir: ""                                    # Auto: {data_dir}/dag-runs
+  queueDir: ""                                      # Auto: {data_dir}/queue
+  procDir: ""                                       # Auto: {data_dir}/proc
   executable: ""                                    # Auto: current executable
 
 # Permissions
 permissions:
-  writeDAGs: true         # Allow creating/editing/deleting DAGs
-  runDAGs: true           # Allow running/stopping/retrying DAGs
+  write_dags: true         # Allow creating/editing/deleting DAGs
+  run_dags: true           # Allow running/stopping/retrying DAGs
 
 # Authentication
 auth:
@@ -69,6 +69,7 @@ auth:
 
   # Basic auth (simple username/password)
   basic:
+    enabled: true
     username: "admin"
     password: "secret"
 
@@ -78,39 +79,39 @@ auth:
 
   # OIDC auth (standalone or under builtin mode)
   oidc:
-    clientId: "your-client-id"
-    clientSecret: "your-client-secret"
-    clientUrl: "http://localhost:8080"
+    client_id: "your-client-id"
+    client_secret: "your-client-secret"
+    client_url: "http://localhost:8080"
     issuer: "https://accounts.google.com"
     scopes: ["openid", "profile", "email"]
     whitelist: ["admin@example.com"]
     # Builtin-specific fields (only used when mode: builtin)
     # enabled: true                  # Optional - auto-enabled when required fields are set
-    autoSignup: true                 # Auto-create users on first login
-    defaultRole: "viewer"            # Role for new users
-    allowedDomains: ["company.com"]  # Allowed email domains
-    buttonLabel: "Login with SSO"    # SSO button text
+    auto_signup: true                 # Auto-create users on first login
+    default_role: "viewer"            # Role for new users
+    allowed_domains: ["company.com"]  # Allowed email domains
+    button_label: "Login with SSO"    # SSO button text
 
 # TLS/HTTPS Configuration
 tls:
-  certFile: "/path/to/cert.pem"
-  keyFile: "/path/to/key.pem"
+  cert_file: "/path/to/cert.pem"
+  key_file: "/path/to/key.pem"
 
 # UI Customization
 ui:
-  navbarColor: "#1976d2"        # Header color (hex or name)
-  navbarTitle: "Dagu"           # Header title
-  logEncodingCharset: "utf-8"   # Log file encoding (see reference for supported encodings)
-  maxDashboardPageLimit: 100    # Max items on dashboard
+  navbar_color: "#1976d2"        # Header color (hex or name)
+  navbar_title: "Dagu"           # Header title
+  log_encoding_charset: "utf-8"   # Log file encoding (see reference for supported encodings)
+  max_dashboard_page_limit: 100    # Max items on dashboard
   dags:
-    sortField: "name"           # Default sort field (name/status/lastRun/schedule/suspended)
-    sortOrder: "asc"            # Default sort order (asc/desc)
+    sort_field: "name"           # Default sort field (name/status/lastRun/schedule/suspended)
+    sort_order: "asc"            # Default sort order (asc/desc)
 
 # Latest Status Configuration
-latestStatusToday: true         # Show only today's latest status
+latest_status_today: true         # Show only today's latest status
 
 # Execution Mode
-defaultExecutionMode: "local"      # "local" (default) or "distributed"
+default_execution_mode: "local"      # "local" (default) or "distributed"
                                     # When "distributed", all DAGs dispatch to workers
 
 # Terminal Configuration
@@ -120,31 +121,31 @@ terminal:
 # Audit Logging
 audit:
   enabled: true               # Enable audit logging (default: true)
-  retentionDays: 7            # Days to keep audit logs (default: 7, 0 = keep forever)
+  retention_days: 7            # Days to keep audit logs (default: 7, 0 = keep forever)
 
 # Queue System
 queues:
   enabled: true                 # Enable queue system (default: true)
   config:
     - name: "critical"
-      maxConcurrency: 5          # Maximum concurrent DAG runs
+      max_concurrency: 5          # Maximum concurrent DAG runs
     - name: "batch"
-      maxConcurrency: 1
+      max_concurrency: 1
     - name: "default"
-      maxConcurrency: 2
+      max_concurrency: 2
 
 # Remote Nodes
-remoteNodes:
+remote_nodes:
   - name: "staging"
-    apiBaseURL: "https://staging.example.com/api/v1"
-    isBasicAuth: true
-    basicAuthUsername: "admin"
-    basicAuthPassword: "password"
+    api_base_url: "https://staging.example.com/api/v1"
+    is_basic_auth: true
+    basic_auth_username: "admin"
+    basic_auth_password: "password"
   - name: "production"
-    apiBaseURL: "https://prod.example.com/api/v1"
-    isAuthToken: true
-    authToken: "prod-token"
-    skipTLSVerify: false
+    api_base_url: "https://prod.example.com/api/v1"
+    is_auth_token: true
+    auth_token: "prod-token"
+    skip_tls_verify: false
 ```
 
 ## Environment Variables
@@ -219,7 +220,7 @@ debug: true
 host: "0.0.0.0"
 port: 443
 permissions:
-  writeDAGs: false
+  write_dags: false
 auth:
   mode: builtin
   builtin:
@@ -230,8 +231,8 @@ auth:
       secret: "${AUTH_TOKEN_SECRET}"
       ttl: "24h"
 tls:
-  certFile: "/etc/ssl/cert.pem"
-  keyFile: "/etc/ssl/key.pem"
+  cert_file: "/etc/ssl/cert.pem"
+  key_file: "/etc/ssl/key.pem"
 ```
 
 ### Docker
@@ -282,6 +283,7 @@ Simple single-user authentication without user management.
 ```yaml
 auth:
   basic:
+    enabled: true
     username: "admin"
     password: "${ADMIN_PASSWORD}"
 ```
@@ -305,9 +307,9 @@ curl -H "Authorization: Bearer your-token" \
 auth:
   mode: oidc
   oidc:
-    clientId: "${OIDC_CLIENT_ID}"
-    clientSecret: "${OIDC_CLIENT_SECRET}"
-    clientUrl: "https://dagu.example.com"
+    client_id: "${OIDC_CLIENT_ID}"
+    client_secret: "${OIDC_CLIENT_SECRET}"
+    client_url: "https://dagu.example.com"
     issuer: "https://accounts.google.com"
 ```
 
@@ -320,12 +322,12 @@ auth:
       secret: "${AUTH_TOKEN_SECRET}"
   oidc:
     enabled: true
-    clientId: "${OIDC_CLIENT_ID}"
-    clientSecret: "${OIDC_CLIENT_SECRET}"
-    clientUrl: "https://dagu.example.com"
+    client_id: "${OIDC_CLIENT_ID}"
+    client_secret: "${OIDC_CLIENT_SECRET}"
+    client_url: "https://dagu.example.com"
     issuer: "https://accounts.google.com"
-    autoSignup: true
-    defaultRole: viewer
+    auto_signup: true
+    default_role: viewer
 ```
 
 See [OIDC Configuration](authentication/oidc) for detailed setup.
@@ -343,7 +345,7 @@ export DAGU_KEY_FILE=/etc/letsencrypt/live/dagu.example.com/privkey.pem
 **Behind Nginx:**
 ```yaml
 # config.yaml
-basePath: "/dagu"
+base_path: "/dagu"
 host: "127.0.0.1"
 port: 8080
 ```
@@ -360,9 +362,9 @@ location /dagu/ {
 
 ```yaml
 ui:
-  navbarColor: "#1976d2"
-  navbarTitle: "Workflows"
-  logEncodingCharset: "utf-8"
+  navbar_color: "#1976d2"
+  navbar_title: "Workflows"
+  log_encoding_charset: "utf-8"
 ```
 
 Color suggestions:
@@ -372,7 +374,7 @@ Color suggestions:
 
 ### Log Encoding
 
-The `logEncodingCharset` option specifies the character encoding used to read log files in the UI. This is useful when your DAG steps produce output in non-UTF-8 encodings.
+The `log_encoding_charset` option specifies the character encoding used to read log files in the UI. This is useful when your DAG steps produce output in non-UTF-8 encodings.
 
 **Common encodings:**
 - `utf-8` (default) - Unicode
@@ -389,7 +391,7 @@ See [Configuration Reference - Supported Log Encodings](/configurations/referenc
 **Example for Japanese logs:**
 ```yaml
 ui:
-  logEncodingCharset: "shift_jis"
+  log_encoding_charset: "shift_jis"
 ```
 
 **Environment variable:**
@@ -400,17 +402,17 @@ export DAGU_UI_LOG_ENCODING_CHARSET="shift_jis"
 ## Remote Nodes
 
 ```yaml
-remoteNodes:
+remote_nodes:
   - name: "production"
-    apiBaseURL: "https://prod.example.com/api/v1"
-    isBasicAuth: true
-    basicAuthUsername: "admin"
-    basicAuthPassword: "${PROD_PASSWORD}"
-    
+    api_base_url: "https://prod.example.com/api/v1"
+    is_basic_auth: true
+    basic_auth_username: "admin"
+    basic_auth_password: "${PROD_PASSWORD}"
+
   - name: "staging"
-    apiBaseURL: "https://staging.example.com/api/v1"
-    isAuthToken: true
-    authToken: "${STAGING_TOKEN}"
+    api_base_url: "https://staging.example.com/api/v1"
+    is_auth_token: true
+    auth_token: "${STAGING_TOKEN}"
 ```
 
 ## Queues
@@ -420,11 +422,11 @@ queues:
   enabled: true
   config:
     - name: "critical"
-      maxConcurrency: 5
+      max_concurrency: 5
     - name: "batch"
-      maxConcurrency: 1
+      max_concurrency: 1
     - name: "default"
-      maxConcurrency: 2
+      max_concurrency: 2
 ```
 
 ## Base Configuration
@@ -578,7 +580,7 @@ export DAGU_AUDIT_RETENTION_DAYS=30
 
 ### Retention
 
-Audit log files are automatically cleaned up based on the `retentionDays` setting:
+Audit log files are automatically cleaned up based on the `retention_days` setting:
 
 - **Default**: 7 days (keeps today plus the 7 previous days)
 - **Disable cleanup**: Set to `0` to keep logs forever
@@ -597,7 +599,7 @@ When enabled, the following events are recorded:
 
 ### Storage
 
-Audit logs are stored as daily JSONL files in `{adminLogsDir}/audit/`:
+Audit logs are stored as daily JSONL files in `{admin_logs_dir}/audit/`:
 ```
 ~/.local/share/dagu/logs/admin/audit/
 ├── 2025-01-10.jsonl

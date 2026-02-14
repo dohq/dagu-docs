@@ -67,9 +67,9 @@ docker compose -f docker-compose-keycloak.yml up -d
 # ~/.config/dagu/config.yaml
 auth:
   oidc:
-    clientId: "dagu-client"
-    clientSecret: "copy-from-keycloak-credentials-tab"
-    clientUrl: "http://localhost:8080"
+    client_id: "dagu-client"
+    client_secret: "copy-from-keycloak-credentials-tab"
+    client_url: "http://localhost:8080"
     issuer: "http://localhost:8081/realms/dagu"
     scopes:
       - "openid"
@@ -97,9 +97,9 @@ dagu start-all
 # Production Keycloak
 auth:
   oidc:
-    clientId: "dagu-prod"
-    clientSecret: "production-secret"
-    clientUrl: "https://dagu.example.com"
+    client_id: "dagu-prod"
+    client_secret: "production-secret"
+    client_url: "https://dagu.example.com"
     issuer: "https://auth.example.com/realms/production"
     scopes:
       - "openid"

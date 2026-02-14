@@ -74,21 +74,21 @@ When running distributed workers in shared-nothing mode (with `worker.coordinato
 
 This prevents connection exhaustion when multiple DAGs run concurrently in the same worker process. All PostgreSQL connections across all DAG executions share the pool.
 
-**Configuration** is done via [`worker.postgresPool`](/features/workers/shared-nothing#postgresql-connection-pool-management):
+**Configuration** is done via [`worker.postgres_pool`](/features/workers/shared-nothing#postgresql-connection-pool-management):
 
 ```yaml
 worker:
-  postgresPool:
-    maxOpenConns: 25       # Total connections across ALL PostgreSQL DSNs
-    maxIdleConns: 5        # Idle connections per DSN
-    connMaxLifetime: 300   # Connection lifetime in seconds
-    connMaxIdleTime: 60    # Idle connection timeout in seconds
+  postgres_pool:
+    max_open_conns: 25       # Total connections across ALL PostgreSQL DSNs
+    max_idle_conns: 5        # Idle connections per DSN
+    conn_max_lifetime: 300   # Connection lifetime in seconds
+    conn_max_idle_time: 60    # Idle connection timeout in seconds
 ```
 
 ::: warning Connection Limits in Worker Mode
-With many concurrent DAGs, configure `worker.postgresPool.maxOpenConns` based on your PostgreSQL server's `max_connections` setting. Consider the total: `number of workers × maxOpenConns`.
+With many concurrent DAGs, configure `worker.postgres_pool.max_open_conns` based on your PostgreSQL server's `max_connections` setting. Consider the total: `number of workers × max_open_conns`.
 
-Example: 5 workers with `maxOpenConns: 25` = up to 125 connections to your PostgreSQL server.
+Example: 5 workers with `max_open_conns: 25` = up to 125 connections to your PostgreSQL server.
 :::
 
 ## Parameterized Queries

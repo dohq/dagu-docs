@@ -9,9 +9,9 @@ Enable encrypted connections for Dagu.
 ```yaml
 # ~/.config/dagu/config.yaml
 tls:
-  certFile: /path/to/server.crt
-  keyFile: /path/to/server.key
-  caFile: /path/to/ca.crt  # Optional
+  cert_file: /path/to/server.crt
+  key_file: /path/to/server.key
+  ca_file: /path/to/ca.crt  # Optional
 ```
 
 ### Environment Variables
@@ -72,7 +72,7 @@ dagu start-all
 
 ## Notes
 
-- Both certFile and keyFile must be provided to enable TLS
+- Both cert_file and key_file must be provided to enable TLS
 - Server will listen on HTTPS when TLS is configured
 - Self-signed certificates require clients to skip verification
 - Use proper CA-signed certificates in production

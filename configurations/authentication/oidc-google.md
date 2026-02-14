@@ -37,9 +37,9 @@ Configure Dagu with Google as OIDC provider.
 # ~/.config/dagu/config.yaml
 auth:
   oidc:
-    clientId: "123456789012-abcdefghijklmnopqrstuvwxyz012345.apps.googleusercontent.com"
-    clientSecret: "GOCSPX-1234567890abcdefghijklmno"
-    clientUrl: "http://localhost:8080"
+    client_id: "123456789012-abcdefghijklmnopqrstuvwxyz012345.apps.googleusercontent.com"
+    client_secret: "GOCSPX-1234567890abcdefghijklmno"
+    client_url: "http://localhost:8080"
     issuer: "https://accounts.google.com"
     scopes:
       - "openid"
@@ -68,9 +68,9 @@ For Google Workspace domains:
 ```yaml
 auth:
   oidc:
-    clientId: "your-client-id"
-    clientSecret: "your-secret"
-    clientUrl: "https://dagu.company.com"
+    client_id: "your-client-id"
+    client_secret: "your-secret"
+    client_url: "https://dagu.company.com"
     issuer: "https://accounts.google.com"
 ```
 
@@ -92,15 +92,15 @@ auth:
 # Production with HTTPS
 auth:
   oidc:
-    clientId: "your-production-client-id"
-    clientSecret: "your-production-secret"
-    clientUrl: "https://dagu.example.com"
+    client_id: "your-production-client-id"
+    client_secret: "your-production-secret"
+    client_url: "https://dagu.example.com"
     issuer: "https://accounts.google.com"
 
 # Also enable TLS
 tls:
-  certFile: "/etc/ssl/dagu.crt"
-  keyFile: "/etc/ssl/dagu.key"
+  cert_file: "/etc/ssl/dagu.crt"
+  key_file: "/etc/ssl/dagu.key"
 ```
 
 ## Testing

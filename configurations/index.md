@@ -41,7 +41,7 @@ auth:
     password: ${ADMIN_PASSWORD}
 
 paths:
-  dagsDir: /opt/dagu/workflows
+  dags_dir: /opt/dagu/workflows
   log_dir: /var/log/dagu
 ```
 
@@ -98,8 +98,8 @@ host: 127.0.0.1
 port: 8080
 
 tls:
-  certFile: /etc/ssl/cert.pem
-  keyFile: /etc/ssl/key.pem
+  cert_file: /etc/ssl/cert.pem
+  key_file: /etc/ssl/key.pem
 
 auth:
   basic:
@@ -108,12 +108,12 @@ auth:
     password: ${ADMIN_PASSWORD}
 
 permissions:
-  writeDAGs: false  # Read-only
-  runDAGs: true
+  write_dags: false  # Read-only
+  run_dags: true
 
 ui:
-  navbarColor: "#FF0000"
-  navbarTitle: "Production"
+  navbar_color: "#FF0000"
+  navbar_title: "Production"
 ```
 
 ### Development

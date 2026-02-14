@@ -48,7 +48,7 @@ The dispatch decision evaluates these rules in order, stopping at the first matc
 | 1 | `worker_selector: local` is set | **Local** — always runs on the main instance |
 | 2 | No coordinator is configured | **Local** — distributed execution is unavailable |
 | 3 | `worker_selector` has labels (e.g., `gpu: "true"`) | **Dispatch** — sent to a matching worker |
-| 4 | `defaultExecutionMode: distributed` is set | **Dispatch** — sent to any available worker |
+| 4 | `default_execution_mode: distributed` is set | **Dispatch** — sent to any available worker |
 | 5 | None of the above | **Local** — runs on the main instance |
 
 ### Execution Paths
@@ -66,7 +66,7 @@ All of the following entry points evaluate the same decision logic:
 
 ### Queue Behavior
 
-When a DAG run is enqueued (via API, webhook, or scheduler), it always enters the local queue first with status `queued`. The queue processor dequeues items respecting `maxConcurrency`, and only at dequeue time does it evaluate the dispatch decision. This means distributed runs are still subject to queue concurrency limits — the queue acts as a gate before dispatch, not after.
+When a DAG run is enqueued (via API, webhook, or scheduler), it always enters the local queue first with status `queued`. The queue processor dequeues items respecting `max_concurrency`, and only at dequeue time does it evaluate the dispatch decision. This means distributed runs are still subject to queue concurrency limits — the queue acts as a gate before dispatch, not after.
 
 ### Sub-DAG Dispatch
 
@@ -143,11 +143,11 @@ See [Worker Labels](./worker-labels) for full details on label matching and step
 
 ## Default Execution Mode
 
-By default, DAGs without a `worker_selector` run locally on the main instance. You can change this behavior with the `defaultExecutionMode` server setting so that all DAGs are dispatched to workers automatically.
+By default, DAGs without a `worker_selector` run locally on the main instance. You can change this behavior with the `default_execution_mode` server setting so that all DAGs are dispatched to workers automatically.
 
 ```yaml
 # config.yaml
-defaultExecutionMode: distributed  # "local" (default) or "distributed"
+default_execution_mode: distributed  # "local" (default) or "distributed"
 ```
 
 Or via environment variable:
@@ -160,10 +160,10 @@ When set to `distributed`, every DAG is dispatched to a worker through the coord
 
 ### Force Local Execution
 
-If `defaultExecutionMode` is `distributed` but you need a specific DAG to always run locally (e.g., a lightweight health-check), use `worker_selector: local`:
+If `default_execution_mode` is `distributed` but you need a specific DAG to always run locally (e.g., a lightweight health-check), use `worker_selector: local`:
 
 ```yaml
-# This DAG always runs locally, even when defaultExecutionMode is "distributed"
+# This DAG always runs locally, even when default_execution_mode is "distributed"
 worker_selector: local
 
 steps:

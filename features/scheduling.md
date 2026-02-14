@@ -49,7 +49,7 @@ The scheduler automatically detects and cleans up "zombie" DAG runs - processes 
 ```yaml
 # config.yaml
 scheduler:
-  zombieDetectionInterval: 45s  # Check interval (default: 45s, set to 0 to disable)
+  zombie_detection_interval: 45s  # Check interval (default: 45s, set to 0 to disable)
 ```
 
 When a zombie is detected, its status is automatically updated from "running" to "failed". This ensures:
@@ -209,7 +209,7 @@ queues:
   enabled: true
   config:
     - name: batch-jobs
-      maxConcurrency: 2  # Allow 2 concurrent instances
+      max_concurrency: 2  # Allow 2 concurrent instances
 ```
 
 ```yaml

@@ -1881,13 +1881,13 @@ Retrieves all execution queues with their running and queued DAG runs. Queues ar
 - `queues`: Array of queue objects containing running and queued DAG runs
 - `name`: Queue name (either custom queue name or DAG name for dag-based queues)
 - `type`: Queue type - "custom" for explicitly defined queues, "dag-based" for DAG name queues
-- `maxConcurrency`: Maximum concurrent runs (only present for custom queues)
+- `max_concurrency`: Maximum concurrent runs (only present for custom queues)
 - `summary`: Count summary with running, queued, and total DAG runs
 - `runningDAGRuns`: Array of currently running DAG runs (uses DAGRunSummary schema)
 - `queuedDAGRuns`: Array of queued DAG runs waiting for execution (uses DAGRunSummary schema)
 
 **Queue Types**:
-- **Custom**: Explicitly defined queues with configurable `maxConcurrency`
+- **Custom**: Explicitly defined queues with configurable `max_concurrency`
 - **DAG-based**: Implicit queues where DAG name serves as the queue name
 
 **Error Response (500)**:

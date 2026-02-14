@@ -10,13 +10,13 @@ Default: `~/.config/dagu/config.yaml`
 # Server
 host: "127.0.0.1"
 port: 8080
-basePath: ""              # For reverse proxy (e.g., "/dagu")
-apiBasePath: "/api/v1"    # API endpoint base path
+base_path: ""              # For reverse proxy (e.g., "/dagu")
+api_base_path: "/api/v1"    # API endpoint base path
 tz: "America/New_York"
 debug: false
-logFormat: "text"         # "text" or "json"
+log_format: "text"         # "text" or "json"
 headless: false
-skipExamples: false       # Skip creating example DAGs
+skip_examples: false       # Skip creating example DAGs
 metrics: "private"        # Metrics endpoint: "private" (default) or "public"
 
 # Terminal (web-based shell access)
@@ -26,26 +26,26 @@ terminal:
 # Audit Logging
 audit:
   enabled: true           # Enable audit logging (default: true)
-  retentionDays: 7        # Days to keep audit logs (default: 7, 0 = keep forever)
+  retention_days: 7        # Days to keep audit logs (default: 7, 0 = keep forever)
 
 # Directories (must be under "paths" key)
 paths:
-  dagsDir: "~/.config/dagu/dags"
+  dags_dir: "~/.config/dagu/dags"
   log_dir: "~/.local/share/dagu/logs"
-  dataDir: "~/.local/share/dagu/data"
-  suspendFlagsDir: "~/.local/share/dagu/suspend"
-  adminLogsDir: "~/.local/share/dagu/logs/admin"
-  baseConfig: "~/.config/dagu/base.yaml"
-  dagRunsDir: ""            # Auto: {dataDir}/dag-runs
-  queueDir: ""              # Auto: {dataDir}/queue
-  procDir: ""               # Auto: {dataDir}/proc
-  serviceRegistryDir: ""    # Auto: {dataDir}/service-registry
+  data_dir: "~/.local/share/dagu/data"
+  suspend_flags_dir: "~/.local/share/dagu/suspend"
+  admin_logs_dir: "~/.local/share/dagu/logs/admin"
+  base_config: "~/.config/dagu/base.yaml"
+  dagRunsDir: ""            # Auto: {data_dir}/dag-runs
+  queueDir: ""              # Auto: {data_dir}/queue
+  procDir: ""               # Auto: {data_dir}/proc
+  serviceRegistryDir: ""    # Auto: {data_dir}/service-registry
   executable: ""            # Auto: current executable path
 
 # Permissions
 permissions:
-  writeDAGs: true         # Create/edit/delete DAGs
-  runDAGs: true           # Run/stop/retry DAGs
+  write_dags: true         # Create/edit/delete DAGs
+  run_dags: true           # Run/stop/retry DAGs
 
 # Authentication
 auth:
@@ -62,6 +62,7 @@ auth:
 
   # Basic auth (simple username/password)
   basic:
+    enabled: true
     username: "admin"
     password: "secret"
 
@@ -71,61 +72,61 @@ auth:
 
   # OIDC auth (standalone or under builtin mode)
   oidc:
-    clientId: "your-client-id"
-    clientSecret: "your-client-secret"
-    clientUrl: "https://dagu.example.com"
+    client_id: "your-client-id"
+    client_secret: "your-client-secret"
+    client_url: "https://dagu.example.com"
     issuer: "https://accounts.google.com"
     scopes: ["openid", "profile", "email"]
     # Builtin-specific settings (only when mode=builtin)
     enabled: false           # Enable OIDC under builtin auth
-    autoSignup: false        # Auto-create users on first login
-    defaultRole: "viewer"    # Role for new users
-    allowedDomains: []       # Restrict by email domain
-    buttonLabel: "Login with SSO"
+    auto_signup: false        # Auto-create users on first login
+    default_role: "viewer"    # Role for new users
+    allowed_domains: []       # Restrict by email domain
+    button_label: "Login with SSO"
 
 # TLS/HTTPS
 tls:
-  certFile: "/path/to/cert.pem"
-  keyFile: "/path/to/key.pem"
+  cert_file: "/path/to/cert.pem"
+  key_file: "/path/to/key.pem"
 
 # UI
 ui:
-  navbarColor: "#1976d2"     # Hex or CSS color
-  navbarTitle: "Dagu"
-  logEncodingCharset: "utf-8"  # Character encoding for log files (see supported encodings below)
-  maxDashboardPageLimit: 100
+  navbar_color: "#1976d2"     # Hex or CSS color
+  navbar_title: "Dagu"
+  log_encoding_charset: "utf-8"  # Character encoding for log files (see supported encodings below)
+  max_dashboard_page_limit: 100
   dags:
-    sortField: "name"        # Default sort field (name/status/lastRun/schedule/suspended)
-    sortOrder: "asc"         # Default sort order (asc/desc)
+    sort_field: "name"        # Default sort field (name/status/lastRun/schedule/suspended)
+    sort_order: "asc"         # Default sort order (asc/desc)
 
-latestStatusToday: true      # Show only today's status
+latest_status_today: true      # Show only today's status
 
 # Execution
-defaultExecutionMode: "local"  # "local" (default) or "distributed"
+default_execution_mode: "local"  # "local" (default) or "distributed"
 
 # Queues
 queues:
   enabled: true          # Default: true
   config:
     - name: "critical"
-      maxConcurrency: 5   # Maximum concurrent DAG runs
+      max_concurrency: 5   # Maximum concurrent DAG runs
     - name: "batch"
-      maxConcurrency: 1
+      max_concurrency: 1
     - name: "default"
-      maxConcurrency: 2
+      max_concurrency: 2
 
 # Remote Nodes
-remoteNodes:
+remote_nodes:
   - name: "staging"
-    apiBaseURL: "https://staging.example.com/api/v1"
-    isBasicAuth: true
-    basicAuthUsername: "admin"
-    basicAuthPassword: "password"
+    api_base_url: "https://staging.example.com/api/v1"
+    is_basic_auth: true
+    basic_auth_username: "admin"
+    basic_auth_password: "password"
   - name: "production"
-    apiBaseURL: "https://prod.example.com/api/v1"
-    isAuthToken: true
-    authToken: "prod-token"
-    skipTLSVerify: false
+    api_base_url: "https://prod.example.com/api/v1"
+    is_auth_token: true
+    auth_token: "prod-token"
+    skip_tls_verify: false
 
 # Coordinator (for distributed execution)
 coordinator:
@@ -141,26 +142,26 @@ worker:
     gpu: "false"
     memory: "16G"
     region: "us-east-1"
-  postgresPool:           # PostgreSQL connection pool (shared-nothing mode only)
-    maxOpenConns: 25      # Total connections across ALL PostgreSQL DSNs (default: 25)
-    maxIdleConns: 5       # Idle connections per DSN (default: 5)
-    connMaxLifetime: 300  # Connection lifetime in seconds (default: 300)
-    connMaxIdleTime: 60   # Idle connection timeout in seconds (default: 60)
+  postgres_pool:           # PostgreSQL connection pool (shared-nothing mode only)
+    max_open_conns: 25      # Total connections across ALL PostgreSQL DSNs (default: 25)
+    max_idle_conns: 5       # Idle connections per DSN (default: 5)
+    conn_max_lifetime: 300  # Connection lifetime in seconds (default: 300)
+    conn_max_idle_time: 60   # Idle connection timeout in seconds (default: 60)
 
 # Peer TLS configuration (for distributed execution)
 peer:
   insecure: true          # Use h2c instead of TLS (default: true)
-  certFile: ""            # TLS certificate for peer connections
-  keyFile: ""             # TLS key for peer connections
-  clientCaFile: ""        # CA certificate for peer verification (mTLS)
-  skipTlsVerify: false    # Skip TLS certificate verification
+  cert_file: ""            # TLS certificate for peer connections
+  key_file: ""             # TLS key for peer connections
+  client_ca_file: ""        # CA certificate for peer verification (mTLS)
+  skip_tls_verify: false    # Skip TLS certificate verification
 
 # Scheduler
 scheduler:
   port: 8090              # Health check port (0 to disable)
-  lockStaleThreshold: "30s"  # Time after which a scheduler lock is considered stale
-  lockRetryInterval: "5s"   # Interval between lock acquisition attempts
-  zombieDetectionInterval: "45s"  # Interval for detecting zombie DAG runs (0 to disable)
+  lock_stale_threshold: "30s"  # Time after which a scheduler lock is considered stale
+  lock_retry_interval: "5s"   # Interval between lock acquisition attempts
+  zombie_detection_interval: "45s"  # Interval for detecting zombie DAG runs (0 to disable)
 
 # Resource Monitoring
 monitoring:
@@ -178,7 +179,7 @@ All options support `DAGU_` prefix.
 - `DAGU_HOST` - Server host (default: `127.0.0.1`)
 - `DAGU_PORT` - Server port (default: `8080`)
 - `DAGU_BASE_PATH` - Base path for reverse proxy
-- `DAGU_API_BASE_URL` - **DEPRECATED** - Use `apiBasePath` config instead
+- `DAGU_API_BASE_URL` - **DEPRECATED** - Use `api_base_path` config instead
 - `DAGU_TZ` - Server timezone
 - `DAGU_DEBUG` - Enable debug mode
 - `DAGU_LOG_FORMAT` - Log format (`text`/`json`)
@@ -219,7 +220,7 @@ All options support `DAGU_` prefix.
 - `DAGU_AUTH_TOKEN_TTL` - JWT token expiry (default: `24h`)
 - `DAGU_AUTH_ADMIN_USERNAME` - Initial admin username (default: `admin`)
 - `DAGU_AUTH_ADMIN_PASSWORD` - Initial admin password (auto-generated if empty)
-- `DAGU_USERS_DIR` - User data directory (default: `{dataDir}/users`)
+- `DAGU_USERS_DIR` - User data directory (default: `{data_dir}/users`)
 
 #### Basic Auth
 - `DAGU_AUTH_BASIC_USERNAME` - Basic auth username
@@ -450,30 +451,30 @@ auth:
       ttl: 24h
 
 tls:
-  certFile: /etc/ssl/certs/dagu.crt
-  keyFile: /etc/ssl/private/dagu.key
+  cert_file: /etc/ssl/certs/dagu.crt
+  key_file: /etc/ssl/private/dagu.key
 
 permissions:
-  writeDAGs: false
-  runDAGs: true
+  write_dags: false
+  run_dags: true
 
 ui:
-  navbarColor: "#ff0000"
-  navbarTitle: "Production"
+  navbar_color: "#ff0000"
+  navbar_title: "Production"
 ```
 
 ### Multi-Environment
 ```yaml
-remoteNodes:
+remote_nodes:
   - name: staging
-    apiBaseURL: https://staging.example.com/api/v1
-    isAuthToken: true
-    authToken: ${STAGING_TOKEN}
-    
+    api_base_url: https://staging.example.com/api/v1
+    is_auth_token: true
+    auth_token: ${STAGING_TOKEN}
+
   - name: production
-    apiBaseURL: https://prod.example.com/api/v1
-    isAuthToken: true
-    authToken: ${PROD_TOKEN}
+    api_base_url: https://prod.example.com/api/v1
+    is_auth_token: true
+    auth_token: ${PROD_TOKEN}
 ```
 
 ### Distributed Execution
@@ -486,7 +487,7 @@ coordinator:
   host: 0.0.0.0
   port: 50055
 
-defaultExecutionMode: distributed  # Dispatch all DAGs to workers
+default_execution_mode: distributed  # Dispatch all DAGs to workers
 
 # Worker configuration
 worker:
@@ -501,41 +502,41 @@ worker:
 # TLS configuration for peer connections
 peer:
   insecure: false  # Enable TLS
-  certFile: /etc/dagu/tls/cert.pem
-  keyFile: /etc/dagu/tls/key.pem
-  clientCaFile: /etc/dagu/tls/ca.pem
+  cert_file: /etc/dagu/tls/cert.pem
+  key_file: /etc/dagu/tls/key.pem
+  client_ca_file: /etc/dagu/tls/ca.pem
 ```
 
 ## Default Values
 
 ### Key Defaults
-- `apiBasePath`: `/api/v1`
+- `api_base_path`: `/api/v1`
 - `queues.enabled`: `true`
-- `permissions.writeDAGs`: `true`
-- `permissions.runDAGs`: `true`
-- `ui.maxDashboardPageLimit`: `100`
-- `ui.logEncodingCharset`: `utf-8`
-- `ui.dags.sortField`: `name`
-- `ui.dags.sortOrder`: `asc`
-- `logFormat`: `text`
+- `permissions.write_dags`: `true`
+- `permissions.run_dags`: `true`
+- `ui.max_dashboard_page_limit`: `100`
+- `ui.log_encoding_charset`: `utf-8`
+- `ui.dags.sort_field`: `name`
+- `ui.dags.sort_order`: `asc`
+- `log_format`: `text`
 - `host`: `127.0.0.1`
 - `port`: `8080`
 - `metrics`: `private`
-- `defaultExecutionMode`: `local`
+- `default_execution_mode`: `local`
 - `coordinator.enabled`: `true`
 - `terminal.enabled`: `false`
 - `audit.enabled`: `true`
 
 ### Auto-generated Paths
-When not specified, these paths are automatically set based on `paths.dataDir`:
-- `paths.dagRunsDir`: `{paths.dataDir}/dag-runs` - Stores DAG run history
-- `paths.queueDir`: `{paths.dataDir}/queue` - Stores queue data
-- `paths.procDir`: `{paths.dataDir}/proc` - Stores process data
+When not specified, these paths are automatically set based on `paths.data_dir`:
+- `paths.dagRunsDir`: `{paths.data_dir}/dag-runs` - Stores DAG run history
+- `paths.queueDir`: `{paths.data_dir}/queue` - Stores queue data
+- `paths.procDir`: `{paths.data_dir}/proc` - Stores process data
 - `paths.executable`: Current executable path - Auto-detected from running process
 
 ## Supported Log Encodings
 
-The `ui.logEncodingCharset` configuration option supports a wide range of character encodings for reading log files. This is useful when your DAG steps produce output in non-UTF-8 encodings.
+The `ui.log_encoding_charset` configuration option supports a wide range of character encodings for reading log files. This is useful when your DAG steps produce output in non-UTF-8 encodings.
 
 ### Common Encodings
 
@@ -594,15 +595,15 @@ The `ui.logEncodingCharset` configuration option supports a wide range of charac
 ```yaml
 # For Japanese logs (Shift_JIS encoding)
 ui:
-  logEncodingCharset: "shift_jis"
+  log_encoding_charset: "shift_jis"
 
 # For Russian logs (KOI8-R encoding)
 ui:
-  logEncodingCharset: "koi8-r"
+  log_encoding_charset: "koi8-r"
 
 # For legacy Windows systems
 ui:
-  logEncodingCharset: "windows-1252"
+  log_encoding_charset: "windows-1252"
 ```
 
 ## See Also

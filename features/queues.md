@@ -12,7 +12,7 @@ Dagu's queue system helps you:
 
 **How Queues Work:**
 
-- **Global queues** (defined in `config.yaml`) control concurrency via `maxConcurrency`
+- **Global queues** (defined in `config.yaml`) control concurrency via `max_concurrency`
 - **Local queues** (per-DAG, used when no `queue` field is set) always process FIFO with concurrency of 1
 - To control concurrent execution, define global queues and assign DAGs using the `queue` field
 
@@ -28,7 +28,7 @@ steps:
   - command: echo "Processing batch"
 ```
 
-The queue's `maxConcurrency` (defined in `config.yaml`) controls how many DAGs assigned to this queue can run concurrently.
+The queue's `max_concurrency` (defined in `config.yaml`) controls how many DAGs assigned to this queue can run concurrently.
 
 ## Global Queue Configuration
 
@@ -40,11 +40,11 @@ queues:
   enabled: true
   config:
     - name: "critical"
-      maxConcurrency: 5      # 5 critical jobs concurrently
+      max_concurrency: 5      # 5 critical jobs concurrently
     - name: "batch"
-      maxConcurrency: 1      # One batch job at a time
+      max_concurrency: 1      # One batch job at a time
     - name: "reporting"
-      maxConcurrency: 3      # 3 reports concurrently
+      max_concurrency: 3      # 3 reports concurrently
 ```
 
 ## Default Queue via Base Config
@@ -56,7 +56,7 @@ Set a default queue for all workflows in your base config:
 queue: "default"
 
 # All DAGs inherit this queue assignment
-# Define the "default" queue in config.yaml with desired maxConcurrency
+# Define the "default" queue in config.yaml with desired max_concurrency
 ```
 
 ## Manual Queue Management

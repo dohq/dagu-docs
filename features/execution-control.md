@@ -110,7 +110,7 @@ queues:
   enabled: true
   config:
     - name: "batch"
-      maxConcurrency: 2  # Allow 2 concurrent instances
+      max_concurrency: 2  # Allow 2 concurrent instances
 ```
 
 ```yaml

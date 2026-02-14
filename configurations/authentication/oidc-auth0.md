@@ -50,9 +50,9 @@ Configure Dagu with Auth0 as OIDC provider.
 # ~/.config/dagu/config.yaml
 auth:
   oidc:
-    clientId: "your-auth0-client-id"
-    clientSecret: "your-auth0-client-secret"
-    clientUrl: "http://localhost:8080"
+    client_id: "your-auth0-client-id"
+    client_secret: "your-auth0-client-secret"
+    client_url: "http://localhost:8080"
     issuer: "https://your-tenant.auth0.com/"
     scopes:
       - "openid"
@@ -159,15 +159,15 @@ Users can now login with social accounts through Auth0.
    ```yaml
    auth:
      oidc:
-       clientId: "production-client-id"
-       clientSecret: "production-secret"
-       clientUrl: "https://dagu.example.com"
+       client_id: "production-client-id"
+       client_secret: "production-secret"
+       client_url: "https://dagu.example.com"
        issuer: "https://your-tenant.auth0.com/"
    
    # Enable HTTPS
    tls:
-     certFile: "/etc/ssl/dagu.crt"
-     keyFile: "/etc/ssl/dagu.key"
+     cert_file: "/etc/ssl/dagu.crt"
+     key_file: "/etc/ssl/dagu.key"
    ```
 
 ### Rate Limits

@@ -31,7 +31,7 @@ Override the default path in your server configuration:
 ```yaml
 # ~/.config/dagu/config.yaml
 paths:
-  baseConfig: "/path/to/custom/base.yaml"
+  base_config: "/path/to/custom/base.yaml"
 ```
 
 Or via environment variable:
@@ -353,7 +353,7 @@ worker_selector:
   capability: gpu
 ```
 
-To force local execution for a specific DAG (overriding `defaultExecutionMode: distributed`):
+To force local execution for a specific DAG (overriding `default_execution_mode: distributed`):
 
 ```yaml
 # my-local-dag.yaml

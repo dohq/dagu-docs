@@ -22,42 +22,42 @@ Rules implemented by `internal/gitsync/service.go`:
 ## Configuration
 
 ```yaml
-gitSync:
+git_sync:
   enabled: true
   repository: github.com/your-org/dags
   branch: main
   path: ""  # subdirectory in repo (empty = root)
-  pushEnabled: true
+  push_enabled: true
 
   auth:
     type: token
     token: ${GITHUB_TOKEN}
 
-  autoSync:
+  auto_sync:
     enabled: true
-    onStartup: true
+    on_startup: true
     interval: 300
 
   commit:
-    authorName: Dagu
-    authorEmail: dagu@localhost
+    author_name: Dagu
+    author_email: dagu@localhost
 ```
 
-Defaults applied when `gitSync.enabled: true`:
+Defaults applied when `git_sync.enabled: true`:
 - `branch: main`
-- `pushEnabled: true`
+- `push_enabled: true`
 - `auth.type: token`
-- `autoSync.onStartup: true`
-- `autoSync.interval: 300`
-- `commit.authorName: Dagu`
-- `commit.authorEmail: dagu@localhost`
+- `auto_sync.on_startup: true`
+- `auto_sync.interval: 300`
+- `commit.author_name: Dagu`
+- `commit.author_email: dagu@localhost`
 
 ## Authentication
 
 ### HTTPS token
 
 ```yaml
-gitSync:
+git_sync:
   repository: github.com/your-org/dags
   branch: main
   auth:
@@ -75,13 +75,13 @@ export DAGU_GITSYNC_AUTH_TOKEN=ghp_xxxxxxxxxxxx
 Use SSH repository format, for example `git@github.com:org/repo.git`.
 
 ```yaml
-gitSync:
+git_sync:
   repository: git@github.com:your-org/dags.git
   branch: main
   auth:
     type: ssh
-    sshKeyPath: /home/user/.ssh/id_ed25519
-    sshPassphrase: ${SSH_PASSPHRASE}
+    ssh_key_path: /home/user/.ssh/id_ed25519
+    ssh_passphrase: ${SSH_PASSPHRASE}
 ```
 
 ```bash
@@ -231,18 +231,18 @@ API permission checks for sync endpoints:
 
 - `/sync/status`, `/sync/config`, and `/sync/test-connection` return non-error responses even when sync is not configured.
 - `/sync/items/{itemId}/diff` requires sync service configuration.
-- write operations (`/sync/pull`, `/sync/publish-all`, `/sync/items/{itemId}/publish`, `/sync/items/{itemId}/discard`) require `server.permissions.writeDAGs`.
+- write operations (`/sync/pull`, `/sync/publish-all`, `/sync/items/{itemId}/publish`, `/sync/items/{itemId}/discard`) require `server.permissions.write_dags`.
 - authenticated users on write operations must satisfy `Role.CanWrite()` (`admin` or `manager`).
-- write operations are blocked when Git Sync is read-only (`gitSync.enabled=true` and `pushEnabled=false`).
+- write operations are blocked when Git Sync is read-only (`git_sync.enabled=true` and `push_enabled=false`).
 - Config update (`PUT /sync/config`): admin only.
 
 ## Data On Disk
 
 | path | purpose |
 |---|---|
-| `{dagsDir}/` | local DAG and memory files |
-| `{dataDir}/gitsync/state.json` | sync state |
-| `{dataDir}/gitsync/repo/` | local Git checkout cache |
+| `{dags_dir}/` | local DAG and memory files |
+| `{data_dir}/gitsync/state.json` | sync state |
+| `{data_dir}/gitsync/repo/` | local Git checkout cache |
 
 `state.json` top-level fields:
 - `version`

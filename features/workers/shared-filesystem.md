@@ -130,7 +130,7 @@ dagu worker --worker.labels gpu=true,memory=64G
 ```yaml
 # config.yaml (same on all nodes)
 paths:
-  dataDir: "/shared/dagu/data"        # Must be shared
+  data_dir: "/shared/dagu/data"        # Must be shared
   log_dir: "/shared/dagu/logs"         # Must be shared
   serviceRegistryDir: "/shared/dagu/service-registry"  # Must be shared
 
