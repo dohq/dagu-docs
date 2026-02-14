@@ -35,9 +35,6 @@ auth:
     token:
       secret: your-secure-random-secret-key
       ttl: 24h
-  # Optional: API token for programmatic access (works alongside JWT)
-  token:
-    value: your-api-token
 ```
 
 ### Token TTL Format
@@ -226,17 +223,6 @@ volumes:
 ## Important Notes
 
 - **Basic Auth Ignored**: When `auth.mode` is set to `builtin`, any `auth.basic` configuration is ignored. A warning will be logged. Use the builtin admin credentials instead.
-- **API Token Support**: API tokens (`auth.token.value`) work alongside builtin auth for programmatic access without requiring JWT login.
-
-  ```yaml
-  auth:
-    mode: builtin
-    builtin:
-      token:
-        secret: your-jwt-secret
-    token:
-      value: your-api-token  # Use with: curl -H "Authorization: Bearer your-api-token"
-  ```
 
 ## Security Notes
 

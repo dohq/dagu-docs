@@ -13,7 +13,6 @@ The API supports multiple authentication methods:
 - **API Keys**: Include `Authorization: Bearer dagu_<key>` header (requires Builtin Auth)
 - **Webhooks**: Include `Authorization: Bearer dagu_wh_<token>` header for triggering specific DAGs (requires Builtin Auth)
 - **JWT Token**: Include `Authorization: Bearer <jwt-token>` header (from login endpoint)
-- **Static Token**: Include `Authorization: Bearer <token>` header (configured via `auth.token.value`)
 - **Basic Auth**: Include `Authorization: Basic <base64(username:password)>` header
 - **No Authentication**: When auth is disabled (default for local development)
 

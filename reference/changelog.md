@@ -24,6 +24,8 @@
 
 - **API v1**: The legacy v1 API (`/api/v1/*`) has been completely removed from the codebase. All clients should migrate to the v2 API (`/api/v1/*`). The v1 API was previously disabled when authentication was enabled (v1.26.2), and is now fully removed.
 
+- **Static API Token (`auth.token`)**: The `auth.token.value` configuration field and `DAGU_AUTH_TOKEN` environment variable have been removed. Use API keys (builtin auth mode) or basic auth instead. API keys provide role-based access control and usage tracking. See [API Keys](/configurations/authentication/api-keys) for migration.
+
 - **Deprecated YAML Fields**: The following deprecated fields have been removed from the YAML spec. Migrate to the replacement fields:
 
   | Removed Field | Replacement | Context |
