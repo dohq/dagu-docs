@@ -8,7 +8,6 @@ Configure authentication and access control for your Dagu instance.
 - [API Keys](authentication/api-keys) - Programmatic access with role-based permissions (requires Builtin Auth)
 - [Webhooks](authentication/webhooks) - DAG-specific tokens for external integrations (requires Builtin Auth)
 - [Basic Authentication](authentication/basic) - Simple username and password authentication
-- [Token Authentication](authentication/token) - API token-based authentication
 - [OIDC Authentication](authentication/oidc) - OpenID Connect authentication
 - [TLS/HTTPS](authentication/tls) - Encrypted connections
 - [Remote Nodes](authentication/remote-nodes) - Multi-instance authentication

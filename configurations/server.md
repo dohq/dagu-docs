@@ -176,11 +176,9 @@ All options support `DAGU_` prefix:
 - `DAGU_AUTH_ADMIN_PASSWORD` - Initial admin password (auto-generated if empty)
 
 *Basic Auth:*
+- `DAGU_AUTH_BASIC_ENABLED` - Enable basic auth
 - `DAGU_AUTH_BASIC_USERNAME` - Basic auth username
 - `DAGU_AUTH_BASIC_PASSWORD` - Basic auth password
-
-*Token Auth:*
-- `DAGU_AUTH_TOKEN` - API token
 
 *OIDC Auth:*
 - `DAGU_AUTH_OIDC_CLIENT_ID` - OIDC client ID

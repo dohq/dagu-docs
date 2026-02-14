@@ -223,11 +223,9 @@ All options support `DAGU_` prefix.
 - `DAGU_USERS_DIR` - User data directory (default: `{data_dir}/users`)
 
 #### Basic Auth
+- `DAGU_AUTH_BASIC_ENABLED` - Enable basic auth
 - `DAGU_AUTH_BASIC_USERNAME` - Basic auth username
 - `DAGU_AUTH_BASIC_PASSWORD` - Basic auth password
-
-#### Token Auth
-- `DAGU_AUTH_TOKEN` - API token for token authentication
 
 #### OIDC Auth
 Core OIDC settings (used by both standalone OIDC mode and builtin+OIDC):

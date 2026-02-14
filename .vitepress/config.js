@@ -152,7 +152,6 @@ const fullSidebar = [
           { text: "API Keys", link: "/configurations/authentication/api-keys" },
           { text: "Webhooks", link: "/configurations/authentication/webhooks" },
           { text: "Basic Auth", link: "/configurations/authentication/basic" },
-          { text: "Token Auth", link: "/configurations/authentication/token" },
           { text: "OIDC", link: "/configurations/authentication/oidc" },
           {
             text: "OIDC - Google",
