@@ -1,13 +1,13 @@
 # TLS/HTTPS Configuration
 
-Enable encrypted connections for Dagu.
+Enable encrypted connections for Boltbase.
 
 ## Configuration
 
 ### YAML Configuration
 
 ```yaml
-# ~/.config/dagu/config.yaml
+# ~/.config/boltbase/config.yaml
 tls:
   cert_file: /path/to/server.crt
   key_file: /path/to/server.key
@@ -17,10 +17,10 @@ tls:
 ### Environment Variables
 
 ```bash
-export DAGU_CERT_FILE=/path/to/server.crt
-export DAGU_KEY_FILE=/path/to/server.key
+export BOLTBASE_CERT_FILE=/path/to/server.crt
+export BOLTBASE_KEY_FILE=/path/to/server.key
 
-dagu start-all
+boltbase start-all
 ```
 
 ## Generate Certificates
@@ -41,7 +41,7 @@ openssl genrsa -out server.key 4096
 
 # Generate certificate signing request
 openssl req -new -key server.key -out server.csr \
-  -subj "/C=US/ST=State/L=City/O=Organization/CN=dagu.example.com"
+  -subj "/C=US/ST=State/L=City/O=Organization/CN=boltbase.example.com"
 
 # Submit CSR to your CA and get signed certificate
 ```
@@ -55,19 +55,19 @@ openssl req -new -key server.key -out server.csr \
 curl -k https://localhost:8080/api/v1/dags
 
 # With CA-signed certificate
-curl https://dagu.example.com/api/v1/dags
+curl https://boltbase.example.com/api/v1/dags
 ```
 
 ## Multi-Environment Setup
 
 ```bash
 # Development (HTTP)
-dagu start-all
+boltbase start-all
 
 # Production (HTTPS)
-export DAGU_CERT_FILE=/etc/ssl/dagu.crt
-export DAGU_KEY_FILE=/etc/ssl/dagu.key
-dagu start-all
+export BOLTBASE_CERT_FILE=/etc/ssl/boltbase.crt
+export BOLTBASE_KEY_FILE=/etc/ssl/boltbase.key
+boltbase start-all
 ```
 
 ## Notes

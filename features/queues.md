@@ -4,7 +4,7 @@ Control concurrent execution and resource usage with queues.
 
 ## Overview
 
-Dagu's queue system helps you:
+Boltbase's queue system helps you:
 - Limit concurrent workflow executions
 - Manage resource usage
 - Prioritize critical workflows
@@ -35,7 +35,7 @@ The queue's `max_concurrency` (defined in `config.yaml`) controls how many DAGs 
 Configure queues in server config:
 
 ```yaml
-# ~/.config/dagu/config.yaml
+# ~/.config/boltbase/config.yaml
 queues:
   enabled: true
   config:
@@ -52,7 +52,7 @@ queues:
 Set a default queue for all workflows in your base config:
 
 ```yaml
-# ~/.config/dagu/base.yaml
+# ~/.config/boltbase/base.yaml
 queue: "default"
 
 # All DAGs inherit this queue assignment
@@ -65,24 +65,24 @@ queue: "default"
 
 ```bash
 # Basic enqueue
-dagu enqueue workflow.yaml
+boltbase enqueue workflow.yaml
 
 # With custom run ID
-dagu enqueue workflow.yaml --run-id=batch-2024-01-15
+boltbase enqueue workflow.yaml --run-id=batch-2024-01-15
 
 # With parameters
-dagu enqueue process.yaml -- DATE=2024-01-15 TYPE=daily
+boltbase enqueue process.yaml -- DATE=2024-01-15 TYPE=daily
 
 # Override the queue at enqueue-time
-dagu enqueue --queue=high-priority workflow.yaml
+boltbase enqueue --queue=high-priority workflow.yaml
 ```
 
 ### Remove from Queue
 
 ```bash
 # Remove the next item in a queue
-dagu dequeue default
+boltbase dequeue default
 
 # Remove a specific run from a queue
-dagu dequeue default --dag-run=workflow:batch-2024-01-15
+boltbase dequeue default --dag-run=workflow:batch-2024-01-15
 ```

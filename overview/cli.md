@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Dagu CLI provides all the necessary commands to manage and execute DAGs (workflows) directly from the terminal. It allows you to start, stop, retry, and monitor workflows, as well as manage the underlying scheduler and web server.
+The Boltbase CLI provides all the necessary commands to manage and execute DAGs (workflows) directly from the terminal. It allows you to start, stop, retry, and monitor workflows, as well as manage the underlying scheduler and web server.
 
 ::: tip Complete Reference
 For the full CLI command reference, see [CLI Commands Reference](/reference/cli).
@@ -11,20 +11,20 @@ For the full CLI command reference, see [CLI Commands Reference](/reference/cli)
 ## Basic Usage
 
 ```bash
-dagu [global options] command [command options] [arguments...]
+boltbase [global options] command [command options] [arguments...]
 ```
 
 ### Getting Help
 
 ```bash
 # General help
-dagu --help
+boltbase --help
 
 # Command-specific help
-dagu start --help
+boltbase start --help
 
 # Show version
-dagu version
+boltbase version
 ```
 
 ## Essential Commands
@@ -34,55 +34,55 @@ dagu version
 #### Start a Workflow
 ```bash
 # Basic execution
-dagu start my-workflow.yaml
+boltbase start my-workflow.yaml
 
 # Interactive DAG selection (when no file is specified)
-dagu start
+boltbase start
 
 # With named parameters (use -- separator)
-dagu start etl.yaml -- DATE=2024-01-01 ENV=prod
+boltbase start etl.yaml -- DATE=2024-01-01 ENV=prod
 
 # With positional parameters
-dagu start my-workflow.yaml -- value1 value2 value3
+boltbase start my-workflow.yaml -- value1 value2 value3
 
 # Override DAG name
-dagu start --name my_custom_name my-workflow.yaml
+boltbase start --name my_custom_name my-workflow.yaml
 
 # Queue for later
-dagu enqueue my-workflow.yaml
+boltbase enqueue my-workflow.yaml
 
 # Remove a queued run (by queue name)
-dagu dequeue default
+boltbase dequeue default
 ```
 
 #### Stop a Running Workflow
 ```bash
 # Stop currently running workflow
-dagu stop my-workflow
+boltbase stop my-workflow
 
 # Stop specific run
-dagu stop --run-id=20240101_120000 my-workflow
+boltbase stop --run-id=20240101_120000 my-workflow
 
 # Can also use file path
-dagu stop my-workflow.yaml
+boltbase stop my-workflow.yaml
 ```
 
 #### Restart a Workflow
 ```bash
 # Restart latest run
-dagu restart my-workflow
+boltbase restart my-workflow
 
 # Restart specific run
-dagu restart --run-id=20240101_120000 my-workflow
+boltbase restart --run-id=20240101_120000 my-workflow
 ```
 
 #### Retry Failed Workflow
 ```bash
 # Retry specific run (run-id is required)
-dagu retry --run-id=20240101_120000 my-workflow
+boltbase retry --run-id=20240101_120000 my-workflow
 
 # Can also use file path
-dagu retry --run-id=20240101_120000 my-workflow.yaml
+boltbase retry --run-id=20240101_120000 my-workflow.yaml
 ```
 
 ### Monitoring Workflows
@@ -90,19 +90,19 @@ dagu retry --run-id=20240101_120000 my-workflow.yaml
 #### Check Status
 ```bash
 # Check latest run status
-dagu status my-workflow
+boltbase status my-workflow
 
 # Check specific run status
-dagu status --run-id=20240101_120000 my-workflow
+boltbase status --run-id=20240101_120000 my-workflow
 
 # Can also use file path
-dagu status my-workflow.yaml
+boltbase status my-workflow.yaml
 ```
 
 #### View Status of a DAG run
 ```bash
 # Check detailed status and output
-dagu status my-workflow.yaml
+boltbase status my-workflow.yaml
 
 # Note: For detailed logs, use the web UI at http://localhost:8080
 # or check log files in the configured log directory
@@ -114,19 +114,19 @@ The `history` command displays past DAG executions with filtering and export cap
 
 ```bash
 # View recent runs
-dagu history my-workflow
+boltbase history my-workflow
 
 # Debug recent failures
-dagu history my-workflow --status failed --last 7d
+boltbase history my-workflow --status failed --last 7d
 
 # Export to JSON for analysis
-dagu history --format json --limit 500 > history.json
+boltbase history --format json --limit 500 > history.json
 
 # Export to CSV for spreadsheets
-dagu history --format csv > history.csv
+boltbase history --format csv > history.csv
 
 # Filter by tags (AND logic)
-dagu history --tags "prod,critical"
+boltbase history --tags "prod,critical"
 ```
 
 **Key features:**
@@ -143,7 +143,7 @@ See [`history` reference](/reference/cli#history) for all options.
 #### Validate DAG Specification
 ```bash
 # Validate DAG structure and references
-dagu validate my-workflow.yaml
+boltbase validate my-workflow.yaml
 
 # Returns human-readable validation errors if any
 ```
@@ -151,13 +151,13 @@ dagu validate my-workflow.yaml
 #### Dry Run
 ```bash
 # Test DAG execution without running it
-dagu dry my-workflow.yaml
+boltbase dry my-workflow.yaml
 
 # With parameters
-dagu dry my-workflow.yaml -- DATE=2024-01-01
+boltbase dry my-workflow.yaml -- DATE=2024-01-01
 
 # Override DAG name
-dagu dry --name my_custom_name my-workflow.yaml
+boltbase dry --name my_custom_name my-workflow.yaml
 ```
 
 ### Server Commands
@@ -165,34 +165,34 @@ dagu dry --name my_custom_name my-workflow.yaml
 #### Start Everything
 ```bash
 # Start scheduler, web UI, and coordinator service (default: localhost:8080)
-dagu start-all
+boltbase start-all
 
 # Custom host and port
-dagu start-all --host=0.0.0.0 --port=9000
+boltbase start-all --host=0.0.0.0 --port=9000
 
 # Custom DAGs directory
-dagu start-all --dags=/path/to/directory
+boltbase start-all --dags=/path/to/directory
 ```
 
 #### Start Scheduler Only
 ```bash
 # Run just the scheduler (no UI)
-dagu scheduler
+boltbase scheduler
 
 # Custom DAGs directory
-dagu scheduler --dags=/opt/workflows
+boltbase scheduler --dags=/opt/workflows
 ```
 
 #### Start Web UI Only
 ```bash
 # Run just the web server (no scheduler)
-dagu server
+boltbase server
 
 # Custom host and port
-dagu server --host=0.0.0.0 --port=9000
+boltbase server --host=0.0.0.0 --port=9000
 
 # Custom DAGs directory
-dagu server --dags=/path/to/directory
+boltbase server --dags=/path/to/directory
 ```
 
 ### Distributed Execution Commands
@@ -200,13 +200,13 @@ dagu server --dags=/path/to/directory
 #### Start Coordinator
 ```bash
 # Start the coordinator gRPC server
-dagu coordinator
+boltbase coordinator
 
 # Custom host and port
-dagu coordinator --coordinator.host=0.0.0.0 --coordinator.port=50055
+boltbase coordinator --coordinator.host=0.0.0.0 --coordinator.port=50055
 
 # With TLS
-dagu coordinator \
+boltbase coordinator \
   --peer.cert-file=server.pem \
   --peer.key-file=server-key.pem
 ```
@@ -216,13 +216,13 @@ The coordinator service manages task distribution to workers for distributed exe
 #### Start Worker
 ```bash
 # Start a worker that polls for tasks
-dagu worker
+boltbase worker
 
 # With labels for capability matching
-dagu worker --worker.labels gpu=true,memory=64G,region=us-east-1
+boltbase worker --worker.labels gpu=true,memory=64G,region=us-east-1
 
 # With custom worker ID and concurrency
-dagu worker \
+boltbase worker \
   --worker.id=gpu-worker-01 \
   --worker.max-active-runs=50
 ```
@@ -231,10 +231,10 @@ Workers automatically register in the service registry system and poll the coord
 
 ### Interactive DAG Selection
 
-When you run `dagu start` without specifying a DAG file, an interactive selector appears:
+When you run `boltbase start` without specifying a DAG file, an interactive selector appears:
 
 ```bash
-dagu start
+boltbase start
 ```
 
 Features:
@@ -248,25 +248,25 @@ Features:
 
 ```bash
 # Add to queue
-dagu enqueue my-workflow.yaml
+boltbase enqueue my-workflow.yaml
 
 # Add to queue with custom ID
-dagu enqueue --run-id=custom-001 my-workflow.yaml
+boltbase enqueue --run-id=custom-001 my-workflow.yaml
 
 # Add to queue with parameters
-dagu enqueue my-workflow.yaml -- KEY=value
+boltbase enqueue my-workflow.yaml -- KEY=value
 
 # Add to queue using a specific queue (override)
-dagu enqueue --queue=high-priority my-workflow.yaml
+boltbase enqueue --queue=high-priority my-workflow.yaml
 
 # Override DAG name
-dagu enqueue --name my_custom_name my-workflow.yaml
+boltbase enqueue --name my_custom_name my-workflow.yaml
 
 # Remove next item from queue
-dagu dequeue default
+boltbase dequeue default
 
 # Remove specific run from queue
-dagu dequeue default --dag-run=my-workflow:custom-001
+boltbase dequeue default --dag-run=my-workflow:custom-001
 ```
 
 ### Working with Parameters
@@ -275,13 +275,13 @@ Parameters can be passed in multiple ways:
 
 ```bash
 # Positional parameters (use -- separator)
-dagu start my-workflow.yaml -- param1 param2 param3
+boltbase start my-workflow.yaml -- param1 param2 param3
 
 # Named parameters (use -- separator)
-dagu start my-workflow.yaml -- KEY1=value1 KEY2=value2
+boltbase start my-workflow.yaml -- KEY1=value1 KEY2=value2
 
 # Mixed (use -- separator)
-dagu start my-workflow.yaml -- param1 KEY=value param2
+boltbase start my-workflow.yaml -- param1 KEY=value param2
 ```
 
 ## CLI Configuration
@@ -290,7 +290,7 @@ dagu start my-workflow.yaml -- param1 KEY=value param2
 
 | Option | Description | Default |
 |--------|-------------|---------|
-| `--config` | Config file path | `~/.config/dagu/config.yaml` |
+| `--config` | Config file path | `~/.config/boltbase/config.yaml` |
 | `--log-level` | Log verbosity | `info` |
 | `--log-format` | Output format | `text` |
 | `--quiet` | Suppress output | `false` |

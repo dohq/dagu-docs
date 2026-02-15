@@ -41,7 +41,7 @@
     monospace;
 
   /* Custom gradient for hero text - warm sepia tones */
-  --dagu-gradient: linear-gradient(120deg, #c4956a 0%, #8b7355 100%);
+  --boltbase-gradient: linear-gradient(120deg, #c4956a 0%, #8b7355 100%);
 }
 
 .dark {
@@ -63,7 +63,7 @@
 
 /* Hero Section Styling */
 .VPHero .name {
-  background: var(--dagu-gradient);
+  background: var(--boltbase-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

@@ -1,6 +1,6 @@
 # Core Concepts
 
-Essential concepts for working with Dagu.
+Essential concepts for working with Boltbase.
 
 ## DAG (Directed Acyclic Graph)
 
@@ -80,7 +80,7 @@ steps:
 
 Override at runtime:
 ```bash
-dagu start workflow.yaml -- ENV=prod REGION=eu-west-1
+boltbase start workflow.yaml -- ENV=prod REGION=eu-west-1
 ```
 
 ### Variables

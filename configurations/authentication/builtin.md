@@ -25,7 +25,7 @@ Builtin authentication provides user management with role-based access control (
 ### YAML Configuration
 
 ```yaml
-# ~/.config/dagu/config.yaml
+# ~/.config/boltbase/config.yaml
 auth:
   mode: builtin
   builtin:
@@ -69,17 +69,17 @@ You can also combine units: `1h30m`, `2h45m30s`
 
 ```bash
 # Required
-export DAGU_AUTH_MODE=builtin
-export DAGU_AUTH_TOKEN_SECRET=your-secure-random-secret-key
+export BOLTBASE_AUTH_MODE=builtin
+export BOLTBASE_AUTH_TOKEN_SECRET=your-secure-random-secret-key
 
 # Optional - admin credentials
-export DAGU_AUTH_ADMIN_USERNAME=admin  # default: admin
-export DAGU_AUTH_ADMIN_PASSWORD=       # auto-generated if not set
+export BOLTBASE_AUTH_ADMIN_USERNAME=admin  # default: admin
+export BOLTBASE_AUTH_ADMIN_PASSWORD=       # auto-generated if not set
 
 # Optional - token settings
-export DAGU_AUTH_TOKEN_TTL=24h         # default: 24h
+export BOLTBASE_AUTH_TOKEN_TTL=24h         # default: 24h
 
-dagu start-all
+boltbase start-all
 ```
 
 ## Initial Setup
@@ -87,7 +87,7 @@ dagu start-all
 On first startup with builtin auth enabled:
 
 1. If no users exist, an admin user is automatically created
-2. If `DAGU_AUTH_ADMIN_PASSWORD` is not set, a secure password is auto-generated and printed to stdout:
+2. If `BOLTBASE_AUTH_ADMIN_PASSWORD` is not set, a secure password is auto-generated and printed to stdout:
 
 ```
 ================================================================================
@@ -205,19 +205,19 @@ curl -X PATCH http://localhost:8080/api/v1/users/{user-id} \
 
 ```yaml
 services:
-  dagu:
-    image: ghcr.io/dagu-org/dagu:latest
+  boltbase:
+    image: ghcr.io/dagu-org/boltbase:latest
     environment:
-      - DAGU_AUTH_MODE=builtin
-      - DAGU_AUTH_TOKEN_SECRET=change-me-to-secure-random-string
+      - BOLTBASE_AUTH_MODE=builtin
+      - BOLTBASE_AUTH_TOKEN_SECRET=change-me-to-secure-random-string
       # Password auto-generated on first run, printed to stdout
     ports:
       - "8080:8080"
     volumes:
-      - dagu-data:/var/lib/dagu
+      - boltbase-data:/var/lib/boltbase
 
 volumes:
-  dagu-data:
+  boltbase-data:
 ```
 
 ## Important Notes
@@ -247,7 +247,7 @@ curl -X POST http://localhost:8080/api/v1/api-keys \
   -d '{"name": "ci-pipeline", "role": "operator"}'
 
 # Use the API key
-curl -H "Authorization: Bearer dagu_your-api-key-here" \
+curl -H "Authorization: Bearer boltbase_your-api-key-here" \
   http://localhost:8080/api/v1/dags
 ```
 
@@ -262,7 +262,7 @@ For detailed documentation, see [API Keys](api-keys).
 
 ## OIDC/SSO Login
 
-Builtin authentication supports OIDC/SSO login, allowing users to authenticate via enterprise identity providers (Google, Okta, Auth0, Keycloak, etc.) while maintaining Dagu's user management and RBAC system.
+Builtin authentication supports OIDC/SSO login, allowing users to authenticate via enterprise identity providers (Google, Okta, Auth0, Keycloak, etc.) while maintaining Boltbase's user management and RBAC system.
 
 ### Enabling OIDC
 
@@ -280,7 +280,7 @@ auth:
   oidc:
     client_id: your-client-id
     client_secret: your-client-secret
-    client_url: https://dagu.example.com
+    client_url: https://boltbase.example.com
     issuer: https://accounts.google.com
     scopes: ["openid", "profile", "email"]
     # auto_signup defaults to true - users are auto-created on first login
@@ -295,17 +295,17 @@ auth:
 
 ```bash
 # OIDC configuration (auto-enabled when all required fields are set)
-export DAGU_AUTH_OIDC_CLIENT_ID=your-client-id
-export DAGU_AUTH_OIDC_CLIENT_SECRET=your-client-secret
-export DAGU_AUTH_OIDC_CLIENT_URL=https://dagu.example.com
-export DAGU_AUTH_OIDC_ISSUER=https://accounts.google.com
+export BOLTBASE_AUTH_OIDC_CLIENT_ID=your-client-id
+export BOLTBASE_AUTH_OIDC_CLIENT_SECRET=your-client-secret
+export BOLTBASE_AUTH_OIDC_CLIENT_URL=https://boltbase.example.com
+export BOLTBASE_AUTH_OIDC_ISSUER=https://accounts.google.com
 
 # Optional settings
-export DAGU_AUTH_OIDC_AUTO_SIGNUP=true                    # default: true
-export DAGU_AUTH_OIDC_DEFAULT_ROLE=viewer                 # default: viewer
-export DAGU_AUTH_OIDC_ALLOWED_DOMAINS=company.com,other.com  # comma-separated
-export DAGU_AUTH_OIDC_WHITELIST=user@example.com          # comma-separated
-export DAGU_AUTH_OIDC_BUTTON_LABEL="Login with SSO"
+export BOLTBASE_AUTH_OIDC_AUTO_SIGNUP=true                    # default: true
+export BOLTBASE_AUTH_OIDC_DEFAULT_ROLE=viewer                 # default: viewer
+export BOLTBASE_AUTH_OIDC_ALLOWED_DOMAINS=company.com,other.com  # comma-separated
+export BOLTBASE_AUTH_OIDC_WHITELIST=user@example.com          # comma-separated
+export BOLTBASE_AUTH_OIDC_BUTTON_LABEL="Login with SSO"
 ```
 
 ### Configuration Fields
@@ -314,7 +314,7 @@ export DAGU_AUTH_OIDC_BUTTON_LABEL="Login with SSO"
 |-------|-------------|---------|
 | `client_id` | OAuth2 client ID from your OIDC provider | Required |
 | `client_secret` | OAuth2 client secret | Required |
-| `client_url` | Base URL of your Dagu instance | Required |
+| `client_url` | Base URL of your Boltbase instance | Required |
 | `issuer` | OIDC provider URL | Required |
 | `scopes` | OAuth2 scopes to request | `["openid", "profile", "email"]` |
 | `auto_signup` | Auto-create users on first OIDC login | `true` |
@@ -327,9 +327,9 @@ export DAGU_AUTH_OIDC_BUTTON_LABEL="Login with SSO"
 
 ### Auto-Signup
 
-When `auto_signup` is enabled (the default), users authenticating via OIDC for the first time are automatically created in Dagu with the role specified by `role_mapping.default_role`. This eliminates the need to pre-create user accounts.
+When `auto_signup` is enabled (the default), users authenticating via OIDC for the first time are automatically created in Boltbase with the role specified by `role_mapping.default_role`. This eliminates the need to pre-create user accounts.
 
-When `auto_signup` is disabled, users must exist in Dagu before they can log in via OIDC.
+When `auto_signup` is disabled, users must exist in Boltbase before they can log in via OIDC.
 
 ### Domain Filtering
 
@@ -366,7 +366,7 @@ oidc:
 
 ### Role Mapping
 
-Map IdP groups to Dagu roles for automatic role assignment:
+Map IdP groups to Boltbase roles for automatic role assignment:
 
 ```yaml
 oidc:
@@ -374,7 +374,7 @@ oidc:
     default_role: viewer           # Role when no mapping matches (default: viewer)
     groups_claim: groups           # Claim containing user's groups
     group_mappings:
-      admins: admin               # IdP group -> Dagu role
+      admins: admin               # IdP group -> Boltbase role
       developers: developer
       ops: operator
       everyone: viewer
@@ -388,7 +388,7 @@ oidc:
 |-------|-------------|---------|
 | `default_role` | Role assigned when no mapping matches | `viewer` |
 | `groups_claim` | JWT claim containing group membership | `groups` |
-| `group_mappings` | Map of IdP group names to Dagu roles | None |
+| `group_mappings` | Map of IdP group names to Boltbase roles | None |
 | `role_attribute_path` | jq expression for advanced role extraction | None |
 | `role_attribute_strict` | Deny login when no valid role is found | `false` |
 | `skip_org_role_sync` | Only assign role on first login | `false` |
@@ -405,15 +405,15 @@ role_mapping:
 
 1. User clicks "Login with SSO" on the login page
 2. Redirected to OIDC provider for authentication
-3. After successful authentication, Dagu validates the token
+3. After successful authentication, Boltbase validates the token
 4. If `auto_signup` is enabled and user doesn't exist, a new user is created
 5. Role is determined by `role_mapping` (if configured) or `default_role`
-6. User receives a JWT token for the Dagu session
+6. User receives a JWT token for the Boltbase session
 
 ### Notes
 
 - OIDC users are managed alongside local users in the same user database
-- OIDC users can also authenticate with their Dagu password if one is set
+- OIDC users can also authenticate with their Boltbase password if one is set
 - Admin users can manage all users (OIDC and local) from the web UI
 - The callback URL is `{client_url}/oidc-callback`
 

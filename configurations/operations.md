@@ -6,23 +6,23 @@ Production deployment and monitoring.
 
 ### systemd
 
-Create `/etc/systemd/system/dagu.service`:
+Create `/etc/systemd/system/boltbase.service`:
 
 ```ini
 [Unit]
-Description=Dagu Workflow Engine
-Documentation=https://docs.daguit.dev/
+Description=Boltbase Workflow Engine
+Documentation=https://docs.boltbase.ai/
 After=network.target
 Wants=network-online.target
 
 [Service]
 Type=simple
-User=dagu
-Group=dagu
-WorkingDirectory=/opt/dagu
+User=boltbase
+Group=boltbase
+WorkingDirectory=/opt/boltbase
 
 # Main process
-ExecStart=/usr/local/bin/dagu start-all
+ExecStart=/usr/local/bin/boltbase start-all
 
 # Graceful shutdown
 ExecStop=/bin/kill -TERM $MAINPID
@@ -41,42 +41,42 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
-ReadWritePaths=/opt/dagu/data /opt/dagu/logs
+ReadWritePaths=/opt/boltbase/data /opt/boltbase/logs
 
 # Resource limits
 LimitNOFILE=65536
 LimitNPROC=4096
 
 # Environment
-EnvironmentFile=-/etc/dagu/environment
-Environment="DAGU_HOME=/opt/dagu"
+EnvironmentFile=-/etc/boltbase/environment
+Environment="BOLTBASE_HOME=/opt/boltbase"
 
 [Install]
 WantedBy=multi-user.target
 ```
 
-Create `/etc/dagu/environment`:
+Create `/etc/boltbase/environment`:
 ```bash
-DAGU_HOST=0.0.0.0
-DAGU_PORT=8080
-DAGU_TZ=America/New_York
-DAGU_LOG_FORMAT=json
+BOLTBASE_HOST=0.0.0.0
+BOLTBASE_PORT=8080
+BOLTBASE_TZ=America/New_York
+BOLTBASE_LOG_FORMAT=json
 ```
 
 Setup:
 ```bash
 # Create user and directories
-sudo useradd -r -s /bin/false dagu
-sudo mkdir -p /opt/dagu/{dags,data,logs}
-sudo chown -R dagu:dagu /opt/dagu
+sudo useradd -r -s /bin/false boltbase
+sudo mkdir -p /opt/boltbase/{dags,data,logs}
+sudo chown -R boltbase:boltbase /opt/boltbase
 
 # Enable and start
-sudo systemctl enable dagu
-sudo systemctl start dagu
+sudo systemctl enable boltbase
+sudo systemctl start boltbase
 
 # Check status
-sudo systemctl status dagu
-sudo journalctl -u dagu -f
+sudo systemctl status boltbase
+sudo journalctl -u boltbase -f
 ```
 
 ### Docker Compose
@@ -87,9 +87,9 @@ sudo journalctl -u dagu -f
 version: '3.8'
 
 services:
-  dagu:
-    image: ghcr.io/dagu-org/dagu:latest
-    container_name: dagu
+  boltbase:
+    image: ghcr.io/dagu-org/boltbase:latest
+    container_name: boltbase
     restart: unless-stopped
     
     # Health check
@@ -107,16 +107,16 @@ services:
     # Environment variables
     environment:
       # Server configuration
-      - DAGU_PORT=8080
-      - DAGU_HOST=0.0.0.0
-      - DAGU_TZ=America/New_York
+      - BOLTBASE_PORT=8080
+      - BOLTBASE_HOST=0.0.0.0
+      - BOLTBASE_TZ=America/New_York
       
       # Logging
-      - DAGU_LOG_FORMAT=json
+      - BOLTBASE_LOG_FORMAT=json
       
       # Authentication (optional)
-      # - DAGU_AUTH_BASIC_USERNAME=admin
-      # - DAGU_AUTH_BASIC_PASSWORD=your-secure-password
+      # - BOLTBASE_AUTH_BASIC_USERNAME=admin
+      # - BOLTBASE_AUTH_BASIC_PASSWORD=your-secure-password
       
       # User/Group IDs (optional)
       # - PUID=1000
@@ -127,7 +127,7 @@ services:
     
     # Volume mounts
     volumes:
-      - dagu:/var/lib/dagu
+      - boltbase:/var/lib/boltbase
       
       # Docker socket for Docker executor (optional)
       # - /var/run/docker.sock:/var/run/docker.sock
@@ -140,8 +140,8 @@ services:
         max-file: "5"
 
 volumes:
-  dagu-data:
-  dagu-logs:
+  boltbase-data:
+  boltbase-logs:
 ```
 
 ```bash
@@ -157,13 +157,13 @@ docker compose down
 
 With authentication (`.env` file):
 ```bash
-DAGU_AUTH_BASIC_USERNAME=admin
-DAGU_AUTH_BASIC_PASSWORD=secure-password
+BOLTBASE_AUTH_BASIC_USERNAME=admin
+BOLTBASE_AUTH_BASIC_PASSWORD=secure-password
 ```
 
 ### Resource Monitoring
 
-Dagu provides built-in resource monitoring that tracks CPU, memory, disk, and load average. The data is displayed in the System Status page of the web UI.
+Boltbase provides built-in resource monitoring that tracks CPU, memory, disk, and load average. The data is displayed in the System Status page of the web UI.
 
 **Configuration:**
 ```yaml
@@ -175,8 +175,8 @@ monitoring:
 
 ```bash
 # Or via environment variables
-export DAGU_MONITORING_RETENTION=12h
-export DAGU_MONITORING_INTERVAL=10s
+export BOLTBASE_MONITORING_RETENTION=12h
+export BOLTBASE_MONITORING_INTERVAL=10s
 ```
 
 **Metrics collected:**
@@ -202,15 +202,15 @@ Resource history is stored in memory. With default settings (5s interval, 24h re
 Metrics available at `/api/v1/metrics`:
 
 **System:**
-- `dagu_info` - Build information
-- `dagu_uptime_seconds` - Uptime
-- `dagu_scheduler_running` - Scheduler status
+- `boltbase_info` - Build information
+- `boltbase_uptime_seconds` - Uptime
+- `boltbase_scheduler_running` - Scheduler status
 
 **DAGs:**
-- `dagu_dags_total` - Total DAGs
-- `dagu_dag_runs_currently_running` - Running DAGs
-- `dagu_dag_runs_queued_total` - Queued DAGs
-- `dagu_dag_runs_total` - DAG runs by status (24h)
+- `boltbase_dags_total` - Total DAGs
+- `boltbase_dag_runs_currently_running` - Running DAGs
+- `boltbase_dag_runs_queued_total` - Queued DAGs
+- `boltbase_dag_runs_total` - DAG runs by status (24h)
 
 **Standard:**
 - Go runtime metrics
@@ -223,14 +223,14 @@ Metrics available at `/api/v1/metrics`:
 log_format: json    # text or json
 debug: true       # Debug mode
 paths:
-  log_dir: /var/log/dagu
+  log_dir: /var/log/boltbase
 ```
 
 ```bash
 # Or via environment
-export DAGU_LOG_FORMAT=json
-export DAGU_DEBUG=true
-export DAGU_LOG_DIR=/var/log/dagu
+export BOLTBASE_LOG_FORMAT=json
+export BOLTBASE_DEBUG=true
+export BOLTBASE_LOG_DIR=/var/log/boltbase
 ```
 
 JSON log example:
@@ -268,20 +268,20 @@ Deletes:
 
 #### Viewing Run History
 
-Before cleaning up logs, review execution history with `dagu history`:
+Before cleaning up logs, review execution history with `boltbase history`:
 
 ```bash
 # Preview what cleanup would affect
-dagu history my-workflow --limit 100
+boltbase history my-workflow --limit 100
 
 # Check run status before deletion
-dagu history my-workflow --from 2025-01-01 --to 2025-12-31
+boltbase history my-workflow --from 2025-01-01 --to 2025-12-31
 ```
 
 The `history` command helps:
 - Identify which runs to keep/delete
 - Verify cleanup results
-- Export run metadata before cleanup: `dagu history --format json`
+- Export run metadata before cleanup: `boltbase history --format json`
 
 See [`history` CLI reference](/reference/cli#history) and [`cleanup` command](/reference/cli#cleanup).
 
@@ -298,7 +298,7 @@ smtp:
   password: "${SMTP_PASSWORD}"
 
 error_mail:
-  from: "dagu@company.com"
+  from: "boltbase@company.com"
   to: "ops-team@company.com"
   prefix: "[ERROR]"
   attach_logs: true
@@ -361,7 +361,7 @@ handler_on:
 
 ### Environment Variable Filtering
 
-Dagu implements environment variable filtering to prevent accidental exposure of sensitive data to step processes and sub DAGs.
+Boltbase implements environment variable filtering to prevent accidental exposure of sensitive data to step processes and sub DAGs.
 
 **How It Works:**
 
@@ -372,9 +372,9 @@ System environment variables are available for variable expansion (`${VAR}`) whe
 Only these system environment variables are automatically passed to step processes and sub DAGs:
 
 - **Whitelisted:** `PATH`, `HOME`, `LANG`, `TZ`, `SHELL`
-- **Allowed Prefixes:** `DAGU_*`, `LC_*`, `DAG_*`
+- **Allowed Prefixes:** `BOLTBASE_*`, `LC_*`, `DAG_*`
 
-**Note:** Dagu automatically sets special variables with the `DAG_*` prefix for every step execution:
+**Note:** Boltbase automatically sets special variables with the `DAG_*` prefix for every step execution:
 - `DAG_NAME`, `DAG_RUN_ID`, `DAG_RUN_STEP_NAME`
 - `DAG_RUN_LOG_FILE`, `DAG_RUN_STEP_STDOUT_FILE`, `DAG_RUN_STEP_STDERR_FILE`
 
@@ -421,7 +421,7 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
-ReadWritePaths=/opt/dagu/data /opt/dagu/logs
+ReadWritePaths=/opt/boltbase/data /opt/boltbase/logs
 ```
 
 ## See Also

@@ -1,13 +1,13 @@
 # Basic Authentication
 
-Username and password authentication for Dagu.
+Username and password authentication for Boltbase.
 
 ## Configuration
 
 ### YAML Configuration
 
 ```yaml
-# ~/.config/dagu/config.yaml
+# ~/.config/boltbase/config.yaml
 auth:
   basic:
     enabled: true
@@ -18,11 +18,11 @@ auth:
 ### Environment Variables
 
 ```bash
-export DAGU_AUTH_BASIC_ENABLED=true
-export DAGU_AUTH_BASIC_USERNAME=admin
-export DAGU_AUTH_BASIC_PASSWORD=secure-password
+export BOLTBASE_AUTH_BASIC_ENABLED=true
+export BOLTBASE_AUTH_BASIC_USERNAME=admin
+export BOLTBASE_AUTH_BASIC_PASSWORD=secure-password
 
-dagu start-all
+boltbase start-all
 ```
 
 ## Usage
@@ -31,10 +31,10 @@ dagu start-all
 
 ```bash
 # Using environment variables
-export DAGU_AUTH_BASIC_ENABLED=true
-export DAGU_AUTH_BASIC_USERNAME=admin
-export DAGU_AUTH_BASIC_PASSWORD=secure-password
-dagu status
+export BOLTBASE_AUTH_BASIC_ENABLED=true
+export BOLTBASE_AUTH_BASIC_USERNAME=admin
+export BOLTBASE_AUTH_BASIC_PASSWORD=secure-password
+boltbase status
 ```
 
 ### API Access

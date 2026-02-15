@@ -6,66 +6,66 @@ See [Docker Images](./docker-images.md) to choose between the standard, alpine, 
 
 ```bash
 docker run -d \
-  --name dagu \
+  --name boltbase \
   -p 8525:8080 \
-  -v dagu-data:/var/lib/dagu \
-  ghcr.io/dagu-org/dagu:latest
+  -v boltbase-data:/var/lib/boltbase \
+  ghcr.io/dagu-org/boltbase:latest
 ```
 
 ## With Custom DAGs Directory
 
 ```bash
 docker run -d \
-  --name dagu \
+  --name boltbase \
   -p 8525:8080 \
-  -v ./dags:/var/lib/dagu/dags \
-  -v dagu-data:/var/lib/dagu \
-  -e DAGU_HOST=0.0.0.0 \
-  -e DAGU_PORT=8080 \
-  ghcr.io/dagu-org/dagu:latest
+  -v ./dags:/var/lib/boltbase/dags \
+  -v boltbase-data:/var/lib/boltbase \
+  -e BOLTBASE_HOST=0.0.0.0 \
+  -e BOLTBASE_PORT=8080 \
+  ghcr.io/dagu-org/boltbase:latest
 ```
 
 ## With Docker Executor Support
 
 ```bash
 docker run -d \
-  --name dagu \
+  --name boltbase \
   -p 8525:8080 \
-  -v dagu-data:/var/lib/dagu \
+  -v boltbase-data:/var/lib/boltbase \
   -v /var/run/docker.sock:/var/run/docker.sock \
   --user 0:0 \
-  ghcr.io/dagu-org/dagu:latest
+  ghcr.io/dagu-org/boltbase:latest
 ```
 
 ## Environment Variables
 
 ```bash
 docker run -d \
-  --name dagu \
+  --name boltbase \
   -p 8525:8080 \
-  -v dagu-data:/var/lib/dagu \
-  -e DAGU_HOST=0.0.0.0 \
-  -e DAGU_PORT=8080 \
-  -e DAGU_TZ=America/New_York \
-  -e DAGU_AUTH_BASIC_USERNAME=admin \
-  -e DAGU_AUTH_BASIC_PASSWORD=password \
-  ghcr.io/dagu-org/dagu:latest
+  -v boltbase-data:/var/lib/boltbase \
+  -e BOLTBASE_HOST=0.0.0.0 \
+  -e BOLTBASE_PORT=8080 \
+  -e BOLTBASE_TZ=America/New_York \
+  -e BOLTBASE_AUTH_BASIC_USERNAME=admin \
+  -e BOLTBASE_AUTH_BASIC_PASSWORD=password \
+  ghcr.io/dagu-org/boltbase:latest
 ```
 
 ## Container Management
 
 ```bash
 # View logs
-docker logs -f dagu
+docker logs -f boltbase
 
 # Stop container
-docker stop dagu
+docker stop boltbase
 
 # Start container
-docker start dagu
+docker start boltbase
 
 # Remove container
-docker rm -f dagu
+docker rm -f boltbase
 ```
 
 ## Access

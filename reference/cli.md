@@ -9,11 +9,11 @@ Commands accept either DAG names (from YAML `name` field) or file paths.
 ## Global Options
 
 ```bash
-dagu [global options] command [command options] [arguments...]
+boltbase [global options] command [command options] [arguments...]
 ```
 
-- `--config, -c` - Config file (default: `~/.config/dagu/config.yaml`)
-- `--dagu-home` - Override DAGU_HOME for this command invocation
+- `--config, -c` - Config file (default: `~/.config/boltbase/config.yaml`)
+- `--boltbase-home` - Override BOLTBASE_HOME for this command invocation
 - `--quiet, -q` - Suppress output
 - `--cpu-profile` - Enable CPU profiling
 - `--help, -h` - Show help
@@ -26,7 +26,7 @@ dagu [global options] command [command options] [arguments...]
 Run a command without writing a YAML file.
 
 ```bash
-dagu exec [options] -- <command> [args...]
+boltbase exec [options] -- <command> [args...]
 ```
 
 **Options:**
@@ -36,15 +36,15 @@ dagu exec [options] -- <command> [args...]
 - `--dotenv <path>` - Load dotenv file (repeatable)
 - `--workdir <path>` - Working directory
 - `--shell <path>` - Shell binary
-- `--base <file>` - Custom base config file (default: `~/.config/dagu/base.yaml`)
+- `--base <file>` - Custom base config file (default: `~/.config/boltbase/base.yaml`)
 - `--worker-label key=value` - Set worker selector labels (repeatable)
 
 ```bash
 # Basic usage
-dagu exec -- python script.py
+boltbase exec -- python script.py
 
 # With environment variables
-dagu exec --env DB_HOST=localhost -- python etl.py
+boltbase exec --env DB_HOST=localhost -- python etl.py
 ```
 
 See the [exec guide](/features/exec) for detailed documentation.
@@ -54,7 +54,7 @@ See the [exec guide](/features/exec) for detailed documentation.
 Run a DAG workflow.
 
 ```bash
-dagu start [options] DAG_NAME_OR_FILE [-- PARAMS...]
+boltbase start [options] DAG_NAME_OR_FILE [-- PARAMS...]
 ```
 
 **Interactive Mode:**
@@ -72,22 +72,22 @@ dagu start [options] DAG_NAME_OR_FILE [-- PARAMS...]
 
 ```bash
 # Basic run
-dagu start my-workflow.yaml
+boltbase start my-workflow.yaml
 
 # Interactive mode (no file specified)
-dagu start
+boltbase start
 
 # With parameters (note the -- separator)
-dagu start etl.yaml -- DATE=2024-01-01 ENV=prod
+boltbase start etl.yaml -- DATE=2024-01-01 ENV=prod
 
 # Custom run ID
-dagu start --run-id batch-001 etl.yaml
+boltbase start --run-id batch-001 etl.yaml
 
 # Override DAG name
-dagu start --name my_custom_name my-workflow.yaml
+boltbase start --name my_custom_name my-workflow.yaml
 
 # Clone parameters from a historic run
-dagu start --from-run-id 20241031_235959 example-dag.yaml
+boltbase start --from-run-id 20241031_235959 example-dag.yaml
 ```
 
 ### `stop`
@@ -95,15 +95,15 @@ dagu start --from-run-id 20241031_235959 example-dag.yaml
 Stop a running DAG.
 
 ```bash
-dagu stop [options] DAG_NAME_OR_FILE
+boltbase stop [options] DAG_NAME_OR_FILE
 ```
 
 **Options:**
 - `--run-id, -r` - Specific run ID (optional)
 
 ```bash
-dagu stop my-workflow                     # Stop current run
-dagu stop --run-id=20240101_120000 etl   # Stop specific run
+boltbase stop my-workflow                     # Stop current run
+boltbase stop --run-id=20240101_120000 etl   # Stop specific run
 ```
 
 ### `restart`
@@ -111,15 +111,15 @@ dagu stop --run-id=20240101_120000 etl   # Stop specific run
 Restart a DAG run with a new ID.
 
 ```bash
-dagu restart [options] DAG_NAME
+boltbase restart [options] DAG_NAME
 ```
 
 **Options:**
 - `--run-id, -r` - Run to restart (optional)
 
 ```bash
-dagu restart my-workflow                  # Restart latest
-dagu restart --run-id=20240101_120000 etl # Restart specific
+boltbase restart my-workflow                  # Restart latest
+boltbase restart --run-id=20240101_120000 etl # Restart specific
 ```
 
 ### `retry`
@@ -127,14 +127,14 @@ dagu restart --run-id=20240101_120000 etl # Restart specific
 Retry a failed DAG execution.
 
 ```bash
-dagu retry [options] DAG_NAME_OR_FILE
+boltbase retry [options] DAG_NAME_OR_FILE
 ```
 
 **Options:**
 - `--run-id, -r` - Run to retry (required)
 
 ```bash
-dagu retry --run-id=20240101_120000 my-workflow
+boltbase retry --run-id=20240101_120000 my-workflow
 ```
 
 ### `status`
@@ -142,14 +142,14 @@ dagu retry --run-id=20240101_120000 my-workflow
 Display current status of a DAG.
 
 ```bash
-dagu status [options] DAG_NAME_OR_FILE
+boltbase status [options] DAG_NAME_OR_FILE
 ```
 
 **Options:**
 - `--run-id, -r` - Check specific run (optional)
 
 ```bash
-dagu status my-workflow  # Latest run status
+boltbase status my-workflow  # Latest run status
 ```
 
 **Output:**
@@ -169,7 +169,7 @@ Display execution history of DAG runs with filtering and pagination.
 
 **Usage:**
 ```bash
-dagu history [flags] [DAG_NAME]
+boltbase history [flags] [DAG_NAME]
 ```
 
 **Flags:**
@@ -194,28 +194,28 @@ dagu history [flags] [DAG_NAME]
 
 ```bash
 # All runs from last 30 days
-dagu history
+boltbase history
 
 # Specific DAG runs
-dagu history my-workflow
+boltbase history my-workflow
 
 # Recent failures for debugging
-dagu history my-workflow --status failed --last 7d
+boltbase history my-workflow --status failed --last 7d
 
 # Date range query
-dagu history --from 2026-01-01 --to 2026-01-31
+boltbase history --from 2026-01-01 --to 2026-01-31
 
 # JSON export for analysis
-dagu history --format json --limit 500 > history.json
+boltbase history --format json --limit 500 > history.json
 
 # CSV export for spreadsheets
-dagu history --format csv --limit 500 > history.csv
+boltbase history --format csv --limit 500 > history.csv
 
 # Tag filtering (AND logic)
-dagu history --tags "prod,critical"
+boltbase history --tags "prod,critical"
 
 # Combined filters
-dagu history my-workflow --status failed --last 24h --limit 10
+boltbase history my-workflow --status failed --last 24h --limit 10
 ```
 
 **Output (table):**
@@ -255,15 +255,15 @@ my-workflow,019c1ca3-f123-4567-89ab-cdef01234567,Failed,2026-02-01 14:22:15,45s,
 **Error Examples:**
 ```bash
 # Conflicting flags
-$ dagu history --last 7d --from 2026-01-01
+$ boltbase history --last 7d --from 2026-01-01
 Error: cannot use --last with --from or --to
 
 # Invalid status
-$ dagu history --status invalid
+$ boltbase history --status invalid
 Error: invalid status 'invalid'. Valid values: running, succeeded, failed, ...
 
 # Date validation
-$ dagu history --from 2026-02-01 --to 2026-01-01
+$ boltbase history --from 2026-02-01 --to 2026-01-01
 Error: --from date (2026-02-01) must be before --to date (2026-01-01)
 ```
 
@@ -277,7 +277,7 @@ Error: --from date (2026-02-01) must be before --to date (2026-01-01)
 Start the web UI server.
 
 ```bash
-dagu server [options]
+boltbase server [options]
 ```
 
 **Options:**
@@ -286,8 +286,8 @@ dagu server [options]
 - `--dags, -d` - DAGs directory
 
 ```bash
-dagu server                               # Default settings
-dagu server --host=0.0.0.0 --port=9000  # Custom host/port
+boltbase server                               # Default settings
+boltbase server --host=0.0.0.0 --port=9000  # Custom host/port
 ```
 
 ### `scheduler`
@@ -295,15 +295,15 @@ dagu server --host=0.0.0.0 --port=9000  # Custom host/port
 Start the DAG scheduler daemon.
 
 ```bash
-dagu scheduler [options]
+boltbase scheduler [options]
 ```
 
 **Options:**
 - `--dags, -d` - DAGs directory
 
 ```bash
-dagu scheduler                  # Default settings
-dagu scheduler --dags=/opt/dags # Custom directory
+boltbase scheduler                  # Default settings
+boltbase scheduler --dags=/opt/dags # Custom directory
 ```
 
 ### `start-all`
@@ -311,7 +311,7 @@ dagu scheduler --dags=/opt/dags # Custom directory
 Start scheduler, web UI, and optionally coordinator service.
 
 ```bash
-dagu start-all [options]
+boltbase start-all [options]
 ```
 
 **Options:**
@@ -324,13 +324,13 @@ dagu start-all [options]
 
 ```bash
 # Single instance mode (coordinator disabled)
-dagu start-all
+boltbase start-all
 
 # Distributed mode with coordinator enabled
-dagu start-all --coordinator.host=0.0.0.0 --coordinator.port=50055
+boltbase start-all --coordinator.host=0.0.0.0 --coordinator.port=50055
 
 # Production mode
-dagu start-all --host=0.0.0.0 --port=9000 --coordinator.host=0.0.0.0
+boltbase start-all --host=0.0.0.0 --port=9000 --coordinator.host=0.0.0.0
 ```
 
 **Note:** The coordinator service is only started when `--coordinator.host` is set to a non-localhost address (not `127.0.0.1` or `localhost`). By default, `start-all` runs in single instance mode without the coordinator.
@@ -340,13 +340,13 @@ dagu start-all --host=0.0.0.0 --port=9000 --coordinator.host=0.0.0.0
 Validate a DAG specification for structural correctness.
 
 ```bash
-dagu validate [options] DAG_FILE
+boltbase validate [options] DAG_FILE
 ```
 
 Checks structural correctness and references (e.g., step dependencies) without evaluating variables or executing the DAG. Returns validation errors in a human-readable format.
 
 ```bash
-dagu validate my-workflow.yaml
+boltbase validate my-workflow.yaml
 ```
 
 **Output when valid:**
@@ -366,7 +366,7 @@ Validation failed for my-workflow.yaml
 Validate a DAG without executing it.
 
 ```bash
-dagu dry [options] DAG_FILE [-- PARAMS...]
+boltbase dry [options] DAG_FILE [-- PARAMS...]
 ```
 
 **Options:**
@@ -374,9 +374,9 @@ dagu dry [options] DAG_FILE [-- PARAMS...]
 - `--name, -N` - Override the DAG name (default: name from DAG definition or filename)
 
 ```bash
-dagu dry my-workflow.yaml
-dagu dry etl.yaml -- DATE=2024-01-01  # With parameters
-dagu dry --name my_custom_name my-workflow.yaml  # Override DAG name
+boltbase dry my-workflow.yaml
+boltbase dry etl.yaml -- DATE=2024-01-01  # With parameters
+boltbase dry --name my_custom_name my-workflow.yaml  # Override DAG name
 ```
 
 ### `enqueue`
@@ -384,7 +384,7 @@ dagu dry --name my_custom_name my-workflow.yaml  # Override DAG name
 Add a DAG to the execution queue.
 
 ```bash
-dagu enqueue [options] DAG_FILE [-- PARAMS...]
+boltbase enqueue [options] DAG_FILE [-- PARAMS...]
 ```
 
 **Options:**
@@ -394,12 +394,12 @@ dagu enqueue [options] DAG_FILE [-- PARAMS...]
 - `--queue, -u` - Override DAG-level queue name for this enqueue
 
 ```bash
-dagu enqueue my-workflow.yaml
-dagu enqueue --run-id=batch-001 etl.yaml -- TYPE=daily
+boltbase enqueue my-workflow.yaml
+boltbase enqueue --run-id=batch-001 etl.yaml -- TYPE=daily
 # Enqueue to a specific queue (override)
-dagu enqueue --queue=high-priority my-workflow.yaml
+boltbase enqueue --queue=high-priority my-workflow.yaml
 # Override DAG name
-dagu enqueue --name my_custom_name my-workflow.yaml
+boltbase enqueue --name my_custom_name my-workflow.yaml
 ```
 
 ### `dequeue`
@@ -407,15 +407,15 @@ dagu enqueue --name my_custom_name my-workflow.yaml
 Remove a DAG from the execution queue.
 
 ```bash
-dagu dequeue <queue-name> --dag-run=<dag-name>:<run-id>  # remove specific run
-dagu dequeue <queue-name>                                # pop the oldest item
+boltbase dequeue <queue-name> --dag-run=<dag-name>:<run-id>  # remove specific run
+boltbase dequeue <queue-name>                                # pop the oldest item
 ```
 
 Example:
 
 ```bash
-dagu dequeue default --dag-run=my-workflow:batch-001
-dagu dequeue default
+boltbase dequeue default --dag-run=my-workflow:batch-001
+boltbase dequeue default
 ```
 
 ### `version`
@@ -423,7 +423,7 @@ dagu dequeue default
 Display version information.
 
 ```bash
-dagu version
+boltbase version
 ```
 
 ### `cleanup`
@@ -431,7 +431,7 @@ dagu version
 Remove old DAG run history for a specified DAG.
 
 ```bash
-dagu cleanup [options] DAG_NAME
+boltbase cleanup [options] DAG_NAME
 ```
 
 **Options:**
@@ -443,19 +443,19 @@ Active runs (running, queued) are never deleted for safety.
 
 ```bash
 # Delete all history (with confirmation prompt)
-dagu cleanup my-workflow
+boltbase cleanup my-workflow
 
 # Keep last 30 days of history
-dagu cleanup --retention-days 30 my-workflow
+boltbase cleanup --retention-days 30 my-workflow
 
 # Preview what would be deleted
-dagu cleanup --dry-run my-workflow
+boltbase cleanup --dry-run my-workflow
 
 # Delete without confirmation (for scripts)
-dagu cleanup -y my-workflow
+boltbase cleanup -y my-workflow
 
 # Combine options
-dagu cleanup --retention-days 7 -y my-workflow
+boltbase cleanup --retention-days 7 -y my-workflow
 ```
 
 **Output:**
@@ -475,7 +475,7 @@ Successfully removed 5 run(s) for DAG "my-workflow"
 Migrate legacy data to new format.
 
 ```bash
-dagu migrate history  # Migrate v1.16 -> v1.17+ format
+boltbase migrate history  # Migrate v1.16 -> v1.17+ format
 ```
 
 ### `coordinator`
@@ -483,7 +483,7 @@ dagu migrate history  # Migrate v1.16 -> v1.17+ format
 Start the coordinator gRPC server for distributed task execution.
 
 ```bash
-dagu coordinator [options]
+boltbase coordinator [options]
 ```
 
 **Options:**
@@ -498,22 +498,22 @@ dagu coordinator [options]
 
 ```bash
 # Basic usage
-dagu coordinator --coordinator.host=0.0.0.0 --coordinator.port=50055
+boltbase coordinator --coordinator.host=0.0.0.0 --coordinator.port=50055
 
 # Bind to all interfaces and advertise service name (for containers/K8s)
-dagu coordinator \
+boltbase coordinator \
   --coordinator.host=0.0.0.0 \
-  --coordinator.advertise=dagu-server \
+  --coordinator.advertise=boltbase-server \
   --coordinator.port=50055
 
 # With TLS
-dagu coordinator \
+boltbase coordinator \
   --peer.insecure=false \
   --peer.cert-file=server.pem \
   --peer.key-file=server-key.pem
 
 # With mutual TLS
-dagu coordinator \
+boltbase coordinator \
   --peer.insecure=false \
   --peer.cert-file=server.pem \
   --peer.key-file=server-key.pem \
@@ -533,7 +533,7 @@ The coordinator service enables distributed task execution by:
 Start a worker that polls the coordinator for tasks.
 
 ```bash
-dagu worker [options]
+boltbase worker [options]
 ```
 
 **Options:**
@@ -548,30 +548,30 @@ dagu worker [options]
 
 ```bash
 # Basic usage
-dagu worker
+boltbase worker
 
 # With custom configuration
-dagu worker \
+boltbase worker \
   --worker.id=worker-1 \
   --worker.max-active-runs=50
 
 # With labels for capability matching
-dagu worker --worker.labels gpu=true,memory=64G,region=us-east-1
-dagu worker --worker.labels cpu-arch=amd64,instance-type=m5.xlarge
+boltbase worker --worker.labels gpu=true,memory=64G,region=us-east-1
+boltbase worker --worker.labels cpu-arch=amd64,instance-type=m5.xlarge
 
 # With TLS connection
-dagu worker \
+boltbase worker \
   --peer.insecure=false
 
 # With mutual TLS
-dagu worker \
+boltbase worker \
   --peer.insecure=false \
   --peer.cert-file=client.pem \
   --peer.key-file=client-key.pem \
   --peer.client-ca-file=ca.pem
 
 # With self-signed certificates
-dagu worker \
+boltbase worker \
   --peer.insecure=false \
   --peer.skip-tls-verify
 ```
@@ -584,25 +584,25 @@ Priority: CLI flags > Environment variables > Config file
 
 ### Using Custom Home Directory
 
-The `--dagu-home` flag allows you to override the application home directory for a specific command invocation. This is useful for:
+The `--boltbase-home` flag allows you to override the application home directory for a specific command invocation. This is useful for:
 - Testing with different configurations
-- Running multiple Dagu instances with isolated data
+- Running multiple Boltbase instances with isolated data
 - CI/CD scenarios requiring custom directories
 
 ```bash
 # Use a custom home directory for this command
-dagu --dagu-home=/tmp/dagu-test start my-workflow.yaml
+boltbase --boltbase-home=/tmp/boltbase-test start my-workflow.yaml
 
 # Start server with isolated data
-dagu --dagu-home=/opt/dagu-prod start-all
+boltbase --boltbase-home=/opt/boltbase-prod start-all
 
 # Run scheduler with specific configuration
-dagu --dagu-home=/var/lib/dagu scheduler
+boltbase --boltbase-home=/var/lib/boltbase scheduler
 ```
 
-When `--dagu-home` is set, it overrides the `DAGU_HOME` environment variable and uses a unified directory structure:
+When `--boltbase-home` is set, it overrides the `BOLTBASE_HOME` environment variable and uses a unified directory structure:
 ```
-$DAGU_HOME/
+$BOLTBASE_HOME/
 ├── dags/              # DAG definitions
 ├── logs/              # All log files
 ├── data/              # Application data
@@ -613,11 +613,11 @@ $DAGU_HOME/
 
 ### Key Environment Variables
 
-- `DAGU_HOME` - Set all directories to this path
-- `DAGU_HOST` - Server host (default: `127.0.0.1`)
-- `DAGU_PORT` - Server port (default: `8080`)
-- `DAGU_DAGS_DIR` - DAGs directory
-- `DAGU_LOG_DIR` - Log directory
-- `DAGU_DATA_DIR` - Data directory
-- `DAGU_AUTH_BASIC_USERNAME` - Basic auth username
-- `DAGU_AUTH_BASIC_PASSWORD` - Basic auth password
+- `BOLTBASE_HOME` - Set all directories to this path
+- `BOLTBASE_HOST` - Server host (default: `127.0.0.1`)
+- `BOLTBASE_PORT` - Server port (default: `8080`)
+- `BOLTBASE_DAGS_DIR` - DAGs directory
+- `BOLTBASE_LOG_DIR` - Log directory
+- `BOLTBASE_DATA_DIR` - Data directory
+- `BOLTBASE_AUTH_BASIC_USERNAME` - Basic auth username
+- `BOLTBASE_AUTH_BASIC_PASSWORD` - Basic auth password

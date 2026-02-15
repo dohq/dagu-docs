@@ -1,6 +1,6 @@
 # Tunnel (Tailscale)
 
-Remote access to Dagu via embedded Tailscale node. No port forwarding, firewall rules, or VPN setup required.
+Remote access to Boltbase via embedded Tailscale node. No port forwarding, firewall rules, or VPN setup required.
 
 ## Architecture
 
@@ -14,10 +14,10 @@ graph LR
         WG[WireGuard Tunnel]
     end
 
-    subgraph Server["Dagu Server"]
+    subgraph Server["Boltbase Server"]
         TS[tsnet Listener<br/>:80 or :443]
         RP[Reverse Proxy]
-        DS[Dagu HTTP<br/>:8080]
+        DS[Boltbase HTTP<br/>:8080]
     end
 
     B -->|HTTPS/HTTP| WG
@@ -27,15 +27,15 @@ graph LR
 ```
 
 **How it works:**
-1. Dagu starts an embedded Tailscale node using [tsnet](https://pkg.go.dev/tailscale.com/tsnet)
+1. Boltbase starts an embedded Tailscale node using [tsnet](https://pkg.go.dev/tailscale.com/tsnet)
 2. The node joins your Tailscale network (tailnet)
-3. A reverse proxy forwards requests to the local Dagu server
-4. Access via `http://dagu.<your-tailnet>.ts.net`
+3. A reverse proxy forwards requests to the local Boltbase server
+4. Access via `http://boltbase.<your-tailnet>.ts.net`
 
 ## Quick Start
 
 ```bash
-dagu server --tunnel
+boltbase server --tunnel
 ```
 
 **First run:**
@@ -46,7 +46,7 @@ Click the URL to authorize. Credentials are saved for subsequent runs.
 
 **Access:**
 ```
-http://dagu.<your-tailnet>.ts.net
+http://boltbase.<your-tailnet>.ts.net
 ```
 
 ## CLI Flags
@@ -61,7 +61,7 @@ http://dagu.<your-tailnet>.ts.net
 ## Configuration File
 
 ```yaml
-# ~/.config/dagu/config.yaml
+# ~/.config/boltbase/config.yaml
 tunnel:
   enabled: true
 
@@ -70,8 +70,8 @@ tunnel:
     # Generate at: https://login.tailscale.com/admin/settings/keys
     auth_key: "tskey-auth-xxxxx"
 
-    # Machine name in tailnet (default: "dagu")
-    hostname: "dagu"
+    # Machine name in tailnet (default: "boltbase")
+    hostname: "boltbase"
 
     # Enable Tailscale Funnel for public access
     funnel: false
@@ -79,7 +79,7 @@ tunnel:
     # Use HTTPS for tailnet-only access
     https: false
 
-    # State directory (default: ~/.dagu_data/tailscale)
+    # State directory (default: ~/.boltbase_data/tailscale)
     state_dir: ""
 
   # Allow terminal access via tunnel (default: false)
@@ -100,29 +100,29 @@ tunnel:
 
 | Variable | Config Key |
 |----------|------------|
-| `DAGU_TUNNEL_ENABLED` | `tunnel.enabled` |
-| `DAGU_TUNNEL_TAILSCALE_AUTH_KEY` | `tunnel.tailscale.auth_key` |
-| `DAGU_TUNNEL_TAILSCALE_HOSTNAME` | `tunnel.tailscale.hostname` |
-| `DAGU_TUNNEL_TAILSCALE_FUNNEL` | `tunnel.tailscale.funnel` |
-| `DAGU_TUNNEL_TAILSCALE_HTTPS` | `tunnel.tailscale.https` |
-| `DAGU_TUNNEL_TAILSCALE_STATE_DIR` | `tunnel.tailscale.state_dir` |
-| `DAGU_TUNNEL_ALLOW_TERMINAL` | `tunnel.allow_terminal` |
-| `DAGU_TUNNEL_RATE_LIMITING_ENABLED` | `tunnel.rate_limiting.enabled` |
-| `DAGU_TUNNEL_RATE_LIMITING_LOGIN_ATTEMPTS` | `tunnel.rate_limiting.login_attempts` |
-| `DAGU_TUNNEL_RATE_LIMITING_WINDOW_SECONDS` | `tunnel.rate_limiting.window_seconds` |
-| `DAGU_TUNNEL_RATE_LIMITING_BLOCK_DURATION_SECONDS` | `tunnel.rate_limiting.block_duration_seconds` |
+| `BOLTBASE_TUNNEL_ENABLED` | `tunnel.enabled` |
+| `BOLTBASE_TUNNEL_TAILSCALE_AUTH_KEY` | `tunnel.tailscale.auth_key` |
+| `BOLTBASE_TUNNEL_TAILSCALE_HOSTNAME` | `tunnel.tailscale.hostname` |
+| `BOLTBASE_TUNNEL_TAILSCALE_FUNNEL` | `tunnel.tailscale.funnel` |
+| `BOLTBASE_TUNNEL_TAILSCALE_HTTPS` | `tunnel.tailscale.https` |
+| `BOLTBASE_TUNNEL_TAILSCALE_STATE_DIR` | `tunnel.tailscale.state_dir` |
+| `BOLTBASE_TUNNEL_ALLOW_TERMINAL` | `tunnel.allow_terminal` |
+| `BOLTBASE_TUNNEL_RATE_LIMITING_ENABLED` | `tunnel.rate_limiting.enabled` |
+| `BOLTBASE_TUNNEL_RATE_LIMITING_LOGIN_ATTEMPTS` | `tunnel.rate_limiting.login_attempts` |
+| `BOLTBASE_TUNNEL_RATE_LIMITING_WINDOW_SECONDS` | `tunnel.rate_limiting.window_seconds` |
+| `BOLTBASE_TUNNEL_RATE_LIMITING_BLOCK_DURATION_SECONDS` | `tunnel.rate_limiting.block_duration_seconds` |
 
 ## Modes
 
 ### Default: HTTP (Tailnet Only)
 
 ```bash
-dagu server --tunnel
+boltbase server --tunnel
 ```
 
 | Property | Value |
 |----------|-------|
-| URL | `http://dagu.<tailnet>.ts.net` |
+| URL | `http://boltbase.<tailnet>.ts.net` |
 | Port | 80 |
 | Encryption | WireGuard (network layer) |
 | Access | Tailnet devices only |
@@ -133,12 +133,12 @@ Traffic is encrypted by WireGuard. HTTP is used because TLS on top of WireGuard 
 ### HTTPS (Tailnet Only)
 
 ```bash
-dagu server --tunnel --tunnel-https
+boltbase server --tunnel --tunnel-https
 ```
 
 | Property | Value |
 |----------|-------|
-| URL | `https://dagu.<tailnet>.ts.net` |
+| URL | `https://boltbase.<tailnet>.ts.net` |
 | Port | 443 |
 | Encryption | WireGuard + TLS |
 | Access | Tailnet devices only |
@@ -151,12 +151,12 @@ dagu server --tunnel --tunnel-https
 ### Funnel: Public Internet
 
 ```bash
-dagu server --tunnel --tunnel-funnel
+boltbase server --tunnel --tunnel-funnel
 ```
 
 | Property | Value |
 |----------|-------|
-| URL | `https://dagu.<tailnet>.ts.net` |
+| URL | `https://boltbase.<tailnet>.ts.net` |
 | Port | 443 |
 | Encryption | TLS |
 | Access | Anyone on internet |
@@ -191,14 +191,14 @@ server:
 
 ```
 1. Start server
-   $ dagu server --tunnel
+   $ boltbase server --tunnel
 
 2. Server prints login URL
    To start this tsnet server, go to: https://login.tailscale.com/a/abc123
 
 3. Click URL → Authorize in browser
 
-4. State saved to ~/.dagu_data/tailscale/tailscaled.state
+4. State saved to ~/.boltbase_data/tailscale/tailscaled.state
 
 5. Subsequent runs auto-connect (no login needed)
 ```
@@ -209,19 +209,19 @@ For automated deployments without interactive login:
 
 ```bash
 # Generate auth key at https://login.tailscale.com/admin/settings/keys
-dagu server --tunnel --tunnel-token=tskey-auth-kxxxxxxx
+boltbase server --tunnel --tunnel-token=tskey-auth-kxxxxxxx
 ```
 
 Or via environment:
 ```bash
-export DAGU_TUNNEL_TAILSCALE_AUTH_KEY=tskey-auth-kxxxxxxx
-dagu server --tunnel
+export BOLTBASE_TUNNEL_TAILSCALE_AUTH_KEY=tskey-auth-kxxxxxxx
+boltbase server --tunnel
 ```
 
 ## File Locations
 
 ```
-~/.dagu_data/
+~/.boltbase_data/
 ├── tailscale/
 │   └── tailscaled.state   # Persistent auth credentials
 └── tunnel_url             # Last known tunnel URL
@@ -239,7 +239,7 @@ GET /api/v1/services/tunnel
   "enabled": true,
   "provider": "tailscale",
   "status": "connected",
-  "publicUrl": "http://dagu.tail01cbab.ts.net",
+  "publicUrl": "http://boltbase.tail01cbab.ts.net",
   "mode": "direct",
   "isPublic": false,
   "startedAt": "2024-01-27T12:45:44Z"

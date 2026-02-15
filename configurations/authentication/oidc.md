@@ -1,13 +1,13 @@
 # OIDC Authentication
 
-OpenID Connect (OIDC) authentication for Dagu using OAuth2.
+OpenID Connect (OIDC) authentication for Boltbase using OAuth2.
 
 ## Recommended: Builtin + OIDC Mode
 
 For most use cases, we recommend using **builtin auth mode with OIDC enabled** instead of standalone OIDC mode. This gives you:
 
 - SSO/OIDC login convenience
-- Dagu's user management and RBAC
+- Boltbase's user management and RBAC
 - API key management
 - Role mapping from IdP groups
 - Auto-signup for new users (enabled by default)
@@ -22,7 +22,7 @@ auth:
     # OIDC is auto-enabled when all required fields are set
     client_id: your-client-id
     client_secret: your-client-secret
-    client_url: https://dagu.example.com
+    client_url: https://boltbase.example.com
     issuer: https://accounts.google.com
     # auto_signup defaults to true
     role_mapping:
@@ -33,7 +33,7 @@ See [Builtin Authentication - OIDC/SSO Login](/configurations/authentication/bui
 
 ## Standalone OIDC Mode
 
-Standalone OIDC mode (`auth.mode: oidc`) is available for simple setups where you don't need Dagu's user management features.
+Standalone OIDC mode (`auth.mode: oidc`) is available for simple setups where you don't need Boltbase's user management features.
 
 **Important**: All authenticated OIDC users are granted **admin role** with full access. There is no role-based access control in this mode. Use [Builtin + OIDC mode](/configurations/authentication/builtin#oidcsso-login) if you need RBAC.
 
@@ -55,7 +55,7 @@ Standalone OIDC mode has the following limitations compared to [Builtin + OIDC m
 ### YAML Configuration
 
 ```yaml
-# ~/.config/dagu/config.yaml
+# ~/.config/boltbase/config.yaml
 auth:
   mode: oidc  # Standalone OIDC mode
   oidc:
@@ -75,22 +75,22 @@ auth:
 ### Environment Variables
 
 ```bash
-export DAGU_AUTH_MODE=oidc
-export DAGU_AUTH_OIDC_CLIENT_ID="your-client-id"
-export DAGU_AUTH_OIDC_CLIENT_SECRET="your-client-secret"
-export DAGU_AUTH_OIDC_CLIENT_URL="http://localhost:8080"
-export DAGU_AUTH_OIDC_ISSUER="https://accounts.google.com"
-export DAGU_AUTH_OIDC_SCOPES="openid,profile,email"
-export DAGU_AUTH_OIDC_WHITELIST="admin@example.com,team@example.com"
+export BOLTBASE_AUTH_MODE=oidc
+export BOLTBASE_AUTH_OIDC_CLIENT_ID="your-client-id"
+export BOLTBASE_AUTH_OIDC_CLIENT_SECRET="your-client-secret"
+export BOLTBASE_AUTH_OIDC_CLIENT_URL="http://localhost:8080"
+export BOLTBASE_AUTH_OIDC_ISSUER="https://accounts.google.com"
+export BOLTBASE_AUTH_OIDC_SCOPES="openid,profile,email"
+export BOLTBASE_AUTH_OIDC_WHITELIST="admin@example.com,team@example.com"
 
-dagu start-all
+boltbase start-all
 ```
 
 ## Configuration Fields
 
 - **client_id**: OAuth2 client ID from your OIDC provider (required)
 - **client_secret**: OAuth2 client secret (required)
-- **client_url**: Base URL of your Dagu instance, used for callback (required)
+- **client_url**: Base URL of your Boltbase instance, used for callback (required)
 - **issuer**: OIDC provider URL (required)
 - **scopes**: OAuth2 scopes to request (default: `["openid", "profile", "email"]`)
 - **whitelist**: Email addresses allowed to authenticate (optional)
@@ -113,11 +113,11 @@ Register this callback URL with your OIDC provider.
 
 ## How It Works
 
-1. User accesses Dagu web interface
+1. User accesses Boltbase web interface
 2. If not authenticated, redirected to OIDC provider
 3. User logs in with provider
-4. Provider redirects back to Dagu callback URL
-5. Dagu validates the token and creates a session
+4. Provider redirects back to Boltbase callback URL
+5. Boltbase validates the token and creates a session
 6. Session stored in secure cookie (24 hour validity)
 
 ## Email Whitelist
@@ -137,7 +137,7 @@ auth:
 Or use comma-separated format (useful for environment variables):
 
 ```bash
-export DAGU_AUTH_OIDC_WHITELIST="admin@company.com,team@company.com"
+export BOLTBASE_AUTH_OIDC_WHITELIST="admin@company.com,team@company.com"
 ```
 
 **Important:** When whitelist is set, only emails in the whitelist are allowed. If whitelist is empty or not specified, all authenticated users are allowed.
@@ -161,7 +161,7 @@ auth:
   oidc:
     client_id: "web-client"
     client_secret: "secret"
-    client_url: "https://dagu.example.com"
+    client_url: "https://boltbase.example.com"
     issuer: "https://auth.example.com"
 
   # Token for API access (works alongside OIDC)

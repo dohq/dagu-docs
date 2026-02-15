@@ -6,7 +6,7 @@ In shared filesystem mode, workers share storage access with the coordinator. Al
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     Dagu Instance                           │
+│                     Boltbase Instance                           │
 │  (Scheduler + Web UI + Coordinator)                         │
 └─────────────────────────────────────────────────────────────┘
          │                              │
@@ -60,11 +60,11 @@ The registry directory must be accessible by all nodes:
 ```yaml
 # config.yaml
 paths:
-  service_registry_dir: "/nfs/shared/dagu/service-registry"
+  service_registry_dir: "/nfs/shared/boltbase/service-registry"
 ```
 
 ```bash
-export DAGU_PATHS_SERVICE_REGISTRY_DIR=/nfs/shared/dagu/service-registry
+export BOLTBASE_PATHS_SERVICE_REGISTRY_DIR=/nfs/shared/boltbase/service-registry
 ```
 
 ### Status Persistence
@@ -96,7 +96,7 @@ Workers write execution logs directly to the shared log directory:
 
 ## Requirements
 
-Shared storage must be mounted at the same path on all nodes, or configured via `DAGU_HOME` to point to the shared location.
+Shared storage must be mounted at the same path on all nodes, or configured via `BOLTBASE_HOME` to point to the shared location.
 
 Required shared directories:
 - `{data}/service-registry/` — worker registration and discovery
@@ -112,17 +112,17 @@ Required shared directories:
 
 ```bash
 # Start coordinator on the main server
-dagu start-all --coordinator.host=0.0.0.0 --port=8080
+boltbase start-all --coordinator.host=0.0.0.0 --port=8080
 
 # Or start coordinator separately
-dagu coordinator --coordinator.host=0.0.0.0 --coordinator.port=50055
+boltbase coordinator --coordinator.host=0.0.0.0 --coordinator.port=50055
 ```
 
 ### Workers
 
 ```bash
 # Workers auto-discover coordinators via service registry
-dagu worker --worker.labels gpu=true,memory=64G
+boltbase worker --worker.labels gpu=true,memory=64G
 ```
 
 ### Configuration File
@@ -130,9 +130,9 @@ dagu worker --worker.labels gpu=true,memory=64G
 ```yaml
 # config.yaml (same on all nodes)
 paths:
-  data_dir: "/shared/dagu/data"        # Must be shared
-  log_dir: "/shared/dagu/logs"         # Must be shared
-  service_registry_dir: "/shared/dagu/service-registry"  # Must be shared
+  data_dir: "/shared/boltbase/data"        # Must be shared
+  log_dir: "/shared/boltbase/logs"         # Must be shared
+  service_registry_dir: "/shared/boltbase/service-registry"  # Must be shared
 
 worker:
   id: "worker-gpu-01"
@@ -151,21 +151,21 @@ coordinator:
 version: '3.8'
 
 services:
-  dagu-main:
-    image: dagu:latest
+  boltbase-main:
+    image: boltbase:latest
     command: start-all --host=0.0.0.0 --coordinator.host=0.0.0.0
     ports:
       - "8080:8080"
       - "50055:50055"
     volumes:
-      - ./dags:/etc/dagu/dags           # DAG definitions (only main instance)
-      - shared-data:/var/lib/dagu       # Shared: data + logs + service registry
+      - ./dags:/etc/boltbase/dags           # DAG definitions (only main instance)
+      - shared-data:/var/lib/boltbase       # Shared: data + logs + service registry
 
   worker-gpu:
-    image: dagu:latest
+    image: boltbase:latest
     command: worker --worker.labels=gpu=true,cuda=11.8
     volumes:
-      - shared-data:/var/lib/dagu       # Shared storage (no dags needed)
+      - shared-data:/var/lib/boltbase       # Shared storage (no dags needed)
     deploy:
       replicas: 2
       resources:
@@ -174,10 +174,10 @@ services:
             - capabilities: [gpu]
 
   worker-cpu:
-    image: dagu:latest
+    image: boltbase:latest
     command: worker --worker.labels=cpu-only=true
     volumes:
-      - shared-data:/var/lib/dagu       # Shared storage (no dags needed)
+      - shared-data:/var/lib/boltbase       # Shared storage (no dags needed)
     deploy:
       replicas: 5
 
@@ -192,7 +192,7 @@ volumes:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: dagu-shared
+  name: boltbase-shared
 spec:
   accessModes:
     - ReadWriteMany
@@ -204,47 +204,47 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dagu-main
+  name: boltbase-main
 spec:
   replicas: 1
   template:
     spec:
       containers:
-        - name: dagu
-          image: dagu:latest
+        - name: boltbase
+          image: boltbase:latest
           args: ["start-all", "--host=0.0.0.0", "--coordinator.host=0.0.0.0"]
           volumeMounts:
             - name: shared
-              mountPath: /var/lib/dagu
+              mountPath: /var/lib/boltbase
             - name: dags
-              mountPath: /etc/dagu/dags
+              mountPath: /etc/boltbase/dags
       volumes:
         - name: shared
           persistentVolumeClaim:
-            claimName: dagu-shared
+            claimName: boltbase-shared
         - name: dags
           configMap:
-            name: dagu-dags
+            name: boltbase-dags
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dagu-worker
+  name: boltbase-worker
 spec:
   replicas: 3
   template:
     spec:
       containers:
         - name: worker
-          image: dagu:latest
+          image: boltbase:latest
           args: ["worker", "--worker.labels=region=us-east-1"]
           volumeMounts:
             - name: shared
-              mountPath: /var/lib/dagu
+              mountPath: /var/lib/boltbase
       volumes:
         - name: shared
           persistentVolumeClaim:
-            claimName: dagu-shared
+            claimName: boltbase-shared
 ```
 
 For Helm-based Kubernetes deployment, see [Kubernetes (Helm)](/configurations/deployment/kubernetes).

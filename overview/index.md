@@ -1,10 +1,10 @@
-# What is Dagu?
+# What is Boltbase?
 
 <div style="text-align: center; margin: 2rem 0;">
-  <img src="/logo.webp" alt="Dagu" style="max-width: 280px; height: auto;" />
+  <img src="/logo.webp" alt="Boltbase" style="max-width: 280px; height: auto;" />
 </div>
 
-Dagu is a self-contained workflow engine for orchestrating shell commands, containers, and remote tasks. Define workflows in declarative YAML, execute them with a single binary, and compose complex pipelines from reusable sub-workflows. No database, message broker, or external dependencies required.
+Boltbase is a self-contained workflow engine for orchestrating shell commands, containers, and remote tasks. Define workflows in declarative YAML, execute them with a single binary, and compose complex pipelines from reusable sub-workflows. No database, message broker, or external dependencies required.
 
 ## Key Capabilities
 
@@ -17,7 +17,7 @@ Dagu is a self-contained workflow engine for orchestrating shell commands, conta
 
 ## How It Works
 
-Dagu executes workflows defined as steps in YAML. Steps form a Directed Acyclic Graph (DAG), ensuring predictable execution order.
+Boltbase executes workflows defined as steps in YAML. Steps form a Directed Acyclic Graph (DAG), ensuring predictable execution order.
 
 ### Sequential Execution
 

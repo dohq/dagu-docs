@@ -1,17 +1,17 @@
 # Kubernetes (Helm)
 
-Deploy Dagu to Kubernetes using the official Helm chart. The chart deploys a scheduler, coordinator, Web UI, and configurable worker pools.
+Deploy Boltbase to Kubernetes using the official Helm chart. The chart deploys a scheduler, coordinator, Web UI, and configurable worker pools.
 
 ## Installation
 
 ```bash
-helm repo add dagu https://dagu-org.github.io/dagu
-helm install dagu dagu/dagu
+helm repo add boltbase https://dagu-org.github.io/dagu
+helm install boltbase boltbase/boltbase
 ```
 
 ## Worker Pools
 
-The `workerPools` section in `values.yaml` defines groups of worker Deployments. Each pool creates a separate Kubernetes Deployment named `<release>-dagu-worker-<poolName>`.
+The `workerPools` section in `values.yaml` defines groups of worker Deployments. Each pool creates a separate Kubernetes Deployment named `<release>-boltbase-worker-<poolName>`.
 
 ### Default Configuration
 
@@ -72,14 +72,14 @@ workerPools:
 ```
 
 This creates two Deployments:
-- `<release>-dagu-worker-general` — 3 replicas, no labels, matches any DAG without `worker_selector`
-- `<release>-dagu-worker-gpu` — 2 replicas, labels `gpu=true,cuda=12.0`, scheduled on GPU nodes
+- `<release>-boltbase-worker-general` — 3 replicas, no labels, matches any DAG without `worker_selector`
+- `<release>-boltbase-worker-gpu` — 2 replicas, labels `gpu=true,cuda=12.0`, scheduled on GPU nodes
 
 DAGs with `worker_selector: {gpu: "true"}` are dispatched to the `gpu` pool. DAGs without `worker_selector` are dispatched to any pool (including `general`).
 
 ### How Pool Labels Map to Worker Labels
 
-Each pool's `labels` map is converted to a `--worker.labels` CLI argument via the `dagu.workerLabels` template helper. For example:
+Each pool's `labels` map is converted to a `--worker.labels` CLI argument via the `boltbase.workerLabels` template helper. For example:
 
 ```yaml
 labels:
@@ -90,7 +90,7 @@ labels:
 becomes the CLI argument `--worker.labels gpu=true,cuda=12.0`, which is equivalent to running:
 
 ```bash
-dagu worker --worker.labels gpu=true,cuda=12.0
+boltbase worker --worker.labels gpu=true,cuda=12.0
 ```
 
 These labels are then matched against `worker_selector` in DAG definitions. See [Distributed Execution — How Dispatch Decisions Work](/features/distributed-execution#how-dispatch-decisions-work) for the full dispatch logic.
@@ -147,7 +147,7 @@ All worker pods mount this PVC at `/data`.
 For local testing with Kind or Docker Desktop (which lack RWX storage), skip PVC validation:
 
 ```bash
-helm install dagu dagu/dagu \
+helm install boltbase boltbase/boltbase \
   --set persistence.skipValidation=true \
   --set workerPools.general.replicas=1
 ```
@@ -207,7 +207,7 @@ auth:
 
 ```yaml
 image:
-  repository: ghcr.io/dagu-org/dagu
+  repository: ghcr.io/dagu-org/boltbase
   tag: latest
   pull_policy: IfNotPresent
 ```

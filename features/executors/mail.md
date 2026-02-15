@@ -116,7 +116,7 @@ handler_on:
     type: mail
     config:
       to: team@company.com
-      from: dagu@company.com
+      from: boltbase@company.com
       subject: "✅ Pipeline Success - ${DAG_NAME}"
       message: |
         Pipeline completed successfully.

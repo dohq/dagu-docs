@@ -1,6 +1,6 @@
 # Linux Systemd Service
 
-## Install Dagu
+## Install Boltbase
 
 ```bash
 # Install to /usr/local/bin (system-wide)
@@ -8,32 +8,32 @@ curl -L https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.s
   bash -s -- --install-dir /usr/local/bin
 
 # Create user and directories
-sudo useradd -r -s /bin/false dagu
-sudo mkdir -p /var/lib/dagu
-sudo chown -R dagu:dagu /var/lib/dagu
+sudo useradd -r -s /bin/false boltbase
+sudo mkdir -p /var/lib/boltbase
+sudo chown -R boltbase:boltbase /var/lib/boltbase
 ```
 
 ## Create Service
 
-Create `/etc/systemd/system/dagu.service`:
+Create `/etc/systemd/system/boltbase.service`:
 
 ```ini
 [Unit]
-Description=Dagu Workflow Engine
+Description=Boltbase Workflow Engine
 After=network.target
 
 [Service]
 Type=simple
-User=dagu
-Group=dagu
-WorkingDirectory=/var/lib/dagu
-ExecStart=/usr/local/bin/dagu start-all
+User=boltbase
+Group=boltbase
+WorkingDirectory=/var/lib/boltbase
+ExecStart=/usr/local/bin/boltbase start-all
 Restart=always
 RestartSec=10
 
-Environment="DAGU_HOST=0.0.0.0"
-Environment="DAGU_PORT=8525"
-Environment="DAGU_HOME=/var/lib/dagu"
+Environment="BOLTBASE_HOST=0.0.0.0"
+Environment="BOLTBASE_PORT=8525"
+Environment="BOLTBASE_HOME=/var/lib/boltbase"
 
 [Install]
 WantedBy=multi-user.target
@@ -46,16 +46,16 @@ WantedBy=multi-user.target
 sudo systemctl daemon-reload
 
 # Enable auto-start
-sudo systemctl enable dagu
+sudo systemctl enable boltbase
 
 # Start service
-sudo systemctl start dagu
+sudo systemctl start boltbase
 
 # Check status
-sudo systemctl status dagu
+sudo systemctl status boltbase
 
 # View logs
-sudo journalctl -u dagu -f
+sudo journalctl -u boltbase -f
 ```
 
 ## Access

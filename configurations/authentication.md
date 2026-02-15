@@ -1,6 +1,6 @@
 # Authentication
 
-Configure authentication and access control for your Dagu instance.
+Configure authentication and access control for your Boltbase instance.
 
 ## Available Authentication Methods
 
@@ -33,8 +33,8 @@ auth:
 Or via environment variables:
 
 ```bash
-export DAGU_AUTH_MODE=builtin
-export DAGU_AUTH_TOKEN_SECRET=your-secure-random-secret
+export BOLTBASE_AUTH_MODE=builtin
+export BOLTBASE_AUTH_TOKEN_SECRET=your-secure-random-secret
 ```
 
 ### Basic Authentication

@@ -4,7 +4,7 @@ Make workflows dynamic and reusable with runtime parameters.
 
 ## Parameter Definition
 
-Dagu supports multiple formats for defining parameters:
+Boltbase supports multiple formats for defining parameters:
 
 ```yaml
 # Named parameters (array of maps)
@@ -115,16 +115,16 @@ Using these as parameter names will cause parsing errors (e.g., `schema` will be
 
 ```bash
 # Named parameters
-dagu start workflow.yaml -- ENVIRONMENT=prod PORT=80
+boltbase start workflow.yaml -- ENVIRONMENT=prod PORT=80
 
 # Positional parameters  
-dagu start workflow.yaml -- input.csv output.json
+boltbase start workflow.yaml -- input.csv output.json
 
 # Mixed
-dagu start workflow.yaml -- config.json ENVIRONMENT=prod
+boltbase start workflow.yaml -- config.json ENVIRONMENT=prod
 
 # With spaces
-dagu start workflow.yaml -- MESSAGE="Hello World"
+boltbase start workflow.yaml -- MESSAGE="Hello World"
 ```
 
 ## Dynamic Parameters

@@ -1,10 +1,10 @@
 # Architecture
 
-Understanding how Dagu works under the hood.
+Understanding how Boltbase works under the hood.
 
 ## Design Philosophy
 
-Dagu follows a simple philosophy: **do one thing well with minimal dependencies**.
+Boltbase follows a simple philosophy: **do one thing well with minimal dependencies**.
 
 ## System Architecture
 
@@ -61,22 +61,22 @@ Dagu follows a simple philosophy: **do one thing well with minimal dependencies*
 - DAG-run Store: Tracks execution history and attempts
 - Proc Store: Process heartbeat tracking
 - Queue Store: Dual-priority queue system
-- By default, all state is stored in files under `~/.config/dagu/` and `~/.local/share/dagu/`
-- You can set a custom directory structure using the `DAGU_HOME` environment variable or configuration options
+- By default, all state is stored in files under `~/.config/boltbase/` and `~/.local/share/boltbase/`
+- You can set a custom directory structure using the `BOLTBASE_HOME` environment variable or configuration options
 
 ## Storage Architecture
 
-Dagu follows the XDG Base Directory specification for file organization:
+Boltbase follows the XDG Base Directory specification for file organization:
 
 ```
-~/.config/dagu/
+~/.config/boltbase/
 ├── dags/              # Workflow definitions
 │   ├── my-workflow.yaml
 │   └── another-workflow.yaml
 ├── config.yaml        # Main configuration
 └── base.yaml          # Shared base configuration
 
-~/.local/share/dagu/
+~/.local/share/boltbase/
 ├── data/              # Main data directory
 │   ├── dag-runs/      # Workflow execution history & state (hierarchical)
 │   │   └── my-workflow/
@@ -115,18 +115,18 @@ Dagu follows the XDG Base Directory specification for file organization:
 │   └── my-workflow.suspend
 └── scheduler/         # Scheduler coordination
     └── locks/         # Directory-based locks for HA
-        └── .dagu_lock.<hostname@pid>.<timestamp>/
+        └── .boltbase_lock.<hostname@pid>.<timestamp>/
 ```
 
 ## Distributed Execution Architecture
 
-Dagu supports distributed execution through a coordinator-worker model. DAG definitions are transmitted to workers via gRPC, so workers only need shared storage for execution state and logs.
+Boltbase supports distributed execution through a coordinator-worker model. DAG definitions are transmitted to workers via gRPC, so workers only need shared storage for execution state and logs.
 
 ### Overview
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     Dagu Instance                           │
+│                     Boltbase Instance                           │
 ├──────────────┬────────────────┬─────────────────────────────┤
 │  Scheduler   │   Web UI       │      Coordinator Service   │
 │              │                │         (gRPC Server)       │
@@ -229,11 +229,11 @@ The file-based service registry system enables:
 #### Single Coordinator, Multiple Workers
 ```bash
 # Start coordinator on main server
-dagu coordinator --coordinator.host=0.0.0.0
+boltbase coordinator --coordinator.host=0.0.0.0
 
 # Start workers on compute nodes
-dagu worker --worker.labels gpu=true --worker.coordinator-host=coordinator.internal
-dagu worker --worker.labels region=us-east-1 --worker.coordinator-host=coordinator.internal
+boltbase worker --worker.labels gpu=true --worker.coordinator-host=coordinator.internal
+boltbase worker --worker.labels region=us-east-1 --worker.coordinator-host=coordinator.internal
 ```
 
 ### Requirements
