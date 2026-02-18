@@ -184,14 +184,11 @@ Spawn sub-agents that execute tasks in parallel.
 
 Each sub-agent:
 - Runs in a separate session linked to the parent via `ParentSessionID`
-- Receives the same system prompt and all tools **except** `delegate` (no recursion)
+- Receives the same system prompt and all tools **except** `delegate`, `ask_user`, and `navigate`
 - Does **not** receive the parent conversation history — starts fresh with only the task description as a user message
 - Executes its full tool-calling loop, then returns its last assistant text response as a summary to the parent
 
-Sub-agents inherit the tool policy configured in agent settings (enabled/disabled tools, bash rules). However, sub-agents cannot interact with the user:
-- `ask_user` returns an error
-- `navigate` succeeds but has no effect (no UI connection)
-- In safe mode, bash commands that match a deny rule with `ask_user` behavior are denied because the approval prompt cannot be delivered to the user
+Sub-agents inherit the tool policy configured in agent settings (enabled/disabled tools, bash rules). In safe mode, bash commands that match a deny rule with `ask_user` behavior are denied because the approval prompt cannot be delivered to the user.
 
 **Concurrency**: All tasks run in parallel. If more than 8 tasks are provided, only the first 8 execute; the rest are dropped with a notice appended to the output.
 
