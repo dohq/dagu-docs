@@ -33,6 +33,7 @@ api_base_path: "/api/v1"    # API endpoint base path
 tz: "Asia/Tokyo"          # Server timezone
 debug: false              # Debug mode
 log_format: "text"         # Log format: "text" or "json"
+access_log_mode: "all"     # Access log mode: "all" (default), "non-public", or "none"
 headless: false           # Run without Web UI
 metrics: "private"        # Metrics endpoint access: "private" (default) or "public"
 
@@ -153,6 +154,7 @@ All options support `DAGU_` prefix:
 - `DAGU_TZ` - Timezone
 - `DAGU_DEBUG` - Debug mode
 - `DAGU_LOG_FORMAT` - Log format (`text`/`json`)
+- `DAGU_ACCESS_LOG_MODE` - Access log mode: `all` (default), `non-public`, or `none`
 - `DAGU_SERVER_METRICS` - Metrics endpoint access: `private` (default) or `public`
 
 **Paths:**

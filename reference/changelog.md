@@ -48,6 +48,8 @@
 
 ### Added
 
+- **Access Log Configuration**: New `access_log_mode` setting controls HTTP request logging. Values: `"all"` (default — log all requests), `"non-public"` (skip public/static asset paths), or `"none"` (disable access logging). Environment variable: `DAGU_ACCESS_LOG_MODE`. See [Server Configuration](/configurations/server#access-log).
+
 - **Auth Mode Selection**: Authentication mode is now configured via `auth.mode` field. Valid modes: `none`, `basic`, `builtin` (default). Basic auth uses `auth.mode: basic` with `auth.basic.username` and `auth.basic.password`. Environment variable: `DAGU_AUTH_MODE`.
 
 - **Coordinator Enabled Config**: New `coordinator.enabled` config option (default: `true`) and `DAGU_COORDINATOR_ENABLED` environment variable to explicitly enable or disable the coordinator service. When disabled, `start-all` skips the coordinator and DAGs are never dispatched to workers. Accepts `true`/`false`/`1`/`0`.
