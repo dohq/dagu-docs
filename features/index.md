@@ -2,6 +2,22 @@
 
 Dagu provides a comprehensive set of features for building and managing workflows.
 
+## AI Agent
+
+Dagu includes a built-in AI assistant powered by LLMs, with tool calling, persistent memory, and configurable personalities.
+
+- [Agent Overview](/features/agent/) - AI assistant in the Web UI
+- [Agent Step](/features/agent/step) - Run agents as workflow steps
+- [Tools Reference](/features/agent/tools) - Available tools and parameters
+- [Memory](/features/agent/memory) - Persistent context across sessions
+- [Souls](/features/agent/souls) - Configurable agent personalities
+
+## Chat & LLM
+
+- [Overview](/features/chat/) - LLM sessions and AI agents
+- [Basic Chat](/features/chat/basics) - Simple LLM sessions
+- [Tool Calling](/features/chat/tool-calling) - AI agents with DAG-based tools
+
 ## Interface
 - [Command Line Interface](/overview/cli)
 - [Web UI](/overview/web-ui)
@@ -33,17 +49,6 @@ Dagu provides a comprehensive set of features for building and managing workflow
 - [Overview](/features/etl/) - SQL queries and data operations
 - [PostgreSQL](/features/etl/postgresql) - PostgreSQL database operations
 - [SQLite](/features/etl/sqlite) - SQLite database operations
-
-### Chat & AI Agents
-- [Overview](/features/chat/) - LLM sessions and AI agents
-- [Basic Chat](/features/chat/basics) - Simple LLM sessions
-- [Tool Calling](/features/chat/tool-calling) - AI agents with DAG-based tools
-
-### Agent
-- [Overview](/features/agent/) - AI assistant in the Web UI
-- [Tools Reference](/features/agent/tools) - Available tools and parameters
-- [Memory](/features/agent/memory) - Persistent context across sessions
-- [Souls](/features/agent/souls) - Configurable agent personalities
 
 ## Authentication & Authorization
 - [Authentication Options](/configurations/authentication)

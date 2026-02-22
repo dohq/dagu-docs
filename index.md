@@ -38,6 +38,7 @@ Credentials: `demouser` / `demouser`
 - **Declarative YAML** - Define workflows without code. [YAML Reference](/reference/yaml)
 - **Composable** - Nest sub-workflows with parameters. [Control Flow](/writing-workflows/control-flow)
 - **Distributed** - Route tasks to workers via labels. [Distributed Execution](/features/distributed-execution)
+- **AI Agent** - Built-in LLM-powered assistant with tools, memory, and configurable personalities. [AI Agent](/features/agent/)
 - **Production-ready** - Retries, hooks, metrics, RBAC. [Error Handling](/writing-workflows/error-handling)
 
 ## Quick Start
@@ -105,6 +106,7 @@ Visit [http://localhost:8080](http://localhost:8080)
 | [**Error Handling**](/writing-workflows/error-handling) | Exponential backoff retries, lifecycle hooks, continue-on-failure |
 | [**Step Types**](/reference/executors) | Shell, Docker, SSH, HTTP, JQ, Mail, and more |
 | [**Observability**](/features/opentelemetry) | Live logs, Gantt charts, [Prometheus metrics](/features/prometheus-metrics), OpenTelemetry |
+| [**AI Agent**](/features/agent/) | Built-in LLM assistant with tool calling, persistent memory, and souls |
 | [**Security**](/configurations/authentication) | Built-in RBAC with admin, manager, operator, and viewer roles |
 
 ## Example
@@ -148,6 +150,7 @@ See [Examples](/writing-workflows/examples) for more patterns.
 - **Data Pipelines** - ETL/ELT with complex dependencies and parallel processing
 - **ML Workflows** - GPU/CPU worker routing for training and inference
 - **Deployment Automation** - Multi-environment rollouts with approval gates
+- **AI-Powered Ops** - Chat-driven workflow management with agent memory and tool calling
 - **Legacy Migration** - Wrap existing scripts without rewriting them
 
 **Quick Links**: [Overview](/overview/) | [CLI](/overview/cli) | [Web UI](/overview/web-ui) | [API](/overview/api) | [Architecture](/overview/architecture)
@@ -170,6 +173,10 @@ See [Examples](/writing-workflows/examples) for more patterns.
   <div class="step-card">
     <h3><a href="/reference/yaml">YAML Reference</a></h3>
     <p>All configuration options</p>
+  </div>
+  <div class="step-card">
+    <h3><a href="/features/agent/">AI Agent</a></h3>
+    <p>Chat, tools, memory, and souls</p>
   </div>
   <div class="step-card">
     <h3><a href="/features/">Features</a></h3>

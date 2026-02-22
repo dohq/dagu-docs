@@ -25,6 +25,25 @@ const fullSidebar = [
     ],
   },
   {
+    text: "AI Agent",
+    items: [
+      { text: "Overview", link: "/features/agent/" },
+      { text: "Agent Step", link: "/features/agent/step" },
+      { text: "Tools Reference", link: "/features/agent/tools" },
+      { text: "Memory", link: "/features/agent/memory" },
+      { text: "Souls", link: "/features/agent/souls" },
+      {
+        text: "Chat & LLM",
+        collapsed: false,
+        items: [
+          { text: "Overview", link: "/features/chat/" },
+          { text: "Basic Chat", link: "/features/chat/basics" },
+          { text: "Tool Calling", link: "/features/chat/tool-calling" },
+        ],
+      },
+    ],
+  },
+  {
     text: "Migration",
     items: [
       { text: "From Cron", link: "/features/exec" },
@@ -89,26 +108,6 @@ const fullSidebar = [
           { text: "Overview", link: "/features/etl/" },
           { text: "PostgreSQL", link: "/features/etl/postgresql" },
           { text: "SQLite", link: "/features/etl/sqlite" },
-        ],
-      },
-      {
-        text: "Chat & AI Agents",
-        collapsed: false,
-        items: [
-          { text: "Overview", link: "/features/chat/" },
-          { text: "Basic Chat", link: "/features/chat/basics" },
-          { text: "Tool Calling", link: "/features/chat/tool-calling" },
-        ],
-      },
-      {
-        text: "Agent",
-        collapsed: false,
-        items: [
-          { text: "Overview", link: "/features/agent/" },
-          { text: "Agent Step", link: "/features/agent/step" },
-          { text: "Tools Reference", link: "/features/agent/tools" },
-          { text: "Memory", link: "/features/agent/memory" },
-          { text: "Souls", link: "/features/agent/souls" },
         ],
       },
       { text: "Scheduling", link: "/features/scheduling" },
@@ -312,6 +311,11 @@ export default withMermaid(
           text: "Writing Workflows",
           link: "/writing-workflows/",
           activeMatch: "/writing-workflows/",
+        },
+        {
+          text: "AI Agent",
+          link: "/features/agent/",
+          activeMatch: "/features/agent/",
         },
         { text: "Features", link: "/features/", activeMatch: "/features/" },
         {
