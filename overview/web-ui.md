@@ -252,7 +252,7 @@ Labels: [gpu=true] [cuda=11.8] [memory=64G] [region=us-east-1]
 
 ## Agent
 
-Tsumugi is an AI assistant that helps create, review, debug, and manage DAG workflows through a chat interface.
+The Dagu agent is an AI assistant that helps create, review, debug, and manage DAG workflows through a chat interface.
 
 ### Accessing the Agent
 

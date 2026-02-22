@@ -1,6 +1,6 @@
 # Agent Step
 
-Run the Tsumugi AI agent as a workflow step. The agent executes a multi-turn tool-calling loop — it reads files, runs commands, edits code, and searches the web to accomplish the task described in `messages`.
+Run the AI agent as a workflow step. The agent executes a multi-turn tool-calling loop — it reads files, runs commands, edits code, and searches the web to accomplish the task described in `messages`.
 
 ## Basic Usage
 
@@ -49,7 +49,7 @@ steps:
 |-------|------|---------|-------------|
 | `model` | string | global default | Model ID from Agent Settings. Overrides the default model for this step. |
 | `tools` | object | — | Tool selection and bash policy. See [Tools](#tools). |
-| `memory` | object | `{ enabled: false }` | When `enabled: true`, loads global and per-DAG memory into the agent context. |
+| `memory` | object | `{ enabled: false }` | When `enabled: true`, loads global and per-DAG memory into the agent context. See [Memory](/features/agent/memory). |
 | `prompt` | string | — | Additional instructions appended to the built-in system prompt. |
 | `max_iterations` | int | `50` | Maximum tool-call rounds before the agent stops. |
 | `safe_mode` | bool | `true` | When `true`, bash commands matching dangerous patterns require HITL approval. |

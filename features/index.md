@@ -40,8 +40,10 @@ Dagu provides a comprehensive set of features for building and managing workflow
 - [Tool Calling](/features/chat/tool-calling) - AI agents with DAG-based tools
 
 ### Agent
-- [Overview](/features/agent/) - AI assistant (Tsumugi) in the Web UI
+- [Overview](/features/agent/) - AI assistant in the Web UI
 - [Tools Reference](/features/agent/tools) - Available tools and parameters
+- [Memory](/features/agent/memory) - Persistent context across sessions
+- [Souls](/features/agent/souls) - Configurable agent personalities
 
 ## Authentication & Authorization
 - [Authentication Options](/configurations/authentication)

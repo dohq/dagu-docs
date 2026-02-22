@@ -1,6 +1,6 @@
 # Agent Tools Reference
 
-Reference for all tools available to Tsumugi.
+Reference for all tools available to the Dagu agent.
 
 ## bash
 

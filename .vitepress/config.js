@@ -107,6 +107,8 @@ const fullSidebar = [
           { text: "Overview", link: "/features/agent/" },
           { text: "Agent Step", link: "/features/agent/step" },
           { text: "Tools Reference", link: "/features/agent/tools" },
+          { text: "Memory", link: "/features/agent/memory" },
+          { text: "Souls", link: "/features/agent/souls" },
         ],
       },
       { text: "Scheduling", link: "/features/scheduling" },

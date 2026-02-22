@@ -1,10 +1,10 @@
 # Agent
 
-Tsumugi is an AI assistant integrated into the Dagu Web UI for workflow management.
+The Dagu agent is an AI assistant integrated into the Dagu Web UI for workflow management.
 
 ## Accessing the Agent
 
-Click the **Agent** button at the bottom-right corner of any page. The button shows a yellow pulsing indicator when Tsumugi is processing.
+Click the **Agent** button at the bottom-right corner of any page. The button shows a yellow pulsing indicator when the agent is processing.
 
 ## Enabling the Agent
 
@@ -62,7 +62,7 @@ For `local` provider, set `baseUrl` to your local endpoint (e.g., `http://localh
 
 ### DAG Context
 
-Provide DAG context to Tsumugi by:
+Provide DAG context to the agent by:
 
 1. **Automatic**: When viewing a DAG or run page, that DAG is automatically included
 2. **Manual**: Click the paperclip icon to select additional DAGs
@@ -115,5 +115,7 @@ See [Tools Reference](/features/agent/tools) for parameters and examples.
 
 - [Agent Step](/features/agent/step) - Run the agent as a workflow step (`type: agent`)
 - [Tools Reference](/features/agent/tools)
+- [Memory](/features/agent/memory) - Persistent context across sessions
+- [Souls](/features/agent/souls) - Configurable agent personalities
 - [Web UI](/overview/web-ui)
 - [Chat & AI Agents](/features/chat/) - LLM sessions in DAG workflows
