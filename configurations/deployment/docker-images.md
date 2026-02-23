@@ -57,3 +57,23 @@ Build and run:
 docker build -t my-dagu .
 docker run -d -p 8080:8080 -v dagu-data:/var/lib/dagu my-dagu
 ```
+
+## Build Arguments
+
+All Dockerfiles accept the following build arguments to customize the container user and data directory:
+
+| Argument | Default | Description |
+| --- | --- | --- |
+| `USER` | `dagu` | Username for the in-container user |
+| `USER_UID` | `1000` | UID for the in-container user |
+| `USER_GID` | `$USER_UID` | GID for the in-container user |
+| `DAGU_HOME` | `/var/lib/dagu` | Data directory where Dagu stores its state |
+
+Match the container UID/GID to your host user so that bind-mounted files have the correct ownership:
+
+```bash
+docker build \
+  --build-arg USER_UID="$(id -u)" \
+  --build-arg USER_GID="$(id -g)" \
+  -t my-dagu .
+```
