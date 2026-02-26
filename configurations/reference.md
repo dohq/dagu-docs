@@ -162,6 +162,29 @@ scheduler:
 monitoring:
   retention: "24h"        # How long to keep resource history (default: 24h)
   interval: "5s"          # How often to collect metrics (default: 5s)
+
+# Git Sync
+git_sync:
+  enabled: false
+  repository: "github.com/your-org/dags"
+  branch: "main"
+  path: ""                 # Subdirectory in repo (empty = root)
+  push_enabled: true
+
+  auth:
+    type: "token"          # "token" or "ssh"
+    token: "${GITHUB_TOKEN}"
+    ssh_key_path: ""
+    ssh_passphrase: ""
+
+  auto_sync:
+    enabled: false
+    on_startup: true
+    interval: 300          # Seconds (0 = no periodic sync)
+
+  commit:
+    author_name: "Dagu"
+    author_email: "dagu@localhost"
 ```
 
 ## Environment Variables
@@ -290,6 +313,22 @@ Builtin-specific OIDC settings (only used when `auth.mode=builtin`):
 ### Resource Monitoring
 - `DAGU_MONITORING_RETENTION` - How long to keep resource history (default: `24h`)
 - `DAGU_MONITORING_INTERVAL` - How often to collect resource metrics (default: `5s`)
+
+### Git Sync
+- `DAGU_GITSYNC_ENABLED` - Enable git sync (default: `false`)
+- `DAGU_GITSYNC_REPOSITORY` - Remote repository URL
+- `DAGU_GITSYNC_BRANCH` - Branch to sync (default: `main`)
+- `DAGU_GITSYNC_PATH` - Subdirectory in repo (default: `""`)
+- `DAGU_GITSYNC_PUSH_ENABLED` - Enable push operations (default: `true`)
+- `DAGU_GITSYNC_AUTH_TYPE` - Auth type: `token` or `ssh` (default: `token`)
+- `DAGU_GITSYNC_AUTH_TOKEN` - Personal access token for HTTPS auth
+- `DAGU_GITSYNC_AUTH_SSH_KEY_PATH` - Path to SSH private key
+- `DAGU_GITSYNC_AUTH_SSH_PASSPHRASE` - SSH key passphrase
+- `DAGU_GITSYNC_AUTOSYNC_ENABLED` - Enable auto-sync background worker (default: `false`)
+- `DAGU_GITSYNC_AUTOSYNC_ON_STARTUP` - Pull on startup (default: `true`)
+- `DAGU_GITSYNC_AUTOSYNC_INTERVAL` - Sync interval in seconds (default: `300`, `0` = no periodic sync)
+- `DAGU_GITSYNC_COMMIT_AUTHOR_NAME` - Git commit author name (default: `Dagu`)
+- `DAGU_GITSYNC_COMMIT_AUTHOR_EMAIL` - Git commit author email (default: `dagu@localhost`)
 
 ### Legacy Environment Variables (Deprecated)
 These variables are maintained for backward compatibility but should not be used in new deployments:

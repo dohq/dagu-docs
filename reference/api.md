@@ -2848,6 +2848,362 @@ Retrieves information about connected workers in the distributed execution syste
 }
 ```
 
+## Git Sync Endpoints
+
+All sync endpoints accept an optional `remoteNode` query parameter.
+
+### Get Sync Status
+
+**Endpoint**: `GET /api/v1/sync/status`
+
+Returns overall sync status, item list, and status counts.
+
+```bash
+curl "http://localhost:8080/api/v1/sync/status"
+```
+
+**Response (200)**:
+```json
+{
+  "enabled": true,
+  "repository": "github.com/your-org/dags",
+  "branch": "main",
+  "summary": "pending",
+  "lastSyncAt": "2026-02-26T10:00:00Z",
+  "lastSyncCommit": "abc123",
+  "items": [
+    {
+      "itemId": "my-dag",
+      "filePath": "my-dag.yaml",
+      "displayName": "my-dag.yaml",
+      "kind": "dag",
+      "status": "modified"
+    }
+  ],
+  "counts": {
+    "synced": 10,
+    "modified": 1,
+    "untracked": 0,
+    "conflict": 0,
+    "missing": 0
+  }
+}
+```
+
+### Pull from Remote
+
+**Endpoint**: `POST /api/v1/sync/pull`
+
+Fetches and applies changes from the remote repository. Requires `permissions.write_dags`.
+
+```bash
+curl -X POST "http://localhost:8080/api/v1/sync/pull"
+```
+
+**Response (200)**:
+```json
+{
+  "success": true,
+  "message": "Synced 3 item(s)",
+  "synced": ["dag-a", "dag-b", "dag-c"],
+  "modified": [],
+  "conflicts": [],
+  "errors": [],
+  "timestamp": "2026-02-26T10:00:00Z"
+}
+```
+
+### Publish All
+
+**Endpoint**: `POST /api/v1/sync/publish-all`
+
+Publishes specified items, or all modified/untracked items if `itemIds` is omitted. Requires `permissions.write_dags`.
+
+```bash
+curl -X POST "http://localhost:8080/api/v1/sync/publish-all" \
+  -H "Content-Type: application/json" \
+  -d '{"message":"Batch publish","itemIds":["my-dag","memory/MEMORY"]}'
+```
+
+**Request Body**:
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `message` | string | No | Commit message |
+| `itemIds` | string[] | No | Item IDs to publish. Omit to publish all modified/untracked. |
+
+**Response (200)**: Same shape as Pull response.
+
+### Test Connection
+
+**Endpoint**: `POST /api/v1/sync/test-connection`
+
+Tests repository access and authentication.
+
+```bash
+curl -X POST "http://localhost:8080/api/v1/sync/test-connection"
+```
+
+**Response (200)**:
+```json
+{
+  "success": true,
+  "message": "Connection successful"
+}
+```
+
+### Get Config
+
+**Endpoint**: `GET /api/v1/sync/config`
+
+```bash
+curl "http://localhost:8080/api/v1/sync/config"
+```
+
+**Response (200)**:
+```json
+{
+  "enabled": true,
+  "repository": "github.com/your-org/dags",
+  "branch": "main",
+  "path": "",
+  "pushEnabled": true,
+  "auth": {
+    "type": "token"
+  },
+  "autoSync": {
+    "enabled": true,
+    "onStartup": true,
+    "interval": 300
+  },
+  "commit": {
+    "authorName": "Dagu",
+    "authorEmail": "dagu@localhost"
+  }
+}
+```
+
+### Update Config
+
+**Endpoint**: `PUT /api/v1/sync/config`
+
+Admin only.
+
+```bash
+curl -X PUT "http://localhost:8080/api/v1/sync/config" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "enabled": true,
+    "repository": "github.com/your-org/dags",
+    "branch": "main",
+    "pushEnabled": true,
+    "auth": {"type": "token", "token": "ghp_xxx"},
+    "autoSync": {"enabled": true, "onStartup": true, "interval": 300},
+    "commit": {"authorName": "Dagu", "authorEmail": "dagu@localhost"}
+  }'
+```
+
+### Get Item Diff
+
+**Endpoint**: `GET /api/v1/sync/items/{itemId}/diff`
+
+Returns local and remote content for comparison. Requires sync service to be configured.
+
+```bash
+curl "http://localhost:8080/api/v1/sync/items/memory%2FMEMORY/diff"
+```
+
+**Response (200)**:
+```json
+{
+  "itemId": "memory/MEMORY",
+  "filePath": "memory/MEMORY.md",
+  "status": "modified",
+  "localContent": "# Memory\nUpdated locally",
+  "remoteContent": "# Memory\nOriginal"
+}
+```
+
+**Response (404)**: Item not found.
+
+### Publish One Item
+
+**Endpoint**: `POST /api/v1/sync/items/{itemId}/publish`
+
+Requires `permissions.write_dags`.
+
+```bash
+curl -X POST "http://localhost:8080/api/v1/sync/items/my-dag/publish" \
+  -H "Content-Type: application/json" \
+  -d '{"message":"Update dag","force":false}'
+```
+
+**Request Body**:
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `message` | string | No | Commit message |
+| `force` | boolean | No | Force publish over conflict |
+
+**Response (200)**: Same shape as Pull response.
+
+**Response (404)**: Item not found.
+
+**Response (409)**: Conflict detected (when `force` is false):
+```json
+{
+  "itemId": "my-dag",
+  "remoteCommit": "abc123",
+  "remoteAuthor": "alice",
+  "remoteMessage": "Remote update",
+  "message": "conflict: \"my-dag\" — remote has been updated"
+}
+```
+
+### Discard Item Changes
+
+**Endpoint**: `POST /api/v1/sync/items/{itemId}/discard`
+
+Requires `permissions.write_dags`.
+
+```bash
+curl -X POST "http://localhost:8080/api/v1/sync/items/my-dag/discard"
+```
+
+**Response (200)**:
+```json
+{
+  "message": "Discarded changes"
+}
+```
+
+**Response (404)**: Item not found.
+
+### Forget Item
+
+**Endpoint**: `POST /api/v1/sync/items/{itemId}/forget`
+
+Removes the state entry for a `missing`, `untracked`, or `conflict` item. Rejects `synced` and `modified` items. Requires `permissions.write_dags`.
+
+```bash
+curl -X POST "http://localhost:8080/api/v1/sync/items/missing-dag/forget"
+```
+
+**Response (200)**:
+```json
+{
+  "message": "Forgotten"
+}
+```
+
+**Response (400)**: Item cannot be forgotten (synced or modified).
+
+**Response (404)**: Item not found.
+
+### Delete Item
+
+**Endpoint**: `POST /api/v1/sync/items/{itemId}/delete`
+
+Removes item from remote repository (git rm + commit + push), local disk, and sync state. Requires `permissions.write_dags`.
+
+```bash
+curl -X POST "http://localhost:8080/api/v1/sync/items/my-dag/delete" \
+  -H "Content-Type: application/json" \
+  -d '{"message":"Remove old DAG","force":false}'
+```
+
+**Request Body**:
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `message` | string | No | Commit message |
+| `force` | boolean | No | Force delete when item has local modifications |
+
+**Response (200)**:
+```json
+{
+  "message": "Deleted item: my-dag"
+}
+```
+
+**Response (400)**: Item cannot be deleted (untracked, or modified without force, or push disabled).
+
+**Response (404)**: Item not found.
+
+### Delete All Missing Items
+
+**Endpoint**: `POST /api/v1/sync/delete-missing`
+
+Removes all missing items from remote repository, local disk, and sync state. Requires `permissions.write_dags`. Request body is optional.
+
+```bash
+curl -X POST "http://localhost:8080/api/v1/sync/delete-missing" \
+  -H "Content-Type: application/json" \
+  -d '{"message":"Clean up missing items"}'
+```
+
+**Request Body**:
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `message` | string | No | Commit message |
+
+**Response (200)**:
+```json
+{
+  "deleted": ["missing-a", "missing-b"],
+  "message": "Deleted 2 missing item(s)"
+}
+```
+
+**Response (400)**: Push is disabled.
+
+### Move Item
+
+**Endpoint**: `POST /api/v1/sync/items/{itemId}/move`
+
+Atomically renames an item across local filesystem, remote repository, and sync state. Requires `permissions.write_dags`.
+
+```bash
+curl -X POST "http://localhost:8080/api/v1/sync/items/old-dag/move" \
+  -H "Content-Type: application/json" \
+  -d '{"newItemId":"new-dag","message":"Rename workflow"}'
+```
+
+**Request Body**:
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `newItemId` | string | Yes | New item ID |
+| `message` | string | No | Commit message |
+| `force` | boolean | No | Force move over conflict |
+
+**Response (200)**:
+```json
+{
+  "message": "Moved old-dag to new-dag"
+}
+```
+
+**Response (400)**: Validation error (cross-kind move, push disabled, invalid ID).
+
+**Response (404)**: Source item not found.
+
+**Response (409)**: Conflict detected (when `force` is false). Same shape as publish conflict response.
+
+### Cleanup
+
+**Endpoint**: `POST /api/v1/sync/cleanup`
+
+Removes all missing entries from sync state. Does not touch files on disk or remote. Requires `permissions.write_dags`.
+
+```bash
+curl -X POST "http://localhost:8080/api/v1/sync/cleanup"
+```
+
+**Response (200)**:
+```json
+{
+  "forgotten": ["missing-a", "missing-b"],
+  "message": "Cleaned up 2 item(s)"
+}
+```
+
 ## API Versioning
 
 - Current version: v2

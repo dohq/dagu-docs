@@ -470,6 +470,158 @@ Dry run: Would delete 5 run(s) for DAG "my-workflow":
 Successfully removed 5 run(s) for DAG "my-workflow"
 ```
 
+### `sync`
+
+Manage Git sync operations.
+
+```bash
+dagu sync <subcommand>
+```
+
+Requires `git_sync.enabled: true` in configuration. See [Git Sync](/features/git-sync) for full documentation.
+
+#### `sync status`
+
+Show current sync status.
+
+```bash
+dagu sync status
+```
+
+Displays repository URL, branch, last sync info, status counts per state, and a table of non-synced items.
+
+#### `sync pull`
+
+Pull changes from remote repository.
+
+```bash
+dagu sync pull
+```
+
+#### `sync publish`
+
+Publish local changes to remote.
+
+```bash
+dagu sync publish <item-id> [options]
+dagu sync publish --all [options]
+```
+
+**Options:**
+- `-m, --message` - Commit message
+- `--all` - Publish all modified and untracked items
+- `-f, --force` - Force publish even with conflicts
+
+Provide either an item ID or `--all`, not both.
+
+```bash
+dagu sync publish my-dag -m "Update dag"
+dagu sync publish memory/MEMORY -m "Update global memory"
+dagu sync publish --all -m "Batch update"
+dagu sync publish my-dag --force -m "Overwrite remote"
+```
+
+#### `sync discard`
+
+Discard local changes for an item.
+
+```bash
+dagu sync discard <item-id> [options]
+```
+
+**Options:**
+- `-y, --yes` - Skip confirmation prompt
+
+```bash
+dagu sync discard my-dag
+dagu sync discard memory/dags/my-dag/MEMORY -y
+```
+
+#### `sync forget`
+
+Remove state entries for missing, untracked, or conflict items.
+
+```bash
+dagu sync forget <item-id> [item-id...] [options]
+```
+
+**Options:**
+- `-y, --yes` - Skip confirmation prompt
+
+Does not touch files on disk or remote. Rejects `synced` and `modified` items. Accepts multiple item IDs.
+
+```bash
+dagu sync forget missing-dag
+dagu sync forget item-a item-b item-c -y
+```
+
+#### `sync cleanup`
+
+Remove all missing entries from sync state.
+
+```bash
+dagu sync cleanup [options]
+```
+
+**Options:**
+- `--dry-run` - Show what would be cleaned without making changes
+- `-y, --yes` - Skip confirmation prompt
+
+Does not touch files on disk or remote.
+
+```bash
+dagu sync cleanup --dry-run
+dagu sync cleanup -y
+```
+
+#### `sync delete`
+
+Delete items from remote repository, local disk, and sync state.
+
+```bash
+dagu sync delete <item-id> [options]
+dagu sync delete --all-missing [options]
+```
+
+**Options:**
+- `-m, --message` - Commit message
+- `--force` - Force delete even with local modifications
+- `--all-missing` - Delete all missing items
+- `--dry-run` - Show what would be deleted without making changes
+- `-y, --yes` - Skip confirmation prompt
+
+Provide either an item ID or `--all-missing`, not both. Untracked items cannot be deleted (use `forget` instead).
+
+```bash
+dagu sync delete my-dag -m "Remove old dag"
+dagu sync delete my-dag --force -m "Remove despite modifications"
+dagu sync delete --all-missing -m "Clean up missing"
+dagu sync delete my-dag --dry-run
+dagu sync delete --all-missing --dry-run
+```
+
+#### `sync mv`
+
+Atomically rename an item across local filesystem, remote repository, and sync state.
+
+```bash
+dagu sync mv <old-id> <new-id> [options]
+```
+
+**Options:**
+- `-m, --message` - Commit message
+- `--force` - Force move even with conflicts
+- `--dry-run` - Show what would be moved without making changes
+- `-y, --yes` - Skip confirmation prompt
+
+Both source and destination must be of the same kind (both DAGs, both memory, etc.).
+
+```bash
+dagu sync mv old-dag new-dag -m "Rename workflow"
+dagu sync mv old-dag new-dag --force -m "Move despite conflict"
+dagu sync mv old-dag new-dag --dry-run
+```
+
 ### `migrate`
 
 Migrate legacy data to new format.
