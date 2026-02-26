@@ -11,13 +11,13 @@ Configure authentication for connecting to remote Dagu instances.
 remote_nodes:
   - name: production
     api_base_url: https://prod.example.com/api/v1
-    is_basic_auth: true
+    auth_type: basic
     basic_auth_username: admin
     basic_auth_password: prod-password
 
   - name: staging
     api_base_url: https://staging.example.com/api/v1
-    is_auth_token: true
+    auth_type: token
     auth_token: staging-api-token
 
   - name: development
@@ -33,7 +33,7 @@ remote_nodes:
 remote_nodes:
   - name: remote1
     api_base_url: https://remote1.example.com/api/v1
-    is_basic_auth: true
+    auth_type: basic
     basic_auth_username: admin
     basic_auth_password: secure-password
 ```
@@ -46,7 +46,7 @@ Use for static tokens or [API Keys](api-keys).
 remote_nodes:
   - name: remote2
     api_base_url: https://remote2.example.com/api/v1
-    is_auth_token: true
+    auth_type: token
     auth_token: api-token-for-remote2
 ```
 
@@ -58,7 +58,7 @@ When the remote node uses [Builtin Authentication](builtin) with [API Keys](api-
 remote_nodes:
   - name: production
     api_base_url: https://prod.example.com/api/v1
-    is_auth_token: true
+    auth_type: token
     auth_token: dagu_7Kq9mXxN3pLwR5tY2vZa8bCdEfGhJk4n6sUwXy0zA1B
 ```
 
@@ -71,7 +71,7 @@ Use environment variables to avoid storing API keys in configuration files:
 remote_nodes:
   - name: production
     api_base_url: https://prod.example.com/api/v1
-    is_auth_token: true
+    auth_type: token
     auth_token: ${PROD_API_KEY}
 ```
 :::
@@ -128,7 +128,7 @@ auth:
 remote_nodes:
   - name: server-b
     api_base_url: http://server-b:8080/api/v1
-    is_auth_token: true
+    auth_type: token
     auth_token: dagu_7Kq9mXxN3pLwR5tY2vZa8bCdEfGhJk4n6sUwXy0zA1B
 ```
 
@@ -154,6 +154,6 @@ remote_nodes:
   - name: self-signed
     api_base_url: https://internal.example.com/api/v1
     skip_tls_verify: true
-    is_auth_token: true
+    auth_type: token
     auth_token: token
 ```
