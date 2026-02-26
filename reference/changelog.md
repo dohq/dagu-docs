@@ -4,7 +4,7 @@
 
 ### Changed
 
-- **OS Environment Variable Expansion**: OS environment variables (e.g., `$HOME`, `$PATH`) are no longer expanded by Dagu for non-shell executor types (docker, http, ssh, jq, mail, s3, redis, etc.) **and DAG-level configuration fields** (`ssh`, `smtp`, `s3`, `registry_auths`). Only variables explicitly defined in the DAG scope (`env:`, `params:`, `secrets:`, step outputs) are expanded. OS variables pass through unchanged, letting the target environment (container, remote shell, etc.) resolve them. Shell command execution is unaffected. See [RFC 007](https://github.com/dagu-org/dagu/blob/main/rfcs/007-os-env-expansion-rules.md).
+- **OS Environment Variable Expansion**: OS environment variables (e.g., `$HOME`, `$PATH`) are no longer expanded by Dagu for non-shell executor types (docker, http, ssh, jq, mail, s3, redis, etc.) **and DAG-level configuration fields** (`ssh`, `smtp`, `s3`, `registry_auths`). Only variables explicitly defined in the DAG scope (`env:`, `params:`, `secrets:`, step outputs) are expanded. OS variables pass through unchanged, letting the target environment (container, remote shell, etc.) resolve them. Shell command execution is unaffected. See [RFC 007](https://github.com/dagu-org/dagu/blob/main/rfcs/implemented/007-os-env-expansion-rules.md).
 
   To use a local OS variable in a config field, explicitly import it via the `env:` block:
 
@@ -18,7 +18,7 @@
     key: ${HOME_DIR}/.ssh/deploy_key  # Expanded — HOME_DIR is DAG-scoped
   ```
 
-- **Auth by Default**: The default authentication mode changed from `none` to `builtin`. New installations require creating an admin account via the `/setup` page on first visit. The JWT token secret is auto-generated and persisted to `{dataDir}/auth/token_secret` if not explicitly configured. See [RFC 018](https://github.com/dagu-org/dagu/blob/main/rfcs/018-auth-by-default.md).
+- **Auth by Default**: The default authentication mode changed from `none` to `builtin`. New installations require creating an admin account via the `/setup` page on first visit. The JWT token secret is auto-generated and persisted to `{dataDir}/auth/token_secret` if not explicitly configured. See [RFC 018](https://github.com/dagu-org/dagu/blob/main/rfcs/draft/018-auth-by-default.md).
 
 - **DAG Type Validation**: DAGs with `type: chain` (the default) no longer allow the `depends` field on steps. Chain execution runs steps sequentially in definition order, making explicit dependencies redundant. To use the `depends` field for custom execution order, set `type: graph` explicitly. This change prevents confusion between chain's implicit sequential ordering and graph's explicit dependency-based execution.
 
