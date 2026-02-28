@@ -1,5 +1,9 @@
 # OIDC Authentication (Pro)
 
+::: info Pro License
+OIDC/SSO login requires a [Dagu Pro license](https://dagu.sh/pricing).
+:::
+
 OpenID Connect (OIDC) authentication for Dagu using OAuth2.
 
 ## Recommended: Builtin + OIDC Mode (Pro)

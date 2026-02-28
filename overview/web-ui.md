@@ -300,6 +300,10 @@ export DAGU_TERMINAL_ENABLED=true
 
 ## Audit Logs (Pro)
 
+::: info Pro License
+Audit logs require a [Dagu Pro license](https://dagu.sh/pricing).
+:::
+
 The Audit Logs page (under Settings) provides a searchable log of security-sensitive operations.
 
 ### Logged Events

@@ -525,6 +525,10 @@ export DAGU_TERMINAL_ENABLED=true
 
 ## Audit Logging (Pro)
 
+::: info Pro License
+Audit logging requires a [Dagu Pro license](https://dagu.sh/pricing).
+:::
+
 Dagu maintains audit logs for security-sensitive operations. Audit logging is **enabled by default**.
 
 ### Configuration

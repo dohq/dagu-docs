@@ -2,6 +2,10 @@
 
 Builtin authentication provides user management with role-based access control (RBAC) using JWT tokens.
 
+::: info Pro License
+User management and RBAC require a [Dagu Pro license](https://dagu.sh/pricing).
+:::
+
 ## Features
 
 - **User Management (Pro)**: Create, update, and delete users through the web UI
