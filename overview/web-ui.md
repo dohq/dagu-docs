@@ -298,7 +298,7 @@ export DAGU_TERMINAL_ENABLED=true
 - Consider enabling authentication when using terminal
 - Terminal sessions are logged in the audit log
 
-## Audit Logs
+## Audit Logs (Pro)
 
 The Audit Logs page (under Settings) provides a searchable log of security-sensitive operations.
 

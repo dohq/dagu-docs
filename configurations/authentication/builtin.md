@@ -4,8 +4,8 @@ Builtin authentication provides user management with role-based access control (
 
 ## Features
 
-- **User Management**: Create, update, and delete users through the web UI
-- **Role-Based Access Control**: Five roles with different permission levels
+- **User Management (Pro)**: Create, update, and delete users through the web UI
+- **Role-Based Access Control (Pro)**: Five roles with different permission levels
 - **JWT Authentication**: Secure token-based authentication
 - **Password Management**: Users can change their own passwords; admins can reset any user's password
 - **API Key Management**: Create and manage API keys for programmatic access with role-based permissions
@@ -244,7 +244,7 @@ curl -H "Authorization: Bearer dagu_your-api-key-here" \
 
 For detailed documentation, see [API Keys](api-keys).
 
-## OIDC/SSO Login
+## OIDC/SSO Login (Pro)
 
 Builtin authentication supports OIDC/SSO login, allowing users to authenticate via enterprise identity providers (Google, Okta, Auth0, Keycloak, etc.) while maintaining Dagu's user management and RBAC system.
 

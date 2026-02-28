@@ -523,7 +523,7 @@ export DAGU_TERMINAL_ENABLED=true
 - Consider using authentication (`auth.mode: builtin`) when enabling terminal access
 - Terminal sessions are logged in the audit log (when audit logging is enabled)
 
-## Audit Logging
+## Audit Logging (Pro)
 
 Dagu maintains audit logs for security-sensitive operations. Audit logging is **enabled by default**.
 

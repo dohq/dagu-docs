@@ -158,17 +158,17 @@ const fullSidebar = [
           { text: "API Keys", link: "/configurations/authentication/api-keys" },
           { text: "Webhooks", link: "/configurations/authentication/webhooks" },
           { text: "Basic Auth", link: "/configurations/authentication/basic" },
-          { text: "OIDC", link: "/configurations/authentication/oidc" },
+          { text: "OIDC (Pro)", link: "/configurations/authentication/oidc" },
           {
-            text: "OIDC - Google",
+            text: "OIDC - Google (Pro)",
             link: "/configurations/authentication/oidc-google",
           },
           {
-            text: "OIDC - Auth0",
+            text: "OIDC - Auth0 (Pro)",
             link: "/configurations/authentication/oidc-auth0",
           },
           {
-            text: "OIDC - Keycloak",
+            text: "OIDC - Keycloak (Pro)",
             link: "/configurations/authentication/oidc-keycloak",
           },
           { text: "TLS/HTTPS", link: "/configurations/authentication/tls" },

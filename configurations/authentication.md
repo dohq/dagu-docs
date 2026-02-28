@@ -4,11 +4,11 @@ Configure authentication and access control for your Dagu instance.
 
 ## Available Authentication Methods
 
-- [Builtin Authentication](authentication/builtin) - User management with role-based access control (RBAC)
+- [Builtin Authentication](authentication/builtin) - User management (Pro) with role-based access control (RBAC)
 - [API Keys](authentication/api-keys) - Programmatic access with role-based permissions (requires Builtin Auth)
 - [Webhooks](authentication/webhooks) - DAG-specific tokens for external integrations (requires Builtin Auth)
 - [Basic Authentication](authentication/basic) - Simple username and password authentication
-- [OIDC Authentication](authentication/oidc) - OpenID Connect authentication
+- [OIDC Authentication](authentication/oidc) - OpenID Connect authentication (Pro)
 - [TLS/HTTPS](authentication/tls) - Encrypted connections
 - [Remote Nodes](authentication/remote-nodes) - Multi-instance authentication
 
@@ -48,7 +48,7 @@ auth:
 
 ### OIDC Authentication
 
-**Recommended: Builtin + OIDC** (SSO with user management and RBAC):
+**Recommended: Builtin + OIDC (Pro)** (SSO with user management and RBAC):
 
 ```yaml
 auth:
@@ -74,7 +74,7 @@ auth:
 | Method | Use Case |
 |--------|----------|
 | **Builtin** | Multiple users with different permission levels, self-hosted user management |
-| **Builtin + OIDC** | Enterprise SSO with RBAC, auto-signup, role mapping from IdP |
+| **Builtin + OIDC (Pro)** | Enterprise SSO with RBAC, auto-signup, role mapping from IdP |
 | **API Keys** | CI/CD pipelines, automation with role-based access (requires Builtin Auth) |
 | **Webhooks** | External integrations (GitHub, Slack, CI/CD) to trigger specific DAGs (requires Builtin Auth) |
 | **Basic** | Single user, simple setup, no user management needed |

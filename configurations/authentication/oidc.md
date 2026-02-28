@@ -1,8 +1,8 @@
-# OIDC Authentication
+# OIDC Authentication (Pro)
 
 OpenID Connect (OIDC) authentication for Dagu using OAuth2.
 
-## Recommended: Builtin + OIDC Mode
+## Recommended: Builtin + OIDC Mode (Pro)
 
 For most use cases, we recommend using **builtin auth mode with OIDC enabled** instead of standalone OIDC mode. This gives you:
 

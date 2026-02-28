@@ -107,7 +107,7 @@ Visit [http://localhost:8080](http://localhost:8080)
 | [**Step Types**](/reference/executors) | Shell, Docker, SSH, HTTP, JQ, Mail, and more |
 | [**Observability**](/features/opentelemetry) | Live logs, Gantt charts, [Prometheus metrics](/features/prometheus-metrics), OpenTelemetry |
 | [**AI Agent**](/features/agent/) | Built-in LLM assistant with tool calling, persistent memory, and souls |
-| [**Security**](/configurations/authentication) | Built-in RBAC with admin, manager, operator, and viewer roles |
+| [**Security**](/configurations/authentication) | Built-in RBAC (Pro) with admin, manager, operator, and viewer roles |
 
 ## Example
 
