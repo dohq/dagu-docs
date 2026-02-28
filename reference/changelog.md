@@ -1,6 +1,6 @@
 # Changelog
 
-## v2.0.0 (UNRELEASED)
+## v2.0.0 (2026-02-28)
 
 ### Changed
 
@@ -428,6 +428,24 @@
 
 - **Unified Stop/Restart Scheduling**: Stop and restart schedules are now evaluated by the same TickPlanner module that handles start schedules. Stop schedules fire only when the DAG's latest status is `running`. Restart schedules fire unconditionally. Watermarks track only start-schedule runs to prevent stop/restart times from corrupting catchup computation.
 
+- **Remote Agent Tool**: New `remote` tool enabling task delegation to remote Dagu nodes. Agents can spawn and manage work across distributed instances with optional session ID support for idempotent session creation. See [Agent Tools](/features/agent/tools).
+
+- **Remote Node Management**: Admin UI page for managing remote worker nodes with full CRUD operations and connection testing. REST API endpoints for remote node configuration. See [Distributed Execution](/features/distributed-execution).
+
+- **Document Management**: Comprehensive document management system with full CRUD and search capabilities. Dedicated Docs page with tree navigation and Markdown rendering for project documentation alongside DAG workflows.
+
+- **Git-Sync Reconciliation**: Enhanced Git-sync with forget, delete, and move operations for sync item management. Cleanup functionality to remove all missing items at once. See [Git Sync](/features/git-sync).
+
+- **License Management**: License validation, status tracking, and feature gating system for RBAC and audit logging.
+
+- **Agent Personality (Soul)**: Agent personality management system with full CRUD capabilities. Users can select and customize agent personalities for chat sessions.
+
+- **Agent API Cost Tracking**: Per-message cost tracking for LLM API calls with USD pricing metadata. Enhanced agent step message persistence for cost analysis.
+
+- **Provider-Native Web Search for Agent**: Agents can use provider-native web search capabilities. Users can enable web search and configure maximum uses per request in agent settings.
+
+- **Singleton Enqueue Option**: New `singleton` constraint for the `/dag-runs/enqueue` endpoint ensures only one DAG with the same name can be running or queued at any time. (#1672)
+
 ### Deprecated
 
 - **DAG-level `max_active_runs` field**: The `max_active_runs` field in DAG files is now deprecated for local (DAG-based) queues. Local queues now always use FIFO processing with concurrency of 1.
@@ -475,28 +493,239 @@
 
 - **Windows Process Timeout and Subprocess Termination**: Fixed `timeout_sec` not being enforced on Windows. The command executor's `Run()` method blocked on `cmd.Wait()` without responding to context cancellation, causing processes to run past their timeout. Refactored to run `cmd.Wait()` asynchronously with a `select` on context cancellation, and updated `KillProcessGroup()` on Windows to use `killProcessTree()` for complete subprocess tree termination. Returns exit code 124 on timeout. (#1635)
 
+- **Security: Path Traversal in DAG Creation API**: DAG creation endpoint now validates names to prevent directory traversal attacks. (GHSA-6v48-fcq6-ff23, #1691)
+
+- **Docker HOME Folder Substitution**: Added `-H` flag to `sudo` in `entrypoint.sh` so `~` correctly expands to `/home/dagu` instead of `/root` inside Docker containers. (#1699, reported by [@simonmysun](https://github.com/simonmysun))
+
+- **Cache Memory Bloat**: Optimized cache implementation with more efficient eviction strategy to prevent excessive memory usage. (#1679, reported by community via #546)
+
+- **Webhook Fallback Body**: Webhooks now support arbitrary JSON payloads with intelligent format detection and automatic fallback handling. (#1668)
+
+- **Queue Processing Stability**: Enhanced queue processor stability with improved error handling and recovery mechanisms for DAG file operations during concurrent processing. (#1595, reported by [@ghansham](https://github.com/ghansham))
+
+- **Variable Expansion for Unknown Variables**: Variable expansion now preserves unknown or undefined variables in their literal form instead of expanding to empty strings. (#1606)
+
+- **Scheduler Queue Capacity on Retry**: Retries for DAGs using global queues are now properly enqueued instead of executed immediately, respecting queue capacity limits. (#1676, contributed by [@kriyanshii](https://github.com/kriyanshii), reported by [@ghansham](https://github.com/ghansham) via #1673)
+
+- **Working Directory Resolution**: Enhanced working directory resolution to properly inherit from base configuration when not explicitly specified in DAG files. (#1641)
+
+- **Upgrade Command Stability**: Improved upgrade download reliability with retry logic and exponential backoff. Strengthened Windows binary replacement. (#1646)
+
+- **Parallel + Call Parameter Splitting**: Fixed expanded variable references being incorrectly split during parallel step execution with `call`. (#1665, reported by [@pdoronila](https://github.com/pdoronila) via #1658)
+
+- **Environment Variable Expansion for Non-Unix Shells**: Improved variable expansion handling for edge cases involving single quotes and adjacent characters on Windows PowerShell and cmd. (#1666, reported by [@pdoronila](https://github.com/pdoronila) via #1661)
+
+- **Start Command Parameter Validation**: Support for JSON-formatted parameters when executing DAG commands. Enhanced parameter validation for the `start` CLI command. (#1663, reported by [@pdoronila](https://github.com/pdoronila) via #1660)
+
+- **Frontend Build Segfaults**: Replaced TerserPlugin with esbuild for faster, more reliable frontend builds. TerserPlugin was causing segfaults due to insufficient memory allocation. (#1645, contributed by [@yonas](https://github.com/yonas), reported via #901)
+
+- **Tag Sorting**: Alphabetical sorting of tag filter combobox and DAG table tags list for better usability. (#1617, contributed by [@prods](https://github.com/prods))
+
+- **Queue Count Display**: Fixed queue status reporting to exclude currently running items from the queued count. (#1602, contributed by [@sahalbelam](https://github.com/sahalbelam), reported via #1601)
+
 ### Contributors
 
-Thanks to our contributors for this release:
+This release represents a massive effort with **108 merged pull requests** since v1.30.3. We are deeply grateful to every contributor who helped make Dagu v2 a reality through code, bug reports, feature requests, reviews, and community support.
 
-| Contribution | Contributor |
+**Special Thanks** to [@ghansham](https://github.com/ghansham) and [@kriyanshii](https://github.com/kriyanshii) for providing many valuable feedback and ideas throughout the v2.0.0 development cycle. Their consistent engagement across issues, pull requests, and discussions has been instrumental in shaping this release.
+
+#### Code Contributors
+
+Contributors who authored merged pull requests for v2.0.0:
+
+| Contributor | Contributions |
 | --- | --- |
-| Windows process timeout and subprocess tree termination fix (#1635), tag sorting fix (#1617) | [@prods](https://github.com/prods) |
-| Production-ready Helm chart for Kubernetes deployment (#1613), tag-wise search for DAG runs feature request (#1494) | [@kriyanshii](https://github.com/kriyanshii) |
-| Queue count display fix (#1602), queue count bug report (#1601) | [@sahalisro-blip](https://github.com/sahalisro-blip) |
-| Dollar sign escape feature request (#1628) | [@sbartczak-aleno](https://github.com/sbartczak-aleno) |
-| `max_active_steps` bug report (#1619), false cyclic plan detection bug report (#1618) | [@waterworthd-cim](https://github.com/waterworthd-cim) |
-| Step name character limit in parallel execution bug report (#1631) | [@dev-epices](https://github.com/dev-epices) |
-| Trigger type visibility feature request (#1610) | [@kevinsimper](https://github.com/kevinsimper) |
-| SSH `working_dir` bug report (#1596), merged log output feature request (#1505) | [@Kirandeep-Singh-Khehra](https://github.com/Kirandeep-Singh-Khehra) |
-| Container shell wrapper feature request (#1589) | [@bagemt](https://github.com/bagemt) |
-| LLM chat content-type bug report (#1574) | [@insanity54](https://github.com/insanity54) |
-| Mail settings environment variable bug report (#1557) | [@abylon-io](https://github.com/abylon-io) |
-| Helm chart feature request (#1492) | [@artemklevtsov](https://github.com/artemklevtsov) |
-| Key-value tags feature request (#1495), community support across multiple issues | [@ghansham](https://github.com/ghansham) |
-| DAG run result field feature request (#1466) | [@Kaiden0001](https://github.com/Kaiden0001) |
-| Worker ID visibility feature request (#1500) | [@berkaydedeoglu](https://github.com/berkaydedeoglu) |
-| Live demo documentation fix (#1560) | [@evanzhang87](https://github.com/evanzhang87) |
+| [@prods](https://github.com/prods) (Pedro Rodriguez) | Windows process timeout and subprocess tree termination fix (#1635), tag sorting and label ordering fix (#1617) |
+| [@kriyanshii](https://github.com/kriyanshii) | Production-ready Helm chart for Kubernetes deployment (#1613), scheduler queue capacity fix for retries (#1676) |
+| [@sahalbelam](https://github.com/sahalbelam) | Singleton option for enqueue API (#1672), filename-based DAG ingestion (#1630), queue count display fix (#1602) |
+| [@yonas](https://github.com/yonas) | Replaced TerserPlugin with esbuild to fix frontend build segfaults (#1645) |
+
+#### Bug Reporters
+
+Contributors who identified and reported bugs that were fixed in v2.0.0:
+
+| Contributor | Reports |
+| --- | --- |
+| [@pdoronila](https://github.com/pdoronila) (Paul Doronila) | `${VAR}` interpolation broken on Windows (#1661), `--` separator required for params (#1660), `parallel:` + `call:` param splitting (#1658), base config `workingDir` inheritance (#1656), multiple dotenv files (#1657) |
+| [@waterworthd-cim](https://github.com/waterworthd-cim) | False "cyclic plan detected" error with step ordering (#1618), `maxActiveSteps` has no effect (#1619) |
+| [@insanity54](https://github.com/insanity54) (Chris) | LLM chat POST content-type set to `text/plain` (#1574), `jq` step outputs numbers in scientific notation (#1648) |
+| [@sahalisro-blip](https://github.com/sahalisro-blip) | Node modules download error (#1561), queued DAG count incorrect (#1601) |
+| [@prods](https://github.com/prods) (Pedro Rodriguez) | `timeoutSec` not enforced on Windows (#1636) |
+| [@simonmysun](https://github.com/simonmysun) (Sun, Maoyin) | Ambiguous HOME folder substitution in Docker (#1698) |
+| [@dendrite-soup](https://github.com/dendrite-soup) | Security vulnerability report: unauthenticated RCE in default config (GHSA-6qr9-g2xw-cw92, #1700) |
+| [@dev-epices](https://github.com/dev-epices) | Step name 29-character limit in parallel execution (#1631) |
+| [@sbartczak-aleno](https://github.com/sbartczak-aleno) (Szymon Bartczak) | No way to escape dollar sign ($) in non-shell contexts (#1628) |
+| [@Kirandeep-Singh-Khehra](https://github.com/Kirandeep-Singh-Khehra) | `workingDir` not working with SSH executor (#1596) |
+| [@abylon-io](https://github.com/abylon-io) (Pascal Thomas) | Environment variables not expanded in mail settings (#1557) |
+| [@n3storm](https://github.com/n3storm) (Nestor Diaz Valencia) | Website docs menu entry pointing to old domain (#1644) |
+| [@aigeling](https://github.com/aigeling) | Documentation site unreachable (#1650) |
+| [@evanzhang87](https://github.com/evanzhang87) (Evan) | Live demo user not working (#1560) |
+| [@Evs91](https://github.com/Evs91) | S3 Object Storage not recognized as valid type (#1690) |
+| [@scilo7](https://github.com/scilo7) | Immediate execution does not respect `workerSelector` (#1638) |
+| [@williamohara](https://github.com/williamohara) (William O'Hara) | Health endpoint access logging noise (#1694) |
+
+#### Feature Requesters
+
+Contributors who proposed features that were implemented in v2.0.0:
+
+| Contributor | Requests |
+| --- | --- |
+| [@ghansham](https://github.com/ghansham) | Key-value tags (#1495), queue capacity on retry (#1673), dynamic parameters (#1677), failed DAG queue behavior (#1674) |
+| [@kevinsimper](https://github.com/kevinsimper) (Kevin Simper) | Trigger type visibility in DAG run history (#1610) |
+| [@bagemt](https://github.com/bagemt) (mt) | Container shell wrapper / generic entrypoint overwrite (#1589), interactive DAG graph library suggestion (#1593) |
+| [@sahalbelam](https://github.com/sahalbelam) | Singleton support for enqueue API (#1643), URL field for enqueue API (#1609) |
+| [@kriyanshii](https://github.com/kriyanshii) | Tag-wise search for DAG runs (#1494) |
+| [@NebulaCoding1029](https://github.com/NebulaCoding1029) | SFTP/FTP executor support (#1079) |
+| [@ByamB4](https://github.com/ByamB4) (Byambadalai Sumiya) | Security features (#1687) |
+| [@Kaiden0001](https://github.com/Kaiden0001) | Log pagination improvements (#1579) |
+| [@thimuslux](https://github.com/thimuslux) (ThiMusLUX) | Basic condition If/Then/Else (#1629) |
+| [@artemklevtsov](https://github.com/artemklevtsov) | Helm chart for Kubernetes (#1492) |
+| [@berkaydedeoglu](https://github.com/berkaydedeoglu) | Worker ID visibility (#1500) |
+
+#### Community Support and Reviewers
+
+Contributors who provided code reviews, helped diagnose bugs, answered questions, and supported the community throughout the v2.0.0 development cycle:
+
+| Contributor | Support |
+| --- | --- |
+| [@ghansham](https://github.com/ghansham) | Extensive code reviews, issue triage, and community support across 15+ issues and PRs including #1596, #1609, #1610, #1629, #1631, #1643, #1644, #1657, #1669, #1672, #1674, #1676, #1677. One of the most active community members. |
+| [@mkalinski93](https://github.com/mkalinski93) (Michael Brendle) | Distributed workers discussion and feedback (#1686) |
+| [@vnghia](https://github.com/vnghia) (Nghia) | Docker executor deprecation discussion (#1515) |
+| [@wilsoncd35](https://github.com/wilsoncd35) (Charlie Wilson) | `logOutput` sub-DAG inheritance report (#1555) |
+| [@ben-auo](https://github.com/ben-auo) | Containerd discussion (#1323) |
+
+#### Historical Code Contributors
+
+Contributors who authored code in previous releases that forms the foundation of v2.0.0:
+
+[@ArseniySavin](https://github.com/ArseniySavin),
+[@ddddddO](https://github.com/ddddddO),
+[@garunitule](https://github.com/garunitule),
+[@Kiyo510](https://github.com/Kiyo510),
+[@Lewiscowles1986](https://github.com/Lewiscowles1986),
+[@liooooo29](https://github.com/liooooo29),
+[@rafiramadhana](https://github.com/rafiramadhana),
+[@RamonEspinosa](https://github.com/RamonEspinosa),
+[@rocwang](https://github.com/rocwang),
+[@stefaan1o](https://github.com/stefaan1o),
+[@x2ocoder](https://github.com/x2ocoder),
+[@x4204](https://github.com/x4204),
+[@fishnux](https://github.com/fishnux),
+[@triole](https://github.com/triole),
+[@yarikoptic](https://github.com/yarikoptic),
+[@zph](https://github.com/zph),
+[@arky](https://github.com/arky),
+[@Arvintian](https://github.com/Arvintian),
+[@jerry-yuan](https://github.com/jerry-yuan),
+[@jonnochoo](https://github.com/jonnochoo),
+[@lvoeg](https://github.com/lvoeg),
+[@reneleonhardt](https://github.com/reneleonhardt),
+[@david-waterworth](https://github.com/david-waterworth),
+[@Tagnard](https://github.com/Tagnard),
+[@thefishhat](https://github.com/thefishhat),
+[@AdityaTel89](https://github.com/AdityaTel89),
+[@Sarvesh-11](https://github.com/Sarvesh-11),
+[@SiwonP](https://github.com/SiwonP),
+[@christinoleo](https://github.com/christinoleo)
+
+#### Community Participants
+
+Everyone who participated in discussions, reported feedback, or helped other users during the v2.0.0 cycle:
+
+[@2012ZGZYY](https://github.com/2012ZGZYY),
+[@accforgithubtest](https://github.com/accforgithubtest),
+[@admerzeau](https://github.com/admerzeau),
+[@agajic-modoolar](https://github.com/agajic-modoolar),
+[@alangrafu](https://github.com/alangrafu),
+[@alext-extracellular](https://github.com/alext-extracellular),
+[@alfhj](https://github.com/alfhj),
+[@alienscience](https://github.com/alienscience),
+[@aptemus](https://github.com/aptemus),
+[@AX-AMote](https://github.com/AX-AMote),
+[@bellackn](https://github.com/bellackn),
+[@bielids](https://github.com/bielids),
+[@biraj21](https://github.com/biraj21),
+[@borestad](https://github.com/borestad),
+[@bremyozo](https://github.com/bremyozo),
+[@cernoel](https://github.com/cernoel),
+[@chrishoage](https://github.com/chrishoage),
+[@CMiksche](https://github.com/CMiksche),
+[@codinggeeks06](https://github.com/codinggeeks06),
+[@Daffdi](https://github.com/Daffdi),
+[@DarkWiiPlayer](https://github.com/DarkWiiPlayer),
+[@dat-adi](https://github.com/dat-adi),
+[@dAtBigFish](https://github.com/dAtBigFish),
+[@dev-a](https://github.com/dev-a),
+[@dmitriy-b](https://github.com/dmitriy-b),
+[@don-philipe](https://github.com/don-philipe),
+[@eerison](https://github.com/eerison),
+[@erwan-airone](https://github.com/erwan-airone),
+[@eugenechyrski](https://github.com/eugenechyrski),
+[@fbartels](https://github.com/fbartels),
+[@frafra](https://github.com/frafra),
+[@georgeck](https://github.com/georgeck),
+[@GhisF](https://github.com/GhisF),
+[@gyger](https://github.com/gyger),
+[@hbina](https://github.com/hbina),
+[@helmut72](https://github.com/helmut72),
+[@hgeritzer](https://github.com/hgeritzer),
+[@HtcOrange](https://github.com/HtcOrange),
+[@iainad](https://github.com/iainad),
+[@imkebe](https://github.com/imkebe),
+[@jarnik](https://github.com/jarnik),
+[@jeremydelattre59](https://github.com/jeremydelattre59),
+[@jhuang732](https://github.com/jhuang732),
+[@JohnMatthiasWabwire](https://github.com/JohnMatthiasWabwire),
+[@jonasban](https://github.com/jonasban),
+[@jonathonc](https://github.com/jonathonc),
+[@jrisch](https://github.com/jrisch),
+[@JuchangGit](https://github.com/JuchangGit),
+[@jyroscoped](https://github.com/jyroscoped),
+[@kacamific](https://github.com/kacamific),
+[@kachida](https://github.com/kachida),
+[@kamandir](https://github.com/kamandir),
+[@kylejbrk](https://github.com/kylejbrk),
+[@lnlion](https://github.com/lnlion),
+[@mdanilakis](https://github.com/mdanilakis),
+[@Mice7R](https://github.com/Mice7R),
+[@mingjianliu](https://github.com/mingjianliu),
+[@mitchplze](https://github.com/mitchplze),
+[@mnmercer](https://github.com/mnmercer),
+[@Netmisa](https://github.com/Netmisa),
+[@nicokant](https://github.com/nicokant),
+[@nightly-brew](https://github.com/nightly-brew),
+[@normal-coder](https://github.com/normal-coder),
+[@overflowy](https://github.com/overflowy),
+[@Pangolin2097](https://github.com/Pangolin2097),
+[@peterbuga](https://github.com/peterbuga),
+[@piotrwalkusz1](https://github.com/piotrwalkusz1),
+[@plc-dev](https://github.com/plc-dev),
+[@pratio](https://github.com/pratio),
+[@rrottmann](https://github.com/rrottmann),
+[@saishreyakumar](https://github.com/saishreyakumar),
+[@samuelgodoy](https://github.com/samuelgodoy),
+[@sascha-andres](https://github.com/sascha-andres),
+[@Sedymariama](https://github.com/Sedymariama),
+[@semyon-t](https://github.com/semyon-t),
+[@SGRelic](https://github.com/SGRelic),
+[@SoarinFerret](https://github.com/SoarinFerret),
+[@tapir](https://github.com/tapir),
+[@tetedange13](https://github.com/tetedange13),
+[@tguructa](https://github.com/tguructa),
+[@thibmart1](https://github.com/thibmart1),
+[@topjor](https://github.com/topjor),
+[@TrezOne](https://github.com/TrezOne),
+[@Vad1mo](https://github.com/Vad1mo),
+[@vhespanha](https://github.com/vhespanha),
+[@volong113322-tech](https://github.com/volong113322-tech),
+[@wakatara](https://github.com/wakatara),
+[@xinxinxinye](https://github.com/xinxinxinye),
+[@yangkghjh](https://github.com/yangkghjh),
+[@ylaizet](https://github.com/ylaizet),
+[@yosefy](https://github.com/yosefy),
+[@yurivish](https://github.com/yurivish),
+[@ZivenLu](https://github.com/ZivenLu),
+[@zobzn](https://github.com/zobzn)
 
 ## v1.30.0 (2026-01-04)
 
