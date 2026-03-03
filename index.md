@@ -27,7 +27,7 @@ layout: doc
 ![Web UI Demo](/demo-web-ui.webp)
 
 ::: tip Try It Live
-Explore without installing: [Live Demo](http://23.251.149.55:8525/)
+Explore without installing: [Live Demo](https://demo-instance.dagu.sh/)
 
 Credentials: `demouser` / `demouser`
 :::
