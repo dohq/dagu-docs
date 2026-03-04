@@ -15,6 +15,32 @@ Dagu orchestrates shell commands, containers, AI agents, and remote tasks with d
 - **Built-in scheduling** - Cron expressions with start/stop/restart support
 - **Web UI** - Monitor, control, and debug workflows in real-time
 
+## AI Agent
+
+Dagu includes a built-in LLM-powered agent that can read, create, and modify your workflows. Use it interactively through the Web UI chat, or add `type: agent` steps to your DAGs for automation.
+
+- **Create and update workflows** — describe what you need; the agent generates valid DAG YAML, validates it against the schema, and opens it in the UI
+- **Debug and fix failures** — point the agent at a failed run; it reads logs, suggests probable causes, and can patch configurations
+- **Answer questions** — ask what a DAG does, how to configure an executor, or why a step failed
+
+The agent runs as an LLM tool-calling loop with configurable tools (shell execution, file read/write, schema lookup, sub-agent delegation) and safety controls (RBAC enforcement, per-tool enable/disable, regex-based bash command policies). Results are non-deterministic and should be reviewed.
+
+Bring your own model: Anthropic, OpenAI, Gemini, OpenRouter, and local servers (Ollama, vLLM) are supported. Models and API keys are configured in the Web UI at `/agent-settings`.
+
+```yaml
+steps:
+  - name: analyze-logs
+    type: agent
+    messages:
+      - role: user
+        content: |
+          Analyze the error logs at /var/log/app/errors.log from the last hour.
+          Summarize the root causes and suggest fixes.
+    output: ANALYSIS_RESULT
+```
+
+See [Agent Overview](/features/agent/) and [Agent Step](/features/agent/step) for full documentation.
+
 ## How It Works
 
 Dagu executes workflows defined as steps in YAML. Steps form a Directed Acyclic Graph (DAG), ensuring predictable execution order.
@@ -108,9 +134,11 @@ See [Architecture](/overview/architecture) for details.
 | Type | Description |
 |------|-------------|
 | `command` | Shell commands (bash, sh, PowerShell, cmd) |
-| `docker` | Container execution with volume mounts and registry auth |
+| `agent` | LLM-powered agent with tool-calling loop |
 | `ssh` | Remote command execution via SSH |
+| `docker` | Container execution with volume mounts and registry auth |
 | `http` | HTTP/REST API requests |
+| `hitl` | Human-in-the-loop approval gates |
 | `jq` | JSON query and transformation |
 | `mail` | Email notifications with attachments |
 | `dag` | Sub-workflow execution (hierarchical composition) |
@@ -135,5 +163,6 @@ See [Step Types Reference](/reference/executors) for configuration details.
 
 - [Quick Start](/getting-started/quickstart) - Running in minutes
 - [Core Concepts](/getting-started/concepts) - Workflows, steps, and dependencies
+- [AI Agent](/features/agent/) - Built-in LLM agent for workflow management
 - [Architecture](/overview/architecture) - System internals and distributed execution
 - [Examples](/writing-workflows/examples) - Ready-to-use workflow patterns
