@@ -52,6 +52,7 @@ steps:
 | `memory` | object | `{ enabled: false }` | When `enabled: true`, loads global and per-DAG memory into the agent context. See [Memory](/features/agent/memory). |
 | `prompt` | string | — | Additional instructions appended to the built-in system prompt. |
 | `max_iterations` | int | `50` | Maximum tool-call rounds before the agent stops. |
+| `web_search` | object | — | Provider-native web search configuration. Overrides the global agent web search setting. See [Web Search](#web-search). |
 | `safe_mode` | bool | `true` | When `true`, bash commands matching dangerous patterns require HITL approval. |
 
 ## Model Resolution
@@ -120,10 +121,13 @@ The agent step has access to these tools:
 | `patch` | Create, edit, or delete files |
 | `think` | Record reasoning without executing actions |
 | `read_schema` | Look up DAG YAML schema documentation |
-| `web_search` | Search the internet via DuckDuckGo |
+| `use_skill` | Execute a skill from the skill store (available when skills are configured) |
+| `search_skills` | Search available skills by query (available when skills are configured) |
+| `remote_agent` | Delegate tasks to agents on remote nodes (available when remote nodes are configured) |
+| `list_remote_nodes` | List available remote nodes (available when remote nodes are configured) |
 | `output` | Write the final result to stdout (step-only, see [Output Capture](#output-capture)) |
 
-The `navigate` and `ask_user` tools are not available in agent steps because they require the Web UI.
+The `navigate`, `ask_user`, and `delegate` tools are not available in agent steps because they require the Web UI.
 
 See [Tools Reference](/features/agent/tools) for full parameter documentation.
 
@@ -189,6 +193,35 @@ agent:
 | `rules[].action` | string | `allow`, `deny` | Action when pattern matches. Required. |
 
 When a bash command is denied, the agent receives: `"Blocked by policy: bash command denied by policy: {reason}"`.
+
+## Web Search
+
+Provider-native web search is configured via the `agent.web_search` field. This uses the LLM provider's built-in web search capability (e.g., Anthropic's web search) rather than a separate tool. When omitted, the step falls back to the global agent web search setting.
+
+```yaml
+agent:
+  web_search:
+    enabled: true
+    max_uses: 10
+    allowed_domains:
+      - docs.example.com
+      - github.com
+    blocked_domains:
+      - reddit.com
+    user_location:
+      city: San Francisco
+      region: California
+      country: US
+      timezone: America/Los_Angeles
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `enabled` | bool | Activates provider-native web search. |
+| `max_uses` | *int | Limits search invocations per request. |
+| `allowed_domains` | string[] | Restricts results to these domains (Anthropic only). |
+| `blocked_domains` | string[] | Excludes results from these domains (Anthropic only). |
+| `user_location` | object | Localizes search results. Fields: `city`, `region`, `country`, `timezone` (all string). |
 
 ## Messages
 

@@ -5,17 +5,18 @@
 Step types extend Dagu's capabilities beyond simple shell commands. Available step types:
 
 - [Shell](/features/executors/shell) (default) - Execute shell commands
-- [Docker](/features/executors/docker) - Run commands in Docker containers
+- [Agent](/features/agent/step) - Run an AI agent as a workflow step (multi-turn tool-calling loop)
 - [SSH](/features/executors/ssh) - Execute commands on remote hosts
-- [S3](/features/executors/s3) - S3 operations (upload, download, list, delete)
+- [Docker](/features/executors/docker) - Run commands in Docker containers
 - [HTTP](/features/executors/http) - Make HTTP requests
-- [Chat](/features/chat/) - Execute LLM requests (OpenAI, Anthropic, Gemini, etc.)
-- [Archive](/features/executors/archive) - Extract, create, and list archive files
-- [Mail](/features/executors/mail) - Send emails
-- [JQ](/features/executors/jq) - Process JSON data
-- [Redis](/features/executors/redis) - Execute Redis commands and operations
-- [HITL](/features/executors/hitl) - Human-in-the-loop approval gates
 - [Router](/features/executors/router) - Route execution to different steps based on pattern matching
+- [HITL](/features/executors/hitl) - Human-in-the-loop approval gates
+- [Mail](/features/executors/mail) - Send emails
+- [Chat](/features/chat/) - Execute LLM requests (OpenAI, Anthropic, Gemini, etc.)
+- [JQ](/features/executors/jq) - Process JSON data
+- [S3](/features/executors/s3) - S3 operations (upload, download, list, delete)
+- [Redis](/features/executors/redis) - Execute Redis commands and operations
+- [Archive](/features/executors/archive) - Extract, create, and list archive files
 - [GitHub Actions (_experimental_)](/features/executors/github-actions) - Run marketplace actions locally with nektos/act
 
 ::: tip
@@ -34,7 +35,7 @@ The default step type runs commands in the system shell. Set a DAG-level `shell`
 shell: ["/bin/bash", "-e"]  # Default shell for the workflow
 steps:
   - command: echo "Hello World"
-    
+
   - command: echo $BASH_VERSION   # Uses DAG shell
   - shell: /usr/bin/zsh           # Step-level override
     command: echo "Uses zsh"
@@ -46,14 +47,187 @@ steps:
 steps:
   - name: default-shell
     command: echo "Uses DAG shell or system default"
-    
+
   - name: bash-specific
     shell: ["bash", "-e", "-u"]   # Array form for flags
     command: echo "Uses bash features"
-    
+
   - name: custom-shell
     shell: /usr/bin/zsh
     command: echo "Uses zsh"
+```
+
+## Agent
+
+::: info
+For detailed Agent step documentation, see [Agent Step Guide](/features/agent/step).
+:::
+
+Run an AI agent as a workflow step. The agent executes a multi-turn tool-calling loop — it reads files, runs commands, edits code, and searches the web to accomplish the task described in `messages`.
+
+Agent settings (models, API keys, tool policies, skills, souls) are configured via the Web UI at `/settings/agent` (requires admin role), not in DAG YAML files. Steps reference models by ID and inherit global policies.
+
+### Minimal
+
+```yaml
+steps:
+  - type: agent
+    messages:
+      - role: user
+        content: "Summarize the README.md in this repository"
+    output: SUMMARY
+```
+
+### With Model Override and Restricted Tools
+
+```yaml
+steps:
+  - type: agent
+    agent:
+      model: claude-opus
+      tools:
+        enabled:
+          - read
+          - think
+      safe_mode: false
+    messages:
+      - role: user
+        content: "Analyze the architecture of this codebase without modifying anything"
+    output: ANALYSIS
+```
+
+### With Bash Policy
+
+```yaml
+steps:
+  - type: agent
+    agent:
+      tools:
+        bash_policy:
+          default_behavior: deny
+          deny_behavior: block
+          rules:
+            - name: allow-status-commands
+              pattern: "^(kubectl get|kubectl describe|helm status)\\b"
+              action: allow
+      prompt: |
+        Check the deployment status of the staging environment.
+        Only use read-only kubectl and helm commands.
+      max_iterations: 20
+    messages:
+      - role: user
+        content: "Report the health of all pods in the staging namespace"
+    output: HEALTH_REPORT
+```
+
+### With Web Search, Memory, Skills, and Soul
+
+```yaml
+steps:
+  - type: agent
+    agent:
+      model: claude-sonnet
+      web_search:
+        enabled: true
+        max_uses: 5
+      memory:
+        enabled: true
+      skills:
+        - code-review
+        - testing
+      soul: tsumugi
+    messages:
+      - role: user
+        content: "Research best practices for database migration and apply them to our schema"
+    output: MIGRATION_PLAN
+```
+
+### Pipeline with Output Capture
+
+```yaml
+params:
+  - REPO_PATH
+
+steps:
+  - type: agent
+    messages:
+      - role: user
+        content: "Analyze the test coverage of ${REPO_PATH} and identify untested code paths"
+    output: COVERAGE_ANALYSIS
+
+  - type: agent
+    agent:
+      model: claude-opus
+      max_iterations: 100
+    messages:
+      - role: user
+        content: |
+          Based on this analysis:
+          ${COVERAGE_ANALYSIS}
+
+          Write unit tests for the untested code paths in ${REPO_PATH}.
+    output: TEST_RESULT
+```
+
+## SSH
+
+::: info
+For detailed SSH step type documentation, see [SSH Guide](/features/executors/ssh).
+:::
+
+Execute commands on remote hosts over SSH.
+
+### Basic SSH
+
+```yaml
+steps:
+  - name: remote-command
+    type: ssh
+    config:
+      user: deploy
+      host: server.example.com
+      port: 22
+      key: /home/user/.ssh/id_rsa
+    command: ls -la /var/www
+```
+
+### With Environment
+
+```yaml
+steps:
+  - name: remote-with-env
+    type: ssh
+    config:
+      user: deploy
+      host: 192.168.1.100
+      key: ~/.ssh/deploy_key
+    command: |
+      export APP_ENV=production
+      cd /opt/app
+      echo "Deploying"
+```
+
+### Multiple Commands
+
+```yaml
+steps:
+  - name: remote-script
+    type: ssh
+    config:
+      user: admin
+      host: backup.server.com
+      key: ${SSH_KEY_PATH}
+    script: |
+      #!/bin/bash
+      set -e
+
+      echo "Starting backup..."
+      tar -czf /backup/app-$(date +%Y%m%d).tar.gz /var/www
+
+      echo "Cleaning old backups..."
+      find /backup -name "app-*.tar.gz" -mtime +7 -delete
+
+      echo "Backup complete"
 ```
 
 ## Docker
@@ -162,36 +336,6 @@ steps:
     command: python process.py /container/data
 ```
 
-## GitHub Actions
-
-::: info
-For the full guide, see [GitHub Actions](/features/executors/github-actions).
-:::
-
-Run marketplace actions (e.g. `actions/checkout@v4`) inside Dagu steps.
-
-```yaml
-secrets:
-  - name: GITHUB_TOKEN
-    provider: env
-    key: GITHUB_TOKEN
-
-steps:
-  - name: checkout
-    command: actions/checkout@v4
-    type: gha               # Aliases: github_action, github-action
-    config:
-      runner: node:24-bookworm
-    params:
-      repository: dagu-org/dagu
-      ref: main
-      token: "${GITHUB_TOKEN}"
-```
-
-::: warning
-This executor is experimental. It depends on Docker, downloads images on demand, and currently supports single-action invocations per step.
-:::
-
 ### Environment Variables
 
 ```yaml
@@ -267,176 +411,6 @@ steps:
         - "127.0.0.1:5432:5432"
       network: bridge
     command: postgres
-```
-
-## SSH
-
-::: info
-For detailed SSH step type documentation, see [SSH Guide](/features/executors/ssh).
-:::
-
-Execute commands on remote hosts over SSH.
-
-### Basic SSH
-
-```yaml
-steps:
-  - name: remote-command
-    type: ssh
-    config:
-      user: deploy
-      host: server.example.com
-      port: 22
-      key: /home/user/.ssh/id_rsa
-    command: ls -la /var/www
-```
-
-### With Environment
-
-```yaml
-steps:
-  - name: remote-with-env
-    type: ssh
-    config:
-      user: deploy
-      host: 192.168.1.100
-      key: ~/.ssh/deploy_key
-    command: |
-      export APP_ENV=production
-      cd /opt/app
-      echo "Deploying"
-```
-
-### Multiple Commands
-
-```yaml
-steps:
-  - name: remote-script
-    type: ssh
-    config:
-      user: admin
-      host: backup.server.com
-      key: ${SSH_KEY_PATH}
-    script: |
-      #!/bin/bash
-      set -e
-      
-      echo "Starting backup..."
-      tar -czf /backup/app-$(date +%Y%m%d).tar.gz /var/www
-      
-      echo "Cleaning old backups..."
-      find /backup -name "app-*.tar.gz" -mtime +7 -delete
-      
-      echo "Backup complete"
-```
-
-## S3
-
-::: info
-For detailed S3 step type documentation, see [S3 Guide](/features/executors/s3).
-:::
-
-Execute S3 operations including upload, download, list, and delete. Supports AWS S3 and S3-compatible services (MinIO, GCS, DigitalOcean Spaces).
-
-### DAG-Level Configuration
-
-```yaml
-s3:
-  region: us-east-1
-  access_key_id: ${AWS_ACCESS_KEY_ID}
-  secret_access_key: ${AWS_SECRET_ACCESS_KEY}
-  bucket: my-bucket
-
-steps:
-  - name: upload-file
-    type: s3
-    config:
-      key: data/file.txt
-      source: /tmp/file.txt
-    command: upload
-```
-
-### Upload
-
-```yaml
-steps:
-  - name: upload-report
-    type: s3
-    config:
-      bucket: my-bucket
-      key: reports/daily.csv
-      source: /tmp/report.csv
-      content_type: text/csv
-      storage_class: STANDARD_IA
-    command: upload
-```
-
-### Download
-
-```yaml
-steps:
-  - name: download-config
-    type: s3
-    config:
-      bucket: my-bucket
-      key: config/settings.json
-      destination: /tmp/settings.json
-    command: download
-```
-
-### List Objects
-
-```yaml
-steps:
-  - name: list-logs
-    type: s3
-    config:
-      bucket: my-bucket
-      prefix: logs/2024/
-      max_keys: 100
-      recursive: true
-    command: list
-    output: OBJECTS
-```
-
-### Delete
-
-```yaml
-steps:
-  # Single object
-  - name: delete-file
-    type: s3
-    config:
-      bucket: my-bucket
-      key: temp/old-file.txt
-    command: delete
-
-  # Batch delete by prefix
-  - name: cleanup
-    type: s3
-    config:
-      bucket: my-bucket
-      prefix: logs/2023/
-    command: delete
-```
-
-### S3-Compatible Services
-
-```yaml
-# MinIO
-s3:
-  endpoint: http://localhost:9000
-  access_key_id: minioadmin
-  secret_access_key: minioadmin
-  bucket: my-bucket
-  force_path_style: true
-
-# Google Cloud Storage
-s3:
-  endpoint: https://storage.googleapis.com
-  access_key_id: ${GCS_HMAC_KEY}
-  secret_access_key: ${GCS_HMAC_SECRET}
-  bucket: my-gcs-bucket
 ```
 
 ## HTTP
@@ -532,56 +506,208 @@ steps:
       silent: false
     command: GET https://api.example.com/data
     output: API_RESPONSE
-    
+
   - name: process-response
     command: echo "${API_RESPONSE}" | jq '.data[]'
 ```
 
-## Archive
+## Router
 
 ::: info
-For detailed Archive step type documentation, see [Archive Guide](/features/executors/archive).
+For detailed Router step type documentation, see [Router Guide](/features/executors/router).
 :::
 
-Manipulate archives without shelling out to `tar`, `zip`, or other external tools.
+Route execution to different steps based on pattern matching against a value.
 
-### Extract Archive
+::: warning
+Router steps require `type: graph` at the DAG level.
+:::
+
+### Basic Usage
 
 ```yaml
+type: graph
+env:
+  - INPUT: exact_value
 steps:
-  - name: unpack
-    type: archive
-    config:
-      source: logs.tar.gz
-      destination: ./logs
-      verify_integrity: true
-    command: extract
+  - name: router
+    type: router
+    value: ${INPUT}
+    routes:
+      "exact_value": [route_a]
+      "other": [route_b]
+
+  - name: route_a
+    command: echo "Route A executed"
+
+  - name: route_b
+    command: echo "Route B executed"
 ```
 
-### Create Archive
+### Regex Patterns
+
+Prefix patterns with `re:` for regex matching:
 
 ```yaml
+type: graph
 steps:
-  - name: package
-    type: archive
-    config:
-      source: ./logs
-      destination: logs-backup.tar.gz
-      include:
-        - "**/*.log"
-    command: create
+  - name: router
+    type: router
+    value: ${INPUT}
+    routes:
+      "re:^apple.*": [apple_handler]
+      "re:^banana.*": [banana_handler]
+      "re:.*": [default_handler]
 ```
 
-### List Contents
+### Multiple Targets
+
+Route to multiple steps from a single pattern:
+
+```yaml
+type: graph
+steps:
+  - name: router
+    type: router
+    value: ${TRIGGER}
+    routes:
+      "all": [step_a, step_b, step_c]
+```
+
+## HITL (Human in the Loop)
+
+::: info
+For detailed HITL documentation, see [HITL Guide](/features/executors/hitl).
+:::
+
+Pause workflow execution until human approval or rejection. This enables human-in-the-loop (HITL) workflows where manual review or authorization is required before proceeding.
+
+### Basic Usage
 
 ```yaml
 steps:
-  - name: inspect
-    type: archive
+  - command: ./deploy.sh staging
+  - type: hitl
+  - command: ./deploy.sh production
+```
+
+### With Prompt and Inputs
+
+```yaml
+steps:
+  - command: ./deploy.sh staging
+  - type: hitl
     config:
-      source: logs-backup.tar.gz
-    command: list
-    output: ARCHIVE_INDEX
+      prompt: "Approve production deployment?"
+      input: [APPROVED_BY, RELEASE_NOTES]
+      required: [APPROVED_BY]
+  - command: |
+      echo "Approved by: ${APPROVED_BY}"
+      ./deploy.sh production
+```
+
+### Configuration Options
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `prompt` | string | Message displayed to the approver |
+| `input` | string[] | Parameter names to collect from approver |
+| `required` | string[] | Parameters that must be provided (subset of `input`) |
+
+### Approval and Rejection
+
+HITL steps can be approved or rejected via the Web UI or REST API:
+
+- **Approval**: The step succeeds and execution continues
+- **Rejection**: The step enters `Rejected` status, the DAG status becomes `Rejected`, and dependent steps are aborted
+
+## DAG (Subworkflow)
+
+::: info
+The DAG step type allows running other workflows as steps. See [Nested Workflows](/writing-workflows/control-flow#nested-workflows).
+:::
+
+Execute other workflows as steps, enabling workflow composition.
+
+### Execute External DAG
+
+```yaml
+steps:
+  - name: run-etl
+    type: dag
+    command: workflows/etl-pipeline.yaml
+    params: "DATE=${TODAY} ENV=production"
+```
+
+### Execute Local DAG
+
+```yaml
+name: main-workflow
+steps:
+  - name: prepare-data
+    type: dag
+    command: data-prep
+    params: "SOURCE=/data/raw"
+
+---
+
+name: data-prep
+params:
+  - SOURCE: /tmp
+steps:
+  - name: validate
+    command: validate.sh ${SOURCE}
+  - name: clean
+    command: clean.py ${SOURCE}
+```
+
+### Capture DAG Output
+
+```yaml
+steps:
+  - name: analyze
+    type: dag
+    command: analyzer.yaml
+    params: "FILE=${INPUT_FILE}"
+    output: ANALYSIS
+
+  - name: use-results
+    command: |
+      echo "Status: ${ANALYSIS.outputs.status}"
+      echo "Count: ${ANALYSIS.outputs.record_count}"
+```
+
+### Error Handling
+
+```yaml
+steps:
+  - name: may-fail
+    type: dag
+    command: risky-process.yaml
+    continue_on:
+      failure: true
+    retry_policy:
+      limit: 3
+      interval_sec: 300
+```
+
+### Dynamic DAG Selection
+
+```yaml
+steps:
+  - name: choose-workflow
+    command: |
+      if [ "${ENVIRONMENT}" = "prod" ]; then
+        echo "production-workflow.yaml"
+      else
+        echo "staging-workflow.yaml"
+      fi
+    output: WORKFLOW_FILE
+
+  - name: run-selected
+    type: dag
+    command: ${WORKFLOW_FILE}
+    params: "ENV=${ENVIRONMENT}"
 ```
 
 ## Mail
@@ -670,6 +796,126 @@ steps:
           </body>
           </html>
 ```
+
+## Chat
+
+::: info
+For detailed Chat step type documentation, see [Chat Guide](/features/chat/).
+:::
+
+Execute requests to Large Language Model providers.
+
+### Basic Chat Request
+
+```yaml
+steps:
+  - type: chat
+    llm:
+      provider: openai
+      model: gpt-4o
+    messages:
+      - role: user
+        content: "What is 2+2?"
+    output: ANSWER
+```
+
+### Supported Providers
+
+| Provider | Environment Variable |
+|----------|---------------------|
+| `openai` | `OPENAI_API_KEY` |
+| `anthropic` | `ANTHROPIC_API_KEY` |
+| `gemini` | `GOOGLE_API_KEY` |
+| `openrouter` | `OPENROUTER_API_KEY` |
+| `local` | (none) |
+
+Aliases `ollama`, `vllm`, and `llama` map to `local`.
+
+### Multi-turn Session
+
+```yaml
+type: graph
+
+steps:
+  - name: setup
+    type: chat
+    llm:
+      provider: openai
+      model: gpt-4o
+      system: "You are a helpful assistant."
+    messages:
+      - role: user
+        content: "What is 2+2?"
+
+  - name: followup
+    depends: [setup]
+    type: chat
+    llm:
+      provider: openai
+      model: gpt-4o
+    messages:
+      - role: user
+        content: "Now multiply that by 3."
+```
+
+Steps inherit session history from dependencies.
+
+### Variable Substitution
+
+```yaml
+params:
+  - TOPIC: "quantum computing"
+
+steps:
+  - type: chat
+    llm:
+      provider: anthropic
+      model: claude-sonnet-4-20250514
+    messages:
+      - role: user
+        content: "Explain ${TOPIC} briefly."
+```
+
+### Local Models (Ollama)
+
+```yaml
+steps:
+  - type: chat
+    llm:
+      provider: local
+      model: llama3
+    messages:
+      - role: user
+        content: "Hello!"
+```
+
+### DAG-Level Configuration
+
+Define LLM defaults at the DAG level to share configuration across steps:
+
+```yaml
+llm:
+  provider: openai
+  model: gpt-4o
+  system: "You are a helpful assistant."
+  temperature: 0.7
+
+steps:
+  - type: chat
+    messages:
+      - role: user
+        content: "First question"
+
+  - type: chat
+    llm:
+      provider: anthropic
+      model: claude-sonnet-4-20250514
+    messages:
+      - role: user
+        content: "Override with different provider"
+```
+
+When a step specifies `llm:`, it completely replaces DAG-level config (no field merging).
 
 ## JQ
 
@@ -803,6 +1049,115 @@ steps:
       ]
 ```
 
+## S3
+
+::: info
+For detailed S3 step type documentation, see [S3 Guide](/features/executors/s3).
+:::
+
+Execute S3 operations including upload, download, list, and delete. Supports AWS S3 and S3-compatible services (MinIO, GCS, DigitalOcean Spaces).
+
+### DAG-Level Configuration
+
+```yaml
+s3:
+  region: us-east-1
+  access_key_id: ${AWS_ACCESS_KEY_ID}
+  secret_access_key: ${AWS_SECRET_ACCESS_KEY}
+  bucket: my-bucket
+
+steps:
+  - name: upload-file
+    type: s3
+    config:
+      key: data/file.txt
+      source: /tmp/file.txt
+    command: upload
+```
+
+### Upload
+
+```yaml
+steps:
+  - name: upload-report
+    type: s3
+    config:
+      bucket: my-bucket
+      key: reports/daily.csv
+      source: /tmp/report.csv
+      content_type: text/csv
+      storage_class: STANDARD_IA
+    command: upload
+```
+
+### Download
+
+```yaml
+steps:
+  - name: download-config
+    type: s3
+    config:
+      bucket: my-bucket
+      key: config/settings.json
+      destination: /tmp/settings.json
+    command: download
+```
+
+### List Objects
+
+```yaml
+steps:
+  - name: list-logs
+    type: s3
+    config:
+      bucket: my-bucket
+      prefix: logs/2024/
+      max_keys: 100
+      recursive: true
+    command: list
+    output: OBJECTS
+```
+
+### Delete
+
+```yaml
+steps:
+  # Single object
+  - name: delete-file
+    type: s3
+    config:
+      bucket: my-bucket
+      key: temp/old-file.txt
+    command: delete
+
+  # Batch delete by prefix
+  - name: cleanup
+    type: s3
+    config:
+      bucket: my-bucket
+      prefix: logs/2023/
+    command: delete
+```
+
+### S3-Compatible Services
+
+```yaml
+# MinIO
+s3:
+  endpoint: http://localhost:9000
+  access_key_id: minioadmin
+  secret_access_key: minioadmin
+  bucket: my-bucket
+  force_path_style: true
+
+# Google Cloud Storage
+s3:
+  endpoint: https://storage.googleapis.com
+  access_key_id: ${GCS_HMAC_KEY}
+  secret_access_key: ${GCS_HMAC_SECRET}
+  bucket: my-gcs-bucket
+```
+
 ## Redis
 
 ::: info
@@ -930,335 +1285,95 @@ redis:
     - node2:6379
 ```
 
-## Chat
+## Archive
 
 ::: info
-For detailed Chat step type documentation, see [Chat Guide](/features/chat/).
+For detailed Archive step type documentation, see [Archive Guide](/features/executors/archive).
 :::
 
-Execute requests to Large Language Model providers.
+Manipulate archives without shelling out to `tar`, `zip`, or other external tools.
 
-### Basic Chat Request
-
-```yaml
-steps:
-  - type: chat
-    llm:
-      provider: openai
-      model: gpt-4o
-    messages:
-      - role: user
-        content: "What is 2+2?"
-    output: ANSWER
-```
-
-### Supported Providers
-
-| Provider | Environment Variable |
-|----------|---------------------|
-| `openai` | `OPENAI_API_KEY` |
-| `anthropic` | `ANTHROPIC_API_KEY` |
-| `gemini` | `GOOGLE_API_KEY` |
-| `openrouter` | `OPENROUTER_API_KEY` |
-| `local` | (none) |
-
-Aliases `ollama`, `vllm`, and `llama` map to `local`.
-
-### Multi-turn Session
-
-```yaml
-type: graph
-
-steps:
-  - name: setup
-    type: chat
-    llm:
-      provider: openai
-      model: gpt-4o
-      system: "You are a helpful assistant."
-    messages:
-      - role: user
-        content: "What is 2+2?"
-
-  - name: followup
-    depends: [setup]
-    type: chat
-    llm:
-      provider: openai
-      model: gpt-4o
-    messages:
-      - role: user
-        content: "Now multiply that by 3."
-```
-
-Steps inherit session history from dependencies.
-
-### Variable Substitution
-
-```yaml
-params:
-  - TOPIC: "quantum computing"
-
-steps:
-  - type: chat
-    llm:
-      provider: anthropic
-      model: claude-sonnet-4-20250514
-    messages:
-      - role: user
-        content: "Explain ${TOPIC} briefly."
-```
-
-### Local Models (Ollama)
+### Extract Archive
 
 ```yaml
 steps:
-  - type: chat
-    llm:
-      provider: local
-      model: llama3
-    messages:
-      - role: user
-        content: "Hello!"
-```
-
-### DAG-Level Configuration
-
-Define LLM defaults at the DAG level to share configuration across steps:
-
-```yaml
-llm:
-  provider: openai
-  model: gpt-4o
-  system: "You are a helpful assistant."
-  temperature: 0.7
-
-steps:
-  - type: chat
-    messages:
-      - role: user
-        content: "First question"
-
-  - type: chat
-    llm:
-      provider: anthropic
-      model: claude-sonnet-4-20250514
-    messages:
-      - role: user
-        content: "Override with different provider"
-```
-
-When a step specifies `llm:`, it completely replaces DAG-level config (no field merging).
-
-## HITL (Human in the Loop)
-
-::: info
-For detailed HITL documentation, see [HITL Guide](/features/executors/hitl).
-:::
-
-Pause workflow execution until human approval or rejection. This enables human-in-the-loop (HITL) workflows where manual review or authorization is required before proceeding.
-
-### Basic Usage
-
-```yaml
-steps:
-  - command: ./deploy.sh staging
-  - type: hitl
-  - command: ./deploy.sh production
-```
-
-### With Prompt and Inputs
-
-```yaml
-steps:
-  - command: ./deploy.sh staging
-  - type: hitl
+  - name: unpack
+    type: archive
     config:
-      prompt: "Approve production deployment?"
-      input: [APPROVED_BY, RELEASE_NOTES]
-      required: [APPROVED_BY]
-  - command: |
-      echo "Approved by: ${APPROVED_BY}"
-      ./deploy.sh production
+      source: logs.tar.gz
+      destination: ./logs
+      verify_integrity: true
+    command: extract
 ```
 
-### Configuration Options
+### Create Archive
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `prompt` | string | Message displayed to the approver |
-| `input` | string[] | Parameter names to collect from approver |
-| `required` | string[] | Parameters that must be provided (subset of `input`) |
+```yaml
+steps:
+  - name: package
+    type: archive
+    config:
+      source: ./logs
+      destination: logs-backup.tar.gz
+      include:
+        - "**/*.log"
+    command: create
+```
 
-### Approval and Rejection
+### List Contents
 
-HITL steps can be approved or rejected via the Web UI or REST API:
+```yaml
+steps:
+  - name: inspect
+    type: archive
+    config:
+      source: logs-backup.tar.gz
+    command: list
+    output: ARCHIVE_INDEX
+```
 
-- **Approval**: The step succeeds and execution continues
-- **Rejection**: The step enters `Rejected` status, the DAG status becomes `Rejected`, and dependent steps are aborted
-
-## DAG (Subworkflow)
+## GitHub Actions
 
 ::: info
-The DAG step type allows running other workflows as steps. See [Nested Workflows](/writing-workflows/control-flow#nested-workflows).
+For the full guide, see [GitHub Actions](/features/executors/github-actions).
 :::
 
-Execute other workflows as steps, enabling workflow composition.
-
-### Execute External DAG
+Run marketplace actions (e.g. `actions/checkout@v4`) inside Dagu steps.
 
 ```yaml
+secrets:
+  - name: GITHUB_TOKEN
+    provider: env
+    key: GITHUB_TOKEN
+
 steps:
-  - name: run-etl
-    type: dag
-    command: workflows/etl-pipeline.yaml
-    params: "DATE=${TODAY} ENV=production"
+  - name: checkout
+    command: actions/checkout@v4
+    type: gha               # Aliases: github_action, github-action
+    config:
+      runner: node:24-bookworm
+    params:
+      repository: dagu-org/dagu
+      ref: main
+      token: "${GITHUB_TOKEN}"
 ```
-
-### Execute Local DAG
-
-```yaml
-name: main-workflow
-steps:
-  - name: prepare-data
-    type: dag
-    command: data-prep
-    params: "SOURCE=/data/raw"
-
----
-
-name: data-prep
-params:
-  - SOURCE: /tmp
-steps:
-  - name: validate
-    command: validate.sh ${SOURCE}
-  - name: clean
-    command: clean.py ${SOURCE}
-```
-
-### Capture DAG Output
-
-```yaml
-steps:
-  - name: analyze
-    type: dag
-    command: analyzer.yaml
-    params: "FILE=${INPUT_FILE}"
-    output: ANALYSIS
-    
-  - name: use-results
-    command: |
-      echo "Status: ${ANALYSIS.outputs.status}"
-      echo "Count: ${ANALYSIS.outputs.record_count}"
-```
-
-### Error Handling
-
-```yaml
-steps:
-  - name: may-fail
-    type: dag
-    command: risky-process.yaml
-    continue_on:
-      failure: true
-    retry_policy:
-      limit: 3
-      interval_sec: 300
-```
-
-### Dynamic DAG Selection
-
-```yaml
-steps:
-  - name: choose-workflow
-    command: |
-      if [ "${ENVIRONMENT}" = "prod" ]; then
-        echo "production-workflow.yaml"
-      else
-        echo "staging-workflow.yaml"
-      fi
-    output: WORKFLOW_FILE
-    
-  - name: run-selected
-    type: dag
-    command: ${WORKFLOW_FILE}
-    params: "ENV=${ENVIRONMENT}"
-```
-
-## Router
-
-::: info
-For detailed Router step type documentation, see [Router Guide](/features/executors/router).
-:::
-
-Route execution to different steps based on pattern matching against a value.
 
 ::: warning
-Router steps require `type: graph` at the DAG level.
+This executor is experimental. It depends on Docker, downloads images on demand, and currently supports single-action invocations per step.
 :::
-
-### Basic Usage
-
-```yaml
-type: graph
-env:
-  - INPUT: exact_value
-steps:
-  - name: router
-    type: router
-    value: ${INPUT}
-    routes:
-      "exact_value": [route_a]
-      "other": [route_b]
-
-  - name: route_a
-    command: echo "Route A executed"
-
-  - name: route_b
-    command: echo "Route B executed"
-```
-
-### Regex Patterns
-
-Prefix patterns with `re:` for regex matching:
-
-```yaml
-type: graph
-steps:
-  - name: router
-    type: router
-    value: ${INPUT}
-    routes:
-      "re:^apple.*": [apple_handler]
-      "re:^banana.*": [banana_handler]
-      "re:.*": [default_handler]
-```
-
-### Multiple Targets
-
-Route to multiple steps from a single pattern:
-
-```yaml
-type: graph
-steps:
-  - name: router
-    type: router
-    value: ${TRIGGER}
-    routes:
-      "all": [step_a, step_b, step_c]
-```
 
 ## See Also
 
 - [Shell](/features/executors/shell) - Shell command execution details
-- [Docker](/features/executors/docker) - Container execution guide
+- [Agent Step](/features/agent/step) - AI agent workflow step guide
 - [SSH](/features/executors/ssh) - Remote execution guide
-- [S3](/features/executors/s3) - S3 operations guide
+- [Docker](/features/executors/docker) - Container execution guide
 - [HTTP](/features/executors/http) - API interaction guide
-- [Chat](/features/chat/) - LLM integration guide
-- [Mail](/features/executors/mail) - Email notification guide
-- [JQ](/features/executors/jq) - JSON processing guide
-- [Redis](/features/executors/redis) - Redis operations guide
+- [Router](/features/executors/router) - Pattern-based routing guide
 - [HITL](/features/executors/hitl) - Human-in-the-loop approval guide
+- [Mail](/features/executors/mail) - Email notification guide
+- [Chat](/features/chat/) - LLM integration guide
+- [JQ](/features/executors/jq) - JSON processing guide
+- [S3](/features/executors/s3) - S3 operations guide
+- [Redis](/features/executors/redis) - Redis operations guide
 - [Writing Workflows](/writing-workflows/) - Using step types in workflows
