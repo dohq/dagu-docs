@@ -256,7 +256,7 @@ The Dagu agent is an AI assistant that helps create, review, debug, and manage D
 
 ### Accessing the Agent
 
-Click the **Agent** button at the bottom-right corner of any page.
+Click the **Agent** button at the bottom-left corner of any page.
 
 ### Capabilities
 
