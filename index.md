@@ -5,8 +5,8 @@ layout: doc
 <img src="/hero-logo.webp" alt="Dagu" style="display: block; margin: 0 auto; width: 100%">
 
 <div class="tagline" style="text-align: center;">
-  <h2>Lightweight, powerful workflow engine that developers enjoy using</h2>
-  <p>Define workflows in YAML. Execute with a single binary. No database or message broker required. Ideal for VMs, containers, and bare metal.</p>
+  <h2>The simplest workflow engine to orchestrate complex workflows</h2>
+  <p>Shell commands, Docker, SSH, AI agents. All defined in YAML. One binary with a Web UI, scheduler, and retries. Runs anywhere.</p>
 </div>
 
 <div class="hero-section">
@@ -109,48 +109,68 @@ Visit [http://localhost:8080](http://localhost:8080)
 | [**AI Agent**](/features/agent/) | Built-in LLM assistant with tool calling, persistent memory, and souls |
 | [**Security**](/configurations/authentication) | Built-in RBAC (Pro) with admin, manager, operator, and viewer roles |
 
-## Example
+## Examples
 
-A data pipeline with scheduling, parallel execution, sub-workflows, and retry logic:
+### CLI Orchestration
 
 ```yaml
 schedule: "0 2 * * *"
 type: graph
 
 steps:
-  - name: extract
-    command: python extract.py --date=${DATE}
-    output: RAW_DATA
+  - name: build
+    command: make build
 
-  - name: transform
-    call: transform-workflow
-    params: "INPUT=${RAW_DATA}"
-    depends: extract
-    parallel:
-      items: [customers, orders, products]
-
-  - name: load
-    command: python load.py
-    depends: transform
+  - name: test
+    command: make test
+    depends: build
     retry_policy:
       limit: 3
       interval_sec: 10
 
+  - name: deploy
+    type: ssh
+    config:
+      host: prod-server
+    command: ./deploy.sh
+    depends: test
+
 handler_on:
   success:
-    command: notify.sh "Pipeline succeeded"
+    command: notify.sh "Deployment succeeded"
   failure:
-    command: alert.sh "Pipeline failed"
+    command: alert.sh "Deployment failed"
+```
+
+### AI Agent Workflow
+
+```yaml
+steps:
+  - name: analyze
+    type: agent
+    messages:
+      - role: user
+        content: "Review error logs and suggest fixes"
+    output: ANALYSIS
+
+  - name: approve
+    type: hitl
+    config:
+      prompt: "Review AI analysis before applying"
+
+  - name: apply
+    command: ./apply-fix.sh "${ANALYSIS}"
+    depends: approve
 ```
 
 See [Examples](/writing-workflows/examples) for more patterns.
 
 ## Use Cases
 
-- **Data Pipelines** - ETL/ELT with complex dependencies and parallel processing
-- **ML Workflows** - GPU/CPU worker routing for training and inference
+- **CLI Orchestration** - Chain shell scripts, Docker containers, and remote commands into reliable workflows
+- **AI-Agent Workflows** - LLM-powered agents with tool calling, human-in-the-loop approval, and memory
 - **Deployment Automation** - Multi-environment rollouts with approval gates
-- **AI-Powered Ops** - Chat-driven workflow management with agent memory and tool calling
+- **Scheduled Operations** - Cron-based maintenance, backups, and reporting
 - **Legacy Migration** - Wrap existing scripts without rewriting them
 
 **Quick Links**: [Overview](/overview/) | [CLI](/overview/cli) | [Web UI](/overview/web-ui) | [API](/overview/api) | [Architecture](/overview/architecture)
