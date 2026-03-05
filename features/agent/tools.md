@@ -125,25 +125,6 @@ Prompt the user with a question.
 
 ---
 
-## read_schema
-
-Look up DAG YAML schema documentation.
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `schema` | string | Yes | Schema name from available schemas |
-| `path` | string | No | Dot-separated path to navigate (e.g., `steps.container`) |
-
-**Common Paths**:
-- `""` (empty string) - Root-level DAG fields
-- `steps` - Step configuration
-- `steps.type` - Executor/step types
-- `steps.container` - Container configuration
-- `handler_on` - Lifecycle handlers
-- `handler_on.success` - Success handler
-
----
-
 ## web_search
 
 Search the internet using DuckDuckGo.
