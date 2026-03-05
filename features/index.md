@@ -23,6 +23,10 @@ Dagu includes a built-in AI assistant powered by LLMs, with tool calling, persis
 - [Web UI](/overview/web-ui)
 - [REST API](/overview/api)
 
+## Cockpit & Workspaces
+- [Cockpit](/features/cockpit) - Workspace-scoped kanban view of DAG runs
+- [Workspaces](/features/workspaces) - Organize DAG runs into named groups
+
 ## Workflow Features
 - [Learn by Examples](/writing-workflows/examples)
 - [Data Flow](/features/data-flow)

@@ -3211,6 +3211,145 @@ curl -X POST "http://localhost:8080/api/v1/sync/cleanup"
 - Version is included in the URL path: `/api/v1/`
 - Breaking changes will result in a new API version
 
+## Workspace Endpoints
+
+### List Workspaces
+
+**Endpoint**: `GET /api/v1/workspaces`
+
+Retrieves all workspaces. No authentication required.
+
+**Query Parameters**:
+| Parameter | Type | Description | Default |
+|-----------|------|-------------|---------|
+| remoteNode | string | Remote node name | "local" |
+
+**Response (200)**:
+```json
+{
+  "workspaces": [
+    {
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "name": "production",
+      "description": "Production workflows",
+      "createdAt": "2026-03-06T10:00:00Z",
+      "updatedAt": "2026-03-06T10:00:00Z"
+    }
+  ]
+}
+```
+
+Returns an empty array if no workspaces exist.
+
+### Create Workspace
+
+**Endpoint**: `POST /api/v1/workspaces`
+
+Creates a new workspace. Requires **developer** role or above.
+
+**Request Body**:
+```json
+{
+  "name": "staging",
+  "description": "Optional description"
+}
+```
+
+`name` is required. `description` is optional.
+
+**Response (201)**: The created workspace object.
+
+**Error Response (400)**:
+```json
+{
+  "code": "bad_request",
+  "message": "Name is required"
+}
+```
+
+**Error Response (409)**:
+```json
+{
+  "code": "already_exists",
+  "message": "Workspace with this name already exists"
+}
+```
+
+### Get Workspace
+
+**Endpoint**: `GET /api/v1/workspaces/{workspaceId}`
+
+Retrieves a single workspace by ID. No authentication required.
+
+**Path Parameters**:
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| workspaceId | string (UUID) | Workspace ID |
+
+**Response (200)**: The workspace object.
+
+**Error Response (404)**: Workspace not found.
+
+### Update Workspace
+
+**Endpoint**: `PATCH /api/v1/workspaces/{workspaceId}`
+
+Updates a workspace. Requires **developer** role or above. PATCH semantics — only provided fields are updated.
+
+**Path Parameters**:
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| workspaceId | string (UUID) | Workspace ID |
+
+**Request Body**:
+```json
+{
+  "name": "new-name",
+  "description": "Updated description"
+}
+```
+
+Both fields are optional. Empty string for `name` is ignored.
+
+**Response (200)**: The updated workspace object.
+
+**Error Response (404)**: Workspace not found.
+
+**Error Response (409)**:
+```json
+{
+  "code": "already_exists",
+  "message": "Workspace with this name already exists"
+}
+```
+
+### Delete Workspace
+
+**Endpoint**: `DELETE /api/v1/workspaces/{workspaceId}`
+
+Deletes a workspace. Requires **developer** role or above.
+
+**Path Parameters**:
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| workspaceId | string (UUID) | Workspace ID |
+
+**Response (204)**: No content.
+
+**Error Response (404)**: Workspace not found.
+
+### Workspace Response Object
+
+All endpoints returning workspace data use this shape:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | UUID |
+| `name` | string | Workspace name |
+| `description` | string | Optional description |
+| `createdAt` | string (date-time) | UTC creation timestamp |
+| `updatedAt` | string (date-time) | UTC last-update timestamp |
+
 ## Remote Node Support
 
 Most endpoints support the `remoteNode` query parameter for multi-environment setups:
