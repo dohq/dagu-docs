@@ -1,16 +1,18 @@
 # Workspaces
 
-Organize DAG runs into named groups using tag-based filtering.
+Named entities used to group DAG runs via tag-based filtering in the Cockpit UI.
 
 ## How It Works
 
-A workspace is a named entity stored on the server. When a DAG run is enqueued from the Cockpit UI, a `workspace=<name>` tag is injected into the DAG spec. The Cockpit then filters DAG runs by this tag, showing only runs belonging to the selected workspace.
+A workspace is a named record stored on the server. When a DAG run is enqueued from the Cockpit UI, a `workspace=<name>` tag is injected into the in-memory YAML spec before submission. The Cockpit then filters DAG runs by this tag using the `tags` query parameter on `GET /api/v1/dag-runs`.
 
-Workspaces do not modify DAG definitions on disk. The tag injection happens at enqueue time on the in-memory spec copy.
+Workspaces do not modify DAG definitions on disk. The tag injection happens at enqueue time on a copy of the spec.
 
-## Configuration
+## Storage
 
-Workspace data is stored as JSON files on the filesystem.
+Each workspace is stored as a JSON file at `{workspaces_dir}/{uuid}.json`.
+
+### Configuration
 
 ```yaml
 # ~/.config/dagu/config.yaml
@@ -18,19 +20,19 @@ paths:
   workspaces_dir: "/custom/path/to/workspaces"
 ```
 
-| Setting | Environment Variable | Default |
-|---------|---------------------|---------|
+| Config key | Environment variable | Default |
+|------------|---------------------|---------|
 | `paths.workspaces_dir` | `DAGU_WORKSPACES_DIR` | `{data_dir}/workspaces` |
 
 The default `data_dir` depends on your setup:
-- With `DAGU_HOME`: `{DAGU_HOME}/data`
+- With `DAGU_HOME` set: `{DAGU_HOME}/data`
 - XDG fallback: `~/.local/share/dagu/data`
 
-Each workspace is stored as `{workspaces_dir}/{uuid}.json`:
+### File Format
 
 ```json
 {
-  "id": "a1b2c3d4-...",
+  "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
   "name": "production",
   "description": "Production workflows",
   "created_at": "2026-03-06T10:00:00Z",
@@ -38,21 +40,25 @@ Each workspace is stored as `{workspaces_dir}/{uuid}.json`:
 }
 ```
 
+File permissions: `0600`. Directory permissions: `0750`.
+
+The store maintains in-memory indices (`byID` and `byName` maps) rebuilt on startup by scanning the directory for `.json` files. Thread-safe via `sync.RWMutex`.
+
 ## Name Constraints
 
-Workspace names must match `[a-zA-Z0-9_-]`. The UI strips any other characters on creation.
+Names must match `[a-zA-Z0-9_-]`. The UI strips any other characters on creation.
 
 ## REST API
 
-All endpoints accept the `remoteNode` query parameter.
+All endpoints accept the `remoteNode` query parameter for routing requests to remote nodes.
 
 ### List Workspaces
 
 ```
-GET /api/v1/workspaces
+GET /api/v1/workspaces?remoteNode=<node>
 ```
 
-No authentication required.
+No specific role required (any authenticated user).
 
 **Response (200)**:
 ```json
@@ -74,10 +80,10 @@ Returns an empty array if no workspaces exist.
 ### Create Workspace
 
 ```
-POST /api/v1/workspaces
+POST /api/v1/workspaces?remoteNode=<node>
 ```
 
-Requires **developer** role or above.
+Requires **developer** role or above (`requireDeveloperOrAbove`).
 
 **Request**:
 ```json
@@ -89,7 +95,7 @@ Requires **developer** role or above.
 
 `name` is required. `description` is optional.
 
-**Response (201)**: The created `WorkspaceResponse` object.
+**Response (201)**: The created workspace object.
 
 **Response (400)**: Name is empty.
 ```json
@@ -104,22 +110,22 @@ Requires **developer** role or above.
 ### Get Workspace
 
 ```
-GET /api/v1/workspaces/{workspaceId}
+GET /api/v1/workspaces/{workspaceId}?remoteNode=<node>
 ```
 
-No authentication required.
+No specific role required (any authenticated user).
 
-**Response (200)**: The `WorkspaceResponse` object.
+**Response (200)**: The workspace object.
 
 **Response (404)**: Workspace not found.
 
 ### Update Workspace
 
 ```
-PATCH /api/v1/workspaces/{workspaceId}
+PATCH /api/v1/workspaces/{workspaceId}?remoteNode=<node>
 ```
 
-Requires **developer** role or above. PATCH semantics — only provided fields are updated.
+Requires **developer** role or above. PATCH semantics -- only provided fields are updated.
 
 **Request**:
 ```json
@@ -129,9 +135,9 @@ Requires **developer** role or above. PATCH semantics — only provided fields a
 }
 ```
 
-Both fields are optional. Empty string for `name` is ignored.
+Both fields are optional. Empty string for `name` is ignored (the existing name is kept).
 
-**Response (200)**: The updated `WorkspaceResponse` object.
+**Response (200)**: The updated workspace object.
 
 **Response (404)**: Workspace not found.
 
@@ -140,7 +146,7 @@ Both fields are optional. Empty string for `name` is ignored.
 ### Delete Workspace
 
 ```
-DELETE /api/v1/workspaces/{workspaceId}
+DELETE /api/v1/workspaces/{workspaceId}?remoteNode=<node>
 ```
 
 Requires **developer** role or above.
@@ -155,23 +161,31 @@ All endpoints returning workspace data use this shape:
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `id` | string | Yes | UUID |
+| `id` | string | Yes | UUID v4, generated by `github.com/google/uuid` |
 | `name` | string | Yes | Workspace name |
-| `description` | string | No | Optional description |
-| `createdAt` | string (date-time) | No | UTC creation timestamp |
-| `updatedAt` | string (date-time) | No | UTC last-update timestamp |
+| `description` | string | No | Omitted from JSON when empty |
+| `createdAt` | string (date-time) | No | UTC timestamp, omitted when zero |
+| `updatedAt` | string (date-time) | No | UTC timestamp, omitted when zero |
+
+### Error Responses
+
+When the workspace store is not configured (e.g., directory creation failed on startup), all endpoints return:
+
+**Response (503)**:
+```json
+{ "code": "internal_error", "message": "Workspace store not configured" }
+```
 
 ## Audit Logging
 
 All write operations are logged with category `workspace`:
 
-| Action | Details |
-|--------|---------|
-| `workspace_create` | `{id, name}` |
-| `workspace_update` | `{id, name}` |
-| `workspace_delete` | `{id, name}` |
+| Action | Logged fields |
+|--------|---------------|
+| `workspace_create` | `id`, `name` |
+| `workspace_update` | `id`, `name` |
+| `workspace_delete` | `id`, `name` |
 
 ## Related
 
-- [Cockpit](/features/cockpit) — the UI that uses workspaces
-- [Tags](/features/tags) — workspaces use `workspace=<name>` tags for filtering
+- [Cockpit](/features/cockpit) -- the UI that uses workspaces
