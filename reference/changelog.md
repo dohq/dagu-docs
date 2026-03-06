@@ -2,6 +2,32 @@
 
 > **Note**: For patch version release notes (e.g., v2.0.1, v2.0.2), see the [GitHub Releases](https://github.com/dagu-org/dagu/releases) page.
 
+## v2.1.0 (2026-03-06)
+
+### Added
+
+- **Cockpit Workspace Kanban View**: New cockpit page with workspace-based kanban board for visualizing DAG runs by date. Includes workspace selector with "All workspaces" default, localStorage persistence for selected workspace, and server-timezone-aware date handling. ([#1728](https://github.com/dagu-org/dagu/pull/1728))
+
+- **File-Based Index for DAG and DAG Run Stores**: New indexing layer for DAG and DAG run file stores, improving lookup performance. ([#1729](https://github.com/dagu-org/dagu/pull/1729))
+
+- **`DAGU_DOCS_DIR` Environment Variable**: Docs directory is now independently configurable via `DAGU_DOCS_DIR` env var or `paths.docs_dir` in config YAML (default: `{dags_dir}/docs`). Previously the docs directory was always derived from `DAGsDir`.
+
+- **Document Management in Tabs/Editor**: Per-tab dropdown menu with Close, Close Others, Close All, and Delete Document actions. Trash icon in editor header bar. Confirmation modals for bulk close when unsaved changes exist.
+
+### Changed
+
+- **Navigation Reorder**: Cockpit now appears before Dashboard in navigation. Docs moved to Overview section. Base Config moved to Workflows section.
+
+- **UI Light Mode Colors**: Light mode colors aligned with the docs warm sepia palette.
+
+### Fixed
+
+- **Cockpit Kanban Timezone**: Fixed browser/server timezone mismatch in kanban date generation and API bounds by using server timezone consistently.
+
+- **Cockpit "All Workspaces"**: Made the "All workspaces" option functional and set as default on load.
+
+- **Cockpit Kanban Status Mapping**: Waiting status now correctly maps to the Running column.
+
 ## v2.0.0 (2026-02-28)
 
 ### Changed
