@@ -38,3 +38,4 @@ Mermaid diagrams are supported via `vitepress-plugin-mermaid`; author diagrams b
 1. Fork or branch from `main`.
 2. Make documentation updates in Markdown (MDX is not enabled).
 3. Run `pnpm build` to ensure the site still compiles before opening a pull request.
+
