@@ -18,6 +18,33 @@ Documents are `.md` files under the `docs/` subdirectory of your DAGs directory:
 
 The document ID is the file path relative to `docs/` without the `.md` extension. The file `docs/runbooks/deployment.md` has ID `runbooks/deployment`.
 
+## Generating Documents from DAG Steps
+
+Dagu sets the `DAG_DOCS_DIR` environment variable to `<paths.docs_dir>/<DAG name>` for each run. Files written under this path are markdown documents that appear in the web UI automatically.
+
+For example, if `paths.docs_dir` is `/home/user/.config/dagu/dags/docs` (the default) and the DAG name is `daily-report`, then `DAG_DOCS_DIR` is `/home/user/.config/dagu/dags/docs/daily-report`.
+
+```yaml
+name: daily-report
+steps:
+  - name: generate-report
+    command: |
+      mkdir -p "${DAG_DOCS_DIR}"
+      cat > "${DAG_DOCS_DIR}/latest-run.md" <<'TEMPLATE'
+      ---
+      title: Latest Run Results
+      ---
+
+      ## Results
+
+      See output files in /tmp/results/
+      TEMPLATE
+```
+
+This writes `daily-report/latest-run.md` under the docs directory. It appears in the web UI at document ID `daily-report/latest-run`.
+
+`DAG_DOCS_DIR` is not set when `paths.docs_dir` in the server configuration resolves to an empty string. By default it is `<paths.dags_dir>/docs`. See [Special Environment Variables](/reference/special-environment-variables).
+
 ## Document Format
 
 Each file is markdown with optional YAML frontmatter. Only the `title` field is parsed from frontmatter:

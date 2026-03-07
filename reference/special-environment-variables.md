@@ -23,32 +23,44 @@ Values are refreshed for each step, so `DAG_RUN_STEP_NAME`, `DAG_RUN_STEP_STDOUT
 | `DAG_RUN_STATUS` | Lifecycle handlers only | Canonical status: `running` (init handler), `succeeded`, `partially_succeeded`, `failed`, `rejected`, `aborted`, or `waiting` (wait handler). | `failed` |
 | `DAG_WAITING_STEPS` | Wait handler only | Comma-separated list of step names currently waiting for human approval (HITL). | `approval-step,review-step` |
 | `PWD` | Current step only | Working directory for the step. Defaults to DAG's `working_dir` or the DAG file's directory. | `/home/user/project` |
-| `DAGU_PARAMS_JSON` | All steps & handlers | JSON string containing the resolved parameter map. If the run was started with JSON parameters, the original payload is preserved. | `{"ENVIRONMENT":"prod","batchSize":1000}` |
+| `DAG_DOCS_DIR` | All steps & handlers | Per-DAG docs directory path. Computed as `<paths.docs_dir>/<dag name>`. Not set when `paths.docs_dir` resolves to empty. | `/var/dagu/dags/docs/daily-backup` |
+| `DAG_PARAMS_JSON` | All steps & handlers | JSON string containing the resolved parameter map. If the run was started with JSON parameters, the original payload is preserved. Not set when the DAG has no resolved parameters. | `{"ENVIRONMENT":"prod","batchSize":1000}` |
 | `WEBHOOK_PAYLOAD` | Webhook-triggered runs only | JSON string containing the payload from the webhook request body. Only available when the DAG was triggered via a webhook. | `{"branch":"main","commit":"abc123"}` |
 
-## Parameter Payload (`DAGU_PARAMS_JSON`)
+## Docs Directory (`DAG_DOCS_DIR`)
 
-Dagu always computes the effective parameter set before each run. The scheduler then serializes that map into the `DAGU_PARAMS_JSON` environment variable so steps can read the entire payload—without reconstructing it from `params` strings.
+Dagu sets `DAG_DOCS_DIR` to `<paths.docs_dir>/<dag name>`. The `paths.docs_dir` configuration defaults to `<paths.dags_dir>/docs` (see [Configuration Reference](/configurations/reference)).
+
+`DAG_DOCS_DIR` is **not set** when `paths.docs_dir` resolves to an empty string.
+
+Markdown files written under `DAG_DOCS_DIR` appear in the web UI's [Documents](/features/documents) page automatically.
+
+```yaml
+steps:
+  - name: generate-report
+    command: |
+      mkdir -p "${DAG_DOCS_DIR}"
+      python generate_report.py > "${DAG_DOCS_DIR}/report.md"
+```
+
+## Parameter Payload (`DAG_PARAMS_JSON`)
+
+`DAG_PARAMS_JSON` contains the resolved parameters serialized as JSON. It is not set when the DAG has no parameters and none were supplied at runtime.
 
 - Defaults declared in the DAG plus CLI/API overrides are merged into a single JSON object.
 - When the run was started with raw JSON parameters (e.g., `dagu start dag.yaml -- '{"foo":"bar"}'`), the original JSON string is preserved verbatim.
-- The variable is empty only when the DAG defines no parameters and none were supplied at runtime.
-
-Example usage inside a shell step:
 
 ```yaml
 steps:
   - name: inspect params
-    command: echo "Full payload: ${DAGU_PARAMS_JSON}"
+    command: echo "Full payload: ${DAG_PARAMS_JSON}"
   - name: read environment
     type: jq
     config:
       raw: true
-    script: ${DAGU_PARAMS_JSON}
+    script: ${DAG_PARAMS_JSON}
     command: '"Environment: \(.ENVIRONMENT // "dev")"'
 ```
-
-This is particularly useful when downstream scripts expect structured data. Treat the JSON as read-only metadata—mutating it inside a step will not affect subsequent steps.
 
 ## Webhook Payload
 

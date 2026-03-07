@@ -208,17 +208,17 @@ steps:
 
 ### Working with Parameters as JSON
 
-Every step automatically receives the merged parameter payload as JSON through the `DAGU_PARAMS_JSON` environment variable. This is especially helpful when parameters were provided as nested JSON via the CLI or API.
+Every step automatically receives the merged parameter payload as JSON through the `DAG_PARAMS_JSON` environment variable. This is especially helpful when parameters were provided as nested JSON via the CLI or API.
 
 ```yaml
 steps:
   - name: inspect params
-    command: echo "Full payload: ${DAGU_PARAMS_JSON}"
+    command: echo "Full payload: ${DAG_PARAMS_JSON}"
   - name: region lookup
     type: jq
     config:
       raw: true
-    script: ${DAGU_PARAMS_JSON}
+    script: ${DAG_PARAMS_JSON}
     command: '"Region: \(.region // "us-east-1")"'
 ```
 
