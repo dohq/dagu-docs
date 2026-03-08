@@ -2,6 +2,45 @@
 
 > **Note**: For patch version release notes (e.g., v2.0.1, v2.0.2), see the [GitHub Releases](https://github.com/dagu-org/dagu/releases) page.
 
+## v2.2.0 (2026-03-08)
+
+### Added
+
+- **Generic Approval Field for Human-in-the-Loop**: Any step type now supports a top-level `approval` field for human-in-the-loop workflows. The dedicated `hitl` executor has been removed — use `approval: true` (or `approval: "custom message"`) on any step instead. Steps with approval enabled pause execution and wait for manual approval before running. ([#1743](https://github.com/dagu-org/dagu/pull/1743))
+- **`DAG_RUN_WORK_DIR` Special Environment Variable**: New built-in variable exposing the working directory for the current DAG run attempt. Available in all step types and automatically set by the runtime. ([#1735](https://github.com/dagu-org/dagu/pull/1735))
+- **`DAG_DOCS_DIR` and `DAG_PARAMS_JSON` Special Environment Variables**: `DAG_DOCS_DIR` provides the path to the docs directory. `DAG_PARAMS_JSON` provides all DAG parameters as a JSON object. ([#1731](https://github.com/dagu-org/dagu/pull/1731))
+- **Tags Parameter for Start and Enqueue APIs**: The start and enqueue API endpoints now accept a `tags` parameter for tagging DAG runs at creation time. ([#1730](https://github.com/dagu-org/dagu/pull/1730))
+- **Auto-Create Default `base.yaml` on First Run**: A default `base.yaml` with comprehensive field reference comments is automatically generated when the base config file does not exist. ([#1737](https://github.com/dagu-org/dagu/pull/1737))
+- **Script Error Line Annotation**: When a shell script step fails, the error message now includes the content of the failing line, making it easier to diagnose script errors. Empty scripts are preserved on failure for debugging. ([#1733](https://github.com/dagu-org/dagu/pull/1733))
+- **Multiline Parameter Input**: The Start and Enqueue modals now support multiline text input for parameters using a textarea. ([#1742](https://github.com/dagu-org/dagu/pull/1742))
+- **Copy File Path Button in Doc Editor**: A button in the doc editor header lets you copy the file path to clipboard. ([#1741](https://github.com/dagu-org/dagu/pull/1741))
+- **Batch Delete for Git-Sync Items**: Multiple git-sync items can now be selected and deleted in bulk. ([#1736](https://github.com/dagu-org/dagu/pull/1736))
+- **Cockpit Review Column**: The cockpit kanban board now includes a "Review" column for DAG runs in waiting/approval status. The cockpit is now the default landing page.
+- **Cockpit Toolbar on Docs Page**: The CockpitToolbar is available on the Docs page for quick access to DAG preview and start actions.
+- **Auto-Open Start Dialog in Cockpit**: Opening a DAG preview modal from the cockpit automatically opens the start dialog.
+- **Agent DAG Authoring Guidance**: The agent system prompt now includes DAG authoring guidance for better workflow generation.
+
+### Changed
+
+- **Default Page Changed to Cockpit**: The default landing page is now the Cockpit instead of the Dashboard.
+- **Cockpit Nav Item Always Visible**: The Cockpit navigation item is shown unconditionally.
+- **Git Sync Nav Reorder**: The Git Sync nav item has been moved to the end of the Workflows section.
+- **Agent Settings Always Visible**: The Agent Settings nav item is always shown so the agent can be re-enabled after being disabled.
+
+### Fixed
+
+- **Base Config Propagation in Distributed Mode**: Base configuration is now correctly propagated to workers in distributed mode. ([#1745](https://github.com/dagu-org/dagu/pull/1745))
+- **Step ID Hyphen Validation**: Step IDs containing hyphens are now rejected to avoid shell variable expansion conflicts. ([#1738](https://github.com/dagu-org/dagu/pull/1738))
+- **Zombie Detector Status Overwrite**: The zombie detector now reads the full status from the attempt before overwriting, preventing data loss. ([#1734](https://github.com/dagu-org/dagu/pull/1734))
+- **Parameter Space-Splitting on Restore**: Parameter values are now properly quoted when restoring a DAG from status, preventing space-splitting issues. ([#1732](https://github.com/dagu-org/dagu/pull/1732))
+- **Graph Node Label for Auto-Generated Names**: Step ID is now displayed as the graph node label when the step name is auto-generated.
+- **Git-Sync Forget Dialog Overflow**: Long filenames no longer overflow the git-sync forget dialog.
+- **Cockpit Preview Modal**: Fixed tab switching, modal staying open after starting a DAG, and showing the specific enqueued run instead of the global latest.
+- **Agent Chat Modal Resize**: Fixed corner resize handles to resize both width and height, added proper z-index to resize handles, and increased hit targets for resize handles.
+- **NavGroup Collapse**: NavGroups can now be collapsed even when a child route is active.
+- **Agent Orphaned Tool Calls**: Orphaned tool calls are now repaired across the entire LLM history.
+- **Agent `web_search` on Haiku Models**: Added `allowed_callers` for `web_search` tool on Haiku models.
+
 ## v2.1.0 (2026-03-06)
 
 ### Added
