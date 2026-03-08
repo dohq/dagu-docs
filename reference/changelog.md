@@ -6,66 +6,66 @@
 
 ### Added
 
-- **Generic Approval Field for Human-in-the-Loop**: Any step type now supports a top-level `approval` field for human-in-the-loop workflows. The dedicated `hitl` executor has been removed — use `approval: true` (or `approval: "custom message"`) on any step instead. Steps with approval enabled pause execution and wait for manual approval before running. ([#1743](https://github.com/dagu-org/dagu/pull/1743))
-- **`DAG_RUN_WORK_DIR` Special Environment Variable**: New built-in variable exposing the working directory for the current DAG run attempt. Available in all step types and automatically set by the runtime. ([#1735](https://github.com/dagu-org/dagu/pull/1735))
-- **`DAG_DOCS_DIR` and `DAG_PARAMS_JSON` Special Environment Variables**: `DAG_DOCS_DIR` provides the path to the docs directory. `DAG_PARAMS_JSON` provides all DAG parameters as a JSON object. ([#1731](https://github.com/dagu-org/dagu/pull/1731))
-- **Tags Parameter for Start and Enqueue APIs**: The start and enqueue API endpoints now accept a `tags` parameter for tagging DAG runs at creation time. ([#1730](https://github.com/dagu-org/dagu/pull/1730))
-- **Auto-Create Default `base.yaml` on First Run**: A default `base.yaml` with comprehensive field reference comments is automatically generated when the base config file does not exist. ([#1737](https://github.com/dagu-org/dagu/pull/1737))
-- **Script Error Line Annotation**: When a shell script step fails, the error message now includes the content of the failing line, making it easier to diagnose script errors. Empty scripts are preserved on failure for debugging. ([#1733](https://github.com/dagu-org/dagu/pull/1733))
-- **Multiline Parameter Input**: The Start and Enqueue modals now support multiline text input for parameters using a textarea. ([#1742](https://github.com/dagu-org/dagu/pull/1742))
-- **Copy File Path Button in Doc Editor**: A button in the doc editor header lets you copy the file path to clipboard. ([#1741](https://github.com/dagu-org/dagu/pull/1741))
-- **Batch Delete for Git-Sync Items**: Multiple git-sync items can now be selected and deleted in bulk. ([#1736](https://github.com/dagu-org/dagu/pull/1736))
-- **Cockpit Review Column**: The cockpit kanban board now includes a "Review" column for DAG runs in waiting/approval status. The cockpit is now the default landing page.
-- **Cockpit Toolbar on Docs Page**: The CockpitToolbar is available on the Docs page for quick access to DAG preview and start actions.
-- **Auto-Open Start Dialog in Cockpit**: Opening a DAG preview modal from the cockpit automatically opens the start dialog.
-- **Agent DAG Authoring Guidance**: The agent system prompt now includes DAG authoring guidance for better workflow generation.
+- Generic Approval Field for Human-in-the-Loop: Any step type now supports a top-level `approval` field for human-in-the-loop workflows. The dedicated `hitl` executor has been removed — use `approval: true` (or `approval: "custom message"`) on any step instead. Steps with approval enabled pause execution and wait for manual approval before running. ([#1743](https://github.com/dagu-org/dagu/pull/1743))
+- `DAG_RUN_WORK_DIR` Special Environment Variable: New built-in variable exposing the working directory for the current DAG run attempt. Available in all step types and automatically set by the runtime. ([#1735](https://github.com/dagu-org/dagu/pull/1735))
+- `DAG_DOCS_DIR` and `DAG_PARAMS_JSON` Special Environment Variables: `DAG_DOCS_DIR` provides the path to the docs directory. `DAG_PARAMS_JSON` provides all DAG parameters as a JSON object. ([#1731](https://github.com/dagu-org/dagu/pull/1731))
+- Tags Parameter for Start and Enqueue APIs: The start and enqueue API endpoints now accept a `tags` parameter for tagging DAG runs at creation time. ([#1730](https://github.com/dagu-org/dagu/pull/1730))
+- Auto-Create Default `base.yaml` on First Run: A default `base.yaml` with comprehensive field reference comments is automatically generated when the base config file does not exist. ([#1737](https://github.com/dagu-org/dagu/pull/1737))
+- Script Error Line Annotation: When a shell script step fails, the error message now includes the content of the failing line, making it easier to diagnose script errors. Empty scripts are preserved on failure for debugging. ([#1733](https://github.com/dagu-org/dagu/pull/1733))
+- Multiline Parameter Input: The Start and Enqueue modals now support multiline text input for parameters using a textarea. ([#1742](https://github.com/dagu-org/dagu/pull/1742))
+- Copy File Path Button in Doc Editor: A button in the doc editor header lets you copy the file path to clipboard. ([#1741](https://github.com/dagu-org/dagu/pull/1741))
+- Batch Delete for Git-Sync Items: Multiple git-sync items can now be selected and deleted in bulk. ([#1736](https://github.com/dagu-org/dagu/pull/1736))
+- Cockpit Review Column: The cockpit kanban board now includes a "Review" column for DAG runs in waiting/approval status. The cockpit is now the default landing page.
+- Cockpit Toolbar on Docs Page: The CockpitToolbar is available on the Docs page for quick access to DAG preview and start actions.
+- Auto-Open Start Dialog in Cockpit: Opening a DAG preview modal from the cockpit automatically opens the start dialog.
+- Agent DAG Authoring Guidance: The agent system prompt now includes DAG authoring guidance for better workflow generation.
 
 ### Changed
 
-- **Default Page Changed to Cockpit**: The default landing page is now the Cockpit instead of the Dashboard.
-- **Cockpit Nav Item Always Visible**: The Cockpit navigation item is shown unconditionally.
-- **Git Sync Nav Reorder**: The Git Sync nav item has been moved to the end of the Workflows section.
-- **Agent Settings Always Visible**: The Agent Settings nav item is always shown so the agent can be re-enabled after being disabled.
+- Default Page Changed to Cockpit: The default landing page is now the Cockpit instead of the Dashboard.
+- Cockpit Nav Item Always Visible: The Cockpit navigation item is shown unconditionally.
+- Git Sync Nav Reorder: The Git Sync nav item has been moved to the end of the Workflows section.
+- Agent Settings Always Visible: The Agent Settings nav item is always shown so the agent can be re-enabled after being disabled.
 
 ### Fixed
 
-- **Base Config Propagation in Distributed Mode**: Base configuration is now correctly propagated to workers in distributed mode. ([#1745](https://github.com/dagu-org/dagu/pull/1745))
-- **Step ID Hyphen Validation**: Step IDs containing hyphens are now rejected to avoid shell variable expansion conflicts. ([#1738](https://github.com/dagu-org/dagu/pull/1738))
-- **Zombie Detector Status Overwrite**: The zombie detector now reads the full status from the attempt before overwriting, preventing data loss. ([#1734](https://github.com/dagu-org/dagu/pull/1734))
-- **Parameter Space-Splitting on Restore**: Parameter values are now properly quoted when restoring a DAG from status, preventing space-splitting issues. ([#1732](https://github.com/dagu-org/dagu/pull/1732))
-- **Graph Node Label for Auto-Generated Names**: Step ID is now displayed as the graph node label when the step name is auto-generated.
-- **Git-Sync Forget Dialog Overflow**: Long filenames no longer overflow the git-sync forget dialog.
-- **Cockpit Preview Modal**: Fixed tab switching, modal staying open after starting a DAG, and showing the specific enqueued run instead of the global latest.
-- **Agent Chat Modal Resize**: Fixed corner resize handles to resize both width and height, added proper z-index to resize handles, and increased hit targets for resize handles.
-- **NavGroup Collapse**: NavGroups can now be collapsed even when a child route is active.
-- **Agent Orphaned Tool Calls**: Orphaned tool calls are now repaired across the entire LLM history.
-- **Agent `web_search` on Haiku Models**: Added `allowed_callers` for `web_search` tool on Haiku models.
+- Base Config Propagation in Distributed Mode: Base configuration is now correctly propagated to workers in distributed mode. ([#1745](https://github.com/dagu-org/dagu/pull/1745))
+- Step ID Hyphen Validation: Step IDs containing hyphens are now rejected to avoid shell variable expansion conflicts. ([#1738](https://github.com/dagu-org/dagu/pull/1738))
+- Zombie Detector Status Overwrite: The zombie detector now reads the full status from the attempt before overwriting, preventing data loss. ([#1734](https://github.com/dagu-org/dagu/pull/1734))
+- Parameter Space-Splitting on Restore: Parameter values are now properly quoted when restoring a DAG from status, preventing space-splitting issues. ([#1732](https://github.com/dagu-org/dagu/pull/1732))
+- Graph Node Label for Auto-Generated Names: Step ID is now displayed as the graph node label when the step name is auto-generated.
+- Git-Sync Forget Dialog Overflow: Long filenames no longer overflow the git-sync forget dialog.
+- Cockpit Preview Modal: Fixed tab switching, modal staying open after starting a DAG, and showing the specific enqueued run instead of the global latest.
+- Agent Chat Modal Resize: Fixed corner resize handles to resize both width and height, added proper z-index to resize handles, and increased hit targets for resize handles.
+- NavGroup Collapse: NavGroups can now be collapsed even when a child route is active.
+- Agent Orphaned Tool Calls: Orphaned tool calls are now repaired across the entire LLM history.
+- Agent `web_search` on Haiku Models: Added `allowed_callers` for `web_search` tool on Haiku models.
 
 ## v2.1.0 (2026-03-06)
 
 ### Added
 
-- **Cockpit Workspace Kanban View**: New cockpit page with workspace-based kanban board for visualizing DAG runs by date. Includes workspace selector with "All workspaces" default, localStorage persistence for selected workspace, and server-timezone-aware date handling. ([#1728](https://github.com/dagu-org/dagu/pull/1728))
-- **File-Based Index for DAG and DAG Run Stores**: New indexing layer for DAG and DAG run file stores, improving lookup performance. ([#1729](https://github.com/dagu-org/dagu/pull/1729))
-- **`DAGU_DOCS_DIR` Environment Variable**: Docs directory is now independently configurable via `DAGU_DOCS_DIR` env var or `paths.docs_dir` in config YAML (default: `{dags_dir}/docs`). Previously the docs directory was always derived from `DAGsDir`.
-- **Document Management in Tabs/Editor**: Per-tab dropdown menu with Close, Close Others, Close All, and Delete Document actions. Trash icon in editor header bar. Confirmation modals for bulk close when unsaved changes exist.
+- Cockpit Workspace Kanban View: New cockpit page with workspace-based kanban board for visualizing DAG runs by date. Includes workspace selector with "All workspaces" default, localStorage persistence for selected workspace, and server-timezone-aware date handling. ([#1728](https://github.com/dagu-org/dagu/pull/1728))
+- File-Based Index for DAG and DAG Run Stores: New indexing layer for DAG and DAG run file stores, improving lookup performance. ([#1729](https://github.com/dagu-org/dagu/pull/1729))
+- `DAGU_DOCS_DIR` Environment Variable: Docs directory is now independently configurable via `DAGU_DOCS_DIR` env var or `paths.docs_dir` in config YAML (default: `{dags_dir}/docs`). Previously the docs directory was always derived from `DAGsDir`.
+- Document Management in Tabs/Editor: Per-tab dropdown menu with Close, Close Others, Close All, and Delete Document actions. Trash icon in editor header bar. Confirmation modals for bulk close when unsaved changes exist.
 
 ### Changed
 
-- **Navigation Reorder**: Cockpit now appears before Dashboard in navigation. Docs moved to Overview section. Base Config moved to Workflows section.
-- **UI Light Mode Colors**: Light mode colors aligned with the docs warm sepia palette.
+- Navigation Reorder: Cockpit now appears before Dashboard in navigation. Docs moved to Overview section. Base Config moved to Workflows section.
+- UI Light Mode Colors: Light mode colors aligned with the docs warm sepia palette.
 
 ### Fixed
 
-- **Cockpit Kanban Timezone**: Fixed browser/server timezone mismatch in kanban date generation and API bounds by using server timezone consistently.
-- **Cockpit "All Workspaces"**: Made the "All workspaces" option functional and set as default on load.
-- **Cockpit Kanban Status Mapping**: Waiting status now correctly maps to the Running column.
+- Cockpit Kanban Timezone: Fixed browser/server timezone mismatch in kanban date generation and API bounds by using server timezone consistently.
+- Cockpit "All Workspaces": Made the "All workspaces" option functional and set as default on load.
+- Cockpit Kanban Status Mapping: Waiting status now correctly maps to the Running column.
 
 ## v2.0.0 (2026-02-28)
 
 ### Changed
 
-- **OS Environment Variable Expansion**: OS environment variables (e.g., `$HOME`, `$PATH`) are no longer expanded by Dagu for non-shell executor types (docker, http, ssh, jq, mail, s3, redis, etc.) **and DAG-level configuration fields** (`ssh`, `smtp`, `s3`, `registry_auths`). Only variables explicitly defined in the DAG scope (`env:`, `params:`, `secrets:`, step outputs) are expanded. OS variables pass through unchanged, letting the target environment (container, remote shell, etc.) resolve them. Shell command execution is unaffected. See [RFC 007](https://github.com/dagu-org/dagu/blob/main/rfcs/implemented/007-os-env-expansion-rules.md).
+- OS Environment Variable Expansion: OS environment variables (e.g., `$HOME`, `$PATH`) are no longer expanded by Dagu for non-shell executor types (docker, http, ssh, jq, mail, s3, redis, etc.) **and DAG-level configuration fields** (`ssh`, `smtp`, `s3`, `registry_auths`). Only variables explicitly defined in the DAG scope (`env:`, `params:`, `secrets:`, step outputs) are expanded. OS variables pass through unchanged, letting the target environment (container, remote shell, etc.) resolve them. Shell command execution is unaffected. See [RFC 007](https://github.com/dagu-org/dagu/blob/main/rfcs/implemented/007-os-env-expansion-rules.md).
   To use a local OS variable in a config field, explicitly import it via the `env:` block:
 
   ```yaml
@@ -78,18 +78,18 @@
     key: ${HOME_DIR}/.ssh/deploy_key  # Expanded — HOME_DIR is DAG-scoped
   ```
 
-- **Auth by Default**: The default authentication mode changed from `none` to `builtin`. New installations require creating an admin account via the `/setup` page on first visit. The JWT token secret is auto-generated and persisted to `{dataDir}/auth/token_secret` if not explicitly configured. See [RFC 018](https://github.com/dagu-org/dagu/blob/main/rfcs/draft/018-auth-by-default.md).
-- **DAG Type Validation**: DAGs with `type: chain` (the default) no longer allow the `depends` field on steps. Chain execution runs steps sequentially in definition order, making explicit dependencies redundant. To use the `depends` field for custom execution order, set `type: graph` explicitly. This change prevents confusion between chain's implicit sequential ordering and graph's explicit dependency-based execution.
+- Auth by Default: The default authentication mode changed from `none` to `builtin`. New installations require creating an admin account via the `/setup` page on first visit. The JWT token secret is auto-generated and persisted to `{dataDir}/auth/token_secret` if not explicitly configured. See [RFC 018](https://github.com/dagu-org/dagu/blob/main/rfcs/draft/018-auth-by-default.md).
+- DAG Type Validation: DAGs with `type: chain` (the default) no longer allow the `depends` field on steps. Chain execution runs steps sequentially in definition order, making explicit dependencies redundant. To use the `depends` field for custom execution order, set `type: graph` explicitly. This change prevents confusion between chain's implicit sequential ordering and graph's explicit dependency-based execution.
 
 ### Removed
 
-- **Legacy API**: The old legacy API has been completely removed from the codebase. The current API (`/api/v1/*`) is the sole API and requires authentication when auth is enabled.
-- **Static API Token (`auth.token`)**: The `auth.token.value` configuration field and `DAGU_AUTH_TOKEN` environment variable have been removed. Use API keys (builtin auth mode) or basic auth instead. API keys provide role-based access control and usage tracking. See [API Keys](/configurations/authentication/api-keys) for migration.
-- **Basic Auth Flat Fields**: The top-level `is_basic_auth`, `basic_auth_username`, and `basic_auth_password` configuration fields have been removed. Use `auth.mode: basic` with `auth.basic.username` and `auth.basic.password` instead. The legacy `DAGU_BASICAUTH_*` environment variables have also been removed; use `DAGU_AUTH_MODE=basic`, `DAGU_AUTH_BASIC_USERNAME`, and `DAGU_AUTH_BASIC_PASSWORD`.
-- **Standalone OIDC Mode (`auth.mode: oidc`)**: Removed. The valid auth modes are now `none`, `basic`, and `builtin`. Use builtin + OIDC mode for SSO with user management and RBAC. See [Builtin Authentication - OIDC/SSO](/configurations/authentication/builtin#oidcsso-login).
-- **Admin Config (`auth.builtin.admin`)**: The `auth.builtin.admin.username` / `auth.builtin.admin.password` config fields and `DAGU_AUTH_ADMIN_USERNAME` / `DAGU_AUTH_ADMIN_PASSWORD` environment variables have been removed. The first admin account is now created via the `/setup` page on first browser visit.
-- **Basic Auth `enabled` Field**: The `auth.basic.enabled` field and `DAGU_AUTH_BASIC_ENABLED` environment variable have been removed. Basic auth is activated by setting `auth.mode: basic`.
-- **Deprecated YAML Fields**: The following deprecated fields have been removed from the YAML spec. Migrate to the replacement fields:
+- Legacy API: The old legacy API has been completely removed from the codebase. The current API (`/api/v1/*`) is the sole API and requires authentication when auth is enabled.
+- Static API Token (`auth.token`): The `auth.token.value` configuration field and `DAGU_AUTH_TOKEN` environment variable have been removed. Use API keys (builtin auth mode) or basic auth instead. API keys provide role-based access control and usage tracking. See [API Keys](/configurations/authentication/api-keys) for migration.
+- Basic Auth Flat Fields: The top-level `is_basic_auth`, `basic_auth_username`, and `basic_auth_password` configuration fields have been removed. Use `auth.mode: basic` with `auth.basic.username` and `auth.basic.password` instead. The legacy `DAGU_BASICAUTH_*` environment variables have also been removed; use `DAGU_AUTH_MODE=basic`, `DAGU_AUTH_BASIC_USERNAME`, and `DAGU_AUTH_BASIC_PASSWORD`.
+- Standalone OIDC Mode (`auth.mode: oidc`): Removed. The valid auth modes are now `none`, `basic`, and `builtin`. Use builtin + OIDC mode for SSO with user management and RBAC. See [Builtin Authentication - OIDC/SSO](/configurations/authentication/builtin#oidcsso-login).
+- Admin Config (`auth.builtin.admin`): The `auth.builtin.admin.username` / `auth.builtin.admin.password` config fields and `DAGU_AUTH_ADMIN_USERNAME` / `DAGU_AUTH_ADMIN_PASSWORD` environment variables have been removed. The first admin account is now created via the `/setup` page on first browser visit.
+- Basic Auth `enabled` Field: The `auth.basic.enabled` field and `DAGU_AUTH_BASIC_ENABLED` environment variable have been removed. Basic auth is activated by setting `auth.mode: basic`.
+- Deprecated YAML Fields: The following deprecated fields have been removed from the YAML spec. Migrate to the replacement fields:
 
   | Removed Field | Replacement | Context |
   |---------------|-------------|---------|
@@ -101,17 +101,17 @@
 
 ### Added
 
-- **Access Log Configuration**: New `access_log_mode` setting controls HTTP request logging. Values: `"all"` (default — log all requests), `"non-public"` (skip public/static asset paths), or `"none"` (disable access logging). Environment variable: `DAGU_ACCESS_LOG_MODE`. See [Server Configuration](/configurations/server#access-log).
-- **Auth Mode Selection**: Authentication mode is now configured via `auth.mode` field. Valid modes: `none`, `basic`, `builtin` (default). Basic auth uses `auth.mode: basic` with `auth.basic.username` and `auth.basic.password`. Environment variable: `DAGU_AUTH_MODE`.
-- **Coordinator Enabled Config**: New `coordinator.enabled` config option (default: `true`) and `DAGU_COORDINATOR_ENABLED` environment variable to explicitly enable or disable the coordinator service. When disabled, `start-all` skips the coordinator and DAGs are never dispatched to workers. Accepts `true`/`false`/`1`/`0`.
-- **Self-Upgrade Command**: New `dagu upgrade` command for in-place binary updates with SHA256 verification, backup support, and cross-platform compatibility. See [Self-Upgrade](/features/upgrade) for details.
-- **Literal Dollar Escape for Non-Shell Executors**: Use `\$` to emit a literal `$` in non-shell contexts (docker, http, ssh, jq, mail, etc.) and config fields. Shell-executed commands preserve native semantics. To emit a literal `$$` in non-shell contexts, escape both dollars: `\$\$`.
-- **Router Examples in Documentation**: Added two router examples to the [Examples](/writing-workflows/examples) page under "Control Flow & Conditions": routing based on environment variable values and routing based on step output. Removed the "Complex Preconditions" example to streamline the page.
-- **Unified Execution Dispatch (`defaultExecutionMode`)**: New server-level `defaultExecutionMode` setting controls whether DAGs run locally or are dispatched to workers. When set to `distributed`, all DAGs are automatically dispatched to the coordinator for worker execution, even without an explicit `worker_selector`. A centralized `ShouldDispatchToCoordinator` function ensures consistent dispatch logic across all execution paths (API, CLI, scheduler, sub-DAG). DAGs that must remain on the main instance can use `worker_selector: local` to override this behavior. See [Distributed Execution](/features/distributed-execution) and [Worker Labels](/features/worker-labels) for details.
-- **Agent**: AI assistant integrated into the Web UI for workflow management. The agent helps create, review, debug, and manage DAG workflows through an interactive chat interface. Supports multiple LLM providers (Anthropic, OpenAI, Google, OpenRouter, local models). Features include shell command execution with approval for dangerous operations, file reading/editing, DAG schema lookup, UI navigation, and web search. See [Agent](/features/agent/) for details.
-- **Agent Delegate Tool**: New `delegate` tool for the agent that spawns up to 8 parallel sub-agents for independent sub-tasks. Each sub-agent runs in its own session with the same tools (minus `delegate` to prevent recursion) and returns a summary to the parent. Sub-agent messages stream through the parent SSE connection. Available in interactive chat only (not in DAG agent steps). See [Tools Reference](/features/agent/tools#delegate).
-- **Trigger Type Visibility**: DAG runs now display how they were initiated (scheduler, manual, webhook, subdag, retry). The trigger type is shown in the DAG runs list and detail views with distinct icons and labels. Available via the `triggerType` field in the API response.
-- **CLI History Command**: New `dagu history` command displays execution history for DAG runs with comprehensive filtering (by date, status, tags, run ID), pagination (limit support up to 1000 results), and multiple output formats (table, JSON, CSV). Essential for debugging patterns, monitoring workflows, and exporting run data. Features:
+- Access Log Configuration: New `access_log_mode` setting controls HTTP request logging. Values: `"all"` (default — log all requests), `"non-public"` (skip public/static asset paths), or `"none"` (disable access logging). Environment variable: `DAGU_ACCESS_LOG_MODE`. See [Server Configuration](/configurations/server#access-log).
+- Auth Mode Selection: Authentication mode is now configured via `auth.mode` field. Valid modes: `none`, `basic`, `builtin` (default). Basic auth uses `auth.mode: basic` with `auth.basic.username` and `auth.basic.password`. Environment variable: `DAGU_AUTH_MODE`.
+- Coordinator Enabled Config: New `coordinator.enabled` config option (default: `true`) and `DAGU_COORDINATOR_ENABLED` environment variable to explicitly enable or disable the coordinator service. When disabled, `start-all` skips the coordinator and DAGs are never dispatched to workers. Accepts `true`/`false`/`1`/`0`.
+- Self-Upgrade Command: New `dagu upgrade` command for in-place binary updates with SHA256 verification, backup support, and cross-platform compatibility. See [Self-Upgrade](/features/upgrade) for details.
+- Literal Dollar Escape for Non-Shell Executors: Use `\$` to emit a literal `$` in non-shell contexts (docker, http, ssh, jq, mail, etc.) and config fields. Shell-executed commands preserve native semantics. To emit a literal `$$` in non-shell contexts, escape both dollars: `\$\$`.
+- Router Examples in Documentation: Added two router examples to the [Examples](/writing-workflows/examples) page under "Control Flow & Conditions": routing based on environment variable values and routing based on step output. Removed the "Complex Preconditions" example to streamline the page.
+- Unified Execution Dispatch (`defaultExecutionMode`): New server-level `defaultExecutionMode` setting controls whether DAGs run locally or are dispatched to workers. When set to `distributed`, all DAGs are automatically dispatched to the coordinator for worker execution, even without an explicit `worker_selector`. A centralized `ShouldDispatchToCoordinator` function ensures consistent dispatch logic across all execution paths (API, CLI, scheduler, sub-DAG). DAGs that must remain on the main instance can use `worker_selector: local` to override this behavior. See [Distributed Execution](/features/distributed-execution) and [Worker Labels](/features/worker-labels) for details.
+- Agent: AI assistant integrated into the Web UI for workflow management. The agent helps create, review, debug, and manage DAG workflows through an interactive chat interface. Supports multiple LLM providers (Anthropic, OpenAI, Google, OpenRouter, local models). Features include shell command execution with approval for dangerous operations, file reading/editing, DAG schema lookup, UI navigation, and web search. See [Agent](/features/agent/) for details.
+- Agent Delegate Tool: New `delegate` tool for the agent that spawns up to 8 parallel sub-agents for independent sub-tasks. Each sub-agent runs in its own session with the same tools (minus `delegate` to prevent recursion) and returns a summary to the parent. Sub-agent messages stream through the parent SSE connection. Available in interactive chat only (not in DAG agent steps). See [Tools Reference](/features/agent/tools#delegate).
+- Trigger Type Visibility: DAG runs now display how they were initiated (scheduler, manual, webhook, subdag, retry). The trigger type is shown in the DAG runs list and detail views with distinct icons and labels. Available via the `triggerType` field in the API response.
+- CLI History Command: New `dagu history` command displays execution history for DAG runs with comprehensive filtering (by date, status, tags, run ID), pagination (limit support up to 1000 results), and multiple output formats (table, JSON, CSV). Essential for debugging patterns, monitoring workflows, and exporting run data. Features:
   - Date filtering: absolute (`--from`/`--to`) or relative (`--last 7d`, `24h`, `1w`)
   - Status filtering: all execution states with aliases (e.g., `success` → `succeeded`)
   - Tag filtering: comma-separated with AND logic
@@ -119,8 +119,8 @@
   - Default: last 30 days, 100 results, table format
   - **Run IDs never truncated** for reliable copy-paste
   - See [CLI Reference](/reference/cli#history) for full documentation.
-- **LLM Model Fallback**: `model` field accepts array of model objects. First is primary, rest are fallbacks tried in order on any error. Per-model overrides for `temperature`, `max_tokens`, `top_p`, `base_url`, `api_key_name`. See [Model Fallback](/features/chat/basics#model-fallback).
-- **Container Shell Wrapper**: New `shell` field wraps step commands with a shell interpreter, enabling pipes, redirects, and command chaining without manual wrapping. Available in both image and exec modes.
+- LLM Model Fallback: `model` field accepts array of model objects. First is primary, rest are fallbacks tried in order on any error. Per-model overrides for `temperature`, `max_tokens`, `top_p`, `base_url`, `api_key_name`. See [Model Fallback](/features/chat/basics#model-fallback).
+- Container Shell Wrapper: New `shell` field wraps step commands with a shell interpreter, enabling pipes, redirects, and command chaining without manual wrapping. Available in both image and exec modes.
 
   ```yaml
   container:
@@ -134,7 +134,7 @@
 
   Format: array where first element is the shell path, remaining elements are flags, and the step command is appended as the final argument. See [Container Field](/writing-workflows/container#shell-wrapper) for details.
 
-- **Step Defaults (`defaults`)**: New DAG-level `defaults` field that defines default values inherited by every step and `handler_on` step. Supports 8 fields: `retry_policy`, `continue_on`, `repeat_policy`, `timeout_sec`, `mail_on_error`, `signal_on_stop`, `env`, `preconditions`. Override fields are applied only when a step does not define its own value. Additive fields (`env`, `preconditions`) prepend default entries before the step's own entries. Unknown keys cause a validation error.
+- Step Defaults (`defaults`): New DAG-level `defaults` field that defines default values inherited by every step and `handler_on` step. Supports 8 fields: `retry_policy`, `continue_on`, `repeat_policy`, `timeout_sec`, `mail_on_error`, `signal_on_stop`, `env`, `preconditions`. Override fields are applied only when a step does not define its own value. Additive fields (`env`, `preconditions`) prepend default entries before the step's own entries. Unknown keys cause a validation error.
 
   ```yaml
   defaults:
@@ -159,9 +159,9 @@
 
   See [Step Defaults](/writing-workflows/step-defaults) for full documentation.
 
-- **Major UI Redesign**: Complete redesign of the user interface with improved dark mode support, modernized color palette, and streamlined navigation. Enhanced visual hierarchy across all pages including DAG lists, execution views, system status, and admin pages.
-- **LLM Secret Masking**: Secrets defined in the `secrets` block are now automatically masked before being sent to LLM providers in chat steps. This prevents accidental exposure of sensitive values to external AI APIs while still allowing secrets to be used in message content via `${VAR}` substitution.
-- **LLM Tool Calling**: Chat executor now supports function calling / tool use, enabling AI agents to execute workflows as tools during sessions. Tools are defined as DAGs with automatic parameter discovery from `defaultParams`.
+- Major UI Redesign: Complete redesign of the user interface with improved dark mode support, modernized color palette, and streamlined navigation. Enhanced visual hierarchy across all pages including DAG lists, execution views, system status, and admin pages.
+- LLM Secret Masking: Secrets defined in the `secrets` block are now automatically masked before being sent to LLM providers in chat steps. This prevents accidental exposure of sensitive values to external AI APIs while still allowing secrets to be used in message content via `${VAR}` substitution.
+- LLM Tool Calling: Chat executor now supports function calling / tool use, enabling AI agents to execute workflows as tools during sessions. Tools are defined as DAGs with automatic parameter discovery from `defaultParams`.
 
   ```yaml
   # Main DAG that uses the tool
@@ -190,15 +190,15 @@
   ```
 
   **Key Features:**
-  - **DAG-as-Tool**: Any DAG can be a tool - parameters auto-discovered from `defaultParams`
-  - **Multi-turn Execution**: Automatic loop: LLM → Tool Calls → Execute DAGs → Results → LLM (up to `max_tool_iterations`)
-  - **Local Tool Discovery**: Tools searched in local DAGs (using `---` separator) first, then database
-  - **UI Drill-down**: Tool executions tracked as sub-DAG runs with full execution details
-  - **Tool Definitions Display**: UI shows available tools and their parameters
-  - **Provider Support**: Anthropic, OpenAI, and Gemini with provider-specific API mappings
-  - **Parameter Passing**: Tool arguments converted to DAG parameters (KEY=value format)
-  - **Output Handling**: Tool results from DAG outputs passed back to LLM as tool results
-  - **Error Handling**: Tool execution failures passed to LLM as error messages
+  - DAG-as-Tool: Any DAG can be a tool - parameters auto-discovered from `defaultParams`
+  - Multi-turn Execution: Automatic loop: LLM → Tool Calls → Execute DAGs → Results → LLM (up to `max_tool_iterations`)
+  - Local Tool Discovery: Tools searched in local DAGs (using `---` separator) first, then database
+  - UI Drill-down: Tool executions tracked as sub-DAG runs with full execution details
+  - Tool Definitions Display: UI shows available tools and their parameters
+  - Provider Support: Anthropic, OpenAI, and Gemini with provider-specific API mappings
+  - Parameter Passing: Tool arguments converted to DAG parameters (KEY=value format)
+  - Output Handling: Tool results from DAG outputs passed back to LLM as tool results
+  - Error Handling: Tool execution failures passed to LLM as error messages
 
   **Configuration:**
   - `llm.tools`: Array of DAG names to make available as tools
@@ -209,7 +209,7 @@
 
   See [Chat - Tool Calling](/features/chat/tool-calling) for full documentation.
 
-- **Tailscale Tunnel**: Built-in remote access via embedded Tailscale node. Access Dagu from anywhere without port forwarding or VPN setup.
+- Tailscale Tunnel: Built-in remote access via embedded Tailscale node. Access Dagu from anywhere without port forwarding or VPN setup.
 
   ```bash
   dagu server --tunnel
@@ -222,7 +222,7 @@
 
   First run shows login URL. Subsequent runs auto-connect using saved state. See [Tunnel Configuration](/configurations/tunnel).
 
-- **System Status Page**: New admin-only page consolidating system health monitoring in one place.
+- System Status Page: New admin-only page consolidating system health monitoring in one place.
 
   **Features:**
   - Scheduler service status with all instances
@@ -234,7 +234,7 @@
 
   Access via the navigation menu under "Overview" (admin users only).
 
-- **OIDC Integration for Builtin Auth (Recommended)**: Added OIDC/SSO login capability under builtin authentication mode. This is now the recommended way to use OIDC with Dagu, as it combines SSO convenience with full user management and RBAC.
+- OIDC Integration for Builtin Auth (Recommended): Added OIDC/SSO login capability under builtin authentication mode. This is now the recommended way to use OIDC with Dagu, as it combines SSO convenience with full user management and RBAC.
 
   ```yaml
   auth:
@@ -252,7 +252,7 @@
   ```
 
   Key features: auto-signup on first login, role mapping from IdP groups, email domain filtering, email whitelist, customizable login button. See [Builtin Authentication](/configurations/authentication/builtin#oidcsso-login) for details.
-- **Synchronous Execution API**: New endpoint `POST /api/v1/dags/{fileName}/start-sync` that executes a DAG and waits for completion before returning. Returns full execution details including all node statuses. Useful for automation scripts, CI/CD pipelines, and any scenario where you need to wait for a DAG to finish.
+- Synchronous Execution API: New endpoint `POST /api/v1/dags/{fileName}/start-sync` that executes a DAG and waits for completion before returning. Returns full execution details including all node statuses. Useful for automation scripts, CI/CD pipelines, and any scenario where you need to wait for a DAG to finish.
 
   ```bash
   curl -X POST "http://localhost:8080/api/v1/dags/my-dag/start-sync" \
@@ -269,7 +269,7 @@
 
   See [REST API Reference](/reference/api#start-dag-synchronous) for full documentation.
 
-- **SFTP Executor**: New step type for transferring files between local and remote servers via SFTP. Supports upload and download of files and directories, with atomic uploads using temporary files to prevent partial transfers.
+- SFTP Executor: New step type for transferring files between local and remote servers via SFTP. Supports upload and download of files and directories, with atomic uploads using temporary files to prevent partial transfers.
 
   ```yaml
   ssh:
@@ -287,7 +287,7 @@
 
   See [SFTP](/features/executors/sftp) for full documentation.
 
-- **SSH Bastion Host Support**: SSH executor now supports connecting through a jump/bastion host for accessing servers in private networks.
+- SSH Bastion Host Support: SSH executor now supports connecting through a jump/bastion host for accessing servers in private networks.
 
   ```yaml
   ssh:
@@ -301,9 +301,9 @@
 
   See [SSH - Bastion Host](/features/executors/ssh#bastion-host) for full documentation.
 
-- **SSH Connection Timeout**: Added `timeout` field to SSH configuration (default: 30s) for controlling connection timeouts.
+- SSH Connection Timeout: Added `timeout` field to SSH configuration (default: 30s) for controlling connection timeouts.
 
-- **S3 Executor**: New step type for S3 operations with support for AWS S3 and S3-compatible services (MinIO, Google Cloud Storage, DigitalOcean Spaces, Backblaze B2).
+- S3 Executor: New step type for S3 operations with support for AWS S3 and S3-compatible services (MinIO, Google Cloud Storage, DigitalOcean Spaces, Backblaze B2).
 
   ```yaml
   s3:
@@ -332,7 +332,7 @@
 
   See [S3](/features/executors/s3) for full documentation.
 
-- **SQL Executor**: New step types for database operations with PostgreSQL and SQLite support. Execute queries, import data from CSV/TSV/JSONL, and export results in multiple formats.
+- SQL Executor: New step types for database operations with PostgreSQL and SQLite support. Execute queries, import data from CSV/TSV/JSONL, and export results in multiple formats.
 
   ```yaml
   steps:
@@ -355,7 +355,7 @@
 
   See [ETL](/features/etl/) for full documentation.
 
-- **Redis Executor**: New step type for Redis operations with support for all major Redis commands, pipelines, transactions, Lua scripts, and distributed locking.
+- Redis Executor: New step type for Redis operations with support for all major Redis commands, pipelines, transactions, Lua scripts, and distributed locking.
 
   ```yaml
   redis:
@@ -385,7 +385,7 @@
 
   See [Redis](/features/executors/redis) for full documentation.
 
-- **PostgreSQL Connection Pool Management for Workers**: Added global PostgreSQL connection pool configuration at the worker level to prevent connection exhaustion when multiple DAGs run concurrently in shared-nothing mode.
+- PostgreSQL Connection Pool Management for Workers: Added global PostgreSQL connection pool configuration at the worker level to prevent connection exhaustion when multiple DAGs run concurrently in shared-nothing mode.
 
   ```yaml
   worker:
@@ -404,9 +404,9 @@
 
   See [Shared Nothing Mode - PostgreSQL Connection Pool Management](/features/workers/shared-nothing#postgresql-connection-pool-management) for details.
 
-- **DAG Runs Tag Filter**: Filter DAG runs by tags in the UI and API. Select multiple tags to filter runs from DAGs that have ALL specified tags (AND logic). Available via the new `tags` query parameter on `/api/v1/dag-runs` endpoint (comma-separated).
+- DAG Runs Tag Filter: Filter DAG runs by tags in the UI and API. Select multiple tags to filter runs from DAGs that have ALL specified tags (AND logic). Available via the new `tags` query parameter on `/api/v1/dag-runs` endpoint (comma-separated).
 
-- **Key-Value Tags**: Tags now support key-value pairs in addition to simple tags. Multiple YAML formats supported:
+- Key-Value Tags: Tags now support key-value pairs in addition to simple tags. Multiple YAML formats supported:
 
   ```yaml
   # Map notation
@@ -431,19 +431,19 @@
 
   Values are normalized to lowercase. See [Tags](/features/tags) for details.
 
-- **Tag Validation**: Tags are validated at YAML load time. Keys must be 1-63 characters (alphanumeric, `-`, `_`, `.`), values 0-255 characters (alphanumeric, `-`, `_`, `.`, `/`). Invalid tags cause DAG load errors with descriptive messages.
+- Tag Validation: Tags are validated at YAML load time. Keys must be 1-63 characters (alphanumeric, `-`, `_`, `.`), values 0-255 characters (alphanumeric, `-`, `_`, `.`, `/`). Invalid tags cause DAG load errors with descriptive messages.
 
-- **Shared-Nothing Worker Architecture**: Workers can now operate without shared filesystem access. Enables deployment in Kubernetes, multi-cloud, and containerized environments where NFS/shared volumes are not available.
+- Shared-Nothing Worker Architecture: Workers can now operate without shared filesystem access. Enables deployment in Kubernetes, multi-cloud, and containerized environments where NFS/shared volumes are not available.
 
   **Key Features:**
-  - **Static Discovery**: Configure workers with `--worker.coordinators=host:port` for direct coordinator connection
-  - **Status Pushing**: Workers send execution status to coordinator via `ReportStatus` gRPC call
-  - **Log Streaming**: Workers stream stdout/stderr to coordinator via `StreamLogs` gRPC call (32KB buffer, 64KB flush threshold)
-  - **Zombie Detection**: Coordinator automatically marks tasks as FAILED when workers become unresponsive (30s heartbeat timeout)
+  - Static Discovery: Configure workers with `--worker.coordinators=host:port` for direct coordinator connection
+  - Status Pushing: Workers send execution status to coordinator via `ReportStatus` gRPC call
+  - Log Streaming: Workers stream stdout/stderr to coordinator via `StreamLogs` gRPC call (32KB buffer, 64KB flush threshold)
+  - Zombie Detection: Coordinator automatically marks tasks as FAILED when workers become unresponsive (30s heartbeat timeout)
 
   See [Workers](/features/workers/) for deployment options and configuration.
 
-- **Web Terminal**: Added optional web-based terminal for executing shell commands directly from the Dagu UI. Disabled by default for security.
+- Web Terminal: Added optional web-based terminal for executing shell commands directly from the Dagu UI. Disabled by default for security.
 
   ```yaml
   terminal:
@@ -454,7 +454,7 @@
 
   See [Terminal Configuration](/configurations/server#terminal) for details.
 
-- **Audit Logging Configuration**: Added configuration option to enable/disable audit logging. Enabled by default.
+- Audit Logging Configuration: Added configuration option to enable/disable audit logging. Enabled by default.
 
   ```yaml
   audit:
@@ -465,33 +465,33 @@
 
   See [Audit Logging](/configurations/server#audit-logging) for details.
 
-- **Git Sync**: Synchronize DAG definitions with a Git repository. See [Git Sync](/features/git-sync).
+- Git Sync: Synchronize DAG definitions with a Git repository. See [Git Sync](/features/git-sync).
 
-- **Catchup (Missed Run Replay)**: New `catchup_window` field enables automatic replay of missed cron runs when the scheduler restarts after downtime. The scheduler tracks per-DAG watermarks and replays missed intervals in chronological order, one per scheduler tick. The `overlap_policy` field (`"skip"`, `"all"`, or `"latest"`) controls behavior when the DAG is still running during catchup. See [Scheduling — Catchup](/features/scheduling#catchup-missed-run-replay).
+- Catchup (Missed Run Replay): New `catchup_window` field enables automatic replay of missed cron runs when the scheduler restarts after downtime. The scheduler tracks per-DAG watermarks and replays missed intervals in chronological order, one per scheduler tick. The `overlap_policy` field (`"skip"`, `"all"`, or `"latest"`) controls behavior when the DAG is still running during catchup. See [Scheduling — Catchup](/features/scheduling#catchup-missed-run-replay).
 
-- **Unified Stop/Restart Scheduling**: Stop and restart schedules are now evaluated by the same TickPlanner module that handles start schedules. Stop schedules fire only when the DAG's latest status is `running`. Restart schedules fire unconditionally. Watermarks track only start-schedule runs to prevent stop/restart times from corrupting catchup computation.
+- Unified Stop/Restart Scheduling: Stop and restart schedules are now evaluated by the same TickPlanner module that handles start schedules. Stop schedules fire only when the DAG's latest status is `running`. Restart schedules fire unconditionally. Watermarks track only start-schedule runs to prevent stop/restart times from corrupting catchup computation.
 
-- **Remote Agent Tool**: New `remote` tool enabling task delegation to remote Dagu nodes. Agents can spawn and manage work across distributed instances with optional session ID support for idempotent session creation. See [Agent Tools](/features/agent/tools).
+- Remote Agent Tool: New `remote` tool enabling task delegation to remote Dagu nodes. Agents can spawn and manage work across distributed instances with optional session ID support for idempotent session creation. See [Agent Tools](/features/agent/tools).
 
-- **Remote Node Management**: Admin UI page for managing remote worker nodes with full CRUD operations and connection testing. REST API endpoints for remote node configuration. See [Distributed Execution](/features/distributed-execution).
+- Remote Node Management: Admin UI page for managing remote worker nodes with full CRUD operations and connection testing. REST API endpoints for remote node configuration. See [Distributed Execution](/features/distributed-execution).
 
-- **Document Management**: Comprehensive document management system with full CRUD and search capabilities. Dedicated Docs page with tree navigation and Markdown rendering for project documentation alongside DAG workflows.
+- Document Management: Comprehensive document management system with full CRUD and search capabilities. Dedicated Docs page with tree navigation and Markdown rendering for project documentation alongside DAG workflows.
 
-- **Git-Sync Reconciliation**: Enhanced Git-sync with forget, delete, and move operations for sync item management. Cleanup functionality to remove all missing items at once. See [Git Sync](/features/git-sync).
+- Git-Sync Reconciliation: Enhanced Git-sync with forget, delete, and move operations for sync item management. Cleanup functionality to remove all missing items at once. See [Git Sync](/features/git-sync).
 
-- **License Management**: License validation, status tracking, and feature gating system for RBAC and audit logging.
+- License Management: License validation, status tracking, and feature gating system for RBAC and audit logging.
 
-- **Agent Personality (Soul)**: Agent personality management system with full CRUD capabilities. Users can select and customize agent personalities for chat sessions.
+- Agent Personality (Soul): Agent personality management system with full CRUD capabilities. Users can select and customize agent personalities for chat sessions.
 
-- **Agent API Cost Tracking**: Per-message cost tracking for LLM API calls with USD pricing metadata. Enhanced agent step message persistence for cost analysis.
+- Agent API Cost Tracking: Per-message cost tracking for LLM API calls with USD pricing metadata. Enhanced agent step message persistence for cost analysis.
 
-- **Provider-Native Web Search for Agent**: Agents can use provider-native web search capabilities. Users can enable web search and configure maximum uses per request in agent settings.
+- Provider-Native Web Search for Agent: Agents can use provider-native web search capabilities. Users can enable web search and configure maximum uses per request in agent settings.
 
-- **Singleton Enqueue Option**: New `singleton` constraint for the `/dag-runs/enqueue` endpoint ensures only one DAG with the same name can be running or queued at any time. (#1672)
+- Singleton Enqueue Option: New `singleton` constraint for the `/dag-runs/enqueue` endpoint ensures only one DAG with the same name can be running or queued at any time. (#1672)
 
 ### Deprecated
 
-- **DAG-level `max_active_runs` field**: The `max_active_runs` field in DAG files is now deprecated for local (DAG-based) queues. Local queues now always use FIFO processing with concurrency of 1.
+- DAG-level `max_active_runs` field: The `max_active_runs` field in DAG files is now deprecated for local (DAG-based) queues. Local queues now always use FIFO processing with concurrency of 1.
 
   **Migration**: For concurrency control, define global queues in `~/.config/dagu/config.yaml` and assign DAGs using the `queue` field:
 
@@ -510,15 +510,15 @@
 
   The field is still accepted for backward compatibility but emits a build warning and is ignored for local queues.
 
-- **`max_active_runs: -1` (queue bypass)**: Setting `max_active_runs` to `-1` to bypass queueing is deprecated. All DAGs now go through the queue system with local queues defaulting to FIFO (concurrency 1).
+- `max_active_runs: -1` (queue bypass): Setting `max_active_runs` to `-1` to bypass queueing is deprecated. All DAGs now go through the queue system with local queues defaulting to FIFO (concurrency 1).
 
 ### Fixed
 
-- **Sub-DAG Loading with Long Names**: Fixed a bug where sub-DAG execution failed for DAG names near the 40-character limit. Temp file naming now truncates the DAG name prefix so the generated filename (without extension) never exceeds the `DAGNameMaxLen` validation limit.
+- Sub-DAG Loading with Long Names: Fixed a bug where sub-DAG execution failed for DAG names near the 40-character limit. Temp file naming now truncates the DAG name prefix so the generated filename (without extension) never exceeds the `DAGNameMaxLen` validation limit.
 
-- **Sub-DAG Spec View**: Fixed "file not found" error when viewing the spec tab for sub-DAG runs in the UI. Added dedicated API endpoint `/dag-runs/{name}/{dagRunId}/sub-dag-runs/{subDAGRunId}/spec` that properly retrieves specs from the parent-child storage hierarchy.
+- Sub-DAG Spec View: Fixed "file not found" error when viewing the spec tab for sub-DAG runs in the UI. Added dedicated API endpoint `/dag-runs/{name}/{dagRunId}/sub-dag-runs/{subDAGRunId}/spec` that properly retrieves specs from the parent-child storage hierarchy.
 
-- **Container Step Output Capture**: Fixed an issue where `container.command` was not executed when specified inside the container block without a top-level `command` field. Now `container.command` is properly used as the command to run, and output is correctly captured.
+- Container Step Output Capture: Fixed an issue where `container.command` was not executed when specified inside the container block without a top-level `command` field. Now `container.command` is properly used as the command to run, and output is correctly captured.
 
   ```yaml
   # This now works correctly
@@ -532,39 +532,39 @@
       output: RESULT  # Output is now captured
   ```
 
-- **Sub-DAG Error Masking in Parallel Execution**: Fixed an issue where sub-DAG failures produced the cryptic error "no results available for node status determination" instead of the actual cause. When a child subprocess fails before writing status data, the error is now properly propagated with process exit details and captured stderr. Affected `node.go`, `dag_runner.go`, `parallel.go`, and `dag.go`.
+- Sub-DAG Error Masking in Parallel Execution: Fixed an issue where sub-DAG failures produced the cryptic error "no results available for node status determination" instead of the actual cause. When a child subprocess fails before writing status data, the error is now properly propagated with process exit details and captured stderr. Affected `node.go`, `dag_runner.go`, `parallel.go`, and `dag.go`.
 
-- **Windows Process Timeout and Subprocess Termination**: Fixed `timeout_sec` not being enforced on Windows. The command executor's `Run()` method blocked on `cmd.Wait()` without responding to context cancellation, causing processes to run past their timeout. Refactored to run `cmd.Wait()` asynchronously with a `select` on context cancellation, and updated `KillProcessGroup()` on Windows to use `killProcessTree()` for complete subprocess tree termination. Returns exit code 124 on timeout. (#1635)
+- Windows Process Timeout and Subprocess Termination: Fixed `timeout_sec` not being enforced on Windows. The command executor's `Run()` method blocked on `cmd.Wait()` without responding to context cancellation, causing processes to run past their timeout. Refactored to run `cmd.Wait()` asynchronously with a `select` on context cancellation, and updated `KillProcessGroup()` on Windows to use `killProcessTree()` for complete subprocess tree termination. Returns exit code 124 on timeout. (#1635)
 
-- **Security: Path Traversal in DAG Creation API**: DAG creation endpoint now validates names to prevent directory traversal attacks. (GHSA-6v48-fcq6-ff23, #1691)
+- Security: Path Traversal in DAG Creation API: DAG creation endpoint now validates names to prevent directory traversal attacks. (GHSA-6v48-fcq6-ff23, #1691)
 
-- **Docker HOME Folder Substitution**: Added `-H` flag to `sudo` in `entrypoint.sh` so `~` correctly expands to `/home/dagu` instead of `/root` inside Docker containers. (#1699, reported by [@simonmysun](https://github.com/simonmysun))
+- Docker HOME Folder Substitution: Added `-H` flag to `sudo` in `entrypoint.sh` so `~` correctly expands to `/home/dagu` instead of `/root` inside Docker containers. (#1699, reported by [@simonmysun](https://github.com/simonmysun))
 
-- **Cache Memory Bloat**: Optimized cache implementation with more efficient eviction strategy to prevent excessive memory usage. (#1679, reported by community via #546)
+- Cache Memory Bloat: Optimized cache implementation with more efficient eviction strategy to prevent excessive memory usage. (#1679, reported by community via #546)
 
-- **Webhook Fallback Body**: Webhooks now support arbitrary JSON payloads with intelligent format detection and automatic fallback handling. (#1668)
+- Webhook Fallback Body: Webhooks now support arbitrary JSON payloads with intelligent format detection and automatic fallback handling. (#1668)
 
-- **Queue Processing Stability**: Enhanced queue processor stability with improved error handling and recovery mechanisms for DAG file operations during concurrent processing. (#1595, reported by [@ghansham](https://github.com/ghansham))
+- Queue Processing Stability: Enhanced queue processor stability with improved error handling and recovery mechanisms for DAG file operations during concurrent processing. (#1595, reported by [@ghansham](https://github.com/ghansham))
 
-- **Variable Expansion for Unknown Variables**: Variable expansion now preserves unknown or undefined variables in their literal form instead of expanding to empty strings. (#1606)
+- Variable Expansion for Unknown Variables: Variable expansion now preserves unknown or undefined variables in their literal form instead of expanding to empty strings. (#1606)
 
-- **Scheduler Queue Capacity on Retry**: Retries for DAGs using global queues are now properly enqueued instead of executed immediately, respecting queue capacity limits. (#1676, contributed by [@kriyanshii](https://github.com/kriyanshii), reported by [@ghansham](https://github.com/ghansham) via #1673)
+- Scheduler Queue Capacity on Retry: Retries for DAGs using global queues are now properly enqueued instead of executed immediately, respecting queue capacity limits. (#1676, contributed by [@kriyanshii](https://github.com/kriyanshii), reported by [@ghansham](https://github.com/ghansham) via #1673)
 
-- **Working Directory Resolution**: Enhanced working directory resolution to properly inherit from base configuration when not explicitly specified in DAG files. (#1641)
+- Working Directory Resolution: Enhanced working directory resolution to properly inherit from base configuration when not explicitly specified in DAG files. (#1641)
 
-- **Upgrade Command Stability**: Improved upgrade download reliability with retry logic and exponential backoff. Strengthened Windows binary replacement. (#1646)
+- Upgrade Command Stability: Improved upgrade download reliability with retry logic and exponential backoff. Strengthened Windows binary replacement. (#1646)
 
-- **Parallel + Call Parameter Splitting**: Fixed expanded variable references being incorrectly split during parallel step execution with `call`. (#1665, reported by [@pdoronila](https://github.com/pdoronila) via #1658)
+- Parallel + Call Parameter Splitting: Fixed expanded variable references being incorrectly split during parallel step execution with `call`. (#1665, reported by [@pdoronila](https://github.com/pdoronila) via #1658)
 
-- **Environment Variable Expansion for Non-Unix Shells**: Improved variable expansion handling for edge cases involving single quotes and adjacent characters on Windows PowerShell and cmd. (#1666, reported by [@pdoronila](https://github.com/pdoronila) via #1661)
+- Environment Variable Expansion for Non-Unix Shells: Improved variable expansion handling for edge cases involving single quotes and adjacent characters on Windows PowerShell and cmd. (#1666, reported by [@pdoronila](https://github.com/pdoronila) via #1661)
 
-- **Start Command Parameter Validation**: Support for JSON-formatted parameters when executing DAG commands. Enhanced parameter validation for the `start` CLI command. (#1663, reported by [@pdoronila](https://github.com/pdoronila) via #1660)
+- Start Command Parameter Validation: Support for JSON-formatted parameters when executing DAG commands. Enhanced parameter validation for the `start` CLI command. (#1663, reported by [@pdoronila](https://github.com/pdoronila) via #1660)
 
-- **Frontend Build Segfaults**: Replaced TerserPlugin with esbuild for faster, more reliable frontend builds. TerserPlugin was causing segfaults due to insufficient memory allocation. (#1645, contributed by [@yonas](https://github.com/yonas), reported via #901)
+- Frontend Build Segfaults: Replaced TerserPlugin with esbuild for faster, more reliable frontend builds. TerserPlugin was causing segfaults due to insufficient memory allocation. (#1645, contributed by [@yonas](https://github.com/yonas), reported via #901)
 
-- **Tag Sorting**: Alphabetical sorting of tag filter combobox and DAG table tags list for better usability. (#1617, contributed by [@prods](https://github.com/prods))
+- Tag Sorting: Alphabetical sorting of tag filter combobox and DAG table tags list for better usability. (#1617, contributed by [@prods](https://github.com/prods))
 
-- **Queue Count Display**: Fixed queue status reporting to exclude currently running items from the queued count. (#1602, contributed by [@sahalbelam](https://github.com/sahalbelam), reported via #1601)
+- Queue Count Display: Fixed queue status reporting to exclude currently running items from the queued count. (#1602, contributed by [@sahalbelam](https://github.com/sahalbelam), reported via #1601)
 
 ### Contributors
 
@@ -774,7 +774,7 @@ Everyone who participated in discussions, reported feedback, or helped other use
 
 ### Added
 
-- **SSH Shell Configuration**: Added `shell` field to SSH executor configuration for wrapping remote commands in a shell. This enables shell features like variable expansion, pipes, and command chaining on remote servers. Supports both DAG-level and step-level configuration, with step-level `shell` field as a fallback for convenience.
+- SSH Shell Configuration: Added `shell` field to SSH executor configuration for wrapping remote commands in a shell. This enables shell features like variable expansion, pipes, and command chaining on remote servers. Supports both DAG-level and step-level configuration, with step-level `shell` field as a fallback for convenience.
 
   ```yaml
   ssh:
@@ -789,7 +789,7 @@ Everyone who participated in discussions, reported feedback, or helped other use
 
   See [SSH](/features/executors/ssh) for full documentation.
 
-- **Simplified Executor Syntax**: Added `type` and `config` fields at step level as a cleaner alternative to the `executor` block. Both syntaxes are fully supported. (#1525)
+- Simplified Executor Syntax: Added `type` and `config` fields at step level as a cleaner alternative to the `executor` block. Both syntaxes are fully supported. (#1525)
 
   ```yaml
   # New shorthand syntax
@@ -812,7 +812,7 @@ Everyone who participated in discussions, reported feedback, or helped other use
       command: ./deploy.sh
   ```
 
-- **Chat Step Type**: Added a new step type for integrating Large Language Models into workflows. Execute LLM requests to OpenAI, Anthropic, Google Gemini, OpenRouter, and local models (Ollama, vLLM). (#1548)
+- Chat Step Type: Added a new step type for integrating Large Language Models into workflows. Execute LLM requests to OpenAI, Anthropic, Google Gemini, OpenRouter, and local models (Ollama, vLLM). (#1548)
 
   ```yaml
   steps:
@@ -827,16 +827,16 @@ Everyone who participated in discussions, reported feedback, or helped other use
   ```
 
   **Key Features:**
-  - **Multi-provider support**: OpenAI, Anthropic, Gemini, OpenRouter, and local OpenAI-compatible APIs (aliases: `ollama`, `vllm`, `llama` map to `local`)
-  - **DAG-level configuration**: Define `llm:` at DAG level to share settings across multiple chat steps
-  - **Multi-turn sessions**: Steps inherit session history from dependencies via `depends`, enabling context-aware AI workflows
-  - **Extended thinking mode**: Enable deeper reasoning with `thinking.enabled` and effort levels (`low`, `medium`, `high`, `xhigh`)
-  - **Streaming output**: Response tokens stream to stdout by default (disable with `stream: false`)
-  - **Automatic retry**: Exponential backoff on transient errors (rate limits, server errors, timeouts)
+  - Multi-provider support: OpenAI, Anthropic, Gemini, OpenRouter, and local OpenAI-compatible APIs (aliases: `ollama`, `vllm`, `llama` map to `local`)
+  - DAG-level configuration: Define `llm:` at DAG level to share settings across multiple chat steps
+  - Multi-turn sessions: Steps inherit session history from dependencies via `depends`, enabling context-aware AI workflows
+  - Extended thinking mode: Enable deeper reasoning with `thinking.enabled` and effort levels (`low`, `medium`, `high`, `xhigh`)
+  - Streaming output: Response tokens stream to stdout by default (disable with `stream: false`)
+  - Automatic retry: Exponential backoff on transient errors (rate limits, server errors, timeouts)
 
   See [Chat](/features/chat/) for full documentation.
 
-- **Per-DAG Prometheus Metrics**: Enhanced observability with granular per-DAG metrics and histograms. (#1411)
+- Per-DAG Prometheus Metrics: Enhanced observability with granular per-DAG metrics and histograms. (#1411)
   - `dagu_dag_runs_currently_running_by_dag` - Running count per DAG
   - `dagu_dag_runs_queued_by_dag` - Queue depth per DAG
   - `dagu_dag_runs_total_by_dag` - Run counts by DAG and status
@@ -845,7 +845,7 @@ Everyone who participated in discussions, reported feedback, or helped other use
 
   See [Prometheus Metrics](/features/prometheus-metrics) for full documentation.
 
-- **Container Exec Mode**: Execute commands in already-running containers instead of creating new ones. This enables running workflows in containers started by Docker Compose or other orchestration tools. (#1515)
+- Container Exec Mode: Execute commands in already-running containers instead of creating new ones. This enables running workflows in containers started by Docker Compose or other orchestration tools. (#1515)
 
   **String form** - exec with container's default settings:
 
@@ -875,12 +875,12 @@ Everyone who participated in discussions, reported feedback, or helped other use
 
   See [Container Field](/writing-workflows/container#exec-mode-use-existing-container) for full documentation.
 
-- **Worker ID Tracking**: Added worker ID tracking to DAG runs for distributed setups. Users can now see which worker executed their jobs in both the DAG runs list and detail views. (#1500)
+- Worker ID Tracking: Added worker ID tracking to DAG runs for distributed setups. Users can now see which worker executed their jobs in both the DAG runs list and detail views. (#1500)
   - Local execution displays `local` as the worker ID
   - Distributed execution displays the worker ID (format: `{hostname}@{pid}`)
   - Worker ID is shown in the DAG runs table and run details panel
 
-- **Configurable Cache Limits**: Added `cache` configuration option with presets to control memory usage for in-memory caches. (#1411)
+- Configurable Cache Limits: Added `cache` configuration option with presets to control memory usage for in-memory caches. (#1411)
 
   ```yaml
   cache: normal   # options: low, normal, high (default: normal)
@@ -896,9 +896,9 @@ Everyone who participated in discussions, reported feedback, or helped other use
 
   See [Server Configuration](/configurations/server#cache-configuration) for details.
 
-- **`DAGU_PARAMS_JSON` availability**: Every step now receives the merged parameter payload as JSON via the `DAGU_PARAMS_JSON` environment variable, even when parameters are supplied through legacy CLI strings. If a run starts with raw JSON parameters, the original payload is preserved verbatim. This makes it easier for scripts to consume structured parameter data without re-parsing shell strings. (#1550)
-- **DAG Spec Tab in Status View**: Added a new "Spec" tab to the DAG status page and DAG run details modal/panel. This tab displays the DAG YAML specification in readonly mode with the Schema Documentation sidebar available for reference. The spec shown is the exact spec that was used at execution time, not the current spec. (#XXXX)
-- **Wait Status Email Notifications**: Added `mail_on.wait` and `wait_mail` configuration for sending email notifications when a DAG enters wait status (Human In The Loop). This enables teams to be notified when workflows require human approval.
+- `DAGU_PARAMS_JSON` availability: Every step now receives the merged parameter payload as JSON via the `DAGU_PARAMS_JSON` environment variable, even when parameters are supplied through legacy CLI strings. If a run starts with raw JSON parameters, the original payload is preserved verbatim. This makes it easier for scripts to consume structured parameter data without re-parsing shell strings. (#1550)
+- DAG Spec Tab in Status View: Added a new "Spec" tab to the DAG status page and DAG run details modal/panel. This tab displays the DAG YAML specification in readonly mode with the Schema Documentation sidebar available for reference. The spec shown is the exact spec that was used at execution time, not the current spec. (#XXXX)
+- Wait Status Email Notifications: Added `mail_on.wait` and `wait_mail` configuration for sending email notifications when a DAG enters wait status (Human In The Loop). This enables teams to be notified when workflows require human approval.
 
   ```yaml
   mail_on:
@@ -913,7 +913,7 @@ Everyone who participated in discussions, reported feedback, or helped other use
 
   See [Email Notifications](/features/email-notifications#wait-status-notifications) for details.
 
-- **HITL (Human-in-the-Loop)**: Added `hitl` executor for pausing workflows until human approval. Enables approval gates where manual review is required before proceeding.
+- HITL (Human-in-the-Loop): Added `hitl` executor for pausing workflows until human approval. Enables approval gates where manual review is required before proceeding.
 
   ```yaml
   steps:
@@ -934,7 +934,7 @@ Everyone who participated in discussions, reported feedback, or helped other use
 
   See [Approval](/features/approval) for full documentation.
 
-- **Wait Handler**: Added `handler_on.wait` lifecycle handler that executes when a workflow enters wait status.
+- Wait Handler: Added `handler_on.wait` lifecycle handler that executes when a workflow enters wait status.
 
   ```yaml
   handler_on:
@@ -947,7 +947,7 @@ Everyone who participated in discussions, reported feedback, or helped other use
 
   See [Lifecycle Handlers](/writing-workflows/lifecycle-handlers) for full documentation.
 
-- **Chat Executor**: Added a new executor for integrating Large Language Models into workflows. Supports OpenAI, Anthropic, Google Gemini, OpenRouter, and local models (Ollama, vLLM).
+- Chat Executor: Added a new executor for integrating Large Language Models into workflows. Supports OpenAI, Anthropic, Google Gemini, OpenRouter, and local models (Ollama, vLLM).
 
   ```yaml
   steps:
@@ -962,17 +962,17 @@ Everyone who participated in discussions, reported feedback, or helped other use
   ```
 
   Key features:
-  - **Multi-turn sessions**: Steps inherit session history from dependencies
-  - **Variable substitution**: Message content supports `${VAR}` syntax
-  - **Streaming**: Response tokens are streamed to stdout by default
-  - **Multiple providers**: `openai`, `anthropic`, `gemini`, `openrouter`, `local`
-  - **Automatic retry**: Retries on rate limits and transient errors with exponential backoff
+  - Multi-turn sessions: Steps inherit session history from dependencies
+  - Variable substitution: Message content supports `${VAR}` syntax
+  - Streaming: Response tokens are streamed to stdout by default
+  - Multiple providers: `openai`, `anthropic`, `gemini`, `openrouter`, `local`
+  - Automatic retry: Retries on rate limits and transient errors with exponential backoff
 
   See [Chat Executor](/features/chat/) for full documentation.
 
 ### Changed
 
-- **Metrics Endpoint Access Control**: The `/api/v1/metrics` endpoint now requires authentication by default for improved security. Configure `metrics: "public"` or set `DAGU_SERVER_METRICS=public` to restore the previous public access behavior. When private, use API tokens or basic auth for Prometheus scraping. (#1411)
+- Metrics Endpoint Access Control: The `/api/v1/metrics` endpoint now requires authentication by default for improved security. Configure `metrics: "public"` or set `DAGU_SERVER_METRICS=public` to restore the previous public access behavior. When private, use API tokens or basic auth for Prometheus scraping. (#1411)
 
   ```yaml
   # Require authentication (new default)
@@ -986,9 +986,9 @@ Everyone who participated in discussions, reported feedback, or helped other use
 
 ### Fixed
 
-- **Config Path Resolution**: All configuration paths (DAGsDir, LogDir, DataDir, etc.) are now resolved to absolute paths at load time with proper error handling. Previously, path resolution failures were silently logged and the original unresolved path was used, which could cause mysterious runtime failures. Now, if any config path cannot be resolved to an absolute path, configuration loading fails with a clear error message.
+- Config Path Resolution: All configuration paths (DAGsDir, LogDir, DataDir, etc.) are now resolved to absolute paths at load time with proper error handling. Previously, path resolution failures were silently logged and the original unresolved path was used, which could cause mysterious runtime failures. Now, if any config path cannot be resolved to an absolute path, configuration loading fails with a clear error message.
 
-- **Multiple dotenv files**: Fixed loading of multiple `.env` files. Previously, only the first file was processed. Now all files are loaded sequentially, with later files overriding values from earlier ones. Duplicate file paths are automatically deduplicated. Note: `.env` is always prepended to the list unless `dotenv: []` is specified. (#1519)
+- Multiple dotenv files: Fixed loading of multiple `.env` files. Previously, only the first file was processed. Now all files are loaded sequentially, with later files overriding values from earlier ones. Duplicate file paths are automatically deduplicated. Note: `.env` is always prepended to the list unless `dotenv: []` is specified. (#1519)
 
   ```yaml
   # All files are now loaded, with later files overriding earlier ones
@@ -998,14 +998,14 @@ Everyone who participated in discussions, reported feedback, or helped other use
     - .env.production  # Overrides all earlier files
   ```
 
-- **Cache item counting**: Fixed cache `Store` method incorrectly incrementing item counter when updating existing keys, and `Invalidate` method decrementing counter for non-existent keys. (#1411)
+- Cache item counting: Fixed cache `Store` method incorrectly incrementing item counter when updating existing keys, and `Invalidate` method decrementing counter for non-existent keys. (#1411)
 
 ## v1.29.0 (2025-12-28)
 
 ### Added
 
 - Spec: Added `log_output` field at DAG and step levels to control stdout/stderr logging behavior - `separate` (default) writes to separate `.out`/`.err` files, `merged` writes both to a single `.log` file with interleaved output (#1505)
-- **DAG Run Outputs Collection**: Collect step outputs into a structured `outputs.json` file per DAG run. View collected outputs in the Web UI via the new Outputs tab. (#1466)
+- DAG Run Outputs Collection: Collect step outputs into a structured `outputs.json` file per DAG run. View collected outputs in the Web UI via the new Outputs tab. (#1466)
   - Outputs are automatically collected from steps with `output` field
   - Secret values are automatically masked in outputs
   - Enhanced `output` field syntax supports object form with `name`, `key`, and `omit` options:
@@ -1035,7 +1035,7 @@ steps:
 - API endpoint: `GET /api/v1/dag-runs/{name}/{dagRunId}/outputs`
 - See [DAG Run Outputs](/features/outputs) for full documentation
 - UI: Added wrap/unwrap toggle button in log viewer for better readability of long lines
-- **API Key Management**: Added comprehensive API key management for programmatic access with role-based permissions. API keys provide a secure alternative to static tokens with fine-grained access control.
+- API Key Management: Added comprehensive API key management for programmatic access with role-based permissions. API keys provide a secure alternative to static tokens with fine-grained access control.
   - Create, list, update, and delete API keys via Web UI or REST API
   - Role-based permissions (admin, manager, operator, viewer) per key
   - Usage tracking with `lastUsedAt` timestamp
@@ -1058,7 +1058,7 @@ curl -H "Authorization: Bearer dagu_your-key-here" \
 
 Requires builtin authentication mode (`auth.mode: builtin`). See [API Keys documentation](/configurations/authentication/api-keys) for details.
 
-- **Webhook Management**: Added DAG-specific webhooks for triggering workflow executions from external systems like CI/CD pipelines, GitHub, and Slack.
+- Webhook Management: Added DAG-specific webhooks for triggering workflow executions from external systems like CI/CD pipelines, GitHub, and Slack.
   - Create, regenerate, enable/disable, and delete webhooks via Web UI or REST API
   - DAG-specific tokens (one webhook per DAG) with `dagu_wh_` prefix
   - Payload passthrough via `WEBHOOK_PAYLOAD` environment variable
@@ -1081,7 +1081,7 @@ curl -X POST http://localhost:8080/api/v1/webhooks/my-dag \
 
 Requires builtin authentication mode (`auth.mode: builtin`). See [Webhooks documentation](/configurations/authentication/webhooks) for details.
 
-- **Multiple Commands per Step**: Steps can now execute multiple commands sequentially using an array syntax. This allows sharing step configuration (`env`, `working_dir`, `retry_policy`, `preconditions`, `container`, etc.) across multiple commands instead of duplicating it across separate steps.
+- Multiple Commands per Step: Steps can now execute multiple commands sequentially using an array syntax. This allows sharing step configuration (`env`, `working_dir`, `retry_policy`, `preconditions`, `container`, etc.) across multiple commands instead of duplicating it across separate steps.
 
 ```yaml
 steps:
@@ -1108,7 +1108,7 @@ Supported executors: shell, command, docker, container, ssh. Executors that do n
 
 ### Added
 
-- **Step-Level Container Field**: Added `container` field for individual steps, providing the same configuration options as DAG-level container but for per-step container execution. This is the recommended way to run steps in containers, replacing the verbose `executor: docker` syntax.
+- Step-Level Container Field: Added `container` field for individual steps, providing the same configuration options as DAG-level container but for per-step container execution. This is the recommended way to run steps in containers, replacing the verbose `executor: docker` syntax.
 
 ```yaml
 steps:
@@ -1130,10 +1130,10 @@ steps:
 
 ### Changed
 
-- **Documentation**: Updated all documentation to use the new step-level `container` syntax instead of `executor: docker`
-- **JSON Schema**: Updated DAG schema to include step-level `container` field with proper validation
-- **Spec Refactor (internal)**: Restructured spec types and build logic for improved maintainability (#1499)
-- **UI**: Removed link to Discord and Github from the frontend
+- Documentation: Updated all documentation to use the new step-level `container` syntax instead of `executor: docker`
+- JSON Schema: Updated DAG schema to include step-level `container` field with proper validation
+- Spec Refactor (internal): Restructured spec types and build logic for improved maintainability (#1499)
+- UI: Removed link to Discord and Github from the frontend
 
 ### Validation
 
@@ -1587,7 +1587,7 @@ Thanks to our contributors for this release:
 
 ### New Features
 
-- **Shorthand Step Syntax**: Added simplified step definition without requiring explicit name and command fields (#1206)
+- Shorthand Step Syntax: Added simplified step definition without requiring explicit name and command fields (#1206)
 
   ```yaml
   steps:
@@ -1602,25 +1602,25 @@ Thanks to our contributors for this release:
       command: echo "hello"
   ```
 
-- **Working Directory Support**: Added DAG-level and step-level working directory configuration with inheritance for better file path management
-- **Load Environment Support**: Enhanced environment variable loading capabilities with improved dotenv support
-- **Queue Dashboard UI**: Complete queue management interface with visual feedback and improved user experience (#1217)
-- **DAG Name Input Modal**: Improved UI for DAG name input and management with better validation (#1218)
-- **Max Active Runs Enforcement**: DAG-level `max_active_runs` configuration enforcement in API and CLI when starting DAG-runs (#1214) - Thanks to [@ghansham](https://github.com/ghansham) for feedback
-- **Queue Configuration Rename**: Renamed `queue.max_active_runs` to `queue.maxConcurrency` for clarity and consistency (#1215)
+- Working Directory Support: Added DAG-level and step-level working directory configuration with inheritance for better file path management
+- Load Environment Support: Enhanced environment variable loading capabilities with improved dotenv support
+- Queue Dashboard UI: Complete queue management interface with visual feedback and improved user experience (#1217)
+- DAG Name Input Modal: Improved UI for DAG name input and management with better validation (#1218)
+- Max Active Runs Enforcement: DAG-level `max_active_runs` configuration enforcement in API and CLI when starting DAG-runs (#1214) - Thanks to [@ghansham](https://github.com/ghansham) for feedback
+- Queue Configuration Rename: Renamed `queue.max_active_runs` to `queue.maxConcurrency` for clarity and consistency (#1215)
 
 ### Improvements
 
-- **Directory Lock Management**: Improved directory lock and active process management for better reliability and reduced race conditions (#1202)
-- **Empty Directory Cleanup**: Automatic removal of empty directories for proc and queue management to keep storage clean (#1208)
-- **Default Start Command**: Made 'start' the default command, removing single flag requirement for better CLI usability
-- **Max Active Runs Logic**: Enhanced check logic for `max_active_runs` configuration with improved validation (#1216)
-- **Queue UI Enhancements**: Applied user feedback to improve queue UI usability and functionality (#1221, #1222)
+- Directory Lock Management: Improved directory lock and active process management for better reliability and reduced race conditions (#1202)
+- Empty Directory Cleanup: Automatic removal of empty directories for proc and queue management to keep storage clean (#1208)
+- Default Start Command: Made 'start' the default command, removing single flag requirement for better CLI usability
+- Max Active Runs Logic: Enhanced check logic for `max_active_runs` configuration with improved validation (#1216)
+- Queue UI Enhancements: Applied user feedback to improve queue UI usability and functionality (#1221, #1222)
 
 ### Bug Fixes
 
-- **Script Execution**: Fixed script block execution that was failing with script parsing errors (#1204) - Thanks to [@Kaiden0001](https://github.com/Kaiden0001) for reporting the issue
-- **Parallel Execution**: Fixed parallel execution parameter handling for JSON references and complex data structures (#1219) - Thanks to [@tetedange13](https://github.com/tetedange13) for reporting the issue
+- Script Execution: Fixed script block execution that was failing with script parsing errors (#1204) - Thanks to [@Kaiden0001](https://github.com/Kaiden0001) for reporting the issue
+- Parallel Execution: Fixed parallel execution parameter handling for JSON references and complex data structures (#1219) - Thanks to [@tetedange13](https://github.com/tetedange13) for reporting the issue
 
 ### Contributors
 
@@ -1638,22 +1638,22 @@ Thanks to our contributors for this release:
 
 ### New Features
 
-- **Optional Step Names**: Made step names optional to remove the 40-character limit restriction, allowing more flexibility in workflow definitions (#1193) - Thanks to [@jonathonc](https://github.com/jonathonc) for raising the issue
-- **Singleton DAG Execution**: Added `--singleton` flag to ensure only one instance of a DAG runs at a time, preventing duplicate executions (#1195) - Thanks to [@Kaiden0001](https://github.com/Kaiden0001) for the feature request
-- **DAG-level SSH Configuration**: Implemented DAG-level SSH config for better control over remote executions across all steps (#1184)
-- **Example DAGs for New Users**: Auto-create example DAGs when starting Dagu for the first time, helping new users get started quickly (#1190)
-- **DAG-run Details Refresh**: Added refresh button to the DAG-run details page for immediate status updates (#1192)
-- **Invalid DAG Handling**: Improved UI handling of invalid DAG configurations with better error messages and graceful degradation (#1186)
+- Optional Step Names: Made step names optional to remove the 40-character limit restriction, allowing more flexibility in workflow definitions (#1193) - Thanks to [@jonathonc](https://github.com/jonathonc) for raising the issue
+- Singleton DAG Execution: Added `--singleton` flag to ensure only one instance of a DAG runs at a time, preventing duplicate executions (#1195) - Thanks to [@Kaiden0001](https://github.com/Kaiden0001) for the feature request
+- DAG-level SSH Configuration: Implemented DAG-level SSH config for better control over remote executions across all steps (#1184)
+- Example DAGs for New Users: Auto-create example DAGs when starting Dagu for the first time, helping new users get started quickly (#1190)
+- DAG-run Details Refresh: Added refresh button to the DAG-run details page for immediate status updates (#1192)
+- Invalid DAG Handling: Improved UI handling of invalid DAG configurations with better error messages and graceful degradation (#1186)
 
 ### Improvements
 
-- **Queue Directory Management**: Ensure queue directory is created before starting file watch to prevent startup errors (#1191)
-- **Coordinator Hostname Resolution**: Register configured hostname instead of resolved IP in coordinator.json for better network configuration (#1188) - Thanks to [@peterbuga](https://github.com/peterbuga) for reporting and proposing the solution
+- Queue Directory Management: Ensure queue directory is created before starting file watch to prevent startup errors (#1191)
+- Coordinator Hostname Resolution: Register configured hostname instead of resolved IP in coordinator.json for better network configuration (#1188) - Thanks to [@peterbuga](https://github.com/peterbuga) for reporting and proposing the solution
 
 ### Documentation
 
-- **Examples Update**: Updated and cleaned up example DAGs to reflect current best practices (#1185)
-- **Architecture Documentation**: Updated architecture diagrams and documentation
+- Examples Update: Updated and cleaned up example DAGs to reflect current best practices (#1185)
+- Architecture Documentation: Updated architecture diagrams and documentation
 
 ### Contributors
 
@@ -1671,26 +1671,26 @@ Thanks to our contributors for this release:
 
 ### New Features
 
-- **DAG Run Configuration**: Added ability to lock parameters and run ID in DAG configuration for controlled execution (#1176) - Thanks to [@kriyanshii](https://github.com/kriyanshii)
-- **System Status UI**: Added comprehensive system health monitoring for scheduler and coordinator services (#1177)
-- **Manual Refresh Controls**: Added refresh buttons to Dashboard, DAG-runs, and DAG-definitions pages for immediate data updates (#1178)
-- **Immediate Execution Option**: Added checkbox to start DAGs immediately, bypassing the queue for urgent workflows (#1171)
-- **Feedback Integration**: Added feedback button to sidebar with Web3Forms integration for better user communication (#1173)
-- **Community Link**: Added Discord community link to navigation sidebar for easier access to support (#1175)
-- **Auto-Navigation**: Automatically navigate to DAG-run detail page after starting or enqueuing a DAG (#1172)
+- DAG Run Configuration: Added ability to lock parameters and run ID in DAG configuration for controlled execution (#1176) - Thanks to [@kriyanshii](https://github.com/kriyanshii)
+- System Status UI: Added comprehensive system health monitoring for scheduler and coordinator services (#1177)
+- Manual Refresh Controls: Added refresh buttons to Dashboard, DAG-runs, and DAG-definitions pages for immediate data updates (#1178)
+- Immediate Execution Option: Added checkbox to start DAGs immediately, bypassing the queue for urgent workflows (#1171)
+- Feedback Integration: Added feedback button to sidebar with Web3Forms integration for better user communication (#1173)
+- Community Link: Added Discord community link to navigation sidebar for easier access to support (#1175)
+- Auto-Navigation: Automatically navigate to DAG-run detail page after starting or enqueuing a DAG (#1172)
 
 ### Improvements
 
-- **Queue Management**: Refactored process store to use hierarchical directory structure, separating group names (queues) from DAG names for better organization (#1174)
-- **Scheduler Timeout Handling**: Fixed scheduler queue reader to discard items when DAG runs don't become active within 10 seconds, preventing queue stacking (#1169) - Thanks to [@jrisch](https://github.com/jrisch) for reporting
+- Queue Management: Refactored process store to use hierarchical directory structure, separating group names (queues) from DAG names for better organization (#1174)
+- Scheduler Timeout Handling: Fixed scheduler queue reader to discard items when DAG runs don't become active within 10 seconds, preventing queue stacking (#1169) - Thanks to [@jrisch](https://github.com/jrisch) for reporting
 
 ### Bug Fixes
 
-- **Status Display**: Fixed DAG header showing "0" instead of "not started" for DAGs that haven't been executed (#1168)
+- Status Display: Fixed DAG header showing "0" instead of "not started" for DAGs that haven't been executed (#1168)
 
 ### Documentation
 
-- **Roadmap**: Updated project roadmap with latest development priorities
+- Roadmap: Updated project roadmap with latest development priorities
 
 ### Contributors
 
@@ -1707,27 +1707,27 @@ Thanks to our contributors for this release:
 
 ### New Features
 
-- **DAG-level Container Field**: Added support for running all steps in a single container with DAG-level container configuration (#1154)
-- **Zombie DAG Detection**: Added automatic detection and cleanup of zombie DAG runs with configurable detection interval (#1163) - Thanks to [@jonasban](https://github.com/jonasban) for feedback
-- **Container Registry Authentication**: Added support for pulling images from private registries with username/password and token-based authentication (#1165) - Thanks to [@vnghia](https://github.com/vnghia) for the feature request
+- DAG-level Container Field: Added support for running all steps in a single container with DAG-level container configuration (#1154)
+- Zombie DAG Detection: Added automatic detection and cleanup of zombie DAG runs with configurable detection interval (#1163) - Thanks to [@jonasban](https://github.com/jonasban) for feedback
+- Container Registry Authentication: Added support for pulling images from private registries with username/password and token-based authentication (#1165) - Thanks to [@vnghia](https://github.com/vnghia) for the feature request
 
 ### Improvements
 
-- **Scheduler Health Check**: Fixed health check server startup to work correctly with multiple scheduler instances (#1157) - Thanks to [@jonasban](https://github.com/jonasban) for reporting
-- **Stop Operation**: Fixed stop operation to properly handle multiple running instances of the same DAG (#1167) - Thanks to [@jeremydelattre59](https://github.com/jeremydelattre59) for reporting
-- **Scheduler Queue Processing**: Fixed scheduler to use heartbeat monitoring instead of status files for more reliable process detection (#1166) - Thanks to [@jrisch](https://github.com/jrisch) for feedback
-- **Environment Variables**: Corrected environment variable mapping for coordinator host and port configuration (#1162)
-- **Docker Permissions**: Ensured DAGU_HOME directory has proper permissions in Docker containers (#1161)
+- Scheduler Health Check: Fixed health check server startup to work correctly with multiple scheduler instances (#1157) - Thanks to [@jonasban](https://github.com/jonasban) for reporting
+- Stop Operation: Fixed stop operation to properly handle multiple running instances of the same DAG (#1167) - Thanks to [@jeremydelattre59](https://github.com/jeremydelattre59) for reporting
+- Scheduler Queue Processing: Fixed scheduler to use heartbeat monitoring instead of status files for more reliable process detection (#1166) - Thanks to [@jrisch](https://github.com/jrisch) for feedback
+- Environment Variables: Corrected environment variable mapping for coordinator host and port configuration (#1162)
+- Docker Permissions: Ensured DAGU_HOME directory has proper permissions in Docker containers (#1161)
 
 ### Bug Fixes
 
-- **Continue On Skipped**: Fixed exit code 0 incorrectly triggering continuation for skipped steps with repeat policies (#1158) - Thanks to [@jeremydelattre59](https://github.com/jeremydelattre59) for reporting and [@thefishhat](https://github.com/thefishhat) for the fix
-- **Queue Processing**: Fixed process store to correctly use queue name when specified (#1155) - Thanks to [@jonasban](https://github.com/jonasban) and [@ghansham](https://github.com/ghansham) for reporting
+- Continue On Skipped: Fixed exit code 0 incorrectly triggering continuation for skipped steps with repeat policies (#1158) - Thanks to [@jeremydelattre59](https://github.com/jeremydelattre59) for reporting and [@thefishhat](https://github.com/thefishhat) for the fix
+- Queue Processing: Fixed process store to correctly use queue name when specified (#1155) - Thanks to [@jonasban](https://github.com/jonasban) and [@ghansham](https://github.com/ghansham) for reporting
 
 ### Documentation
 
-- **Docker Compose Example**: Added example configuration for Docker Compose setup
-- **Roadmap**: Updated project roadmap based on general features
+- Docker Compose Example: Added example configuration for Docker Compose setup
+- Roadmap: Updated project roadmap based on general features
 
 ### Contributors
 
@@ -1748,16 +1748,16 @@ Thanks to our contributors for this release:
 
 ### Bug Fixes
 
-- **Scheduler**: Fixed health check server startup race condition when multiple scheduler instances are deployed (#1157) - Thanks to [@jonasban](https://github.com/jonasban) for reporting
+- Scheduler: Fixed health check server startup race condition when multiple scheduler instances are deployed (#1157) - Thanks to [@jonasban](https://github.com/jonasban) for reporting
 
 ### Improvements
 
-- **Node.js**: Upgraded to Node.js 22 (#1150) - Thanks to [@reneleonhardt](https://github.com/reneleonhardt)
+- Node.js: Upgraded to Node.js 22 (#1150) - Thanks to [@reneleonhardt](https://github.com/reneleonhardt)
 
 ### New Features
 
-- **npm Package Verification**: Added automatic verification after npm package publishing (#1149)
-- **npm Installation**: Added support for installing Dagu via npm
+- npm Package Verification: Added automatic verification after npm package publishing (#1149)
+- npm Installation: Added support for installing Dagu via npm
 
 ### Contributors
 
@@ -1774,43 +1774,43 @@ Thanks to our contributors for this release:
 
 ### New Features
 
-- **Step-level Environment Variables**: Added support for environment variables at the step level (#1148) - Thanks to [@admerzeau](https://github.com/admerzeau) for reporting
-- **Enhanced Repeat Policy**: Added explicit `until` and `while` modes for clearer repeat logic (#1050) - Thanks to [@thefishhat](https://github.com/thefishhat)
-- **Live Log Loading**: Added real-time log streaming in the Web UI with reload button (#1085) - Thanks to [@tapir](https://github.com/tapir) for reporting
-- **Exponential Backoff for RetryPolicy**: Added support for exponential backoff in retry policies (#1096, #1093) - Thanks to [@Sarvesh-11](https://github.com/Sarvesh-11)
-- **OpenID Connect (OIDC) Authentication**: Added OIDC support for Web UI authentication (#1107) - Thanks to [@Arvintian](https://github.com/Arvintian)
-- **Partial Success Status**: Added step-level partial success status for sub-DAG executions (#1115) - Thanks to [@ghansham](https://github.com/ghansham) for the feature request
-- **Distributed Workflow Execution**: Implemented distributed task execution via worker processes (#1116, #1145)
-- **Multiple Email Recipients**: Added support for multiple recipients in email notifications (#1125)
-- **High Availability Support**: Added redundant scheduler support for high availability (#1147)
-- **TLS/mTLS Support**: Added TLS/mTLS support for coordinator service
-- **Scheduler Health Check**: Added health check endpoint for scheduler monitoring (#1129) - Thanks to [@jonasban](https://github.com/jonasban) for the feature request
-- **Default DAG Sorting Configuration**: Added configuration for default DAG list sorting (#1135)
-- **GitHub Repository Link**: Added GitHub repository link to sidebar
-- **npm Installation Support**: Added global npm package for easy cross-platform installation via `npm install -g @dagu-org/dagu`
+- Step-level Environment Variables: Added support for environment variables at the step level (#1148) - Thanks to [@admerzeau](https://github.com/admerzeau) for reporting
+- Enhanced Repeat Policy: Added explicit `until` and `while` modes for clearer repeat logic (#1050) - Thanks to [@thefishhat](https://github.com/thefishhat)
+- Live Log Loading: Added real-time log streaming in the Web UI with reload button (#1085) - Thanks to [@tapir](https://github.com/tapir) for reporting
+- Exponential Backoff for RetryPolicy: Added support for exponential backoff in retry policies (#1096, #1093) - Thanks to [@Sarvesh-11](https://github.com/Sarvesh-11)
+- OpenID Connect (OIDC) Authentication: Added OIDC support for Web UI authentication (#1107) - Thanks to [@Arvintian](https://github.com/Arvintian)
+- Partial Success Status: Added step-level partial success status for sub-DAG executions (#1115) - Thanks to [@ghansham](https://github.com/ghansham) for the feature request
+- Distributed Workflow Execution: Implemented distributed task execution via worker processes (#1116, #1145)
+- Multiple Email Recipients: Added support for multiple recipients in email notifications (#1125)
+- High Availability Support: Added redundant scheduler support for high availability (#1147)
+- TLS/mTLS Support: Added TLS/mTLS support for coordinator service
+- Scheduler Health Check: Added health check endpoint for scheduler monitoring (#1129) - Thanks to [@jonasban](https://github.com/jonasban) for the feature request
+- Default DAG Sorting Configuration: Added configuration for default DAG list sorting (#1135)
+- GitHub Repository Link: Added GitHub repository link to sidebar
+- npm Installation Support: Added global npm package for easy cross-platform installation via `npm install -g @dagu-org/dagu`
 
 ### Improvements
 
-- **Output Capture**: Fixed maximum size setting for output capture
-- **Web UI Sidebar**: Replaced automatic hover with manual toggle control, added persistence (#1121) - Thanks to [@ghansham](https://github.com/ghansham) for feedback
-- **DAG Sorting**: Moved sorting logic from frontend to backend for proper pagination (#1123, #1134) - Thanks to [@ghansham](https://github.com/ghansham) for reporting
-- **Dependency Upgrades**: Updated multiple dependencies (#1127) - Thanks to [@reneleonhardt](https://github.com/reneleonhardt)
-- **Duration Display**: Fixed invalid date display in duration fields (#1137)
-- **Orphaned DAG Handling**: Fixed handling of orphaned running DAGs after unexpected restarts (#1122)
-- **Log File Migration**: Fixed log file path migration from legacy format (#1124)
-- **Pagination**: Fixed hardcoded pagination limit (#1126)
-- **DAG State Preservation**: Preserve previous DAG state when dequeuing (#1118)
+- Output Capture: Fixed maximum size setting for output capture
+- Web UI Sidebar: Replaced automatic hover with manual toggle control, added persistence (#1121) - Thanks to [@ghansham](https://github.com/ghansham) for feedback
+- DAG Sorting: Moved sorting logic from frontend to backend for proper pagination (#1123, #1134) - Thanks to [@ghansham](https://github.com/ghansham) for reporting
+- Dependency Upgrades: Updated multiple dependencies (#1127) - Thanks to [@reneleonhardt](https://github.com/reneleonhardt)
+- Duration Display: Fixed invalid date display in duration fields (#1137)
+- Orphaned DAG Handling: Fixed handling of orphaned running DAGs after unexpected restarts (#1122)
+- Log File Migration: Fixed log file path migration from legacy format (#1124)
+- Pagination: Fixed hardcoded pagination limit (#1126)
+- DAG State Preservation: Preserve previous DAG state when dequeuing (#1118)
 
 ### Bug Fixes
 
-- **Installation Script**: Fixed installer script issues (#1091) - Thanks to [@Sarvesh-11](https://github.com/Sarvesh-11)
-- **DAG List Sorting**: Fixed sort key issue in DAG list (#1134) - Thanks to [@ghansham](https://github.com/ghansham) for reporting
-- **Next Run Display**: Fixed next run display for timezones (#1138)
+- Installation Script: Fixed installer script issues (#1091) - Thanks to [@Sarvesh-11](https://github.com/Sarvesh-11)
+- DAG List Sorting: Fixed sort key issue in DAG list (#1134) - Thanks to [@ghansham](https://github.com/ghansham) for reporting
+- Next Run Display: Fixed next run display for timezones (#1138)
 
 ### Documentation
 
-- **OIDC Documentation**: Added comprehensive OIDC authentication documentation
-- **Heartbeat Interval**: Documented heartbeat interval behavior
+- OIDC Documentation: Added comprehensive OIDC authentication documentation
+- Heartbeat Interval: Documented heartbeat interval behavior
 
 ### Contributors
 
@@ -1838,23 +1838,23 @@ Thanks to our contributors for this release:
 
 ### New Features
 
-- **Interactive DAG Selection**: Run `dagu start` without arguments to select DAGs interactively (#1074)
-- **Bubble Tea Progress Display**: Replaced ANSI progress display with Bubble Tea TUI framework
-- **OpenTelemetry Support**: Added distributed tracing with W3C trace context propagation (#1068)
-- **Windows Support**: Initial Windows compatibility with PowerShell and cmd.exe (#1066)
+- Interactive DAG Selection: Run `dagu start` without arguments to select DAGs interactively (#1074)
+- Bubble Tea Progress Display: Replaced ANSI progress display with Bubble Tea TUI framework
+- OpenTelemetry Support: Added distributed tracing with W3C trace context propagation (#1068)
+- Windows Support: Initial Windows compatibility with PowerShell and cmd.exe (#1066)
 
 ### Improvements
 
-- **Scheduler Refactoring**: Cleaned up scheduler code for better maintainability (#1062)
-- **Error Handling**: Handle corrupted status files in scheduler queue processing
+- Scheduler Refactoring: Cleaned up scheduler code for better maintainability (#1062)
+- Error Handling: Handle corrupted status files in scheduler queue processing
 
 ### Bug Fixes
 
-- **UI**: Fixed 'f' key triggering fullscreen mode while editing DAGs (#1075)
-- **SSH Executor**: Fixed handling of `||` and `&&` operators in command parsing (#1067)
-- **JSON Schema**: Corrected DAG JSON schema for schedule field (#1071)
-- **Scheduler**: Fixed scheduler discarding queued items when scheduled by `enqueue` (#1070)
-- **Base DAG**: Fixed parameter parsing issue in base DAG loading
+- UI: Fixed 'f' key triggering fullscreen mode while editing DAGs (#1075)
+- SSH Executor: Fixed handling of `||` and `&&` operators in command parsing (#1067)
+- JSON Schema: Corrected DAG JSON schema for schedule field (#1071)
+- Scheduler: Fixed scheduler discarding queued items when scheduled by `enqueue` (#1070)
+- Base DAG: Fixed parameter parsing issue in base DAG loading
 
 ### Documentation
 
@@ -1882,20 +1882,20 @@ Thanks to our contributors for this release:
 
 ### New Features
 
-- **HTTP Executor**: Added `skipTLSVerify` option to support self-signed certificates (#1046)
+- HTTP Executor: Added `skipTLSVerify` option to support self-signed certificates (#1046)
 
 ### Bug Fixes
 
-- **Configuration**: Fixed DAGU_DAGS_DIR environment variable not being recognized (#1060)
-- **SSH Executor**: Fixed stdout and stderr streams being incorrectly merged (#1057)
-- **Repeat Policy**: Fixed nodes being marked as failed when using repeat policy with non-zero exit codes (#1052)
-- **UI**: Fixed retry individual step functionality for remote nodes (#1049)
-- **Environment Variables**: Fixed environment variable evaluation and working directory handling (#1045)
-- **Dashboard**: Prevented full page reload on date change and fixed invalid date handling (commit 58ad8e44)
+- Configuration: Fixed DAGU_DAGS_DIR environment variable not being recognized (#1060)
+- SSH Executor: Fixed stdout and stderr streams being incorrectly merged (#1057)
+- Repeat Policy: Fixed nodes being marked as failed when using repeat policy with non-zero exit codes (#1052)
+- UI: Fixed retry individual step functionality for remote nodes (#1049)
+- Environment Variables: Fixed environment variable evaluation and working directory handling (#1045)
+- Dashboard: Prevented full page reload on date change and fixed invalid date handling (commit 58ad8e44)
 
 ### Documentation
 
-- **Repeat Policy**: Corrected documentation and examples to accurately describe behavior (#1056)
+- Repeat Policy: Corrected documentation and examples to accurately describe behavior (#1056)
 
 ### Contributors
 
@@ -1914,7 +1914,7 @@ Thanks to our contributors for this release:
 
 ### Bug Fixes
 
-- **HTTP Executor**: Fixed output not being written to stdout (#1042) - Thanks to [@nightly-brew](https://github.com/nightly-brew) for reporting
+- HTTP Executor: Fixed output not being written to stdout (#1042) - Thanks to [@nightly-brew](https://github.com/nightly-brew) for reporting
 
 ### Contributors
 
@@ -1928,14 +1928,14 @@ Thanks to our contributors for this release:
 
 ### New Features
 
-- **One-click Step Re-run**: Retry an individual step without touching the rest of the DAG (#1030)
-- **Nested-DAG Log Viewer**: See logs for every repeated sub run instead of only the last execution (#1029)
+- One-click Step Re-run: Retry an individual step without touching the rest of the DAG (#1030)
+- Nested-DAG Log Viewer: See logs for every repeated sub run instead of only the last execution (#1029)
 
 ### Bug Fixes
 
-- **Docker**: Fixed asset serving with base path and corrected storage volume locations (#1037)
-- **Docker**: Updated Docker storage paths from `/dagu` to `/var/lib/dagu`
-- **Steps**: Support camel case for step exit code field (#1031)
+- Docker: Fixed asset serving with base path and corrected storage volume locations (#1037)
+- Docker: Updated Docker storage paths from `/dagu` to `/var/lib/dagu`
+- Steps: Support camel case for step exit code field (#1031)
 
 ### Contributors
 
@@ -2023,9 +2023,9 @@ New execution history page with:
 
 #### Better Debugging
 
-- **Precondition Results**: Display actual results of precondition evaluations in the UI
-- **Output Variables**: Show output variable values in the UI for easier debugging
-- **Separate Logs**: stdout and stderr are now separated by default for clearer log analysis
+- Precondition Results: Display actual results of precondition evaluations in the UI
+- Output Variables: Show output variable values in the UI for easier debugging
+- Separate Logs: stdout and stderr are now separated by default for clearer log analysis
 
 #### Queue Management
 
@@ -2074,7 +2074,7 @@ Thanks to @vnghia:
 
 Thanks to @thefishhat:
 
-- **Enhanced in v1.17.5**: Explicit 'while' and 'until' modes for clear repeat logic
+- Enhanced in v1.17.5: Explicit 'while' and 'until' modes for clear repeat logic
 - Conditions for repeat execution
 - Expected output matching  
 - Exit code-based repeats
@@ -2363,9 +2363,9 @@ steps:
 
 ### Improvements
 
-- **Environment Variable Expansion**: Now supported in most DAG fields
-- **UI Enhancements**: Improved DAG visualization for better readability
-- **Storage Optimization**: Reduced state file sizes by removing redundant data
+- Environment Variable Expansion: Now supported in most DAG fields
+- UI Enhancements: Improved DAG visualization for better readability
+- Storage Optimization: Reduced state file sizes by removing redundant data
 
 ### Bug Fixes
 
@@ -2387,9 +2387,9 @@ For older versions, please refer to the [GitHub releases page](https://github.co
 
 ## Version Support
 
-- **Current**: v1.16.x (latest features and bug fixes)
-- **Previous**: v1.15.x (bug fixes only)
-- **Older**: Best effort support
+- Current: v1.16.x (latest features and bug fixes)
+- Previous: v1.15.x (bug fixes only)
+- Older: Best effort support
 
 ## Migration Guides
 
