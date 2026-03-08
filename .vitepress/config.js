@@ -79,6 +79,8 @@ const fullSidebar = [
     text: "Features",
     items: [
       { text: "Overview", link: "/features/" },
+      { text: "Cockpit", link: "/features/cockpit" },
+      { text: "Workspaces", link: "/features/workspaces" },
       {
         text: "Step Types",
         collapsed: false,
@@ -119,8 +121,6 @@ const fullSidebar = [
       { text: "DAG Run Outputs", link: "/features/outputs" },
       { text: "Queue System", link: "/features/queues" },
       { text: "Tags", link: "/features/tags" },
-      { text: "Workspaces", link: "/features/workspaces" },
-      { text: "Cockpit", link: "/features/cockpit" },
       { text: "Email Notifications", link: "/features/email-notifications" },
       { text: "Prometheus Metrics", link: "/features/prometheus-metrics" },
       { text: "OpenTelemetry", link: "/features/opentelemetry" },
