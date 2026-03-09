@@ -242,6 +242,19 @@ Features:
 - Enter parameters interactively
 - Confirm before execution
 
+### AI Coding Tool Integration
+
+#### Install Dagu Skill
+```bash
+# Auto-detect installed tools and install the Dagu DAG authoring skill
+dagu ai install
+
+# Skip prompts — install to all detected tools
+dagu ai install --yes
+```
+
+Supported tools: Claude Code, Codex, OpenCode, Gemini CLI, Copilot CLI. See [`ai install` reference](/reference/cli#ai-install) for detection logic and install paths.
+
 ## Advanced Usage
 
 ### Queue Management

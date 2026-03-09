@@ -622,6 +622,52 @@ dagu sync mv old-dag new-dag --force -m "Move despite conflict"
 dagu sync mv old-dag new-dag --dry-run
 ```
 
+### `ai`
+
+AI coding tool integrations.
+
+#### `ai install`
+
+Install the Dagu DAG authoring skill into detected AI coding tools. The skill teaches AI tools (Claude Code, Codex, etc.) how to write correct Dagu DAG YAML files — covering executor types, schema, CLI commands, environment variables, and common pitfalls.
+
+The command auto-detects which tools are installed by checking for their configuration files, then copies the skill files into each tool's skill directory.
+
+```bash
+dagu ai install [options]
+```
+
+**Options:**
+- `--yes, -y` - Install to all detected tools without prompting
+
+**Supported tools and detection:**
+
+| Tool | Detection | Install location |
+|------|-----------|-----------------|
+| Claude Code | `~/.claude/.claude.json` exists | `~/.claude/skills/dagu/SKILL.md` |
+| Codex | `$AGENTS_HOME` or `~/.agents` or `$CODEX_HOME` or `~/.codex` directory exists | `<dir>/skills/dagu/SKILL.md` |
+| OpenCode | `~/.config/opencode` directory exists | `~/.config/opencode/skills/dagu/SKILL.md` |
+| Gemini CLI | `~/.gemini/GEMINI.md` exists | `~/.gemini/skills/dagu/SKILL.md` |
+| Copilot CLI | `~/.copilot/config.json` or `$XDG_CONFIG_HOME/.copilot/config.json` exists | `<dir>/copilot-instructions.md` (appended between `<!-- BEGIN DAGU -->` / `<!-- END DAGU -->` markers) |
+
+For skill-based tools, the installer copies a `SKILL.md` file and a `references/` directory containing `cli.md`, `schema.md`, `executors.md`, `env.md`, and `pitfalls.md`. For Copilot CLI, the content is concatenated (without YAML frontmatter) and injected into `copilot-instructions.md` between marker comments. Re-running `dagu ai install` overwrites existing skill files or replaces the marked section.
+
+```bash
+# Interactive — prompts for each detected tool
+dagu ai install
+
+# Non-interactive — installs to all detected tools
+dagu ai install --yes
+```
+
+**Example output:**
+```
+Found 3 tool(s)
+
+  Claude Code    ✓ ~/.claude/skills/dagu/SKILL.md
+  Codex          ✓ ~/.agents/skills/dagu/SKILL.md
+  Gemini CLI     skipped
+```
+
 ### `migrate`
 
 Migrate legacy data to new format.

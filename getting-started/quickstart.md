@@ -41,6 +41,24 @@ npm install -g --ignore-scripts=false @dagu-org/dagu
 
 See [Installation Guide](/getting-started/installation) for more options.
 
+## AI-Assisted Workflow Authoring
+
+If you use an AI coding tool (Claude Code, Codex, OpenCode, Gemini CLI, or Copilot CLI), you can install the Dagu skill so the AI knows how to write correct DAG YAML files:
+
+```bash
+dagu ai install
+```
+
+This auto-detects installed tools and prompts you for each one. Use `--yes` to skip prompts:
+
+```bash
+dagu ai install --yes
+```
+
+After installation, your AI coding tool can generate, edit, and debug Dagu DAG definitions with knowledge of the full YAML schema, all 18+ executor types, CLI commands, and common pitfalls.
+
+See [`dagu ai install`](/reference/cli#ai-install) for details on detection logic and install locations.
+
 ## Your First Workflow
 
 ::: info Example DAGs
