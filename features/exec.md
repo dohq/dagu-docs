@@ -175,7 +175,7 @@ name: exec-python
 type: chain
 working_dir: /current/directory
 steps:
-  - name: main
+  - id: main
     command: ["python", "script.py", "--arg=value"]
 ```
 
@@ -196,7 +196,7 @@ working_dir: /current/directory
 env:
   - FOO=bar
 steps:
-  - name: main
+  - id: main
     command: ["python", "script.py"]
 ```
 

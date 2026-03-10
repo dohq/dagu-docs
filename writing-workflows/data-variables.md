@@ -79,7 +79,7 @@ env:
   - BASE_PATH: /data
 
 steps:
-  - name: process data
+  - id: process_data
     command: python process.py
     env:
       - INPUT_PATH: ${BASE_PATH}/input
@@ -161,7 +161,7 @@ secrets:
     key: secrets/db-pass   # Relative to working_dir, then the DAG file directory
 
 steps:
-  - name: migrate
+  - id: migrate
     command: ./migrate.sh
     env:
       - STRICT_MODE: "1"   # Step-level env still overrides secrets if needed
@@ -212,9 +212,9 @@ Every step automatically receives the merged parameter payload as JSON through t
 
 ```yaml
 steps:
-  - name: inspect params
+  - id: inspect_params
     command: echo "Full payload: ${DAG_PARAMS_JSON}"
-  - name: region lookup
+  - id: region_lookup
     type: jq
     config:
       raw: true
@@ -357,12 +357,12 @@ Example output format:
 ```yaml
 type: graph
 steps:
-  - name: get config
+  - id: get_config
     command: |
       echo '{"env": "prod", "replicas": 3, "region": "us-east-1"}'
     output: CONFIG
 
-  - name: get secrets
+  - id: get_secrets
     command: vault read -format=json secret/app
     output: SECRETS
 
@@ -371,7 +371,7 @@ steps:
         REGION=${CONFIG.region} \
         API_KEY=${SECRETS.data.api_key}
       kubectl scale --replicas=${CONFIG.replicas} deployment/app
-    depends: [get config, get secrets]
+    depends: [get_config, get_secrets]
 ```
 
 ### Through Files

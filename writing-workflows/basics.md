@@ -33,7 +33,7 @@ params:
 
 # Steps
 steps:
-  - name: process
+  - id: process
     command: python process.py ${DATE}
 
 # Handlers
@@ -56,7 +56,7 @@ steps:
   - script: |                      # Auto-named: script_2
       echo "Multi-line"
       echo "Script"
-  - name: explicit-name            # Explicit name
+  - id: explicit_name              # Explicit name
     command: echo "Third step"
   - type: http                     # Auto-named: http_4
     config:
@@ -92,14 +92,14 @@ This is equivalent to:
 ```yaml
 type: graph
 steps:
-  - name: step 1
+  - id: step_1
     command: echo "Hello World"
-  - name: step 2
+  - id: step_2
     command: ls -la
-    depends: step 1
-  - name: step 3
+    depends: step_1
+  - id: step_3
     command: python script.py
-    depends: step 2
+    depends: step_2
 ```
 
 ### Multiple Commands
@@ -108,7 +108,7 @@ Multiple commands share the same step configuration:
 
 ```yaml
 steps:
-  - name: build-and-test
+  - id: build_and_test
     command:
       - npm install
       - npm run build
@@ -152,10 +152,10 @@ Set a default shell for every step at the DAG level, and override it per step wh
 ```yaml
 shell: ["/bin/bash", "-e", "-u"]  # Default shell + args for the whole workflow
 steps:
-  - name: bash-task
+  - id: bash_task
     command: echo "Runs with bash -e -u"
 
-  - name: zsh-override
+  - id: zsh_override
     shell: /bin/zsh                # Step-level override
     command: echo "Uses zsh instead"
 ```
@@ -179,13 +179,13 @@ Steps run sequentially by default. Use `depends` for parallel execution or to co
 
 ```yaml
 steps:
-  - name: download
+  - id: download
     command: wget data.csv
-    
-  - name: process
+
+  - id: process
     command: python process.py
-    
-  - name: upload
+
+  - id: upload
     command: aws s3 cp output.csv s3://bucket/
 ```
 
@@ -196,18 +196,18 @@ You can run steps in parallel using explicit dependencies:
 ```yaml
 type: graph
 steps:
-  - name: setup
+  - id: setup
     command: echo "Setup"
 
-  - name: task1
+  - id: task1
     command: echo "Task 1"
     depends: setup
 
-  - name: task2
+  - id: task2
     command: echo "Task 2"
     depends: setup
 
-  - name: finish
+  - id: finish
     command: echo "All tasks complete"
     depends: [task1, task2]
 ```
@@ -218,11 +218,11 @@ Set where commands execute:
 
 ```yaml
 steps:
-  - name: in-project
+  - id: in_project
     working_dir: /home/user/project
     command: python main.py
-    
-  - name: in-data
+
+  - id: in_data
     working_dir: /data/input
     command: ls -la
 ```
@@ -237,7 +237,7 @@ env:
   - ENV: production
 
 steps:
-  - name: dev-test
+  - id: dev_test
     command: echo "Running in $ENV"
     env:
       - ENV: development  # Overrides DAG-level
@@ -253,11 +253,11 @@ Store command output in variables:
 
 ```yaml
 steps:
-  - name: get-version
+  - id: get_version
     command: git rev-parse --short HEAD
     output: VERSION
-    
-  - name: build
+
+  - id: build
     command: docker build -t app:${VERSION} .
 ```
 
@@ -267,12 +267,12 @@ steps:
 
 ```yaml
 steps:
-  - name: optional-step
+  - id: optional_step
     command: maybe-fails.sh
     continue_on:
       failure: true
-      
-  - name: always-runs
+
+  - id: always_runs
     command: cleanup.sh
 ```
 
@@ -280,7 +280,7 @@ steps:
 
 ```yaml
 steps:
-  - name: flaky-api
+  - id: flaky_api
     command: curl https://unstable-api.com
     retry_policy:
       limit: 3
@@ -292,7 +292,7 @@ Prevent steps from running forever:
 
 ```yaml
 steps:
-  - name: long-task
+  - id: long_task
     command: echo "Processing data"
     timeout_sec: 300  # 5 minutes
 ```
@@ -303,7 +303,7 @@ Document your steps:
 
 ```yaml
 steps:
-  - name: etl-process
+  - id: etl_process
     description: |
       Extract data from API, transform to CSV,
       and load into data warehouse

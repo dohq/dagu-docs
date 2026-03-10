@@ -189,7 +189,7 @@ Steps automatically inherit session history from their dependencies:
 type: graph
 
 steps:
-  - name: setup
+  - id: setup
     type: chat
     llm:
       provider: openai
@@ -199,7 +199,7 @@ steps:
       - role: user
         content: "What is 2+2?"
 
-  - name: followup
+  - id: followup
     depends: [setup]
     type: chat
     llm:
@@ -353,7 +353,7 @@ Use a chat step to classify input, then route based on the response:
 type: graph
 
 steps:
-  - name: classify
+  - id: classify
     type: chat
     llm:
       provider: openai
@@ -364,7 +364,7 @@ steps:
         content: "${USER_REQUEST}"
     output: TYPE
 
-  - name: route
+  - id: route
     type: router
     depends: [classify]
     value: ${TYPE}
@@ -373,7 +373,7 @@ steps:
       "feature": [handle_feature]
       "question": [handle_question]
 
-  - name: handle_bug
+  - id: handle_bug
     type: chat
     llm:
       provider: anthropic
@@ -383,7 +383,7 @@ steps:
       - role: user
         content: "${USER_REQUEST}"
 
-  - name: handle_feature
+  - id: handle_feature
     type: chat
     llm:
       provider: anthropic
@@ -393,7 +393,7 @@ steps:
       - role: user
         content: "${USER_REQUEST}"
 
-  - name: handle_question
+  - id: handle_question
     type: chat
     llm:
       provider: anthropic

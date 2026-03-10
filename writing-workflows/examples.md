@@ -70,7 +70,7 @@ graph TD
 
 ```yaml
 steps:
-  - name: build-and-test
+  - id: build_and_test
     command:
       - npm install
       - npm run build
@@ -101,10 +101,10 @@ steps:
 ---
 type: graph
 steps:
-  - name: a
+  - id: a
     command: echo A
     depends: []   # Explicitly independent
-  - name: b
+  - id: b
     command: echo B
     depends: []
 ```
@@ -365,17 +365,17 @@ type: graph
 env:
   - STATUS: production
 steps:
-  - name: router
+  - id: router
     type: router
     value: ${STATUS}
     routes:
       "production": [prod_handler]
       "staging": [staging_handler]
 
-  - name: prod_handler
+  - id: prod_handler
     command: echo "Production"
 
-  - name: staging_handler
+  - id: staging_handler
     command: echo "Staging"
 ```
 
@@ -404,11 +404,11 @@ flowchart TD
 ```yaml
 type: graph
 steps:
-  - name: check_status
+  - id: check_status
     command: echo "success"
     output: STATUS
 
-  - name: router
+  - id: router
     type: router
     value: ${STATUS}
     routes:
@@ -416,10 +416,10 @@ steps:
       "failure": [failure_handler]
     depends: [check_status]
 
-  - name: success_handler
+  - id: success_handler
     command: echo "Handling success"
 
-  - name: failure_handler
+  - id: failure_handler
     command: echo "Handling failure"
 ```
 
@@ -1319,7 +1319,7 @@ steps:
 
 ```yaml
 steps:
-  - name: build
+  - id: build
     container:
       image: node:18
       volumes:
@@ -1378,18 +1378,18 @@ steps:
 ```yaml
 steps:
   # Exec into app container
-  - name: maintenance-mode
+  - id: maintenance_mode
     container: my-app
     command: php artisan down
 
   # Run migration in fresh container
-  - name: migrate
+  - id: migrate
     container:
       image: my-app:latest
     command: php artisan migrate
 
   # Exec back into app container
-  - name: restart
+  - id: restart
     container: my-app
     command: php artisan up
 ```
@@ -1583,7 +1583,7 @@ steps:
 
 ```yaml
 steps:
-  - name: build
+  - id: build
     container:
       image: node:24
       volumes:
@@ -1591,7 +1591,7 @@ steps:
       working_dir: /app
     command: npm run build
 
-  - name: test
+  - id: test
     container:
       image: node:24
       volumes:
@@ -1599,7 +1599,7 @@ steps:
       working_dir: /app
     command: npm test
 
-  - name: deploy
+  - id: deploy
     container:
       image: python:3.11
       env:
@@ -2066,15 +2066,15 @@ queue: "compute-queue"    # Assign to queue for concurrency control
 delay_sec: 10              # 10 second initial delay
 skip_if_successful: true    # Skip if already succeeded
 steps:
-  - name: validate
+  - id: validate
     command: echo "Validating configuration"
-  - name: process-batch-1
+  - id: process_batch_1
     command: echo "Processing batch 1"
     depends: validate
-  - name: process-batch-2
+  - id: process_batch_2
     command: echo "Processing batch 2"
     depends: validate
-  - name: process-batch-3
+  - id: process_batch_3
     command: echo "Processing batch 3"
     depends: validate
 ```
@@ -2163,7 +2163,7 @@ handler_on:
   exit:
     command: echo "Final cleanup"
 steps:
-  - name: validate-environment
+  - id: validate_environment
     command: echo "Validating environment: ${ENVIRONMENT}"
 ```
 

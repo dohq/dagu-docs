@@ -31,9 +31,9 @@ env:
 # Workflow steps (type: graph requires explicit depends)
 type: graph
 steps:
-  - name: step-name        # Optional
+  - id: step_name          # Optional
     command: echo "Hello"
-    depends: previous-step # Optional
+    depends: previous_step # Optional
 
 # Lifecycle handlers
 handler_on:
@@ -75,13 +75,13 @@ steps:
 # Graph mode - dependency-based execution
 type: graph
 steps:
-  - name: fetch-a
+  - id: fetch_a
     command: curl https://api.example.com/a
-  - name: fetch-b
+  - id: fetch_b
     command: curl https://api.example.com/b
-  - name: merge
+  - id: merge
     command: ./merge.sh
-    depends: [fetch-a, fetch-b]  # Runs after both complete
+    depends: [fetch_a, fetch_b]  # Runs after both complete
 ```
 
 ### Scheduling Fields
@@ -166,10 +166,10 @@ defaults:
   continue_on: failed
 
 steps:
-  - name: fetch-data
+  - id: fetch_data
     command: curl https://api.example.com/data
 
-  - name: process-data
+  - id: process_data
     command: ./process.sh
 ```
 
@@ -184,12 +184,12 @@ defaults:
 
 steps:
   # Inherits retry_policy (limit: 5) and gets LOG_LEVEL from defaults
-  - name: step-a
+  - id: step_a
     command: ./run.sh
 
   # Overrides retry_policy with its own; still gets LOG_LEVEL from defaults
   # plus its own TIMEOUT env var
-  - name: step-b
+  - id: step_b
     command: ./run-critical.sh
     retry_policy:
       limit: 1
@@ -406,7 +406,7 @@ redis:
   db: 0
 
 steps:
-  - name: cache-lookup
+  - id: cache_lookup
     type: redis
     config:
       command: GET
@@ -644,7 +644,7 @@ The `command` field accepts an array of strings. Multiple commands share the sam
 
 ```yaml
 steps:
-  - name: build-and-test
+  - id: build_and_test
     command:
       - npm install
       - npm run build
@@ -854,7 +854,7 @@ Use the `container` field to run a step in its own container:
 ```yaml
 steps:
   # Image mode - create new container
-  - name: run-in-container
+  - id: run_in_container
     container:
       image: python:3.11
       volumes:
@@ -864,12 +864,12 @@ steps:
     command: python process.py
 
   # Exec mode - string form
-  - name: run-migration
+  - id: run_migration
     container: my-app-container
     command: php artisan migrate
 
   # Exec mode - object form with overrides
-  - name: admin-task
+  - id: admin_task
     container:
       exec: my-app-container
       user: root
@@ -949,13 +949,13 @@ See [Chat Executor](/features/chat/) for full documentation.
 
 ```yaml
 steps:
-  - name: deploy-staging
+  - id: deploy_staging
     command: ./deploy.sh staging
     approval:
       prompt: "Approve production?"
       input: [APPROVED_BY]
       required: [APPROVED_BY]
-  - name: deploy-prod
+  - id: deploy_prod
     command: ./deploy.sh production
 ```
 
@@ -1176,15 +1176,15 @@ steps:
       failure: false
 
  # Use different container for this step
-  - name: load-data
+  - id: load_data
     container:
       image: postgres:16
       env:
         - PGPASSWORD=${DB_PASSWORD}
     command: psql -h ${DB_HOST} -U ${DB_USER} -f load.sql
-    
+
   - command: python validate_results.py --date=${DATE}
-    depends: load-data
+    depends: load_data
     mail_on_error: true
 
 handler_on:

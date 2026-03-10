@@ -18,7 +18,7 @@ secrets:
     key: POSTGRES_PASSWORD  # Source variable name
 
 steps:
-  - name: query-users
+  - id: query_users
     type: postgres
     config:
       dsn: "postgres://user:${DB_PASSWORD}@localhost:5432/mydb"
@@ -97,7 +97,7 @@ secrets:
     key: POSTGRES_PASSWORD
 
 steps:
-  - name: import-csv
+  - id: import_csv
     type: postgres
     config:
       dsn: "postgres://user:${DB_PASSWORD}@localhost:5432/mydb"
@@ -134,7 +134,7 @@ Use named parameters for SQL injection prevention:
 
 ```yaml
 steps:
-  - name: safe-query
+  - id: safe_query
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -150,7 +150,7 @@ Or positional parameters:
 
 ```yaml
 steps:
-  - name: safe-query
+  - id: safe_query
     type: sqlite
     config:
       dsn: "file:./app.db"
@@ -166,7 +166,7 @@ Wrap multiple statements in a transaction:
 
 ```yaml
 steps:
-  - name: transfer-funds
+  - id: transfer_funds
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -185,7 +185,7 @@ One JSON object per line, ideal for streaming:
 
 ```yaml
 steps:
-  - name: export-jsonl
+  - id: export_jsonl
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -205,7 +205,7 @@ Array of objects:
 
 ```yaml
 steps:
-  - name: export-json
+  - id: export_json
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -223,7 +223,7 @@ Tabular format with optional headers:
 
 ```yaml
 steps:
-  - name: export-csv
+  - id: export_csv
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -238,7 +238,7 @@ For large result sets, stream directly to a file:
 
 ```yaml
 steps:
-  - name: export-large-table
+  - id: export_large_table
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -259,7 +259,7 @@ steps:
 
 ```yaml
 steps:
-  - name: query-with-retry
+  - id: query_with_retry
     type: postgres
     config:
       dsn: "${DATABASE_URL}"

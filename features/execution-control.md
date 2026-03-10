@@ -151,14 +151,14 @@ Apply a per‑step cap that overrides the workflow timeout for that specific ste
 timeout_sec: 1800  # Overall DAG timeout (30m)
 
 steps:
-  - name: fast-check
+  - id: fast_check
     command: curl -sf https://example.com/health
     timeout_sec: 20    # This step fails if still running after 20s
 
-  - name: bulk-import
+  - id: bulk_import
     command: python import.py   # Inherits 30m DAG timeout
 
-  - name: guarded-external
+  - id: guarded_external
     command: bash -c 'long_unstable_call'
     timeout_sec: 300   # Give 5m max even though DAG allows 30m
 ```
@@ -216,21 +216,21 @@ steps:
 ```yaml
 type: graph
 steps:
-  - name: setup
+  - id: setup
     command: echo "Setting up"
 
-  - name: task-a
+  - id: task_a
     command: echo "Running task A"
     depends: setup
 
-  - name: task-b
+  - id: task_b
     command: echo "Running task B"
     depends: setup
 
   - command: echo "Finalizing"
     depends:
-      - command: task-a
-      - command: task-b
+      - task_a
+      - task_b
 ```
 
 ## Retry and Repeat Control

@@ -51,21 +51,21 @@ The executor automatically detects archive format from:
 
 ```yaml
 steps:
-  - name: unpack
+  - id: unpack
     type: archive
     config:
       source: logs.tar.gz
       destination: ./logs
     command: extract
 
-  - name: package
+  - id: package
     type: archive
     config:
       source: ./logs
       destination: logs-backup.tar.gz
     command: create
 
-  - name: inspect
+  - id: inspect
     type: archive
     config:
       source: logs-backup.tar.gz
@@ -104,7 +104,7 @@ All fields support environment interpolation (`${VAR}`) and outputs from previou
 working_dir: /data/pipeline
 
 steps:
-  - name: extract-csv
+  - id: extract_csv
     type: archive
     config:
       source: dataset.tar.zst
@@ -121,7 +121,7 @@ steps:
 working_dir: /deploy/release
 
 steps:
-  - name: bundle-artifacts
+  - id: bundle_artifacts
     type: archive
     config:
       source: ./dist
@@ -142,7 +142,7 @@ secrets:
     key: ARCHIVE_PASSWORD
 
 steps:
-  - name: unpack-secure
+  - id: unpack_secure
     type: archive
     config:
       source: secure-data.7z

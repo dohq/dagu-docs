@@ -350,7 +350,7 @@ Multiple commands share the same step configuration, including the container con
 
 ```yaml
 steps:
-  - name: build-and-test
+  - id: build_and_test
     container:
       image: node:24
       volumes:
@@ -454,7 +454,7 @@ per step), use the step-level `container` field:
 
 ```yaml
 steps:
-  - name: send-confirmation-emails
+  - id: send_confirmation_emails
     container:
       image: myorg/myimage:latest
     # The container is automatically created and removed after execution
@@ -465,7 +465,7 @@ You can also use different containers for different steps:
 
 ```yaml
 steps:
-  - name: build
+  - id: build
     container:
       image: node:24
       volumes:
@@ -473,7 +473,7 @@ steps:
       working_dir: /app
     command: npm run build
 
-  - name: test
+  - id: test
     container:
       image: node:24
       volumes:
@@ -481,7 +481,7 @@ steps:
       working_dir: /app
     command: npm test
 
-  - name: deploy
+  - id: deploy
     container:
       image: python:3.11
       env:
@@ -496,12 +496,12 @@ Steps can also exec into existing containers using the same syntax as DAG-level:
 ```yaml
 steps:
   # String form - exec with defaults
-  - name: run-migration
+  - id: run_migration
     container: my-app-container
     command: php artisan migrate
 
   # Object form with overrides
-  - name: clear-cache
+  - id: clear_cache
     container:
       exec: my-app-container
       user: www-data
@@ -509,7 +509,7 @@ steps:
     command: php artisan cache:clear
 
   # Mix exec and image modes in the same workflow
-  - name: run-tests
+  - id: run_tests
     container:
       image: node:24
     command: npm test

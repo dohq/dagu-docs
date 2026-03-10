@@ -250,17 +250,17 @@ A parent DAG delegates focused review tasks to specialized child agents, then co
 type: graph
 
 steps:
-  - name: lint-review
+  - id: lint_review
     call: lint-agent
     params: "REPO_PATH=/app"
     output: LINT
 
-  - name: security-review
+  - id: security_review
     call: security-agent
     params: "REPO_PATH=/app"
     output: SECURITY
 
-  - name: docs-review
+  - id: docs_review
     call: docs-agent
     params: "REPO_PATH=/app"
     output: DOCS
@@ -274,11 +274,11 @@ steps:
           Lint: ${LINT.outputs.FINDINGS}
           Security: ${SECURITY.outputs.FINDINGS}
           Docs: ${DOCS.outputs.FINDINGS}
-    depends: [lint-review, security-review, docs-review]
+    depends: [lint_review, security_review, docs_review]
     output: FINAL_REPORT
 ```
 
-In graph mode, `lint-review`, `security-review`, and `docs-review` run in parallel since they have no dependencies on each other.
+In graph mode, `lint_review`, `security_review`, and `docs_review` run in parallel since they have no dependencies on each other.
 
 ### Inline Nested Agent
 

@@ -128,11 +128,11 @@ handler_on:
     command: notify-slack.sh "Approval needed: ${DAG_WAITING_STEPS}"
 
 steps:
-  - name: deploy-staging
+  - id: deploy_staging
     command: ./deploy.sh staging
     approval:
       prompt: "Approve production?"
-  - name: deploy-prod
+  - id: deploy_prod
     command: ./deploy.sh production
 ```
 

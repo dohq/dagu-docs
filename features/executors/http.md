@@ -6,7 +6,7 @@ Execute HTTP requests to web services and APIs.
 
 ```yaml
 steps:
-  - name: get-data
+  - id: get_data
     type: http
     command: GET https://jsonplaceholder.typicode.com/todos/1
 ```
@@ -30,7 +30,7 @@ steps:
 
 ```yaml
 steps:
-  - name: create-resource
+  - id: create_resource
     type: http
     config:
       body: '{"name": "New Resource"}'
@@ -43,7 +43,7 @@ If your body needs a literal `$`, use `\$` (non-shell contexts only):
 
 ```yaml
 steps:
-  - name: price-example
+  - id: price_example
     type: http
     config:
       body: '{"price":"\$9.99"}'  # Becomes {"price":"$9.99"}
@@ -56,7 +56,7 @@ steps:
 
 ```yaml
 steps:
-  - name: bearer-auth
+  - id: bearer_auth
     type: http
     config:
       headers:
@@ -68,7 +68,7 @@ steps:
 
 ```yaml
 steps:
-  - name: search
+  - id: search
     type: http
     config:
       query:
@@ -81,14 +81,14 @@ steps:
 
 ```yaml
 steps:
-  - name: get-user
+  - id: get_user
     type: http
     config:
       silent: true
     command: GET https://api.example.com/user
     output: USER_DATA
 
-  - name: process
+  - id: process
     command: echo "${USER_DATA}" | jq '.email'
 ```
 
@@ -98,7 +98,7 @@ Use `json: true` to get structured JSON output including status code and headers
 
 ```yaml
 steps:
-  - name: api-call
+  - id: api_call
     type: http
     config:
       json: true
@@ -130,7 +130,7 @@ Output format:
 
 ```yaml
 steps:
-  - name: api-call
+  - id: api_call
     type: http
     config:
       timeout: 30
@@ -159,7 +159,7 @@ handler_on:
 
 ```yaml
 steps:
-  - name: internal-api
+  - id: internal_api
     type: http
     config:
       tls_skip_verify: true  # Allow self-signed certificates

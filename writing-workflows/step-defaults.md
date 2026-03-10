@@ -51,10 +51,10 @@ defaults:
     interval_sec: 5
 
 steps:
-  - name: fetch-data
+  - id: fetch_data
     command: curl https://api.example.com/data
 
-  - name: process-data
+  - id: process_data
     command: ./process.sh
 ```
 
@@ -67,13 +67,13 @@ defaults:
   continue_on: failed
 
 steps:
-  - name: cleanup-cache
+  - id: cleanup_cache
     command: rm -rf /tmp/cache/*
 
-  - name: cleanup-logs
+  - id: cleanup_logs
     command: find /var/log -name "*.old" -delete
 
-  - name: report
+  - id: report
     command: echo "cleanup done"
 ```
 
@@ -90,11 +90,11 @@ defaults:
 
 steps:
   # Inherits retry_policy from defaults (limit: 5)
-  - name: fetch-data
+  - id: fetch_data
     command: curl https://api.example.com/data
 
   # Uses its own retry_policy (limit: 1), default is ignored
-  - name: send-notification
+  - id: send_notification
     command: ./notify.sh
     retry_policy:
       limit: 1
@@ -112,7 +112,7 @@ defaults:
     - REGION: us-east-1
 
 steps:
-  - name: deploy
+  - id: deploy
     command: echo "${LOG_LEVEL} ${REGION} ${SERVICE}"
     env:
       - SERVICE: web-api
@@ -130,7 +130,7 @@ defaults:
       expected: "production"
 
 steps:
-  - name: deploy
+  - id: deploy
     command: ./deploy.sh
     preconditions:
       - condition: "`git branch --show-current`"
@@ -147,7 +147,7 @@ defaults:
   timeout_sec: 300
 
 steps:
-  - name: process
+  - id: process
     command: ./run.sh
     # timeout_sec: 300 (inherited)
 
@@ -176,15 +176,15 @@ defaults:
     - NOTIFY: "true"
 
 steps:
-  - name: fetch-users
+  - id: fetch_users
     command: curl https://api.example.com/users
     output: USERS
 
-  - name: fetch-orders
+  - id: fetch_orders
     command: curl https://api.example.com/orders
     output: ORDERS
 
-  - name: generate-report
+  - id: generate_report
     command: ./report.sh
     # Overrides retry_policy — this step must not retry
     retry_policy:

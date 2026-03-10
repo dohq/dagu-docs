@@ -158,9 +158,9 @@ Every step receives the full parameter map encoded as JSON via `DAG_PARAMS_JSON`
 
 ```yaml
 steps:
-  - name: print params
+  - id: print_params
     command: echo "Raw payload: ${DAG_PARAMS_JSON}"
-  - name: batch size
+  - id: batch_size
     type: jq
     config:
       raw: true

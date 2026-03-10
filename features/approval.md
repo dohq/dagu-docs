@@ -6,16 +6,16 @@ Add `approval` to any step to pause execution after the step completes and wait 
 
 ```yaml
 steps:
-  - name: deploy-staging
+  - id: deploy_staging
     command: ./deploy.sh staging
     approval:
       prompt: "Verify staging deployment before production"
-  - name: deploy-prod
-    depends: [deploy-staging]
+  - id: deploy_prod
+    depends: [deploy_staging]
     command: ./deploy.sh production
 ```
 
-The `deploy-staging` step runs `./deploy.sh staging`, then enters `Waiting` status. The `deploy-prod` step remains `Not Started` until the approval is resolved.
+The `deploy_staging` step runs `./deploy.sh staging`, then enters `Waiting` status. The `deploy_prod` step remains `Not Started` until the approval is resolved.
 
 ## Configuration
 
@@ -49,18 +49,18 @@ Approved inputs become environment variables in subsequent steps:
 ```yaml
 type: graph
 steps:
-  - name: generate-plan
+  - id: generate_plan
     command: ./generate-migration-plan.sh
     approval:
       prompt: "Review migration plan"
       input: [APPROVED_BY, MAINTENANCE_WINDOW]
       required: [APPROVED_BY]
-  - name: execute-migration
-    depends: [generate-plan]
+  - id: execute_migration
+    depends: [generate_plan]
     command: ./migrate.sh --approver "${APPROVED_BY}" --window "${MAINTENANCE_WINDOW}"
 ```
 
-`APPROVED_BY` must be provided (it's in `required`). `MAINTENANCE_WINDOW` is optional. Both are injected as environment variables into `execute-migration` after approval.
+`APPROVED_BY` must be provided (it's in `required`). `MAINTENANCE_WINDOW` is optional. Both are injected as environment variables into `execute_migration` after approval.
 
 ### Gating a Sub-DAG
 
@@ -69,16 +69,16 @@ Use `call` with `approval` to gate a multi-step workflow behind a single approva
 ```yaml
 type: graph
 steps:
-  - name: run-integration-tests
+  - id: run_integration_tests
     call: integration-test-suite
     approval:
       prompt: "Review test results before deploying"
-  - name: deploy
-    depends: [run-integration-tests]
+  - id: deploy
+    depends: [run_integration_tests]
     command: ./deploy.sh production
 ```
 
-The `integration-test-suite` DAG (which may contain many steps internally) executes fully. Once finished, `run-integration-tests` enters `Waiting`. The approver reviews the sub-DAG's results before `deploy` proceeds.
+The `integration-test-suite` DAG (which may contain many steps internally) executes fully. Once finished, `run_integration_tests` enters `Waiting`. The approver reviews the sub-DAG's results before `deploy` proceeds.
 
 This pattern is useful when you want human review over a complex operation that involves multiple internal steps — tests, builds, migrations — without adding approval to each individual sub-step.
 
@@ -89,14 +89,14 @@ The reverse pattern: approve first, then trigger multi-step execution. Place app
 ```yaml
 type: graph
 steps:
-  - name: review-config
+  - id: review_config
     command: ./validate-deploy-config.sh production
     approval:
       prompt: "Config validated. Approve production deployment?"
       input: [DEPLOY_VERSION]
       required: [DEPLOY_VERSION]
-  - name: deploy-pipeline
-    depends: [review-config]
+  - id: deploy_pipeline
+    depends: [review_config]
     call: production-deploy
     params: "deploy_version=${DEPLOY_VERSION}"
 ```
@@ -125,7 +125,7 @@ A step queries metrics and outputs a summary. The approver can push back with di
 
 ```yaml
 steps:
-  - name: query-metrics
+  - id: query_metrics
     script: |
       SINCE="${SINCE:-7d}"
       GROUPING="${GROUPING:-daily}"
@@ -135,8 +135,8 @@ steps:
     approval:
       prompt: "Review error rate summary. Push back to adjust query parameters."
       input: [SINCE, GROUPING]
-  - name: send-report
-    depends: [query-metrics]
+  - id: send_report
+    depends: [query_metrics]
     command: ./send-to-slack.sh
 ```
 
@@ -148,7 +148,7 @@ Use `claude -p` in a command step to generate content, then push back with feedb
 
 ```yaml
 steps:
-  - name: draft-changelog
+  - id: draft_changelog
     script: |
       PROMPT="Generate a changelog from these git commits for a public release blog post."
       if [ -n "$FEEDBACK" ]; then
@@ -158,8 +158,8 @@ steps:
     approval:
       prompt: "Review the draft changelog. Push back with feedback to revise."
       input: [FEEDBACK]
-  - name: publish
-    depends: [draft-changelog]
+  - id: publish
+    depends: [draft_changelog]
     command: ./publish-changelog.sh
 ```
 
@@ -183,7 +183,7 @@ Response:
 ```json
 {
   "dagRunId": "...",
-  "stepName": "query-metrics",
+  "stepName": "query_metrics",
   "approvalIteration": 1,
   "resumed": true
 }
@@ -276,7 +276,7 @@ handler_on:
         -d '{"text": "Approval required for ${DAG_NAME}"}'
 
 steps:
-  - name: deploy
+  - id: deploy
     command: ./deploy.sh
     approval:
       prompt: "Approve deployment"

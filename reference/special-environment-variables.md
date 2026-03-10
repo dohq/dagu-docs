@@ -51,15 +51,15 @@ When `working_dir` **is** explicitly set (in the DAG YAML, base config, or via `
 ```yaml
 # No working_dir set — steps run in DAG_RUN_WORK_DIR by default
 steps:
-  - name: write-scratch-file
+  - id: write_scratch_file
     command: |
       # PWD is DAG_RUN_WORK_DIR (e.g., /data/dagu/dag-runs/my-dag/dag-run_.../work)
       echo "intermediate data" > scratch.txt
 
-  - name: read-scratch-file
+  - id: read_scratch_file
     command: cat scratch.txt   # finds the file — same PWD
     depends:
-      - write-scratch-file
+      - write_scratch_file
 ```
 
 ```yaml
@@ -67,10 +67,10 @@ steps:
 working_dir: /app/project
 
 steps:
-  - name: build
+  - id: build
     command: make build   # PWD is /app/project
 
-  - name: save-artifact
+  - id: save_artifact
     command: cp build/output.tar.gz "${DAG_RUN_WORK_DIR}/output.tar.gz"
     depends:
       - build
@@ -86,7 +86,7 @@ Markdown files written under `DAG_DOCS_DIR` appear in the web UI's [Documents](/
 
 ```yaml
 steps:
-  - name: generate-report
+  - id: generate_report
     command: |
       mkdir -p "${DAG_DOCS_DIR}"
       python generate_report.py > "${DAG_DOCS_DIR}/report.md"
@@ -101,9 +101,9 @@ steps:
 
 ```yaml
 steps:
-  - name: inspect params
+  - id: inspect_params
     command: echo "Full payload: ${DAG_PARAMS_JSON}"
-  - name: read environment
+  - id: read_environment
     type: jq
     config:
       raw: true
@@ -123,13 +123,13 @@ Access payload fields directly using Dagu's JSON field access syntax:
 name: webhook-triggered-dag
 type: graph
 steps:
-  - name: deploy
+  - id: deploy
     command: |
       echo "Deploying branch ${WEBHOOK_PAYLOAD.branch}"
       echo "Commit: ${WEBHOOK_PAYLOAD.commit}"
       ./scripts/deploy.sh
 
-  - name: notify
+  - id: notify
     command: echo "Deployed by ${WEBHOOK_PAYLOAD.sender.login}"
     depends:
       - deploy
@@ -139,7 +139,7 @@ For complex payloads with nested structures:
 
 ```yaml
 steps:
-  - name: process-github-push
+  - id: process_github_push
     command: |
       echo "Repository: ${WEBHOOK_PAYLOAD.repository.full_name}"
       echo "Pusher: ${WEBHOOK_PAYLOAD.pusher.name}"

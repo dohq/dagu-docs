@@ -35,7 +35,7 @@ Steps can execute multiple commands that share the same configuration:
 
 ```yaml
 steps:
-  - name: build-and-test
+  - id: build_and_test
     command:
       - npm install
       - npm run build
@@ -51,18 +51,18 @@ By default, steps run sequentially. Use `depends` for parallel execution:
 ```yaml
 type: graph
 steps:
-  - name: A
+  - id: A
     command: echo "First"
 
-  - name: B
+  - id: B
     command: echo "Second (after A)"
     depends: A
 
-  - name: C
+  - id: C
     command: echo "Parallel with B"
     depends: A  # Only depends on A, runs parallel to B
 
-  - name: D
+  - id: D
     command: echo "After both B and C"
     depends: [B, C]
 ```

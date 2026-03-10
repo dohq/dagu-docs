@@ -49,7 +49,7 @@ description: "Perform basic arithmetic operations"
 params: "operation a b"
 
 steps:
-  - name: calculate
+  - id: calculate
     script: |
       case "$1" in
         add) echo $(($2 + $3)) ;;

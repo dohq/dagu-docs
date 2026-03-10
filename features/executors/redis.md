@@ -6,7 +6,7 @@ Execute Redis commands and operations against Redis servers.
 
 ```yaml
 steps:
-  - name: ping
+  - id: ping
     type: redis
     config:
       host: localhost
@@ -25,14 +25,14 @@ redis:
   password: ${REDIS_PASSWORD}
 
 steps:
-  - name: set-value
+  - id: set_value
     type: redis
     config:
       command: SET
       key: mykey
       value: "hello world"
 
-  - name: get-value
+  - id: get_value
     type: redis
     config:
       command: GET
@@ -116,21 +116,21 @@ Steps inherit connection settings from the DAG level. Step-level config override
 
 ```yaml
 steps:
-  - name: set-key
+  - id: set_key
     type: redis
     config:
       command: SET
       key: user:1:name
       value: "John Doe"
 
-  - name: get-key
+  - id: get_key
     type: redis
     config:
       command: GET
       key: user:1:name
     output: USER_NAME
 
-  - name: increment
+  - id: increment
     type: redis
     config:
       command: INCR
@@ -141,26 +141,26 @@ steps:
 
 ```yaml
 steps:
-  - name: check-exists
+  - id: check_exists
     type: redis
     config:
       command: EXISTS
       key: mykey
 
-  - name: set-expiry
+  - id: set_expiry
     type: redis
     config:
       command: EXPIRE
       key: session:123
       ttl: 3600  # 1 hour in seconds
 
-  - name: get-ttl
+  - id: get_ttl
     type: redis
     config:
       command: TTL
       key: session:123
 
-  - name: delete-key
+  - id: delete_key
     type: redis
     config:
       command: DEL
@@ -171,7 +171,7 @@ steps:
 
 ```yaml
 steps:
-  - name: set-hash
+  - id: set_hash
     type: redis
     config:
       command: HSET
@@ -179,7 +179,7 @@ steps:
       field: email
       value: "john@example.com"
 
-  - name: get-hash-field
+  - id: get_hash_field
     type: redis
     config:
       command: HGET
@@ -187,7 +187,7 @@ steps:
       field: email
     output: EMAIL
 
-  - name: get-all-hash
+  - id: get_all_hash
     type: redis
     config:
       command: HGETALL
@@ -199,7 +199,7 @@ steps:
 
 ```yaml
 steps:
-  - name: push-to-list
+  - id: push_to_list
     type: redis
     config:
       command: RPUSH
@@ -207,7 +207,7 @@ steps:
       values:
         - '{"task": "process-order", "id": 123}'
 
-  - name: get-list-range
+  - id: get_list_range
     type: redis
     config:
       command: LRANGE
@@ -216,7 +216,7 @@ steps:
       stop: -1  # all elements
     output: TASKS
 
-  - name: pop-from-list
+  - id: pop_from_list
     type: redis
     config:
       command: LPOP
@@ -228,7 +228,7 @@ steps:
 
 ```yaml
 steps:
-  - name: add-to-set
+  - id: add_to_set
     type: redis
     config:
       command: SADD
@@ -238,14 +238,14 @@ steps:
         - "database"
         - "cache"
 
-  - name: get-members
+  - id: get_members
     type: redis
     config:
       command: SMEMBERS
       key: tags:article:1
     output: TAGS
 
-  - name: check-membership
+  - id: check_membership
     type: redis
     config:
       command: SISMEMBER
@@ -257,7 +257,7 @@ steps:
 
 ```yaml
 steps:
-  - name: add-score
+  - id: add_score
     type: redis
     config:
       command: ZADD
@@ -265,7 +265,7 @@ steps:
       score: 100
       value: "player1"
 
-  - name: get-top-players
+  - id: get_top_players
     type: redis
     config:
       command: ZRANGE
@@ -282,7 +282,7 @@ Execute multiple commands in a single round-trip:
 
 ```yaml
 steps:
-  - name: batch-operations
+  - id: batch_operations
     type: redis
     config:
       pipeline:
@@ -304,7 +304,7 @@ Execute commands atomically with MULTI/EXEC:
 
 ```yaml
 steps:
-  - name: atomic-transfer
+  - id: atomic_transfer
     type: redis
     config:
       multi: true
@@ -321,7 +321,7 @@ Execute Lua scripts for complex operations:
 
 ```yaml
 steps:
-  - name: rate-limit
+  - id: rate_limit
     type: redis
     config:
       script: |
@@ -348,7 +348,7 @@ Or load from a file:
 
 ```yaml
 steps:
-  - name: complex-operation
+  - id: complex_operation
     type: redis
     config:
       script_file: ./scripts/process.lua
@@ -364,7 +364,7 @@ Acquire a lock before executing critical operations:
 
 ```yaml
 steps:
-  - name: critical-section
+  - id: critical_section
     type: redis
     config:
       lock: "locks:resource:${RESOURCE_ID}"
@@ -380,17 +380,17 @@ steps:
 
 ```yaml
 steps:
-  - name: get-config
+  - id: get_config
     type: redis
     config:
       command: HGETALL
       key: app:config
     output: CONFIG
 
-  - name: use-config
+  - id: use_config
     command: echo "Database host is ${CONFIG}"
     depends:
-      - get-config
+      - get_config
 ```
 
 ## Connection Modes
@@ -493,7 +493,7 @@ value1,value2,value3
 
 ```yaml
 steps:
-  - name: redis-operation
+  - id: redis_operation
     type: redis
     config:
       command: GET

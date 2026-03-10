@@ -6,7 +6,7 @@ Execute queries and data operations against SQLite databases. Uses a pure Go SQL
 
 ```yaml
 steps:
-  - name: query-data
+  - id: query_data
     type: sqlite
     config:
       dsn: "file:./data.db"
@@ -64,7 +64,7 @@ This converts the DSN to `file::memory:?cache=shared` internally. For persistent
 
 ```yaml
 steps:
-  - name: query
+  - id: query
     type: sqlite
     config:
       dsn: "file:./app.db"
@@ -93,7 +93,7 @@ Use `:name` syntax for named parameters:
 
 ```yaml
 steps:
-  - name: find-user
+  - id: find_user
     type: sqlite
     config:
       dsn: "file:./app.db"
@@ -111,7 +111,7 @@ SQLite uses `?` for positional parameters:
 
 ```yaml
 steps:
-  - name: find-user
+  - id: find_user
     type: sqlite
     config:
       dsn: "file:./app.db"
@@ -125,7 +125,7 @@ steps:
 
 ```yaml
 steps:
-  - name: batch-update
+  - id: batch_update
     type: sqlite
     config:
       dsn: "file:./app.db"
@@ -142,7 +142,7 @@ For exclusive access to the database file, use file locking:
 
 ```yaml
 steps:
-  - name: exclusive-operation
+  - id: exclusive_operation
     type: sqlite
     config:
       dsn: "file:./shared.db"
@@ -161,7 +161,7 @@ File locking creates a `.lock` file next to the database (e.g., `shared.db.lock`
 ```yaml
 name: cache-cleanup
 steps:
-  - name: cleanup-expired
+  - id: cleanup_expired
     type: sqlite
     config:
       dsn: "file:/shared/cache.db"
@@ -179,7 +179,7 @@ steps:
 
 ```yaml
 steps:
-  - name: import-products
+  - id: import_products
     type: sqlite
     config:
       dsn: "file:./inventory.db"
@@ -195,7 +195,7 @@ steps:
 
 ```yaml
 steps:
-  - name: import-events
+  - id: import_events
     type: sqlite
     config:
       dsn: "file:./events.db"
@@ -211,7 +211,7 @@ SQLite supports `INSERT OR IGNORE` and `INSERT OR REPLACE`:
 
 ```yaml
 steps:
-  - name: upsert-data
+  - id: upsert_data
     type: sqlite
     config:
       dsn: "file:./app.db"
@@ -237,7 +237,7 @@ Unlike PostgreSQL where `replace` uses `ON CONFLICT DO NOTHING`, SQLite's `repla
 
 ```yaml
 steps:
-  - name: export-jsonl
+  - id: export_jsonl
     type: sqlite
     config:
       dsn: "file:./app.db"
@@ -255,7 +255,7 @@ Output:
 
 ```yaml
 steps:
-  - name: export-json
+  - id: export_json
     type: sqlite
     config:
       dsn: "file:./app.db"
@@ -271,7 +271,7 @@ The `json` format buffers ALL rows in memory before writing. For large result se
 
 ```yaml
 steps:
-  - name: export-csv
+  - id: export_csv
     type: sqlite
     config:
       dsn: "file:./app.db"
@@ -284,7 +284,7 @@ steps:
 
 ```yaml
 steps:
-  - name: export-logs
+  - id: export_logs
     type: sqlite
     config:
       dsn: "file:./logs.db"
@@ -304,7 +304,7 @@ steps:
 
 ```yaml
 steps:
-  - name: setup-database
+  - id: setup_database
     type: sqlite
     config:
       dsn: "file:./app.db"
@@ -331,7 +331,7 @@ SQLite provides many built-in functions:
 
 ```yaml
 steps:
-  - name: aggregate-data
+  - id: aggregate_data
     type: sqlite
     config:
       dsn: "file:./sales.db"
@@ -352,7 +352,7 @@ steps:
 
 ```yaml
 steps:
-  - name: safe-query
+  - id: safe_query
     type: sqlite
     config:
       dsn: "file:./app.db"
@@ -373,7 +373,7 @@ env:
   - DB_PATH: "./data/analytics.db"
 
 steps:
-  - name: setup-schema
+  - id: setup_schema
     type: sqlite
     config:
       dsn: "file:${DB_PATH}"
@@ -391,7 +391,7 @@ steps:
         unique_types INTEGER
       );
 
-  - name: import-events
+  - id: import_events
     type: sqlite
     config:
       dsn: "file:${DB_PATH}"
@@ -401,9 +401,9 @@ steps:
         format: jsonl
         batch_size: 1000
     depends:
-      - setup-schema
+      - setup_schema
 
-  - name: calculate-stats
+  - id: calculate_stats
     type: sqlite
     config:
       dsn: "file:${DB_PATH}"
@@ -419,9 +419,9 @@ steps:
       WHERE date(created_at) = date('now')
       GROUP BY date(created_at);
     depends:
-      - import-events
+      - import_events
 
-  - name: export-report
+  - id: export_report
     type: sqlite
     config:
       dsn: "file:${DB_PATH}"
@@ -433,7 +433,7 @@ steps:
       ORDER BY date DESC
       LIMIT 30
     depends:
-      - calculate-stats
+      - calculate_stats
 ```
 
 ## See Also

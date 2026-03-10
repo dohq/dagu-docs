@@ -21,11 +21,11 @@ Capture command output to a variable:
 
 ```yaml
 steps:
-  - name: get-version
+  - id: get_version
     command: cat VERSION
     output: VERSION
 
-  - name: count-records
+  - id: count_records
     command: wc -l < data.csv
     output: RECORD_COUNT
 ```
@@ -56,14 +56,14 @@ For more control, use the object form with additional options:
 ```yaml
 steps:
   # Custom key name in outputs.json
-  - name: get-count
+  - id: get_count
     command: echo "42"
     output:
       name: TOTAL_COUNT
       key: totalItems  # Uses "totalItems" instead of default "totalCount"
 
   # Exclude from outputs.json (still usable within the DAG)
-  - name: internal-step
+  - id: internal_step
     command: echo "processing"
     output:
       name: TEMP
@@ -112,11 +112,11 @@ When multiple steps output to the same key, the **last value wins** based on exe
 
 ```yaml
 steps:
-  - name: step1
+  - id: step1
     command: echo "first"
     output: RESULT
 
-  - name: step2
+  - id: step2
     command: echo "second"
     output: RESULT
     depends: [step1]
@@ -231,7 +231,7 @@ secrets:
     key: MY_API_KEY
 
 steps:
-  - name: call-api
+  - id: call_api
     command: curl -H "Authorization: ${API_KEY}" https://api.example.com
     output: RESPONSE
 ```
@@ -257,13 +257,13 @@ Use `omit: true` for outputs that should remain internal:
 
 ```yaml
 steps:
-  - name: get-temp-token
+  - id: get_temp_token
     command: get-token.sh
     output:
       name: TEMP_TOKEN
       omit: true  # Not saved to outputs.json
 
-  - name: use-token
+  - id: use_token
     command: curl -H "Token: ${TEMP_TOKEN}" https://api.example.com
     output: RESULT
 ```
@@ -278,16 +278,16 @@ steps:
 
 ```yaml
 steps:
-  - name: build
+  - id: build
     command: cat VERSION
     output: BUILD_VERSION
 
-  - name: test
+  - id: test
     command: pytest --collect-only -q | tail -1
     output: TEST_COUNT
     depends: [build]
 
-  - name: deploy
+  - id: deploy
     command: echo "success"
     output: DEPLOY_STATUS
     depends: [test]
@@ -309,13 +309,13 @@ steps:
 
 ```yaml
 steps:
-  - name: count-users
+  - id: count_users
     command: wc -l < users.txt
     output:
       name: USER_COUNT
       key: activeUsers
 
-  - name: count-orders
+  - id: count_orders
     command: wc -l < orders.txt
     output:
       name: ORDER_COUNT
@@ -337,18 +337,18 @@ steps:
 
 ```yaml
 steps:
-  - name: fetch-credentials
+  - id: fetch_credentials
     command: vault read -field=password secret/db
     output:
       name: DB_PASSWORD
       omit: true  # Don't persist
 
-  - name: run-migration
+  - id: run_migration
     command: |
       PGPASSWORD=${DB_PASSWORD} psql -c "SELECT version()"
       echo "complete"
     output: MIGRATION_STATUS
-    depends: [fetch-credentials]
+    depends: [fetch_credentials]
 ```
 
 Only `migrationStatus` appears in `outputs.json`.
@@ -357,16 +357,16 @@ Only `migrationStatus` appears in `outputs.json`.
 
 ```yaml
 steps:
-  - name: extract
+  - id: extract
     command: python extract.py --source s3://bucket/data
     output: EXTRACTED_COUNT
 
-  - name: transform
+  - id: transform
     command: python transform.py --input /tmp/extracted --count ${EXTRACTED_COUNT}
     output: TRANSFORM_RESULT
     depends: [extract]
 
-  - name: load
+  - id: load
     command: python load.py --data /tmp/transformed
     output: LOADED_ROWS
     depends: [transform]

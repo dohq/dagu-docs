@@ -11,7 +11,7 @@ secrets:
     key: POSTGRES_PASSWORD
 
 steps:
-  - name: query-users
+  - id: query_users
     type: postgres
     config:
       dsn: "postgres://user:${DB_PASSWORD}@localhost:5432/mydb"
@@ -48,7 +48,7 @@ config:
 
 ```yaml
 steps:
-  - name: query
+  - id: query
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -99,7 +99,7 @@ Use `:name` syntax for named parameters:
 
 ```yaml
 steps:
-  - name: find-user
+  - id: find_user
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -117,7 +117,7 @@ PostgreSQL uses `$1`, `$2`, etc. for positional parameters:
 
 ```yaml
 steps:
-  - name: find-user
+  - id: find_user
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -133,7 +133,7 @@ steps:
 
 ```yaml
 steps:
-  - name: transfer
+  - id: transfer
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -149,7 +149,7 @@ Control transaction isolation for concurrent access:
 
 ```yaml
 steps:
-  - name: critical-update
+  - id: critical_update
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -173,7 +173,7 @@ Execute multiple SQL statements in a single step:
 
 ```yaml
 steps:
-  - name: setup-tables
+  - id: setup_tables
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -196,7 +196,7 @@ steps:
 
 ```yaml
 steps:
-  - name: import-users
+  - id: import_users
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -216,7 +216,7 @@ steps:
 
 ```yaml
 steps:
-  - name: import-events
+  - id: import_events
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -246,7 +246,7 @@ import:
 
 ```yaml
 steps:
-  - name: import-with-nulls
+  - id: import_with_nulls
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -266,7 +266,7 @@ Test import without writing data:
 
 ```yaml
 steps:
-  - name: validate-import
+  - id: validate_import
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -282,7 +282,7 @@ steps:
 
 ```yaml
 steps:
-  - name: export-orders
+  - id: export_orders
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -301,7 +301,7 @@ Output:
 
 ```yaml
 steps:
-  - name: export-json
+  - id: export_json
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -317,7 +317,7 @@ The `json` format buffers ALL rows in memory before writing. For large result se
 
 ```yaml
 steps:
-  - name: export-csv
+  - id: export_csv
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -332,7 +332,7 @@ For large datasets, stream directly to a file:
 
 ```yaml
 steps:
-  - name: export-all-orders
+  - id: export_all_orders
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -341,10 +341,10 @@ steps:
       output_format: jsonl    # Use jsonl or csv for large results
     command: "SELECT * FROM orders"
 
-  - name: process-export
+  - id: process_export
     command: wc -l /data/orders-export.jsonl
     depends:
-      - export-all-orders
+      - export_all_orders
 ```
 
 ## Advisory Locks
@@ -353,7 +353,7 @@ Prevent concurrent execution of critical operations across distributed workers:
 
 ```yaml
 steps:
-  - name: exclusive-job
+  - id: exclusive_job
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -375,7 +375,7 @@ Advisory locks are session-level and automatically released when the step comple
 ```yaml
 name: distributed-etl
 steps:
-  - name: aggregate-region-data
+  - id: aggregate_region_data
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -392,7 +392,7 @@ steps:
 
 ```yaml
 steps:
-  - name: resilient-query
+  - id: resilient_query
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -413,7 +413,7 @@ env:
   - DATABASE_URL: "postgres://etl:secret@db.example.com:5432/analytics"
 
 steps:
-  - name: acquire-lock
+  - id: acquire_lock
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -423,7 +423,7 @@ steps:
       -- Clear staging table
       TRUNCATE TABLE staging_orders;
 
-  - name: import-new-data
+  - id: import_new_data
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -433,9 +433,9 @@ steps:
         has_header: true
         batch_size: 5000
     depends:
-      - acquire-lock
+      - acquire_lock
 
-  - name: transform-data
+  - id: transform_data
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -449,9 +449,9 @@ steps:
       SET total = EXCLUDED.total,
           updated_at = NOW();
     depends:
-      - import-new-data
+      - import_new_data
 
-  - name: generate-report
+  - id: generate_report
     type: postgres
     config:
       dsn: "${DATABASE_URL}"
@@ -468,7 +468,7 @@ steps:
       GROUP BY DATE(created_at)
       ORDER BY date DESC
     depends:
-      - transform-data
+      - transform_data
 ```
 
 ## See Also

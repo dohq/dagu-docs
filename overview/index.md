@@ -29,7 +29,7 @@ Bring your own model: Anthropic, OpenAI, Gemini, OpenRouter, and local servers (
 
 ```yaml
 steps:
-  - name: analyze-logs
+  - id: analyze_logs
     type: agent
     messages:
       - role: user

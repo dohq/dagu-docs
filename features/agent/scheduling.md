@@ -195,14 +195,14 @@ schedule: "0 6 * * MON-FRI"
 type: graph
 
 steps:
-  - name: check-infra
+  - id: check_infra
     type: agent
     messages:
       - role: user
         content: "Check disk usage, memory, and CPU across all servers."
     output: INFRA_STATUS
 
-  - name: check-app
+  - id: check_app
     type: agent
     messages:
       - role: user
@@ -217,11 +217,11 @@ steps:
 
           Infrastructure: ${INFRA_STATUS}
           Application: ${APP_STATUS}
-    depends: [check-infra, check-app]
+    depends: [check_infra, check_app]
     output: MORNING_BRIEF
 ```
 
-The `check-infra` and `check-app` steps run in parallel. The `summarize` step waits for both to finish before combining their outputs.
+The `check_infra` and `check_app` steps run in parallel. The `summarize` step waits for both to finish before combining their outputs.
 
 ## See Also
 

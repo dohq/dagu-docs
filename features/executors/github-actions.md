@@ -15,7 +15,7 @@ Run individual GitHub Actions inside Dagu by delegating execution to [nektos/act
 
    ```yaml
    steps:
-     - name: run-action
+     - id: run_action
        command: actions/hello-world-javascript-action@main
        type: github_action
        config:
@@ -24,7 +24,7 @@ Run individual GitHub Actions inside Dagu by delegating execution to [nektos/act
          who-to-greet: "Morning"
        output: ACTION_OUTPUT          # capture action outputs for later steps
 
-     - name: inspect-output
+     - id: inspect_output
        command: echo "You got ${ACTION_OUTPUT}"
    ```
 
@@ -50,7 +50,7 @@ secrets:
     key: GITHUB_TOKEN
 
 steps:
-  - name: collect-pr-count
+  - id: collect_pr_count
     type: gha
     command: actions/github-script@v7
     params:
@@ -64,7 +64,7 @@ steps:
         core.setOutput("count", data.length);
     output: PR_COUNT
 
-  - name: notify
+  - id: notify
     command: echo "Open PRs: ${PR_COUNT.count}"
 ```
 
@@ -81,7 +81,7 @@ secrets:
 working_dir: /tmp/gha-workspace
 
 steps:
-  - name: checkout
+  - id: checkout
     command: actions/checkout@v4          # Action to run
     type: gha                             # Aliases: github_action, github-action
     params:

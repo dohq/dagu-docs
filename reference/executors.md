@@ -44,14 +44,14 @@ steps:
 
 ```yaml
 steps:
-  - name: default-shell
+  - id: default_shell
     command: echo "Uses DAG shell or system default"
 
-  - name: bash-specific
+  - id: bash_specific
     shell: ["bash", "-e", "-u"]   # Array form for flags
     command: echo "Uses bash features"
 
-  - name: custom-shell
+  - id: custom_shell
     shell: /usr/bin/zsh
     command: echo "Uses zsh"
 ```
@@ -180,7 +180,7 @@ Execute commands on remote hosts over SSH.
 
 ```yaml
 steps:
-  - name: remote-command
+  - id: remote_command
     type: ssh
     config:
       user: deploy
@@ -194,7 +194,7 @@ steps:
 
 ```yaml
 steps:
-  - name: remote-with-env
+  - id: remote_with_env
     type: ssh
     config:
       user: deploy
@@ -210,7 +210,7 @@ steps:
 
 ```yaml
 steps:
-  - name: remote-script
+  - id: remote_script
     type: ssh
     config:
       user: admin
@@ -245,7 +245,7 @@ Use the `container` field to run a step in its own container:
 
 ```yaml
 steps:
-  - name: run-in-container
+  - id: run_in_container
     container:
       image: alpine:latest
     command: echo "Hello from container"
@@ -262,12 +262,12 @@ Execute commands in an already-running container:
 ```yaml
 steps:
   # String form - exec with container's defaults
-  - name: run-migration
+  - id: run_migration
     container: my-app-container
     command: php artisan migrate
 
   # Object form with overrides
-  - name: admin-task
+  - id: admin_task
     container:
       exec: my-app-container
       user: root
@@ -281,19 +281,19 @@ Exec mode is ideal for running commands in containers started by Docker Compose 
 
 ```yaml
 steps:
-  - name: pull-always
+  - id: pull_always
     container:
       image: myapp:latest
       pull_policy: always      # Always pull from registry
     command: ./app
 
-  - name: pull-if-missing
+  - id: pull_if_missing
     container:
       image: myapp:latest
       pull_policy: missing     # Default - pull only if not local
     command: ./app
 
-  - name: never-pull
+  - id: never_pull
     container:
       image: local-image:dev
       pull_policy: never       # Use local image only
@@ -313,7 +313,7 @@ registry_auths:
     password: ${GITHUB_TOKEN}
 
 steps:
-  - name: use-private-image
+  - id: use_private_image
     container:
       image: ghcr.io/myorg/private-app:latest
     command: echo "Running"
@@ -325,7 +325,7 @@ Authentication can also be configured via `DOCKER_AUTH_CONFIG` environment varia
 
 ```yaml
 steps:
-  - name: with-volumes
+  - id: with_volumes
     container:
       image: python:3.13
       volumes:
@@ -342,7 +342,7 @@ env:
   - API_KEY: secret123
 
 steps:
-  - name: with-env
+  - id: with_env
     container:
       image: node:22
       env:
@@ -356,7 +356,7 @@ steps:
 
 ```yaml
 steps:
-  - name: custom-network
+  - id: custom_network
     container:
       image: alpine
       network: my-network
@@ -367,7 +367,7 @@ steps:
 
 ```yaml
 steps:
-  - name: specific-platform
+  - id: specific_platform
     container:
       image: myapp:latest
       platform: linux/amd64  # Force platform
@@ -378,7 +378,7 @@ steps:
 
 ```yaml
 steps:
-  - name: custom-workdir
+  - id: custom_workdir
     container:
       image: python:3.13
       working_dir: /app
@@ -393,7 +393,7 @@ steps:
 
 ```yaml
 steps:
-  - name: run-postgres
+  - id: run_postgres
     container:
       name: test-db
       image: postgres:17
@@ -424,7 +424,7 @@ Make HTTP requests to APIs and web services.
 
 ```yaml
 steps:
-  - name: simple-get
+  - id: simple_get
     type: http
     config:
       silent: true  # Output body only
@@ -435,7 +435,7 @@ steps:
 
 ```yaml
 steps:
-  - name: post-json
+  - id: post_json
     type: http
     config:
       headers:
@@ -454,7 +454,7 @@ steps:
 
 ```yaml
 steps:
-  - name: search-api
+  - id: search_api
     type: http
     config:
       query:
@@ -469,7 +469,7 @@ steps:
 
 ```yaml
 steps:
-  - name: form-submit
+  - id: form_submit
     type: http
     config:
       headers:
@@ -482,7 +482,7 @@ steps:
 
 ```yaml
 steps:
-  - name: internal-api
+  - id: internal_api
     type: http
     config:
       tls_skip_verify: true  # Skip certificate verification
@@ -495,7 +495,7 @@ steps:
 
 ```yaml
 steps:
-  - name: api-workflow
+  - id: api_workflow
     type: http
     config:
       headers:
@@ -506,7 +506,7 @@ steps:
     command: GET https://api.example.com/data
     output: API_RESPONSE
 
-  - name: process-response
+  - id: process_response
     command: echo "${API_RESPONSE}" | jq '.data[]'
 ```
 
@@ -529,17 +529,17 @@ type: graph
 env:
   - INPUT: exact_value
 steps:
-  - name: router
+  - id: router
     type: router
     value: ${INPUT}
     routes:
       "exact_value": [route_a]
       "other": [route_b]
 
-  - name: route_a
+  - id: route_a
     command: echo "Route A executed"
 
-  - name: route_b
+  - id: route_b
     command: echo "Route B executed"
 ```
 
@@ -550,7 +550,7 @@ Prefix patterns with `re:` for regex matching:
 ```yaml
 type: graph
 steps:
-  - name: router
+  - id: router
     type: router
     value: ${INPUT}
     routes:
@@ -566,7 +566,7 @@ Route to multiple steps from a single pattern:
 ```yaml
 type: graph
 steps:
-  - name: router
+  - id: router
     type: router
     value: ${TRIGGER}
     routes:
@@ -585,7 +585,7 @@ Execute other workflows as steps, enabling workflow composition.
 
 ```yaml
 steps:
-  - name: run-etl
+  - id: run_etl
     type: dag
     command: workflows/etl-pipeline.yaml
     params: "DATE=${TODAY} ENV=production"
@@ -596,7 +596,7 @@ steps:
 ```yaml
 name: main-workflow
 steps:
-  - name: prepare-data
+  - id: prepare_data
     type: dag
     command: data-prep
     params: "SOURCE=/data/raw"
@@ -607,9 +607,9 @@ name: data-prep
 params:
   - SOURCE: /tmp
 steps:
-  - name: validate
+  - id: validate
     command: validate.sh ${SOURCE}
-  - name: clean
+  - id: clean
     command: clean.py ${SOURCE}
 ```
 
@@ -617,13 +617,13 @@ steps:
 
 ```yaml
 steps:
-  - name: analyze
+  - id: analyze
     type: dag
     command: analyzer.yaml
     params: "FILE=${INPUT_FILE}"
     output: ANALYSIS
 
-  - name: use-results
+  - id: use_results
     command: |
       echo "Status: ${ANALYSIS.outputs.status}"
       echo "Count: ${ANALYSIS.outputs.record_count}"
@@ -633,7 +633,7 @@ steps:
 
 ```yaml
 steps:
-  - name: may-fail
+  - id: may_fail
     type: dag
     command: risky-process.yaml
     continue_on:
@@ -647,7 +647,7 @@ steps:
 
 ```yaml
 steps:
-  - name: choose-workflow
+  - id: choose_workflow
     command: |
       if [ "${ENVIRONMENT}" = "prod" ]; then
         echo "production-workflow.yaml"
@@ -656,7 +656,7 @@ steps:
       fi
     output: WORKFLOW_FILE
 
-  - name: run-selected
+  - id: run_selected
     type: dag
     command: ${WORKFLOW_FILE}
     params: "ENV=${ENVIRONMENT}"
@@ -680,7 +680,7 @@ smtp:
   password: ${SMTP_PASSWORD}
 
 steps:
-  - name: send-notification
+  - id: send_notification
     type: mail
     config:
       to: recipient@example.com
@@ -693,7 +693,7 @@ steps:
 
 ```yaml
 steps:
-  - name: send-report
+  - id: send_report
     type: mail
     config:
       to: team@company.com
@@ -712,7 +712,7 @@ steps:
 
 ```yaml
 steps:
-  - name: alert-team
+  - id: alert_team
     type: mail
     config:
       to:
@@ -732,7 +732,7 @@ steps:
 
 ```yaml
 steps:
-  - name: send-html
+  - id: send_html
     type: mail
     config:
       to: marketing@company.com
@@ -789,7 +789,7 @@ Aliases `ollama`, `vllm`, and `llama` map to `local`.
 type: graph
 
 steps:
-  - name: setup
+  - id: setup
     type: chat
     llm:
       provider: openai
@@ -799,7 +799,7 @@ steps:
       - role: user
         content: "What is 2+2?"
 
-  - name: followup
+  - id: followup
     depends: [setup]
     type: chat
     llm:
@@ -883,7 +883,7 @@ Set `config.raw: true` to mirror jq's `-r` flag and emit unquoted primitives.
 
 ```yaml
 steps:
-  - name: list-emails
+  - id: list_emails
     type: jq
     config:
       raw: true
@@ -909,7 +909,7 @@ user2@example.com
 
 ```yaml
 steps:
-  - name: pretty-print
+  - id: pretty_print
     type: jq
     script: |
       {"name":"test","values":[1,2,3],"nested":{"key":"value"}}
@@ -930,7 +930,7 @@ Output:
 
 ```yaml
 steps:
-  - name: extract-value
+  - id: extract_value
     type: jq
     command: '.data.users[] | select(.active == true) | .email'
     script: |
@@ -955,7 +955,7 @@ Output:
 
 ```yaml
 steps:
-  - name: transform-data
+  - id: transform_data
     type: jq
     command: '{id: .id, name: .name, total: (.items | map(.price) | add)}'
     script: |
@@ -983,7 +983,7 @@ Output:
 
 ```yaml
 steps:
-  - name: analyze-logs
+  - id: analyze_logs
     type: jq
     command: |
       group_by(.level) |
@@ -1019,7 +1019,7 @@ s3:
   bucket: my-bucket
 
 steps:
-  - name: upload-file
+  - id: upload_file
     type: s3
     config:
       key: data/file.txt
@@ -1031,7 +1031,7 @@ steps:
 
 ```yaml
 steps:
-  - name: upload-report
+  - id: upload_report
     type: s3
     config:
       bucket: my-bucket
@@ -1046,7 +1046,7 @@ steps:
 
 ```yaml
 steps:
-  - name: download-config
+  - id: download_config
     type: s3
     config:
       bucket: my-bucket
@@ -1059,7 +1059,7 @@ steps:
 
 ```yaml
 steps:
-  - name: list-logs
+  - id: list_logs
     type: s3
     config:
       bucket: my-bucket
@@ -1075,7 +1075,7 @@ steps:
 ```yaml
 steps:
   # Single object
-  - name: delete-file
+  - id: delete_file
     type: s3
     config:
       bucket: my-bucket
@@ -1083,7 +1083,7 @@ steps:
     command: delete
 
   # Batch delete by prefix
-  - name: cleanup
+  - id: cleanup
     type: s3
     config:
       bucket: my-bucket
@@ -1122,7 +1122,7 @@ Execute commands against Redis servers.
 
 ```yaml
 steps:
-  - name: ping
+  - id: ping
     type: redis
     config:
       host: localhost
@@ -1141,14 +1141,14 @@ redis:
   password: ${REDIS_PASSWORD}
 
 steps:
-  - name: set-value
+  - id: set_value
     type: redis
     config:
       command: SET
       key: mykey
       value: "hello"
 
-  - name: get-value
+  - id: get_value
     type: redis
     config:
       command: GET
@@ -1160,14 +1160,14 @@ steps:
 
 ```yaml
 steps:
-  - name: cache-user
+  - id: cache_user
     type: redis
     config:
       command: SET
       key: user:${USER_ID}
       value: '{"name": "John", "email": "john@example.com"}'
 
-  - name: get-user
+  - id: get_user
     type: redis
     config:
       command: GET
@@ -1179,7 +1179,7 @@ steps:
 
 ```yaml
 steps:
-  - name: set-user-field
+  - id: set_user_field
     type: redis
     config:
       command: HSET
@@ -1187,7 +1187,7 @@ steps:
       field: email
       value: "john@example.com"
 
-  - name: get-all-fields
+  - id: get_all_fields
     type: redis
     config:
       command: HGETALL
@@ -1199,7 +1199,7 @@ steps:
 
 ```yaml
 steps:
-  - name: batch-ops
+  - id: batch_ops
     type: redis
     config:
       pipeline:
@@ -1249,7 +1249,7 @@ Manipulate archives without shelling out to `tar`, `zip`, or other external tool
 
 ```yaml
 steps:
-  - name: unpack
+  - id: unpack
     type: archive
     config:
       source: logs.tar.gz
@@ -1262,7 +1262,7 @@ steps:
 
 ```yaml
 steps:
-  - name: package
+  - id: package
     type: archive
     config:
       source: ./logs
@@ -1276,7 +1276,7 @@ steps:
 
 ```yaml
 steps:
-  - name: inspect
+  - id: inspect
     type: archive
     config:
       source: logs-backup.tar.gz
@@ -1299,7 +1299,7 @@ secrets:
     key: GITHUB_TOKEN
 
 steps:
-  - name: checkout
+  - id: checkout
     command: actions/checkout@v4
     type: gha               # Aliases: github_action, github-action
     config:

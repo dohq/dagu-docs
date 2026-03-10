@@ -311,7 +311,7 @@ mail_on:
 Per-step notification:
 ```yaml
 steps:
-  - name: critical-task
+  - id: critical_task
     command: echo "Processing"
     mail_on_error: true
 ```
@@ -389,7 +389,7 @@ The recommended approach is to use `.env` files to provide sensitive credentials
 dotenv: .env.secrets  # Load from .env file (not tracked in git)
 
 steps:
-  - name: deploy
+  - id: deploy
     command: aws s3 sync ./build s3://my-bucket
 ```
 
@@ -409,7 +409,7 @@ env:
   - AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
 
 steps:
-  - name: deploy
+  - id: deploy
     command: aws s3 sync ./build s3://my-bucket
 ```
 

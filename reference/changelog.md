@@ -156,11 +156,11 @@
       - LOG_LEVEL: info
 
   steps:
-    - name: fetch-data
+    - id: fetch_data
       command: curl https://api.example.com/data
       # Inherits retry_policy and LOG_LEVEL from defaults
 
-    - name: custom-step
+    - id: custom_step
       command: ./run.sh
       retry_policy:
         limit: 1
@@ -288,7 +288,7 @@
     host: server.example.com
 
   steps:
-    - name: upload-config
+    - id: upload_config
       type: sftp
       config:
         direction: upload
@@ -324,7 +324,7 @@
     bucket: my-bucket
 
   steps:
-    - name: upload-report
+    - id: upload_report
       type: s3
       config:
         key: reports/daily.csv
@@ -347,7 +347,7 @@
 
   ```yaml
   steps:
-    - name: query-users
+    - id: query_users
       type: postgres
       config:
         dsn: "postgres://user:pass@localhost:5432/mydb"
@@ -375,7 +375,7 @@
     password: ${REDIS_PASSWORD}
 
   steps:
-    - name: cache-lookup
+    - id: cache_lookup
       type: redis
       config:
         command: GET
@@ -534,7 +534,7 @@
   ```yaml
   # This now works correctly
   steps:
-    - name: step1
+    - id: step1
       container:
         image: alpine:3
         command:
@@ -805,7 +805,7 @@ Everyone who participated in discussions, reported feedback, or helped other use
   ```yaml
   # New shorthand syntax
   steps:
-    - name: deploy
+    - id: deploy
       type: ssh
       config:
         host: prod.example.com
@@ -814,7 +814,7 @@ Everyone who participated in discussions, reported feedback, or helped other use
 
   # Legacy syntax (removed in v1.31.0)
   steps:
-    - name: deploy
+    - id: deploy
       executor:
         type: ssh
         config:
@@ -1024,19 +1024,19 @@ Everyone who participated in discussions, reported feedback, or helped other use
 ```yaml
 steps:
   # Simple string form (existing behavior)
-  - name: get-count
+  - id: get_count
     command: echo "42"
     output: COUNT
 
   # Object form with custom key
-  - name: get-version
+  - id: get_version
     command: cat VERSION
     output:
       name: VERSION
       key: appVersion  # Custom key in outputs.json (default: camelCase of name)
 
   # Object form with omit
-  - name: internal-step
+  - id: internal_step
     command: echo "processing"
     output:
       name: TEMP
@@ -1096,7 +1096,7 @@ Requires builtin authentication mode (`auth.mode: builtin`). See [Webhooks docum
 
 ```yaml
 steps:
-  - name: build-and-test
+  - id: build_and_test
     command:
       - npm install
       - npm run build
@@ -1123,7 +1123,7 @@ Supported executors: shell, command, docker, container, ssh. Executors that do n
 
 ```yaml
 steps:
-  - name: build
+  - id: build
     container:
       image: node:24
       volumes:
@@ -1131,7 +1131,7 @@ steps:
       working_dir: /app
     command: npm run build
 
-  - name: test
+  - id: test
     container:
       image: python:3.11
       env:
@@ -1609,7 +1609,7 @@ Thanks to our contributors for this release:
 
   ```yaml
   steps:
-    - name: step 1
+    - id: step_1
       command: echo "hello"
   ```
 
@@ -1973,12 +1973,12 @@ Execute nested DAGs with full parameter passing and output bubbling:
 
 ```yaml
 steps:
-  - name: run_sub-dag
+  - id: run_sub_dag
     run: sub-dag
     output: OUT
     params: "INPUT=${DATA_PATH}"
 
-  - name: use output
+  - id: use_output
     command: echo ${OUT.outputs.RESULT}
 ```
 
@@ -1989,14 +1989,14 @@ Define multiple DAGs in one YAML file using `---` separator:
 ```yaml
 name: main-workflow
 steps:
-  - name: process
+  - id: process
     run: sub-workflow  # Defined below
 
 ---
 
 name: sub-workflow
 steps:
-  - name: task
+  - id: task
     command: echo "Hello from sub-workflow"
 ```
 
@@ -2006,11 +2006,11 @@ Execute commands or sub-DAGs in parallel with different parameters for batch pro
 
 ```yaml
 steps:
-  - name: get files
+  - id: get_files
     command: find /data -name "*.csv"
     output: FILES
-  
-  - name: process files
+
+  - id: process_files
     run: process-file
     parallel: ${FILES}
     params:
@@ -2092,7 +2092,7 @@ Thanks to @thefishhat:
 
 ```yaml
 steps:
-  - name: wait for service
+  - id: wait_for_service
     command: check_service.sh
     repeat_policy:
       repeat: until        # NEW: Explicit mode (while/until)
@@ -2100,8 +2100,8 @@ steps:
       expected: "ready"    # Repeat UNTIL status is ready
       interval_sec: 30
       limit: 60           # Maximum attempts
-      
-  - name: monitor process
+
+  - id: monitor_process
     command: pgrep myapp
     repeat_policy:
       repeat: while       # Repeat WHILE process exists
@@ -2131,9 +2131,9 @@ To maintain the previous behavior, add `type: graph` to your DAG configuration:
 ```yaml
 type: graph
 steps:
-  - name: task1
+  - id: task1
     command: echo "runs in parallel"
-  - name: task2
+  - id: task2
     command: echo "runs in parallel"
 ```
 
@@ -2142,10 +2142,10 @@ Alternatively, you can explicitly set empty dependencies for parallel steps:
 ```yaml
 type: graph
 steps:
-  - name: task1
+  - id: task1
     command: echo "runs in parallel"
     depends: []
-  - name: task2
+  - id: task2
     command: echo "runs in parallel"
     depends: []
 ```
@@ -2216,10 +2216,10 @@ Access nested JSON values with path syntax:
 
 ```yaml
 steps:
-  - name: sub workflow
+  - id: sub_workflow
     run: sub_workflow
     output: SUB_RESULT
-  - name: use output
+  - id: use_output
     command: echo "The result is ${SUB_RESULT.outputs.finalValue}"
 ```
 
@@ -2241,7 +2241,7 @@ Then `${SUB_RESULT.outputs.finalValue}` expands to `success`.
 
 ```yaml
 steps:
-  - name: some_step
+  - id: some_step
     command: some_command
     preconditions:
       - condition: "`date '+%d'`"
@@ -2252,7 +2252,7 @@ steps:
 
 ```yaml
 steps:
-  - name: some_step
+  - id: some_step
     command: some_command
     preconditions:
       - command: "test -f /tmp/some_file"
@@ -2287,7 +2287,7 @@ dagu start my_dag -- param1 param2 --param3 value3
 
 ```yaml
 steps:
-  - name: some_step
+  - id: some_step
     command: some_command
     continue_on:
       exit_code: [1, 2]  # Continue if exit code is 1 or 2
@@ -2297,7 +2297,7 @@ steps:
 
 ```yaml
 steps:
-  - name: some_step
+  - id: some_step
     command: some_command
     continue_on:
       exit_code: 1
@@ -2308,13 +2308,13 @@ steps:
 
 ```yaml
 steps:
-  - name: some_step
+  - id: some_step
     command: some_command
     continue_on:
       output: "WARNING"  # Continue if output contains "WARNING"
       
   # With regex
-  - name: another_step
+  - id: another_step
     command: another_command
     continue_on:
       output: "re:^ERROR: [0-9]+"  # Regex pattern matching
@@ -2326,7 +2326,7 @@ steps:
 
 ```yaml
 steps:
-  - name: pipe_example
+  - id: pipe_example
     command: "cat file.txt | grep pattern | wc -l"
 ```
 
@@ -2334,11 +2334,11 @@ steps:
 
 ```yaml
 steps:
-  - name: bash_specific
+  - id: bash_specific
     command: "echo ${BASH_VERSION}"
     shell: bash
-    
-  - name: python_shell
+
+  - id: python_shell
     command: "print('Hello from Python')"
     shell: python3
 ```
@@ -2365,9 +2365,9 @@ String format now supported:
 ```yaml
 type: graph
 steps:
-  - name: first
+  - id: first
     command: echo "First"
-  - name: second
+  - id: second
     command: echo "Second"
     depends: first  # Simple string instead of array
 ```

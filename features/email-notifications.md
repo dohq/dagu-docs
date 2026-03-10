@@ -86,7 +86,7 @@ mail_on:
 
 ```yaml
 steps:
-  - name: critical-step
+  - id: critical_step
     command: process_critical_data.sh
     mail_on_error: true  # Email if this step fails
 ```
@@ -115,7 +115,7 @@ Send custom emails as workflow steps:
 
 ```yaml
 steps:
-  - name: send report
+  - id: send_report
     type: mail
     config:
       to:
@@ -144,11 +144,11 @@ steps:
 
 ```yaml
 steps:
-  - name: generate report
+  - id: generate_report
     command: generate_report.py
     output: REPORT_PATH
-  
-  - name: email report
+
+  - id: email_report
     type: mail
     config:
       to: stakeholders@example.com
@@ -253,11 +253,11 @@ error_mail:
 
 ```yaml
 steps:
-  - name: check environment
+  - id: check_environment
     command: echo $ENVIRONMENT
     output: ENV
-  
-  - name: notify
+
+  - id: notify
     type: mail
     config:
       to: |
@@ -274,7 +274,7 @@ steps:
 
 ```yaml
 steps:
-  - name: send html email
+  - id: send_html_email
     type: mail
     config:
       to: reports@example.com

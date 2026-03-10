@@ -11,14 +11,14 @@ ssh:
   key: ~/.ssh/deploy_key
 
 steps:
-  - name: upload-config
+  - id: upload_config
     type: sftp
     config:
       direction: upload
       source: /local/config.yaml
       destination: /remote/config.yaml
 
-  - name: download-logs
+  - id: download_logs
     type: sftp
     config:
       direction: download
@@ -30,7 +30,7 @@ steps:
 
 ```yaml
 steps:
-  - name: upload-file
+  - id: upload_file
     type: sftp
     config:
       user: deploy
@@ -64,14 +64,14 @@ Directories are transferred recursively:
 
 ```yaml
 steps:
-  - name: upload-dir
+  - id: upload_dir
     type: sftp
     config:
       direction: upload
       source: /local/project/
       destination: /remote/project/
 
-  - name: download-dir
+  - id: download_dir
     type: sftp
     config:
       direction: download

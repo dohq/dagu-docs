@@ -27,7 +27,7 @@ For example, if `paths.docs_dir` is `/home/user/.config/dagu/dags/docs` (the def
 ```yaml
 name: daily-report
 steps:
-  - name: generate-report
+  - id: generate_report
     command: |
       mkdir -p "${DAG_DOCS_DIR}"
       cat > "${DAG_DOCS_DIR}/latest-run.md" <<'TEMPLATE'

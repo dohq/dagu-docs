@@ -64,12 +64,12 @@ When set to `true`, the workflow continues even if the step fails with any non-z
 ```yaml
 steps:
   # Shorthand syntax
-  - name: optional-cleanup
+  - id: optional_cleanup
     command: rm -rf /tmp/cache/*
     continue_on: failed
 
   # Object syntax (equivalent)
-  - name: optional-cleanup
+  - id: optional_cleanup
     command: rm -rf /tmp/cache/*
     continue_on:
       failure: true
@@ -82,7 +82,7 @@ When set to `true`, the workflow continues when a step is skipped due to unmet p
 ```yaml
 steps:
   # Shorthand syntax
-  - name: conditional-task
+  - id: conditional_task
     command: echo "Processing"
     preconditions:
       - condition: "${ENABLE_FEATURE}"
@@ -90,7 +90,7 @@ steps:
     continue_on: skipped
 
   # Object syntax (equivalent)
-  - name: conditional-task
+  - id: conditional_task
     command: echo "Processing"
     preconditions:
       - condition: "${ENABLE_FEATURE}"
@@ -105,7 +105,7 @@ An array of specific exit codes that should not stop the workflow. This is usefu
 
 ```yaml
 steps:
-  - name: check-service
+  - id: check_service
     command: echo "Health check OK"
     continue_on:
       exit_code: [0, 1, 2]  # 0=healthy, 1=warning, 2=maintenance
@@ -117,7 +117,7 @@ An array of patterns to match against the command's stdout output. Supports both
 
 ```yaml
 steps:
-  - name: validate-data
+  - id: validate_data
     command: echo "Validating"
     continue_on:
       output:
@@ -139,7 +139,7 @@ When set to `true`, the step is marked as successful if any of the continue cond
 
 ```yaml
 steps:
-  - name: best-effort-optimization
+  - id: best_effort_optimization
     command: echo "Optimizing"
     continue_on:
       failure: true
@@ -154,11 +154,11 @@ For steps that are nice-to-have but not critical:
 
 ```yaml
 steps:
-  - name: cache-warmup
+  - id: cache_warmup
     command: echo "Warming cache"
     continue_on: failed
 
-  - name: main-process
+  - id: main_process
     command: echo "Processing"
 ```
 
@@ -168,12 +168,12 @@ When working with tools that use exit codes for non-error states:
 
 ```yaml
 steps:
-  - name: git-diff
+  - id: git_diff
     command: git diff --exit-code
     continue_on:
       exit_code: [0, 1]  # 0=no changes, 1=changes exist
-      
-  - name: process-changes
+
+  - id: process_changes
     command: echo "Handling changes"
 ```
 
@@ -183,13 +183,13 @@ Continue execution but handle warnings differently:
 
 ```yaml
 steps:
-  - name: lint-code
+  - id: lint_code
     command: eslint .
     continue_on:
       output: ["WARNING", "re:.*warning.*"]
       exit_code: [0, 1]  # 0=no issues, 1=warnings only
-      
-  - name: strict-lint
+
+  - id: strict_lint
     command: eslint . --max-warnings 0
     continue_on:
       failure: false  # This one must pass
@@ -201,11 +201,11 @@ Build workflows that degrade gracefully:
 
 ```yaml
 steps:
-  - name: try-optimal-method
+  - id: try_optimal_method
     command: echo "Processing with optimal settings"
     continue_on: failed
 
-  - name: fallback-method
+  - id: fallback_method
     command: echo "Processing with fallback settings"
     preconditions:
       - condition: "${TRY_OPTIMAL_METHOD_EXIT_CODE}"
@@ -218,7 +218,7 @@ React to specific output patterns:
 
 ```yaml
 steps:
-  - name: deployment-check
+  - id: deployment_check
     command: kubectl rollout status deployment/app
     continue_on:
       output:
@@ -226,8 +226,8 @@ steps:
         - "re:deployment.*not found"
         - "Unable to connect"
       exit_code: [1]
-      
-  - name: handle-deployment-issue
+
+  - id: handle_deployment_issue
     command: echo "Fixing deployment"
 ```
 
@@ -239,7 +239,7 @@ steps:
 
 ```yaml
 steps:
-  - name: flaky-service
+  - id: flaky_service
     command: echo "Calling service"
     retry_policy:
       limit: 3
@@ -258,7 +258,7 @@ handler_on:
     command: echo "DAG completed (status: ${DAG_RUN_STATUS})"  # partially_succeeded
 
 steps:
-  - name: optional-step
+  - id: optional_step
     command: exit 1
     continue_on: failed  # Continues, DAG ends as partially_succeeded
 ```
@@ -270,25 +270,25 @@ Dependent steps see the actual status unless `mark_success` is used:
 ```yaml
 type: graph
 steps:
-  - name: step-a
+  - id: step_a
     command: exit 1
     continue_on:
       failure: true
       mark_success: false  # Default
-      
-  - name: step-b
+
+  - id: step_b
     command: echo "Step A status: failed"
-    depends: [step-a]  # Runs because of continue_on
-    
-  - name: step-c
+    depends: [step_a]  # Runs because of continue_on
+
+  - id: step_c
     command: exit 1
     continue_on:
       failure: true
       mark_success: true  # Override status
-      
-  - name: step-d
+
+  - id: step_d
     command: echo "Step C status: success"
-    depends: [step-c]  # Sees step-c as successful
+    depends: [step_c]  # Sees step-c as successful
 ```
 
 ## Examples
@@ -297,15 +297,15 @@ steps:
 
 ```yaml
 steps:
-  - name: run-migration
+  - id: run_migration
     command: echo "Running migration"
     continue_on:
       output:
         - "re:WARNING:.*already exists"
         - "re:NOTICE:.*will be created"
       exit_code: [0, 1]  # 1 might indicate warnings
-      
-  - name: verify-migration
+
+  - id: verify_migration
     command: echo "Verifying database"
 ```
 
@@ -313,15 +313,15 @@ steps:
 
 ```yaml
 steps:
-  - name: deploy-aws
+  - id: deploy_aws
     command: echo "Deploying to AWS"
     continue_on: failed  # Continue even if AWS fails
 
-  - name: deploy-gcp
+  - id: deploy_gcp
     command: echo "Deploying to GCP"
     continue_on: failed  # Continue even if GCP fails
 
-  - name: verify-deployment
+  - id: verify_deployment
     command: echo "Verifying cloud deployment"
     # No continue_on - at least one cloud must be working
 ```
@@ -330,12 +330,12 @@ steps:
 
 ```yaml
 steps:
-  - name: check-primary
+  - id: check_primary
     command: curl -f https://primary.example.com/health
     continue_on:
       exit_code: [0, 22, 7]  # 22=HTTP error, 7=connection failed
-      
-  - name: check-secondary
+
+  - id: check_secondary
     command: curl -f https://secondary.example.com/health
     preconditions:
       - condition: "${CHECK_PRIMARY_EXIT_CODE}"

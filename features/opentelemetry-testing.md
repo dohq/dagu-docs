@@ -30,24 +30,24 @@ otel:
 
 type: graph
 steps:
-  - name: fetch-data
+  - id: fetch_data
     command: echo "Fetching data..." && sleep 1
 
-  - name: process-data
+  - id: process_data
     command: echo "Processing data..." && sleep 2
-    depends: fetch-data
+    depends: fetch_data
 
-  - name: analyze-batch-1
+  - id: analyze_batch_1
     command: echo "Analyzing batch 1..." && sleep 1
-    depends: process-data
+    depends: process_data
 
-  - name: analyze-batch-2
+  - id: analyze_batch_2
     command: echo "Analyzing batch 2..." && sleep 1
-    depends: process-data
+    depends: process_data
 
-  - name: aggregate-results
+  - id: aggregate_results
     command: echo "Aggregating results..."
-    depends: [analyze-batch-1, analyze-batch-2]
+    depends: [analyze_batch_1, analyze_batch_2]
 ```
 
 ### 3. Run the DAG

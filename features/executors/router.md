@@ -15,18 +15,18 @@ type: graph
 env:
   - INPUT: exact_value
 steps:
-  - name: router
+  - id: router
     type: router
     value: ${INPUT}
     routes:
       "exact_value": [route_a]
       "other": [route_b]
 
-  - name: route_a
+  - id: route_a
     command: echo "Route A executed"
     output: RESULT_A
 
-  - name: route_b
+  - id: route_b
     command: echo "Route B executed"
     output: RESULT_B
 ```
@@ -44,18 +44,18 @@ type: graph
 env:
   - STATUS: production
 steps:
-  - name: router
+  - id: router
     type: router
     value: ${STATUS}
     routes:
       "production": [prod_handler]
       "staging": [staging_handler]
 
-  - name: prod_handler
+  - id: prod_handler
     command: echo "Production"
     output: ENV
 
-  - name: staging_handler
+  - id: staging_handler
     command: echo "Staging"
     output: ENV
 ```
@@ -69,18 +69,18 @@ type: graph
 env:
   - INPUT: apple_pie
 steps:
-  - name: router
+  - id: router
     type: router
     value: ${INPUT}
     routes:
       "re:^apple.*": [route_a]
       "re:^banana.*": [route_b]
 
-  - name: route_a
+  - id: route_a
     command: echo "Apple route"
     output: RESULT_A
 
-  - name: route_b
+  - id: route_b
     command: echo "Banana route"
     output: RESULT_B
 ```
@@ -96,7 +96,7 @@ type: graph
 env:
   - INPUT: success_code
 steps:
-  - name: router
+  - id: router
     type: router
     value: ${INPUT}
     routes:
@@ -104,15 +104,15 @@ steps:
       "re:.*_code$": [handle_code]
       "re:.*": [catch_all]
 
-  - name: handle_success
+  - id: handle_success
     command: echo "Success handler"
     output: SUCCESS
 
-  - name: handle_code
+  - id: handle_code
     command: echo "Code handler"
     output: CODE
 
-  - name: catch_all
+  - id: catch_all
     command: echo "Catch all"
     output: CATCH_ALL
 ```
@@ -128,18 +128,18 @@ type: graph
 env:
   - INPUT: unknown_value
 steps:
-  - name: router
+  - id: router
     type: router
     value: ${INPUT}
     routes:
       "specific": [route_a]
       "re:.*": [default_route]
 
-  - name: route_a
+  - id: route_a
     command: echo "Specific route"
     output: RESULT_A
 
-  - name: default_route
+  - id: default_route
     command: echo "Default route"
     output: RESULT_DEFAULT
 ```
@@ -155,21 +155,21 @@ type: graph
 env:
   - INPUT: trigger
 steps:
-  - name: router
+  - id: router
     type: router
     value: ${INPUT}
     routes:
       "trigger": [step_a, step_b]
 
-  - name: step_a
+  - id: step_a
     command: echo "Step A"
     output: RESULT_A
 
-  - name: step_b
+  - id: step_b
     command: echo "Step B"
     output: RESULT_B
 
-  - name: step_c
+  - id: step_c
     command: echo "Step C"
     output: RESULT_C
     depends:
@@ -185,11 +185,11 @@ Route based on the output of a previous step:
 ```yaml
 type: graph
 steps:
-  - name: check_status
+  - id: check_status
     command: echo "success"
     output: STATUS
 
-  - name: router
+  - id: router
     type: router
     value: ${STATUS}
     routes:
@@ -197,11 +197,11 @@ steps:
       "failure": [failure_handler]
     depends: [check_status]
 
-  - name: success_handler
+  - id: success_handler
     command: echo "Handling success"
     output: RESULT
 
-  - name: failure_handler
+  - id: failure_handler
     command: echo "Handling failure"
     output: RESULT
 ```
@@ -218,29 +218,29 @@ env:
   - CATEGORY: electronics
   - SUBCATEGORY: phone
 steps:
-  - name: category_router
+  - id: category_router
     type: router
     value: ${CATEGORY}
     routes:
       "electronics": [electronics_router]
       "clothing": [clothing_handler]
 
-  - name: electronics_router
+  - id: electronics_router
     type: router
     value: ${SUBCATEGORY}
     routes:
       "phone": [phone_handler]
       "laptop": [laptop_handler]
 
-  - name: phone_handler
+  - id: phone_handler
     command: echo "Phone"
     output: RESULT
 
-  - name: laptop_handler
+  - id: laptop_handler
     command: echo "Laptop"
     output: RESULT
 
-  - name: clothing_handler
+  - id: clothing_handler
     command: echo "Clothing"
     output: RESULT
 ```
@@ -256,11 +256,11 @@ type: graph
 env:
   - TRIGGER: all
 steps:
-  - name: setup
+  - id: setup
     command: echo "Setup complete"
     output: SETUP
 
-  - name: router
+  - id: router
     type: router
     value: ${TRIGGER}
     routes:
@@ -268,25 +268,25 @@ steps:
     depends: [setup]
 
   # Three parallel branches
-  - name: branch_a
+  - id: branch_a
     command: echo "A:${SETUP}"
     output: OUT_A
 
-  - name: branch_b
+  - id: branch_b
     command: echo "B:${SETUP}"
     output: OUT_B
 
-  - name: branch_c
+  - id: branch_c
     command: echo "C:${SETUP}"
     output: OUT_C
 
   # Fan-in: aggregator waits for all branches
-  - name: aggregator
+  - id: aggregator
     command: echo "Aggregated"
     output: AGGREGATED
     depends: [branch_a, branch_b, branch_c]
 
-  - name: final
+  - id: final
     command: echo "Final"
     output: FINAL
     depends: [aggregator]
@@ -306,7 +306,7 @@ This creates a diamond pattern: `setup` → `router` → (`branch_a`, `branch_b`
 # INVALID - process_a is targeted by multiple routes
 type: graph
 steps:
-  - name: router
+  - id: router
     type: router
     value: ${MODE}
     routes:

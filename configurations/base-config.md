@@ -562,7 +562,7 @@ handler_on:
     command: echo "Sub-DAG specific failure handling"
 
 steps:
-  - name: process
+  - id: process
     command: ./process.sh
 ```
 

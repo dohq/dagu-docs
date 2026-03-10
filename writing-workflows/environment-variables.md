@@ -19,7 +19,7 @@ env:
   - LOG_DIR: ${HOME}/logs    # Reference system variable
 
 steps:
-  - name: deploy
+  - id: deploy
     env:
       - APP_ENV: staging     # Overrides DAG-level for this step only
     command: ./deploy.sh
@@ -170,16 +170,16 @@ env:
   - LOG_LEVEL: info
 
 steps:
-  - name: normal-processing
+  - id: normal_processing
     command: ./process.sh
     # Uses LOG_LEVEL=info from DAG-level
 
-  - name: debug-processing
+  - id: debug_processing
     env:
       - LOG_LEVEL: debug    # Overrides for this step only
     command: ./process.sh
 
-  - name: final-step
+  - id: final_step
     command: ./cleanup.sh
     # Uses LOG_LEVEL=info again (step-level doesn't persist)
 ```
@@ -188,7 +188,7 @@ Step-level variables support the same features as DAG-level:
 
 ```yaml
 steps:
-  - name: process-data
+  - id: process_data
     env:
       - INPUT_PATH: ${DATA_DIR}/input
       - TIMESTAMP: "`date +%Y%m%d_%H%M%S`"

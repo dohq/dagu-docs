@@ -47,7 +47,7 @@ description: "Perform basic arithmetic operations"
 params: "operation a b"
 
 steps:
-  - name: calculate
+  - id: calculate
     script: |
       case "$1" in
         multiply) echo $(($2 * $3)) ;;
@@ -103,7 +103,7 @@ steps:
 type: graph
 
 steps:
-  - name: setup
+  - id: setup
     type: chat
     llm:
       provider: openai
@@ -113,7 +113,7 @@ steps:
       - role: user
         content: "What is 2+2?"
 
-  - name: followup
+  - id: followup
     depends: [setup]
     type: chat
     llm:

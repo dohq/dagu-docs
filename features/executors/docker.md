@@ -66,7 +66,7 @@ Use the `container` field directly on a step for per-step container configuratio
 
 ```yaml
 steps:
-  - name: build
+  - id: build
     container:
       image: golang:1.22
       working_dir: /app
@@ -74,7 +74,7 @@ steps:
         - ./src:/app
     command: go build -o /app/bin/myapp
 
-  - name: test
+  - id: test
     container:
       image: golang:1.22
       working_dir: /app
@@ -92,12 +92,12 @@ Steps can also exec into existing containers:
 ```yaml
 steps:
   # String form
-  - name: run-migration
+  - id: run_migration
     container: my-database-container
     command: psql -c "SELECT 1"
 
   # Object form with overrides
-  - name: admin-task
+  - id: admin_task
     container:
       exec: my-app-container
       user: root
@@ -111,12 +111,12 @@ Combine exec and image modes in the same workflow:
 ```yaml
 steps:
   # Exec into existing app container
-  - name: prepare-app
+  - id: prepare_app
     container: my-app
     command: php artisan down
 
   # Run migrations in a fresh container
-  - name: migrate
+  - id: migrate
     container:
       image: my-app:latest
       volumes:
@@ -124,7 +124,7 @@ steps:
     command: php artisan migrate --force
 
   # Exec back into the app container
-  - name: restart-app
+  - id: restart_app
     container: my-app
     command: php artisan up
 ```
@@ -200,11 +200,11 @@ container:
   working_dir: /app
 
 steps:
-  - name: install
+  - id: install
     command: npm install
     # Uses DAG-level node:20 container
 
-  - name: deploy
+  - id: deploy
     container:
       image: google/cloud-sdk:latest  # Uses its own container
       env:
@@ -218,7 +218,7 @@ For advanced use cases, use `type: docker` with a `config` block. This provides 
 
 ```yaml
 steps:
-  - name: run-in-docker
+  - id: run_in_docker
     type: docker
     config:
       image: alpine:3
@@ -235,7 +235,7 @@ Pass Docker SDK configuration directly via `container`, `host`, and `network` fi
 
 ```yaml
 steps:
-  - name: with-resource-limits
+  - id: with_resource_limits
     type: docker
     config:
       image: alpine:3
@@ -347,7 +347,7 @@ Multiple commands share the same step configuration, including the container con
 
 ```yaml
 steps:
-  - name: build-and-test
+  - id: build_and_test
     container:
       image: node:20
       volumes:
@@ -402,14 +402,14 @@ Capture step output to variables or redirect to files:
 ```yaml
 steps:
   # Capture small output to variable
-  - name: get-version
+  - id: get_version
     container:
       image: alpine:3
     command: cat /etc/alpine-release
     output: ALPINE_VERSION
 
   # Redirect large output to file
-  - name: process-data
+  - id: process_data
     container:
       image: alpine:3
     command: tar -tvf /data/archive.tar
@@ -483,12 +483,12 @@ registry_auths:
     password: ${GITHUB_TOKEN}
 
 steps:
-  - name: process
+  - id: process
     container:
       image: myorg/processor:latest  # from Docker Hub
     command: process-data
 
-  - name: analyze
+  - id: analyze
     container:
       image: ghcr.io/myorg/analyzer:v2  # from GitHub
     command: analyze-results
@@ -530,13 +530,13 @@ container:
 
 ```yaml
 steps:
-  - name: build-amd64
+  - id: build_amd64
     container:
       image: golang:1.22
       platform: linux/amd64
     command: go build -o app-amd64
 
-  - name: build-arm64
+  - id: build_arm64
     container:
       image: golang:1.22
       platform: linux/arm64

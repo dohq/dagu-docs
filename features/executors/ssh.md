@@ -222,7 +222,7 @@ Multiple commands share the same step configuration:
 
 ```yaml
 steps:
-  - name: remote-checks
+  - id: remote_checks
     type: ssh
     config:
       user: deploy

@@ -6,7 +6,7 @@ Process and transform JSON data using jq.
 
 ```yaml
 steps:
-  - name: extract-field
+  - id: extract_field
     type: jq
     command: '.name'
     script: |
@@ -24,7 +24,7 @@ when you need jq's `-r` behavior (unquoted strings, numbers, booleans).
 
 ```yaml
 steps:
-  - name: list-addresses
+  - id: list_addresses
     type: jq
     config:
       raw: true
@@ -50,7 +50,7 @@ bob@example.com
 
 ```yaml
 steps:
-  - name: transform
+  - id: transform
     type: jq
     command: '{id: .user_id, name: (.first + " " + .last)}'
     script: |
@@ -61,7 +61,7 @@ steps:
 
 ```yaml
 steps:
-  - name: filter-active
+  - id: filter_active
     type: jq
     command: '.users[] | select(.active) | .email'
     script: |
@@ -78,14 +78,14 @@ steps:
 
 ```yaml
 steps:
-  - name: fetch-data
+  - id: fetch_data
     type: http
     config:
       silent: true
     command: GET https://api.example.com/products
     output: API_RESPONSE
 
-  - name: extract-in-stock
+  - id: extract_in_stock
     type: jq
     command: '.products | map(select(.inventory > 0) | {id, name, price})'
     script: ${API_RESPONSE}
@@ -96,7 +96,7 @@ steps:
 
 ```yaml
 steps:
-  - name: sales-by-category
+  - id: sales_by_category
     type: jq
     command: |
       group_by(.category) |

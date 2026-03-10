@@ -26,10 +26,10 @@ Apply execution caps at both the DAG and step level:
 timeout_sec: 600         # (Optional) Overall DAG timeout in seconds
 
 steps:
-  - name: quick-check
+  - id: quick_check
     command: curl -sf https://example.com/health
     timeout_sec: 30      # Kills this step after 30s (overrides DAG-level 600s)
-  - name: long-task
+  - id: long_task
     command: python long_task.py   # Inherits DAG-level 600s since no step timeout
 ```
 

@@ -24,16 +24,16 @@ Use `type: graph` when you need parallel execution or custom dependency relation
 ```yaml
 type: graph
 steps:
-  - name: download-a
+  - id: download_a
     command: wget https://example.com/a.zip
 
-  - name: download-b
+  - id: download_b
     command: wget https://example.com/b.zip
 
   - command: echo "Merging a.zip and b.zip"
     depends:
-      - command: download-a
-      - command: download-b
+      - command: download_a
+      - command: download_b
 ```
 
 ## Modular Workflows and Iteration Patterns
@@ -267,17 +267,17 @@ type: graph
 env:
   - STATUS: production
 steps:
-  - name: router
+  - id: router
     type: router
     value: ${STATUS}
     routes:
       "production": [prod_handler]
       "staging": [staging_handler]
 
-  - name: prod_handler
+  - id: prod_handler
     command: echo "Deploying to production"
 
-  - name: staging_handler
+  - id: staging_handler
     command: echo "Deploying to staging"
 ```
 
@@ -290,17 +290,17 @@ type: graph
 env:
   - INPUT: apple_pie
 steps:
-  - name: router
+  - id: router
     type: router
     value: ${INPUT}
     routes:
       "re:^apple.*": [apple_handler]
       "re:^banana.*": [banana_handler]
 
-  - name: apple_handler
+  - id: apple_handler
     command: echo "Apple route"
 
-  - name: banana_handler
+  - id: banana_handler
     command: echo "Banana route"
 ```
 
@@ -313,17 +313,17 @@ type: graph
 env:
   - INPUT: unknown_value
 steps:
-  - name: router
+  - id: router
     type: router
     value: ${INPUT}
     routes:
       "specific": [specific_handler]
       "re:.*": [default_handler]
 
-  - name: specific_handler
+  - id: specific_handler
     command: echo "Specific route"
 
-  - name: default_handler
+  - id: default_handler
     command: echo "Default route"
 ```
 
@@ -336,16 +336,16 @@ type: graph
 env:
   - INPUT: trigger
 steps:
-  - name: router
+  - id: router
     type: router
     value: ${INPUT}
     routes:
       "trigger": [step_a, step_b]
 
-  - name: step_a
+  - id: step_a
     command: echo "Step A"
 
-  - name: step_b
+  - id: step_b
     command: echo "Step B"
 ```
 
@@ -356,11 +356,11 @@ Use a previous step's output as the router value:
 ```yaml
 type: graph
 steps:
-  - name: check_status
+  - id: check_status
     command: echo "success"
     output: STATUS
 
-  - name: router
+  - id: router
     type: router
     value: ${STATUS}
     routes:
@@ -368,10 +368,10 @@ steps:
       "failure": [failure_handler]
     depends: [check_status]
 
-  - name: success_handler
+  - id: success_handler
     command: echo "Handling success"
 
-  - name: failure_handler
+  - id: failure_handler
     command: echo "Handling failure"
 ```
 
@@ -385,27 +385,27 @@ env:
   - CATEGORY: electronics
   - SUBCATEGORY: phone
 steps:
-  - name: category_router
+  - id: category_router
     type: router
     value: ${CATEGORY}
     routes:
       "electronics": [electronics_router]
       "clothing": [clothing_handler]
 
-  - name: electronics_router
+  - id: electronics_router
     type: router
     value: ${SUBCATEGORY}
     routes:
       "phone": [phone_handler]
       "laptop": [laptop_handler]
 
-  - name: phone_handler
+  - id: phone_handler
     command: echo "Phone"
 
-  - name: laptop_handler
+  - id: laptop_handler
     command: echo "Laptop"
 
-  - name: clothing_handler
+  - id: clothing_handler
     command: echo "Clothing"
 ```
 

@@ -384,7 +384,7 @@ steps:
 type: graph
 
 steps:
-  - name: draft
+  - id: draft
     type: agent
     messages:
       - role: user
@@ -393,7 +393,7 @@ steps:
     approval:
       prompt: "Review the migration plan and approve if acceptable"
 
-  - name: execute
+  - id: execute
     type: agent
     agent:
       safe_mode: true

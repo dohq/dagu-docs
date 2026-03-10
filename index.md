@@ -110,17 +110,17 @@ schedule: "0 2 * * *"
 type: graph
 
 steps:
-  - name: build
+  - id: build
     command: make build
 
-  - name: test
+  - id: test
     command: make test
     depends: build
     retry_policy:
       limit: 3
       interval_sec: 10
 
-  - name: deploy
+  - id: deploy
     type: ssh
     config:
       host: prod-server
@@ -139,7 +139,7 @@ handler_on:
 ```yaml
 type: graph
 steps:
-  - name: analyze
+  - id: analyze
     type: agent
     messages:
       - role: user
@@ -148,7 +148,7 @@ steps:
     approval:
       prompt: "Review AI analysis before applying"
 
-  - name: apply
+  - id: apply
     command: ./apply-fix.sh "${ANALYSIS}"
     depends: [analyze]
 ```

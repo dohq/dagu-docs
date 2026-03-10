@@ -42,19 +42,19 @@ The `output` field supports both string and object forms:
 ```yaml
 steps:
   # Simple string form
-  - name: get-version
+  - id: get_version
     command: cat VERSION
     output: VERSION
 
   # Object form with custom key
-  - name: get-count
+  - id: get_count
     command: echo "42"
     output:
       name: TOTAL_COUNT
       key: totalItems  # Custom key in outputs.json (default: camelCase)
 
   # Object form with omit
-  - name: internal-step
+  - id: internal_step
     command: echo "processing"
     output:
       name: TEMP
@@ -73,21 +73,21 @@ Each step can have one output variable:
 ```yaml
 type: graph
 steps:
-  - name: count-users
+  - id: count_users
     command: wc -l < users.txt
     output: USER_COUNT
 
-  - name: count-orders
+  - id: count_orders
     command: wc -l < orders.txt
     output: ORDER_COUNT
 
-  - name: report
+  - id: report
     command: |
       echo "Users: ${USER_COUNT}"
       echo "Orders: ${ORDER_COUNT}"
     depends:
-      - command: count-users
-      - command: count-orders
+      - count_users
+      - count_orders
 ```
 
 ## JSON Path References

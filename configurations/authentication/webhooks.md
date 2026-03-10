@@ -95,7 +95,7 @@ In your DAG, access the payload fields directly using Dagu's JSON field access s
 
 ```yaml
 steps:
-  - name: process-webhook
+  - id: process_webhook
     command: echo "Building branch ${WEBHOOK_PAYLOAD.branch} at commit ${WEBHOOK_PAYLOAD.commit}"
 ```
 
@@ -103,7 +103,7 @@ You can also access nested fields:
 
 ```yaml
 steps:
-  - name: process-webhook
+  - id: process_webhook
     command: |
       echo "Repository: ${WEBHOOK_PAYLOAD.repository.name}"
       echo "Author: ${WEBHOOK_PAYLOAD.commits.0.author.name}"
@@ -298,13 +298,13 @@ Create a Slack slash command that triggers a DAG:
 ```yaml
 # DAG: slack-command.yaml
 steps:
-  - name: log-request
+  - id: log_request
     command: echo "User ${WEBHOOK_PAYLOAD.user_name} requested: ${WEBHOOK_PAYLOAD.text}"
 
-  - name: execute-action
+  - id: execute_action
     command: ./scripts/handle-slack-command.sh "${WEBHOOK_PAYLOAD.text}"
     depends:
-      - log-request
+      - log_request
 ```
 
 ### Custom Integrations
