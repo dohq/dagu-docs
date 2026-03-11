@@ -108,7 +108,7 @@ All soul endpoints require admin role.
 
 ## Git Sync
 
-Soul files are synced via [Git Sync](/features/git-sync) with kind `soul`. Full conflict detection, publish, and discard operations are supported.
+Soul files are synced via [Git Sync](/server-admin/git-sync) with kind `soul`. Full conflict detection, publish, and discard operations are supported.
 
 ## Example: Creating a Custom Soul
 
@@ -144,4 +144,4 @@ Then select it from Agent Settings or via the API.
 
 - [Agent Overview](/features/agent/) — Chat interface and configuration
 - [Agent Step](/features/agent/step) — Using souls in DAG agent steps
-- [Git Sync](/features/git-sync) — Synchronizing soul files with Git
+- [Git Sync](/server-admin/git-sync) — Synchronizing soul files with Git

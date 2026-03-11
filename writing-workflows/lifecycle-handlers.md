@@ -120,7 +120,7 @@ handler_on:
 
 ### Notify on Wait (Approval)
 
-When using [approval steps](/features/approval), notify stakeholders:
+When using [approval steps](/writing-workflows/approval), notify stakeholders:
 
 ```yaml
 handler_on:
@@ -138,4 +138,4 @@ steps:
 
 The `DAG_WAITING_STEPS` environment variable contains a comma-separated list of step names currently waiting for approval.
 
-For the complete schema, refer to the [YAML specification](/reference/yaml#lifecycle-handlers). Combine handlers with the techniques from [Error Handling](/writing-workflows/error-handling) and [Data & Variables](/writing-workflows/data-variables) to build robust workflow lifecycles.
+For the complete schema, refer to the [YAML specification](/writing-workflows/yaml-specification#lifecycle-handlers). Combine handlers with the techniques from [Error Handling](/writing-workflows/error-handling) and [Data & Variables](/writing-workflows/data-variables) to build robust workflow lifecycles.

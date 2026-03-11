@@ -71,7 +71,7 @@ docker run -d \
   dagu start-all
 ```
 
-Visit http://localhost:8080. See [Docker Images](/configurations/deployment/docker-images) for available tags and variants.
+Visit http://localhost:8080. See [Docker Images](/server-admin/deployment/docker-images) for available tags and variants.
 
 ## Package Managers
 
@@ -220,5 +220,5 @@ dagu version
 ## Next Steps
 
 - [Quick Start](/getting-started/quickstart) - Create your first workflow
-- [Configuration](/configurations/) - Customize Dagu
+- [Configuration](/server-admin/) - Customize Dagu
 - [Web UI](/overview/web-ui) - Explore the interface

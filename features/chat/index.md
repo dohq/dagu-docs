@@ -154,4 +154,4 @@ Both steps inherit the DAG-level LLM configuration.
 - [Basic Chat](/features/chat/basics) - Complete reference for simple LLM sessions
 - [Tool Calling](/features/chat/tool-calling) - Build AI agents with DAG-based tools
 - [Secrets](/writing-workflows/secrets) - Secure handling of API keys
-- [Variables](/reference/variables) - Dynamic content in messages
+- [Variables](/writing-workflows/template-variables) - Dynamic content in messages

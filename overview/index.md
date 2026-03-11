@@ -143,7 +143,7 @@ See [Architecture](/overview/architecture) for details.
 | `mail` | Email notifications with attachments |
 | `dag` | Sub-workflow execution (hierarchical composition) |
 
-See [Step Types Reference](/reference/executors) for configuration details.
+See [Step Types Reference](/step-types/shell) for configuration details.
 
 ## Demo
 

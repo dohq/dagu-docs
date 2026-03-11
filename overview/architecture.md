@@ -41,7 +41,7 @@ Dagu follows a simple philosophy: **do one thing well with minimal dependencies*
 - Consumes queued DAG runs and executes them
 - Supports high availability through directory-based locking
 - Automatic failover when primary scheduler fails
-- See [Scheduling](/features/scheduling) for details
+- See [Scheduling](/writing-workflows/scheduling) for details
 
 ### 3. Agent
 - Manages complete lifecycle of a single DAG run
@@ -243,4 +243,4 @@ dagu worker --worker.labels region=us-east-1 --worker.coordinator-host=coordinat
   - **Shared Filesystem**: Workers write status and logs directly to shared storage (NFS, EFS, Azure Files)
   - **Shared Nothing**: Workers send status and logs to the coordinator via gRPC (no shared storage required)
 
-See [Workers](/features/workers/) for detailed deployment documentation.
+See [Workers](/server-admin/distributed/workers/) for detailed deployment documentation.

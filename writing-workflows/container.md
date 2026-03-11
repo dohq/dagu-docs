@@ -523,5 +523,5 @@ Note: When a DAG‑level `container:` is set, step-level `container` fields are 
 
 ## See Also
 
-- [Docker Executor](/features/executors/docker) - Step-level container execution
-- [Registry Authentication](/features/executors/docker#registry-authentication) - Private registry setup
+- [Docker Executor](/step-types/docker) - Step-level container execution
+- [Registry Authentication](/step-types/docker#registry-authentication) - Private registry setup

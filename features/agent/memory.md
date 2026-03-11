@@ -94,10 +94,10 @@ All memory endpoints require admin role.
 
 ## Git Sync
 
-Memory files are synced via [Git Sync](/features/git-sync) with kind `memory`. Full conflict detection, publish, and discard operations are supported.
+Memory files are synced via [Git Sync](/server-admin/git-sync) with kind `memory`. Full conflict detection, publish, and discard operations are supported.
 
 ## See Also
 
 - [Agent Overview](/features/agent/) — Chat interface and configuration
 - [Agent Step](/features/agent/step) — Using memory in DAG agent steps
-- [Git Sync](/features/git-sync) — Synchronizing memory files with Git
+- [Git Sync](/server-admin/git-sync) — Synchronizing memory files with Git

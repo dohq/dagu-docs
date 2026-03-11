@@ -6,7 +6,7 @@ Agent steps work with `schedule` like any other step type. Add a `schedule` fiel
 
 - The scheduler must be running (`dagu scheduler` or `dagu start-all`)
 - An agent model must be configured in Agent Settings (`/settings/agent`)
-- See [Scheduling](/features/scheduling) for cron syntax and scheduler setup
+- See [Scheduling](/writing-workflows/scheduling) for cron syntax and scheduler setup
 - See [Agent Step](/features/agent/step) for agent configuration
 
 ## Basic Example
@@ -225,7 +225,7 @@ The `check_infra` and `check_app` steps run in parallel. The `summarize` step wa
 
 ## See Also
 
-- [Scheduling](/features/scheduling) — Cron syntax, catchup, overlap policy, queue management
+- [Scheduling](/writing-workflows/scheduling) — Cron syntax, catchup, overlap policy, queue management
 - [Agent Step](/features/agent/step) — Agent configuration, tools, bash policy, output capture
 - [Tools Reference](/features/agent/tools) — Full parameter documentation for each tool
 - [Memory](/features/agent/memory) — Persistent agent memory across sessions

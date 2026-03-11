@@ -27,9 +27,9 @@ Credentials: `demouser` / `demouser`
 ## Why Dagu?
 
 - **Single binary** - No database, message broker, or external services. [Architecture](/overview/architecture)
-- **Declarative YAML** - Define workflows without code. [YAML Reference](/reference/yaml)
+- **Declarative YAML** - Define workflows without code. [YAML Reference](/writing-workflows/yaml-specification)
 - **Composable** - Nest sub-workflows with parameters. [Control Flow](/writing-workflows/control-flow)
-- **Distributed** - Route tasks to workers via labels. [Distributed Execution](/features/distributed-execution)
+- **Distributed** - Route tasks to workers via labels. [Distributed Execution](/server-admin/distributed/)
 - **AI Agent** - Built-in LLM-powered assistant with tools, memory, and configurable personalities. [AI Agent](/features/agent/)
 - **Production-ready** - Retries, hooks, metrics, RBAC. [Error Handling](/writing-workflows/error-handling)
 
@@ -94,12 +94,12 @@ Visit [http://localhost:8080](http://localhost:8080)
 | Capability | Description |
 |------------|-------------|
 | [**Nested Workflows**](/writing-workflows/control-flow#nested-workflows) | Reusable sub-DAGs with full execution lineage tracking |
-| [**Distributed Execution**](/features/distributed-execution) | Label-based worker routing with automatic service discovery |
+| [**Distributed Execution**](/server-admin/distributed/) | Label-based worker routing with automatic service discovery |
 | [**Error Handling**](/writing-workflows/error-handling) | Exponential backoff retries, lifecycle hooks, continue-on-failure |
-| [**Step Types**](/reference/executors) | Shell, Docker, SSH, HTTP, JQ, Mail, and more |
-| [**Observability**](/features/opentelemetry) | Live logs, Gantt charts, [Prometheus metrics](/features/prometheus-metrics), OpenTelemetry |
+| [**Step Types**](/step-types/shell) | Shell, Docker, SSH, HTTP, JQ, Mail, and more |
+| [**Observability**](/server-admin/opentelemetry) | Live logs, Gantt charts, [Prometheus metrics](/server-admin/prometheus-metrics), OpenTelemetry |
 | [**AI Agent**](/features/agent/) | Built-in LLM assistant with tool calling, persistent memory, and souls |
-| [**Security**](/configurations/authentication) | Built-in RBAC (Pro) with admin, manager, operator, and viewer roles |
+| [**Security**](/server-admin/authentication/) | Built-in RBAC (Pro) with admin, manager, operator, and viewer roles |
 
 ## Examples
 
@@ -181,7 +181,7 @@ See [Examples](/writing-workflows/examples) for more patterns.
     <p>Complete workflow authoring guide</p>
   </div>
   <div class="step-card">
-    <h3><a href="/reference/yaml">YAML Reference</a></h3>
+    <h3><a href="/writing-workflows/yaml-specification">YAML Reference</a></h3>
     <p>All configuration options</p>
   </div>
   <div class="step-card">
@@ -189,11 +189,11 @@ See [Examples](/writing-workflows/examples) for more patterns.
     <p>Chat, tools, memory, and souls</p>
   </div>
   <div class="step-card">
-    <h3><a href="/features/">Features</a></h3>
-    <p>Scheduling, queues, distributed execution</p>
+    <h3><a href="/step-types/shell">Step Types</a></h3>
+    <p>Shell, Docker, SSH, HTTP, SQL, Redis, and more</p>
   </div>
   <div class="step-card">
-    <h3><a href="/configurations/">Configuration</a></h3>
+    <h3><a href="/server-admin/">Configuration</a></h3>
     <p>Server, authentication, operations</p>
   </div>
 </div>

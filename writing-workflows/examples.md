@@ -60,7 +60,7 @@ graph TD
     style E stroke:green,stroke-width:1.6px,color:#333
 ```
 
-<a href="/features/execution-control#parallel" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/execution-control#parallel" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -393,7 +393,7 @@ flowchart TD
     style E stroke:lightblue,stroke-width:1.6px,color:#333
 ```
 
-<a href="/features/executors/router" class="learn-more">Learn more →</a>
+<a href="/step-types/router" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -437,7 +437,7 @@ flowchart TD
     style E stroke:lightblue,stroke-width:1.6px,color:#333
 ```
 
-<a href="/features/executors/router#routing-based-on-step-output" class="learn-more">Learn more →</a>
+<a href="/step-types/router#routing-based-on-step-output" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -473,7 +473,7 @@ stateDiagram-v2
   class Failed fail
 ```
 
-<a href="/reference/continue-on" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/continue-on" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -514,7 +514,7 @@ graph TD
     style G stroke:lightblue,stroke-width:1.6px,color:#333
 ```
 
-<a href="/features/executors/dag" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/control-flow#nested-workflows" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -594,7 +594,7 @@ flowchart LR
   style TE,EE stroke:green,stroke-width:1.6px,color:#333
 ```
 
-<a href="/features/distributed-execution" class="learn-more">Learn more →</a>
+<a href="/server-admin/distributed/" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -622,7 +622,7 @@ steps:
   - command: python gpu_process.py
 ```
 
-<a href="/features/distributed-execution#task-routing" class="learn-more">Learn more →</a>
+<a href="/server-admin/distributed/#task-routing" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -642,7 +642,7 @@ steps:
 
 Use `worker_selector: local` as an escape hatch in distributed deployments for lightweight DAGs that should never leave the main instance.
 
-<a href="/features/distributed-execution#force-local-execution" class="learn-more">Learn more →</a>
+<a href="/server-admin/distributed/#force-local-execution" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -685,7 +685,7 @@ graph TD
   style C1,C2,Cn stroke:lime,stroke-width:1.6px,color:#333
 ```
 
-<a href="/features/execution-control#parallel" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/execution-control#parallel" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1009,7 +1009,7 @@ graph TD
   style E stroke:green,stroke-width:1.6px,color:#333
 ```
 
-<a href="/features/execution-control#parallel" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/execution-control#parallel" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1026,7 +1026,7 @@ steps:
       echo "Log: ${DAG_RUN_LOG_FILE}"
 ```
 
-<a href="/reference/variables#special-environment-variables" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/template-variables#special-environment-variables" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1254,7 +1254,7 @@ steps:
       jq --version
 ```
 
-<a href="/features/executors/shell#nix-shell" class="learn-more">Learn more →</a>
+<a href="/step-types/shell#nix-shell" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1283,7 +1283,7 @@ steps:
   - command: python setup.py build
 ```
 
-<a href="/reference/yaml#container-configuration" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/yaml-specification#container-configuration" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1309,7 +1309,7 @@ steps:
       interval_sec: 2
 ```
 
-<a href="/reference/yaml#container-configuration" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/yaml-specification#container-configuration" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1328,7 +1328,7 @@ steps:
     command: npm run build
 ```
 
-<a href="/features/executors/docker" class="learn-more">Learn more →</a>
+<a href="/step-types/docker" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1394,7 +1394,7 @@ steps:
     command: php artisan up
 ```
 
-<a href="/features/executors/docker#mixed-mode-example" class="learn-more">Learn more →</a>
+<a href="/step-types/docker#mixed-mode-example" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1418,7 +1418,7 @@ steps:
       token: "${GITHUB_TOKEN}"
 ```
 
-<a href="/features/executors/github-actions" class="learn-more">Learn more →</a>
+<a href="/step-types/github-actions" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1438,7 +1438,7 @@ steps:
   - command: systemctl restart myapp
 ```
 
-<a href="/features/executors/ssh" class="learn-more">Learn more →</a>
+<a href="/step-types/ssh" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1457,7 +1457,7 @@ steps:
   - command: python process.py
 ```
 
-<a href="/reference/yaml#working-directory-and-volume-resolution" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/yaml-specification#working-directory-and-volume-resolution" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1476,7 +1476,7 @@ steps:
     
 ```
 
-<a href="/features/executors/http" class="learn-more">Learn more →</a>
+<a href="/step-types/http" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1499,7 +1499,7 @@ steps:
     script: ${API_RESPONSE}
 ```
 
-<a href="/features/executors/jq" class="learn-more">Learn more →</a>
+<a href="/step-types/jq" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1518,7 +1518,7 @@ steps:
     command: extract
 ```
 
-<a href="/features/executors/archive" class="learn-more">Learn more →</a>
+<a href="/step-types/archive" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1573,7 +1573,7 @@ steps:
   - command: ./app
 ```
 
-<a href="/features/executors/docker#registry-authentication" class="learn-more">Learn more →</a>
+<a href="/step-types/docker#registry-authentication" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1637,7 +1637,7 @@ steps:
   - command: systemctl status myapp
 ```
 
-<a href="/reference/yaml#ssh-configuration" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/yaml-specification#ssh-configuration" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1670,7 +1670,7 @@ flowchart LR
   style M stroke:green,stroke-width:1.6px,color:#333
 ```
 
-<a href="/features/executors/mail" class="learn-more">Learn more →</a>
+<a href="/step-types/mail" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1786,7 +1786,7 @@ steps:
   - command: echo "Running scheduled job"
 ```
 
-<a href="/features/scheduling" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/scheduling" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1803,7 +1803,7 @@ steps:
   - command: echo "Loading data"
 ```
 
-<a href="/features/scheduling#skip-redundant" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/scheduling#skip-redundant" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1817,7 +1817,7 @@ steps:
   - command: echo "Processing data"
 ```
 
-<a href="/features/queues" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/queues" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1833,7 +1833,7 @@ steps:
   - command: echo "Run on multiple times"
 ```
 
-<a href="/features/scheduling#multiple-schedules" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/scheduling#multiple-schedules" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1847,7 +1847,7 @@ steps:
   - command: echo "9AM New York"
 ```
 
-<a href="/features/scheduling#timezone-support" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/scheduling#timezone-support" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1865,7 +1865,7 @@ steps:
   - command: echo "Long-running service"
 ```
 
-<a href="/features/scheduling#restart-schedule" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/scheduling#restart-schedule" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1891,7 +1891,7 @@ steps:
 
 Configure queues globally and assign DAGs using the `queue` field.
 
-<a href="/features/queues#advanced" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/queues#advanced" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1913,7 +1913,7 @@ steps:
     mail_on_error: true
 ```
 
-<a href="/features/email-notifications" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/email-notifications" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1937,7 +1937,7 @@ steps:
 
 Control how long execution history is retained.
 
-<a href="/reference/yaml#data-fields" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/yaml-specification#data-fields" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1953,7 +1953,7 @@ steps:
   - command: tail -n 1000 /logs/analysis.out
 ```
 
-<a href="/reference/yaml#data-fields" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/yaml-specification#data-fields" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1974,7 +1974,7 @@ steps:
 
 Organize logs in custom directories with retention.
 
-<a href="/reference/yaml#data-fields" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/yaml-specification#data-fields" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -1993,7 +1993,7 @@ handler_on:
     command: echo "Cleaning up resources"
 ```
 
-<a href="/reference/yaml#execution-control-fields" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/yaml-specification#execution-control-fields" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -2028,7 +2028,7 @@ steps:
       interval_sec: 30
 ```
 
-<a href="/reference/yaml" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/yaml-specification" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -2051,7 +2051,7 @@ steps:
 
 Enable OpenTelemetry tracing for observability.
 
-<a href="/features/opentelemetry" class="learn-more">Learn more →</a>
+<a href="/server-admin/opentelemetry" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -2079,7 +2079,7 @@ steps:
     depends: validate
 ```
 
-<a href="/reference/yaml#execution-control-fields" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/yaml-specification#execution-control-fields" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -2095,7 +2095,7 @@ steps:
   - command: echo "Storing results"
 ```
 
-<a href="/features/queues" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/queues" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -2109,7 +2109,7 @@ steps:
   - command: echo "Running periodic maintenance"
 ```
 
-<a href="/features/queues" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/queues" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -2127,7 +2127,7 @@ params:
   - VERSION: 1.0.0
 ```
 
-<a href="/reference/yaml#runconfig" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/yaml-specification#runconfig" class="learn-more">Learn more →</a>
 
 </div>
 
@@ -2167,7 +2167,7 @@ steps:
     command: echo "Validating environment: ${ENVIRONMENT}"
 ```
 
-<a href="/reference/yaml" class="learn-more">Learn more →</a>
+<a href="/writing-workflows/yaml-specification" class="learn-more">Learn more →</a>
 
 </div>
 

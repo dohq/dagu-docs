@@ -408,7 +408,7 @@ steps:
 - [Agent Overview](/features/agent/) — Web UI agent with sessions and interactive tools
 - [Tools Reference](/features/agent/tools) — Full parameter documentation for each tool
 - [Chat & AI Agents](/features/chat/) — `type: chat` for simple LLM calls with DAG-based tools
-- [Approval](/features/approval) — Human approval gates
+- [Approval](/writing-workflows/approval) — Human approval gates
 - [Scheduled Agents](/features/agent/scheduling) — Running agent steps on a cron schedule
 - [Nested Agents](/features/agent/nesting) — Compose agent workflows hierarchically via sub-DAGs
-- [Data Flow](/features/data-flow) — Passing data between steps with `output`
+- [Data Flow](/writing-workflows/data-flow) — Passing data between steps with `output`

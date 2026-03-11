@@ -123,7 +123,7 @@ steps:
         - command: "re:INFORMATIONAL:"
 ```
 
-See the [Continue On Reference](/reference/continue-on) for complete documentation.
+See the [Continue On Reference](/writing-workflows/continue-on) for complete documentation.
 
 ## Lifecycle Handlers
 

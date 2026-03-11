@@ -17,7 +17,7 @@ The `defaults` block accepts the following fields:
 | `env` | array/object | Environment variables added to each step |
 | `preconditions` | array | Preconditions added to each step |
 
-See [YAML Specification - Step Defaults](/reference/yaml#step-defaults) for the field reference.
+See [YAML Specification - Step Defaults](/writing-workflows/yaml-specification#step-defaults) for the field reference.
 
 ## Merge Rules
 
@@ -196,10 +196,10 @@ steps:
 
 ## Interaction with Base Configuration
 
-The `defaults` field is a DAG-level field. When set in [base configuration](/configurations/base-config), it is inherited by all DAGs. A DAG-level `defaults` overrides the base configuration's `defaults` (standard merge behavior — the DAG value wins).
+The `defaults` field is a DAG-level field. When set in [base configuration](/server-admin/base-config), it is inherited by all DAGs. A DAG-level `defaults` overrides the base configuration's `defaults` (standard merge behavior — the DAG value wins).
 
 ## See Also
 
-- [YAML Specification - Step Defaults](/reference/yaml#step-defaults) — Field reference
+- [YAML Specification - Step Defaults](/writing-workflows/yaml-specification#step-defaults) — Field reference
 - [Error Handling](/writing-workflows/error-handling) — `retry_policy`, `continue_on` usage
-- [Base Configuration](/configurations/base-config) — Shared defaults across all DAGs
+- [Base Configuration](/server-admin/base-config) — Shared defaults across all DAGs

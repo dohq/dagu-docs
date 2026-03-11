@@ -620,7 +620,7 @@ steps:
       skipped: true  # Continue if precondition not met
 ```
 
-See the [Continue On Reference](/reference/continue-on) for complete documentation.
+See the [Continue On Reference](/writing-workflows/continue-on) for complete documentation.
 
 ## DAG-Level Conditions
 

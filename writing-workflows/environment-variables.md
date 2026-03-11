@@ -247,7 +247,7 @@ To use literal backticks without command substitution:
 command: echo "Literal backtick: \`not a command\`"
 ```
 
-For JSON path access and step output references, see [Variables Reference](/reference/variables).
+For JSON path access and step output references, see [Variables Reference](/writing-workflows/template-variables).
 
 ## Precedence Summary
 
@@ -263,7 +263,7 @@ When the same variable is defined at multiple levels, the highest-precedence val
 | Base config `env:` | ↑ | Shared configuration |
 | System environment | Lowest | Filtered OS variables |
 
-For detailed precedence rules, see [Variables Reference - Precedence](/reference/variables#variable-precedence).
+For detailed precedence rules, see [Variables Reference - Precedence](/writing-workflows/template-variables#variable-precedence).
 
 ## Security Considerations
 
@@ -304,6 +304,6 @@ steps:
 ## See Also
 
 - [Data & Variables](/writing-workflows/data-variables) - Complete data handling guide
-- [Variables Reference](/reference/variables) - Full variable syntax reference
-- [Special Environment Variables](/reference/special-environment-variables) - Built-in DAG_* variables
+- [Variables Reference](/writing-workflows/template-variables) - Full variable syntax reference
+- [Special Environment Variables](/writing-workflows/runtime-variables) - Built-in DAG_* variables
 - [Secrets](/writing-workflows/secrets) - Secure secret management

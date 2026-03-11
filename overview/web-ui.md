@@ -16,7 +16,7 @@ Dagu includes a modern, responsive web UI that provides:
 - Audit logging for security events
 
 ::: tip Configuration
-For Web UI configuration options, see [Configuration Reference](/reference/config#ui-configuration).
+For Web UI configuration options, see [Configuration Reference](/server-admin/reference#ui-configuration).
 :::
 
 ## Accessing the UI
@@ -151,7 +151,7 @@ View execution history from the command line with `dagu history`:
 - Faster for scripting and automation
 - Export to JSON for analysis: `dagu history --format json`
 - Advanced filtering: `dagu history --status failed --last 7d --tags prod`
-- See [CLI Reference](/reference/cli#history) for details
+- See [CLI Reference](/getting-started/cli#history) for details
 :::
 
 ## Execution Log
@@ -279,7 +279,7 @@ The Cockpit page (`/cockpit`) provides a workspace-scoped kanban board for monit
 
 Workspaces organize DAG runs using `workspace=<name>` tags. The workspace selector lets you create, switch, and delete workspaces. A template selector lets you browse DAG definitions, preview them in a side panel, and enqueue runs with the workspace tag automatically injected.
 
-See [Cockpit](/features/cockpit) for full details.
+See [Cockpit](/web-ui/cockpit) for full details.
 
 ## Terminal
 
@@ -338,7 +338,7 @@ Or via environment variable:
 export DAGU_AUDIT_ENABLED=false
 ```
 
-See [Audit Logging Configuration](/configurations/server#audit-logging) for more details.
+See [Audit Logging Configuration](/server-admin/server#audit-logging) for more details.
 
 ## UI Customization
 
@@ -399,7 +399,7 @@ cors:
 ## See Also
 
 - [Learn the REST API](/overview/api) for automation
-- [Configure authentication](/configurations/server#authentication) for security
-- [Configure terminal access](/configurations/server#terminal) for shell access
-- [Configure audit logging](/configurations/server#audit-logging) for security monitoring
-- [Set up monitoring](/configurations/operations#monitoring) for production
+- [Configure authentication](/server-admin/server#authentication) for security
+- [Configure terminal access](/server-admin/server#terminal) for shell access
+- [Configure audit logging](/server-admin/server#audit-logging) for security monitoring
+- [Set up monitoring](/server-admin/operations#monitoring) for production

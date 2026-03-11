@@ -59,7 +59,7 @@ steps:
 
 Configuration precedence: System defaults → Base config → DAG config
 
-See [Base Configuration](/configurations/base-config) for complete documentation on all available fields.
+See [Base Configuration](/server-admin/base-config) for complete documentation on all available fields.
 
 ## Guide Sections
 

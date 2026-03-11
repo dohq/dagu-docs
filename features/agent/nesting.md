@@ -17,7 +17,7 @@ Use the `call` field to invoke child DAGs that contain `type: agent` steps. This
 
 - A default model must be configured in Agent Settings (`/settings/agent`), or each agent step must specify `agent.model`
 - Familiarity with [Agent Step](/features/agent/step) configuration
-- Familiarity with [Nested Workflows](/writing-workflows/control-flow#nested-workflows) and [Sub DAG Outputs](/features/data-flow#sub-dag-outputs)
+- Familiarity with [Nested Workflows](/writing-workflows/control-flow#nested-workflows) and [Sub DAG Outputs](/writing-workflows/data-flow#sub-dag-outputs)
 
 ## Basic Example
 
@@ -367,6 +367,6 @@ steps:
 
 - [Agent Step](/features/agent/step) — Agent step configuration and tools
 - [Nested Workflows](/writing-workflows/control-flow#nested-workflows) — General sub-DAG usage
-- [Sub DAG Outputs](/features/data-flow#sub-dag-outputs) — Output structure and access patterns
-- [Parallel Execution Outputs](/features/data-flow#parallel-execution-outputs) — Parallel output aggregation
+- [Sub DAG Outputs](/writing-workflows/data-flow#sub-dag-outputs) — Output structure and access patterns
+- [Parallel Execution Outputs](/writing-workflows/data-flow#parallel-execution-outputs) — Parallel output aggregation
 - [Scheduled Agents](/features/agent/scheduling) — Running agent steps on a cron schedule

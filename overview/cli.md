@@ -5,7 +5,7 @@
 The Dagu CLI provides all the necessary commands to manage and execute DAGs (workflows) directly from the terminal. It allows you to start, stop, retry, and monitor workflows, as well as manage the underlying scheduler and web server.
 
 ::: tip Complete Reference
-For the full CLI command reference, see [CLI Commands Reference](/reference/cli).
+For the full CLI command reference, see [CLI Commands Reference](/getting-started/cli).
 :::
 
 ## Basic Usage
@@ -136,7 +136,7 @@ dagu history --tags "prod,critical"
 - Output: table (default), JSON, or CSV
 - Run IDs never truncated
 
-See [`history` reference](/reference/cli#history) for all options.
+See [`history` reference](/getting-started/cli#history) for all options.
 
 ### Testing and Validation
 
@@ -253,7 +253,7 @@ dagu ai install
 dagu ai install --yes
 ```
 
-Supported tools: Claude Code, Codex, OpenCode, Gemini CLI, Copilot CLI. See [`ai install` reference](/reference/cli#ai-install) for detection logic and install paths.
+Supported tools: Claude Code, Codex, OpenCode, Gemini CLI, Copilot CLI. See [`ai install` reference](/getting-started/cli#ai-install) for detection logic and install paths.
 
 ## Advanced Usage
 
@@ -313,4 +313,4 @@ dagu start my-workflow.yaml -- param1 KEY=value param2
 - [Explore the REST API](/overview/api) for programmatic access
 - [Set up the Web UI](/overview/web-ui) for visual monitoring
 - [Learn workflow syntax](/writing-workflows/) to build complex DAGs
-- [Configure distributed execution](/features/distributed-execution) for scaling workflows
+- [Configure distributed execution](/server-admin/distributed/) for scaling workflows

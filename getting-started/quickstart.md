@@ -57,7 +57,7 @@ dagu ai install --yes
 
 After installation, your AI coding tool can generate, edit, and debug Dagu DAG definitions with knowledge of the full YAML schema, all 18+ executor types, CLI commands, and common pitfalls.
 
-See [`dagu ai install`](/reference/cli#ai-install) for details on detection logic and install locations.
+See [`dagu ai install`](/getting-started/cli#ai-install) for details on detection logic and install locations.
 
 ## Your First Workflow
 
@@ -185,7 +185,7 @@ The history command shows:
 - Duration
 - Parameters
 
-For more filtering options, see the [CLI reference](/reference/cli#history).
+For more filtering options, see the [CLI reference](/getting-started/cli#history).
 
 ### 5. View in the UI
 
@@ -314,4 +314,4 @@ The workflow will execute every day at 2 AM.
 - [Core Concepts](/getting-started/concepts) - Understand Dagu's architecture
 - [Writing Workflows](/writing-workflows/) - Learn advanced features
 - [Examples](/writing-workflows/examples) - Ready-to-use workflow patterns
-- [CLI Reference](/reference/cli) - All command options
+- [CLI Reference](/getting-started/cli) - All command options
