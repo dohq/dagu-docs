@@ -16,7 +16,7 @@ layout: doc
   </div>
 </div>
 
-<video src="/cockpit-demo.webm" autoplay loop muted playsinline style="width: 100%; border-radius: 12px; margin: 8px 0 24px;" />
+<img src="/cockpit-demo.gif" alt="Cockpit demo" style="width: 100%; border-radius: 12px; margin: 8px 0 24px;" />
 
 ::: tip Try It Live
 Explore without installing: [Live Demo](https://demo-instance.dagu.sh/)

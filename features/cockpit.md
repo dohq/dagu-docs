@@ -1,6 +1,6 @@
 # Cockpit
 
-<video src="/cockpit-demo.webm" autoplay loop muted playsinline style="width: 100%; border-radius: 8px; margin: 16px 0 24px;" />
+<img src="/cockpit-demo.gif" alt="Cockpit demo" style="width: 100%; border-radius: 8px; margin: 16px 0 24px;" />
 
 A workspace-scoped kanban view for monitoring DAG runs across dates. Available at `/cockpit` in the Web UI.
 
