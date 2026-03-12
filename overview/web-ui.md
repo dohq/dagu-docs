@@ -64,7 +64,12 @@ DAG steps can generate documents at runtime using the `DAG_DOCS_DIR` environment
 
 ### AI Agent Integration
 
-The built-in AI agent can reference documents via `@` mentions in the agent chat, and navigate to the documents page or a specific document using its `navigate` tool. External AI tools (Claude Code, Codex, custom agents) can create, read, update, delete, and search documents through the REST API at `/api/v1/docs`. This makes documents a useful shared knowledge base between human operators and AI agents working on the same workflows.
+Documents serve as a shared knowledge base between human operators and AI agents:
+
+- **Built-in AI agent** (chat UI): can reference documents via `@` mentions in the agent chat, and navigate to the documents page or a specific document using its `navigate` tool.
+- **Agent steps in workflows** (`type: agent`): have `read` and `bash` tools with access to the docs directory. The system prompt includes the docs directory path, so agents in workflows can read existing documents and write new ones directly to the filesystem.
+- **DAG steps** (shell commands): can write documents using the `DAG_DOCS_DIR` environment variable. Files written there appear in the tree automatically.
+- **External AI tools** (Claude Code, Codex, custom agents): can create, read, update, delete, and search documents through the REST API at `/api/v1/docs`.
 
 See [Documents](/web-ui/documents) for storage format, API reference, and permissions.
 
