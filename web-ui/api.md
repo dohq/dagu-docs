@@ -1851,7 +1851,7 @@ Fetches detailed status of a sub DAG run.
     "onExit": null,
     "onSuccess": null,
     "onFailure": null,
-    "onCancel": null,
+    "onAbort": null,
     "preconditions": []
   }
 }
