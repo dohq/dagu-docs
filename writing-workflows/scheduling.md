@@ -55,7 +55,7 @@ Each running DAG process writes an 8-byte binary timestamp to a proc file every 
 3. After `scheduler.failure_threshold` consecutive stale checks, re-read the run's status. If it is still active (running/queued/waiting), write status "failed". If the run already completed (succeeded/cancelled/failed), do nothing.
 4. Independent of the background detector, status reads also repair verified stale local runs so `dagu server` and direct CLI execution do not leave runs stuck in `running`.
 
-With defaults, a truly dead process is detected in at most `failure_threshold × zombie_detection_interval` = 3 × 45s = **135 seconds**. A transiently stale process (GC pause, I/O lag) survives as long as it recovers within that window.
+With defaults, a truly dead process is detected in at most `scheduler.failure_threshold × scheduler.zombie_detection_interval` = 3 × 45s = **135 seconds**. A transiently stale process (GC pause, I/O lag) survives as long as it recovers within that window.
 
 If a heartbeat file is deleted externally while the process is still alive, the heartbeat goroutine detects the missing file and recreates it on the next tick.
 
