@@ -187,9 +187,19 @@ steps:
 
 ## Catchup (Missed Run Replay)
 
-When the scheduler restarts after downtime, it can replay missed cron runs. Set `catchup_window` to enable this.
+When the scheduler restarts after downtime, it can replay missed cron runs. Catchup requires two things:
+
+1. `catchup_window` set on the DAG
+2. `queues.enabled: true` in `config.yaml`
 
 ```yaml
+# ~/.config/dagu/config.yaml
+queues:
+  enabled: true
+```
+
+```yaml
+# DAG file
 schedule: "0 * * * *"
 catchup_window: "6h"
 
@@ -198,6 +208,47 @@ steps:
 ```
 
 If the scheduler was down from 10:00 to 14:00 and restarts at 14:00, it replays the 10:00, 11:00, 12:00, 13:00, and 14:00 runs in chronological order, one per scheduler tick (one tick per minute).
+
+If `queues.enabled` is `false`, the scheduler logs a warning per DAG that has `catchup_window` set and skips catchup entirely.
+
+### Dispatch via enqueue
+
+Catchup runs are dispatched through the queue system, not started directly. For each missed interval, the scheduler:
+
+1. Generates a deterministic run ID from the DAG name and scheduled time
+2. Checks if a run with that ID already exists (`FindAttempt`) — if so, skips it
+3. Creates a run record with status `Queued`
+4. Adds the item to the queue store
+
+The queue processor then picks up the item and executes it. This works for both local and distributed execution modes — the queue processor calls `ExecuteDAG()` which routes to the coordinator for distributed DAGs.
+
+If enqueueing fails after the run record is created, the record is rolled back (`RemoveDAGRun`) and the watermark is not advanced, so the interval is retried on the next scheduler tick or restart.
+
+### Deterministic run IDs
+
+Catchup run IDs follow the format:
+
+```
+catchup-{name}-{hash}-{timestamp}
+```
+
+- `{name}` — DAG name with dots replaced by underscores, truncated to 31 characters if needed
+- `{hash}` — first 8 hex characters of the SHA-256 hash of the original DAG name
+- `{timestamp}` — scheduled time in UTC as `20060102T150405`
+
+Example: a DAG named `etl-pipeline` with a missed run at 2026-03-12 14:00 UTC produces:
+
+```
+catchup-etl-pipeline-b763ab2e-20260312T140000
+```
+
+The hash ensures that DAGs with names that differ only in dots vs underscores (e.g., `my.dag` and `my_dag`) produce different run IDs. The deterministic format means the same missed interval always produces the same ID, which is what makes catchup idempotent across restarts.
+
+### Idempotency on restart
+
+When the scheduler restarts, it recomputes missed intervals from the watermark. If an interval was already enqueued (the run ID exists in the store), it is skipped. The watermark is re-advanced. No duplicate run is created.
+
+The watermark advances after successful enqueue, not after execution. If the scheduler crashes between enqueue and watermark persistence, the interval is recomputed on restart, found via `FindAttempt`, and skipped.
 
 ### How the replay start time is computed
 
@@ -223,7 +274,7 @@ The value must be positive. An empty or zero value disables catchup.
 
 ### Overlap during catchup
 
-`overlap_policy` controls what happens when a catchup run is ready but the DAG is still running from a previous catchup run:
+`overlap_policy` controls what happens when a catchup run is ready but the DAG is still running or queued:
 
 ```yaml
 schedule: "0 * * * *"
@@ -240,7 +291,9 @@ steps:
 | `"all"` | Keep the run in the buffer, retry on the next scheduler tick |
 | `"latest"` | Discard all but the most recent missed interval, dispatch only the newest |
 
-`overlap_policy` only affects catchup runs. Live scheduled runs use different guards (isRunning check, alreadyFinished check, `skip_if_successful`).
+The overlap check considers both `Running` and `Queued` states. For the `skip` policy, if the DAG has any run currently running or queued, the catchup run is dropped. Without this, multiple catchup runs could queue up before any starts executing, defeating the purpose of `skip`.
+
+Live scheduled runs are also blocked while a catchup run is queued for the same DAG.
 
 ### Catchup buffer limit
 
