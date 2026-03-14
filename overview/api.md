@@ -55,7 +55,7 @@ The API only supports server-side sorting by the `name` field. While the API acc
 curl http://localhost:8080/api/v1/dags/my-dag.yaml
 ```
 
-The DAG detail response includes `paramDefs` when Dagu can derive typed parameter metadata from inline rich `params:` definitions or a representable external schema. UI clients use this to render typed start/enqueue forms.
+The DAG detail response includes `paramDefs` when Dagu can derive typed parameter metadata from inline rich `params:` definitions or a representable external schema. UI clients use this to render typed start/enqueue forms. For named params, clients should submit a JSON object payload; JSON arrays are mainly for positional or mixed raw input.
 
 #### Create New DAG
 ```bash

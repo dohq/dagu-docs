@@ -492,14 +492,14 @@ Creates and starts a DAG run with optional parameters.
 **Request Fields**:
 | Field | Type | Description | Required |
 |-------|------|-------------|----------|
-| params | string | JSON string of parameters. Values are validated and coerced against DAG param definitions or external parameter schema before execution. | No |
+| params | string | JSON string of parameters. Values are validated and coerced against DAG param definitions or external parameter schema before execution. For named params, prefer a JSON object payload. JSON arrays are mainly for positional or mixed raw input. | No |
 | dagRunId | string | Custom run ID | No |
 | dagName | string | Override the DAG name used for this run (must satisfy DAG name validation) | No |
 | singleton | boolean | If true, prevent starting if DAG is already running (returns 409) | No |
 
 > **Tip:** Overriding the DAG name changes the identifier used for queue grouping, which is useful for ad-hoc executions that should not collide with scheduled runs.
 
-> **Note:** `GET /api/v1/dags/{fileName}` returns `paramDefs` for typed UI rendering. The start endpoint still accepts a JSON string in `params`, and the server performs the authoritative validation/coercion.
+> **Note:** `GET /api/v1/dags/{fileName}` returns `paramDefs` for typed UI rendering. The start endpoint still accepts a JSON string in `params`, and the server performs the authoritative validation/coercion. For named params, clients should send a JSON object payload.
 **Response (200)**:
 ```json
 {

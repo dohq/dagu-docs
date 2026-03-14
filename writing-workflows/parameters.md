@@ -139,6 +139,8 @@ The shell sees `"3"`, not a typed integer object.
 Every step receives the merged parameter payload through `DAG_PARAMS_JSON`.
 
 - For resolved DAG parameters, the JSON payload remains a string-only object such as `{"instance_count":"3","debug":"false"}`.
+- Raw JSON input may be supplied as either an object or an array. For named parameters, prefer a JSON object such as `{"region":"us-west-2","count":"5"}`.
+- JSON arrays are mainly useful for positional or mixed payloads.
 - If the run was started with raw JSON parameters, the original JSON payload is preserved verbatim.
 
 Typed parameter definitions do not change this serialization.
@@ -189,9 +191,12 @@ dagu start workflow.yaml -- config.json ENVIRONMENT=prod
 
 # Raw JSON payload
 dagu start workflow.yaml -- '{"environment":"prod","batch_size":50}'
+
+# Raw JSON array payload (mainly for positional or mixed input)
+dagu start workflow.yaml -- '["input.csv",{"ENVIRONMENT":"prod"}]'
 ```
 
-The Web UI uses `paramDefs` from `GET /api/v1/dags/{fileName}` to render typed controls in the start/enqueue modal when the DAG exposes inline definitions or representable external schema metadata. Param descriptions are shown inline below each typed control. If no typed metadata is available, the UI falls back to the raw parameter editor.
+The Web UI uses `paramDefs` from `GET /api/v1/dags/{fileName}` to render typed controls in the start/enqueue modal when the DAG exposes inline definitions or representable external schema metadata. Param descriptions are shown inline below each typed control. For named params, typed clients should submit a JSON object payload. If no typed metadata is available, the UI falls back to the raw parameter editor.
 
 ## External JSON Schema Validation
 

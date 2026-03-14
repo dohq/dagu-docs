@@ -98,6 +98,7 @@ steps:
 
 - Defaults declared in the DAG plus CLI/API overrides are merged into a single JSON object.
 - Resolved DAG params are serialized as strings, even when inline param definitions use `integer`, `number`, or `boolean` types.
+- Raw JSON input may be an object or an array. For named params, prefer an object.
 - When the run was started with raw JSON parameters (e.g., `dagu start dag.yaml -- '{"foo":"bar"}'`), the original JSON string is preserved verbatim.
 
 ```yaml

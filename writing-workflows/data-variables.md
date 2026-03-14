@@ -244,7 +244,7 @@ steps:
     command: '"Region: \(.region // "us-east-1")"'
 ```
 
-If the run was started with raw JSON parameters, the original payload is preserved verbatim; otherwise, Dagu serializes the resolved key/value pairs from your `params` block plus any overrides as a string-only JSON object. Inline typed params do not change this behavior.
+If the run was started with raw JSON parameters, the original payload is preserved verbatim; otherwise, Dagu serializes the resolved key/value pairs from your `params` block plus any overrides as a string-only JSON object. Raw JSON may be an object or an array, but named params should use an object. Inline typed params do not change this behavior.
 
 ### Capture Output
 
