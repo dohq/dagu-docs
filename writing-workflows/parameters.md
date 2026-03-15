@@ -1,8 +1,8 @@
 # Parameters
 
-DAG-level `params:` define runtime inputs for a workflow. They are stored as literal values and can be overridden when the DAG is started from the CLI, API, Web UI, or a sub-DAG step.
+DAG-level `params:` define runtime inputs for a workflow. They can be overridden when the DAG is started from the CLI, API, Web UI, or a sub-DAG step.
 
-Parameter values are **not** evaluated at parse time. Dagu does not run backticks, expand `${VAR}`, or perform shell evaluation inside DAG-level `params:`. If you need a dynamic default, compute it in `env:` and reference that environment variable from your steps.
+By default, parameter defaults are treated as literal values. If you want YAML-authored defaults to support `${VAR}` expansion or backtick command substitution, enable `eval_params: true`.
 
 Named parameters are injected into the step execution environment, so shell commands can read them with normal shell syntax such as `${ENVIRONMENT}`.
 
@@ -134,6 +134,48 @@ steps:
 
 The shell sees `"3"`, not a typed integer object.
 
+## Evaluated Defaults with `eval_params`
+
+Set `eval_params: true` to evaluate YAML-authored parameter defaults with the same expression engine used by DAG `env:`.
+
+```yaml
+env:
+  - BASE_DIR: /srv/data
+
+eval_params: true
+params:
+  - OUTPUT_DIR: "${BASE_DIR}/out"
+  - TODAY: "`date +%Y-%m-%d`"
+  - name: WORKERS
+    type: integer
+    default: "`nproc`"
+    minimum: 1
+
+steps:
+  - command: echo "${OUTPUT_DIR} ${TODAY} ${WORKERS}"
+```
+
+When `eval_params` is enabled:
+
+- It is still opt-in. If the field is absent, the default behavior remains literal.
+- Only YAML-authored defaults are evaluated.
+- Evaluation is single-pass and top-to-bottom, so later params can reference earlier params.
+- The evaluation scope includes OS environment variables, resolved DAG `env:` values, and earlier resolved params.
+- Inline typed defaults are evaluated first, then coerced and validated.
+- External-schema-backed `params.schema` defaults are not evaluated.
+- Invalid expressions or failing command substitutions stop the run before execution begins.
+
+Example of parameter chaining:
+
+```yaml
+eval_params: true
+params:
+  - YEAR: "`date +%Y`"
+  - REPORT_PATH: "/reports/${YEAR}/summary.csv"
+```
+
+`REPORT_PATH` resolves after `YEAR`, so it becomes `/reports/2026/summary.csv`.
+
 ## Parameter JSON Payload
 
 Every step receives the merged parameter payload through `DAG_PARAMS_JSON`.
@@ -145,9 +187,9 @@ Every step receives the merged parameter payload through `DAG_PARAMS_JSON`.
 
 Typed parameter definitions do not change this serialization.
 
-## Parameter Values Are Literal
+## Literal Defaults by Default
 
-Parameter values are not evaluated at parse time:
+When `eval_params` is absent or `false`, parameter defaults stay literal:
 
 ```yaml
 params:
@@ -159,7 +201,7 @@ steps:
   - command: echo "${DATE} ${MESSAGE} ${SOURCE_REF}"
 ```
 
-If you need command substitution or variable expansion, use `env:`:
+If you want dynamic defaults without enabling `eval_params`, compute them in `env:`:
 
 ```yaml
 env:
@@ -176,6 +218,16 @@ params:
 steps:
   - command: python processor.py --input "${INPUT_FILE}" --threads "${THREADS}" --date "${DATE}" --home "${HOME_DIR}"
 ```
+
+## Runtime Overrides Stay Literal
+
+Runtime overrides are never evaluated, even when `eval_params: true`. This applies to:
+
+- CLI overrides such as `dagu start workflow.yaml -- 'DIR=${HOME}/tmp'`
+- API overrides sent in the start request
+- Sub-DAG params passed from a parent DAG
+
+Those values are treated as literal strings for safety. Dagu evaluates the DAG author's YAML defaults, not untrusted runtime input.
 
 ## Passing Parameters
 
@@ -197,6 +249,8 @@ dagu start workflow.yaml -- '["input.csv",{"ENVIRONMENT":"prod"}]'
 ```
 
 The Web UI uses `paramDefs` from `GET /api/v1/dags/{fileName}` to render typed controls in the start/enqueue modal when the DAG exposes inline definitions or representable external schema metadata. Param descriptions are shown inline below each typed control. For named params, typed clients should submit a JSON object payload. If no typed metadata is available, the UI falls back to the raw parameter editor.
+
+When `eval_params` is enabled, `paramDefs.default` keeps the raw authored default for display. Dynamic defaults such as `` `nproc` `` or `${BASE_DIR}/out` are evaluated by the server at runtime, not by the client.
 
 ## External JSON Schema Validation
 

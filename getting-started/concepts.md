@@ -89,7 +89,7 @@ Override at runtime:
 dagu start workflow.yaml -- env=prod region=eu-west-1
 ```
 
-Parameter definitions are literal. If you need a dynamic date or other computed value, define it in `env:` instead of `params:`.
+Parameter defaults are literal by default. If you need `${VAR}` or backtick evaluation in YAML-authored defaults, enable `eval_params: true`. Runtime overrides from the CLI, API, and sub-DAG calls remain literal.
 
 ### Variables
 

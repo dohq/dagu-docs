@@ -204,7 +204,7 @@ steps:
   - command: python main.py ${FOO} ${BAR}  # Will use command-line args or defaults
 ```
 
-Parameter values are literal strings — no variable expansion, command substitution, or shell evaluation is performed on them. Use `env:` for dynamic values (see [Command Substitution](#command-substitution)).
+Parameter defaults are literal by default. If you need `${VAR}` expansion or backtick command substitution in YAML-authored defaults, enable `eval_params: true`. Runtime overrides from the CLI, API, and sub-DAG calls remain literal. See [Parameters](/writing-workflows/parameters) for the full evaluation rules.
 
 Inline rich definitions add validation and UI metadata while keeping runtime values string-based:
 

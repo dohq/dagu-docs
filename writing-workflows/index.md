@@ -26,6 +26,8 @@ steps:                     # Workflow steps
   - command: echo "Processing ${ENVIRONMENT} for date ${DATE} with batch ${BATCH_SIZE}"
 ```
 
+Parameter defaults are literal unless you opt in to `eval_params: true`. See [Parameters](/writing-workflows/parameters) for evaluation rules, override behavior, and typed validation.
+
 ## Base Configuration
 
 Share common settings across all DAGs using base configuration:

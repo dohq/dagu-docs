@@ -11,6 +11,7 @@ The base configuration file provides default values that are automatically inher
 - **Default timeouts** - Consistent execution limits
 - **Email/alerting setup** - Team-wide notification configuration
 - **External service defaults** - SSH, S3, database connections
+- **Shared `eval_params` policy** - Opt workflows into evaluated YAML param defaults by default
 
 Individual DAG files can override any setting from the base configuration.
 
@@ -92,6 +93,26 @@ mail_on:
 # Result: failure=false, success=false (not inherited)
 ```
 
+**Boolean fields such as `eval_params`** - the DAG overrides only when it sets the field explicitly:
+
+```yaml
+# base.yaml
+eval_params: true
+
+# child.yaml
+# eval_params omitted
+# Result: true (inherited)
+```
+
+```yaml
+# base.yaml
+eval_params: true
+
+# child.yaml
+eval_params: false
+# Result: false (explicit DAG override)
+```
+
 ### Precedence Order
 
 From lowest to highest priority:
@@ -117,6 +138,23 @@ env:
 ```
 
 Environment variables from base config are **appended** to those defined in individual DAGs, allowing you to set common defaults while DAGs add their specific variables.
+
+Child DAG `env:` entries can reference inherited base env values, and evaluated param defaults can reference the merged result.
+
+```yaml
+# base.yaml
+env:
+  - BASE_DIR: /srv/shared
+eval_params: true
+
+# report.yaml
+env:
+  - REPORT_DIR: "${BASE_DIR}/reports"
+params:
+  - OUTPUT: "${REPORT_DIR}/daily.csv"
+```
+
+This resolves `REPORT_DIR` from the inherited base env, then resolves `OUTPUT` from the child DAG env because `eval_params` was inherited from `base.yaml`.
 
 ### Lifecycle Handlers
 

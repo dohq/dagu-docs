@@ -18,7 +18,7 @@ schedule: "0 * * * *"      # Optional: cron expression
 max_active_steps: 10         # Max parallel steps
 timeout_sec: 3600           # Workflow timeout (seconds)
 
-# Parameters (values are literal strings — no expansion)
+# Parameters (literal by default; optional evaluation with eval_params)
 params:
   - name: environment
     type: string
@@ -213,6 +213,7 @@ See [Step Defaults](/writing-workflows/step-defaults) for detailed documentation
 | Field | Type | Description | Default |
 |-------|------|-------------|---------|
 | `params` | string/array/object | Default DAG parameters. Supports positional strings, named params, inline rich definitions, and external schema mode. | `[]` |
+| `eval_params` | boolean | Evaluate YAML-authored parameter defaults using the expression engine before runtime use. CLI/API/sub-DAG overrides remain literal. | `false` |
 | `env` | array | Environment variables | `[]` |
 | `secrets` | array | External secret references resolved at runtime and exposed as environment variables | `[]` |
 | `dotenv` | string/array | .env files to load | `[".env"]` |
@@ -232,6 +233,8 @@ Top-level DAG `params:` supports:
 - Ordered lists of strings or single-key maps
 - Inline rich definitions in list form using objects with a required `name` field
 - External schema mode with `{ schema, values }`
+
+Defaults are literal unless `eval_params: true` is enabled on the DAG or inherited from `base.yaml`.
 
 Recommended authored form:
 
@@ -268,6 +271,33 @@ Inline definition fields use `snake_case` in YAML:
 | `pattern` | string | RE2 regex for string validation |
 
 Inline types affect validation and typed UI controls. Runtime shell variables and `DAG_PARAMS_JSON` remain string-based.
+
+#### `eval_params`
+
+`eval_params` is an opt-in top-level boolean:
+
+```yaml
+env:
+  - BASE_DIR: /srv/data
+
+eval_params: true
+params:
+  - OUTPUT_DIR: "${BASE_DIR}/out"
+  - TODAY: "`date +%Y-%m-%d`"
+  - name: WORKERS
+    type: integer
+    default: "`nproc`"
+```
+
+Behavior:
+
+- Default is `false`.
+- Only YAML-authored defaults are evaluated.
+- DAG `env:` is evaluated first, then params are evaluated sequentially from top to bottom.
+- Later params can reference earlier params.
+- Inline typed defaults are evaluated before coercion and validation.
+- CLI, API, and sub-DAG runtime overrides are never evaluated.
+- External-schema-backed defaults are not evaluated.
 
 ### Container Configuration
 
