@@ -451,8 +451,8 @@ steps:
     continue_on:
       exit_code: [0, 3]        # Treat 0 and 3 as non-fatal
       output:
-        - command: "WARNING"
-        - command: "re:^INFO:.*"       # Regex match
+        - "WARNING"
+        - "re:^INFO:.*"       # Regex match
       mark_success: true       # Mark as success when matched
   - command: echo "Continue regardless"
 ```

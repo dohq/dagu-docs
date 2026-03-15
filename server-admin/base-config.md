@@ -15,6 +15,14 @@ The base configuration file provides default values that are automatically inher
 
 Individual DAG files can override any setting from the base configuration.
 
+If `base.yaml` does not exist and base-config auto-creation is enabled, Dagu writes a default `base.yaml` on first startup. The generated file currently enables root DAG retry with:
+
+```yaml
+retry_policy:
+  limit: 1
+  interval_sec: 60
+```
+
 ## File Location
 
 Dagu looks for the base configuration file based on your directory structure:

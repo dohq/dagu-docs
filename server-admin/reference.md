@@ -158,6 +158,7 @@ scheduler:
   lock_stale_threshold: "30s"  # Time after which a scheduler lock is considered stale
   lock_retry_interval: "5s"   # Interval between lock acquisition attempts
   zombie_detection_interval: "45s"  # Interval for detecting zombie DAG runs (0 to disable)
+  retry_failure_window: "24h"  # Lookback window for DAG-level retry scanning (0 to disable). Current limitation: window uses the original DAG-run time bucket, not the latest failed attempt timestamp.
   failure_threshold: 3             # Consecutive stale checks before marking a run as failed
 
 # Local proc heartbeat/liveness (used by all local run owners: server, scheduler, CLI runs, and workers)

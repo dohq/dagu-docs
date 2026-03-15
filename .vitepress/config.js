@@ -38,6 +38,7 @@ const fullSidebar = [
       { text: "Control Flow", link: "/writing-workflows/control-flow" },
       { text: "Scheduling", link: "/writing-workflows/scheduling" },
       { text: "Execution Control", link: "/writing-workflows/execution-control" },
+      { text: "Durable Execution", link: "/writing-workflows/durable-execution" },
       { text: "Queue Assignment", link: "/writing-workflows/queues" },
       { text: "Approval Gates", link: "/writing-workflows/approval" },
       { text: "Error Handling", link: "/writing-workflows/error-handling" },

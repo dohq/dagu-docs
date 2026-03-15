@@ -135,7 +135,36 @@ schedule:
 | `delay_sec` | integer | Initial delay before start (seconds) | `0` |
 | `max_clean_up_time_sec` | integer | Max cleanup time (seconds) | `5` |
 | `preconditions` | array | Workflow-level preconditions | - |
+| `retry_policy` | object | Scheduler-driven retry policy for the whole DAG | - |
 | `run_config` | object | User interaction controls when starting DAG | - |
+
+### DAG Retry Policy
+
+Root `retry_policy` is a DAG-level retry policy. It is different from step `retry_policy`.
+
+- It retries the whole DAG after a failed attempt.
+- It requires the scheduler.
+- It creates a new attempt under the same DAG-run ID.
+- It does not support `exit_code`.
+
+See [Durable Execution](/writing-workflows/durable-execution) for the full behavior, including scheduler polling and `scheduler.retry_failure_window`.
+
+#### DAG Retry Policy Fields
+
+| Field | Type | Description | Default |
+|-------|------|-------------|---------|
+| `limit` | integer/string | Maximum number of scheduler-issued DAG retries. Must be positive. Numeric strings are accepted. | required |
+| `interval_sec` | integer/string | Base delay before retrying, in seconds. Must be positive. Numeric strings are accepted. | `60` |
+| `backoff` | boolean/number | `true` means `2.0`. A number greater than `1.0` is used as the multiplier. `false`, `0`, or omission keeps a fixed interval. | fixed interval |
+| `max_interval_sec` | integer | Maximum retry delay in seconds. Must be positive. | `3600` |
+
+```yaml
+retry_policy:
+  limit: 2
+  interval_sec: 60
+  backoff: true
+  max_interval_sec: 900
+```
 
 ### Step Defaults
 
@@ -866,14 +895,18 @@ See the [Continue On Reference](/writing-workflows/continue-on) for detailed doc
 
 | Field | Type | Description | Default |
 |-------|------|-------------|---------|
-| `limit` | integer | Maximum retry attempts | - |
-| `interval_sec` | integer | Base interval between retries (seconds) | - |
-| `backoff` | any | Exponential backoff multiplier. `true` = 2.0, or specify custom number > 1.0 | - |
-| `max_interval_sec` | integer | Maximum interval between retries (seconds) | - |
+| `limit` | integer/string | Maximum retry attempts after the first failure. Required when `retry_policy` is present. | required |
+| `interval_sec` | integer/string | Base interval between retries in seconds. Required when `retry_policy` is present. | required |
+| `backoff` | boolean/number | Exponential backoff multiplier. `true` = 2.0, or specify a number greater than 1.0. `false`, `0`, or omission keeps a fixed interval. | fixed interval |
+| `max_interval_sec` | integer | Maximum interval between retries in seconds. Applied only when greater than `0`. | uncapped |
 | `exit_code` | array | Exit codes that trigger retry | All non-zero |
 
 **Exponential Backoff**: When `backoff` is set, intervals increase exponentially using the formula:  
 `interval * (backoff ^ attemptCount)`
+
+String values for step `limit` and `interval_sec` are evaluated at runtime and must resolve to integers.
+
+Root `retry_policy` is different from this step-level `retry_policy`. See [DAG Retry Policy](#dag-retry-policy).
 
 #### Repeat Policy Fields
 

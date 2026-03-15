@@ -78,10 +78,11 @@ See [Base Configuration](/server-admin/base-config) for complete documentation o
 2. **[Container](/writing-workflows/container)** - Run workflows in Docker containers
 3. **[Control Flow](/writing-workflows/control-flow)** - Parallel execution, conditions, loops
 4. **[Data & Variables](/writing-workflows/data-variables)** - Parameters, outputs, data passing
-5. **[Error Handling](/writing-workflows/error-handling)** - Retries, failures, notifications
-6. **[Lifecycle Handlers](/writing-workflows/lifecycle-handlers)** - Cleanup, notifications, post-run tasks
-7. **[Patterns](/writing-workflows/control-flow#patterns)** - Composition, optimization, best practices
-8. **[Secrets](/writing-workflows/secrets)** - External providers, resolution order, masking behavior
+5. **[Durable Execution](/writing-workflows/durable-execution)** - Step retries, default step retries, DAG retries
+6. **[Error Handling](/writing-workflows/error-handling)** - Continue-on behavior, handlers, notifications
+7. **[Lifecycle Handlers](/writing-workflows/lifecycle-handlers)** - Cleanup and post-run steps
+8. **[Patterns](/writing-workflows/control-flow#patterns)** - Composition patterns
+9. **[Secrets](/writing-workflows/secrets)** - External providers, resolution order, masking behavior
 
 ## Complete Example
 
