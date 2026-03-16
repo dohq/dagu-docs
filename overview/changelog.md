@@ -459,9 +459,10 @@
   ```yaml
   terminal:
     enabled: true   # default: false
+    max_sessions: 5 # default: 5
   ```
 
-  Or via environment variable: `DAGU_TERMINAL_ENABLED=true`
+  Or via environment variables: `DAGU_TERMINAL_ENABLED=true`, `DAGU_TERMINAL_MAX_SESSIONS=5`
 
   See [Terminal Configuration](/server-admin/server#terminal) for details.
 

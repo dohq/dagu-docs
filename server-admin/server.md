@@ -110,6 +110,7 @@ default_execution_mode: "local"      # "local" (default) or "distributed"
 # Terminal Configuration
 terminal:
   enabled: false              # Enable web-based terminal (default: false)
+  max_sessions: 5             # Maximum concurrent terminal sessions per server
 
 # Audit Logging
 audit:
@@ -193,6 +194,7 @@ All options support `DAGU_` prefix:
 
 **Terminal:**
 - `DAGU_TERMINAL_ENABLED` - Enable web-based terminal (default: `false`)
+- `DAGU_TERMINAL_MAX_SESSIONS` - Maximum concurrent terminal sessions (default: `5`)
 
 **Audit Logging:**
 - `DAGU_AUDIT_ENABLED` - Enable audit logging (default: `true`)
@@ -520,12 +522,14 @@ The web-based terminal allows executing shell commands directly from the Dagu UI
 
 ```yaml
 terminal:
-  enabled: true   # Enable web-based terminal (default: false)
+  enabled: true
+  max_sessions: 5
 ```
 
 Or via environment variable:
 ```bash
 export DAGU_TERMINAL_ENABLED=true
+export DAGU_TERMINAL_MAX_SESSIONS=5
 ```
 
 ### Security Notes
@@ -533,6 +537,7 @@ export DAGU_TERMINAL_ENABLED=true
 - The terminal runs commands with the same permissions as the Dagu server process
 - Only enable in trusted environments where users should have shell access
 - Consider using authentication (`auth.mode: builtin`) when enabling terminal access
+- New sessions are rejected with HTTP `429` after `terminal.max_sessions` active terminals
 - Terminal sessions are logged in the audit log (when audit logging is enabled)
 
 ## Audit Logging (Pro)

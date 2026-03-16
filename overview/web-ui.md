@@ -330,11 +330,13 @@ Terminal is **disabled by default** for security reasons. Enable it in your conf
 # config.yaml
 terminal:
   enabled: true
+  max_sessions: 5
 ```
 
 Or via environment variable:
 ```bash
 export DAGU_TERMINAL_ENABLED=true
+export DAGU_TERMINAL_MAX_SESSIONS=5
 ```
 
 ### Security Notes

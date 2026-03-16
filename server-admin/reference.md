@@ -22,6 +22,7 @@ metrics: "private"        # Metrics endpoint: "private" (default) or "public"
 # Terminal (web-based shell access)
 terminal:
   enabled: false          # Enable web terminal (default: false)
+  max_sessions: 5         # Max concurrent terminals per server (default: 5)
 
 # Audit Logging
 audit:
@@ -217,6 +218,7 @@ All options support `DAGU_` prefix.
 
 ### Terminal
 - `DAGU_TERMINAL_ENABLED` - Enable web-based terminal (default: `false`)
+- `DAGU_TERMINAL_MAX_SESSIONS` - Maximum concurrent terminal sessions (default: `5`)
 
 ### Audit Logging
 - `DAGU_AUDIT_ENABLED` - Enable audit logging (default: `true`)
@@ -578,6 +580,7 @@ peer:
 - `default_execution_mode`: `local`
 - `coordinator.enabled`: `true`
 - `terminal.enabled`: `false`
+- `terminal.max_sessions`: `5`
 - `audit.enabled`: `true`
 
 ### Auto-generated Paths
