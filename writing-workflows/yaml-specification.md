@@ -1051,7 +1051,7 @@ steps:
 ```
 
 **LLM configuration fields:**
-- `provider`: LLM provider (`openai`, `anthropic`, `gemini`, `openrouter`, `local`)
+- `provider`: LLM provider (`openai`, `anthropic`, `gemini`, `openrouter`, `zai`, `local`)
 - `model`: Model identifier (e.g., `gpt-4o`, `claude-sonnet-4-20250514`)
 - `system`: Default system prompt (optional)
 - `temperature`: Randomness control 0.0-2.0 (optional)
