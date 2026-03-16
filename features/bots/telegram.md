@@ -20,55 +20,61 @@ Before configuring Dagu, you need to create a bot on Telegram and get its token.
    123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11
    ```
 
-6. Copy the token (`123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11` in this example). This is the value for `telegram.token` in Dagu config or the `DAGU_TELEGRAM_TOKEN` environment variable.
+6. Copy the token (`123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11` in this example). This is the value for `bots.telegram.token` in Dagu config or the `DAGU_BOTS_TELEGRAM_TOKEN` environment variable.
 7. Open a chat with your new bot in Telegram (search for `@my_dagu_bot`) and send any message. This is needed so the bot has a chat to respond to, and so you can retrieve your chat ID (see [Finding your chat ID](#finding-your-chat-id) below).
 
 ## Running
 
-There are two ways to run the Telegram bot:
-
-### Standalone
+The Telegram bot starts automatically when `bots.telegram.token` is configured and you run either:
 
 ```bash
-dagu telegram --dags=/path/to/dags
+dagu server
 ```
 
-This starts the bot as its own process. It creates its own agent API instance internally.
-
-### As part of `start-all`
+or
 
 ```bash
 dagu start-all
 ```
 
-When `telegram.token` is configured, `start-all` automatically launches the Telegram bot alongside the server, scheduler, and coordinator. In this mode, the bot shares the server's agent API instance.
+In both modes, the bot shares the server's agent API instance.
 
 ## Configuration
 
 The bot requires a token and at least one allowed chat ID. Set these in the Dagu config file (`~/.config/dagu/config.yaml` or the path set by `DAGU_HOME`):
 
 ```yaml
-telegram:
-  token: "123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"
-  allowed_chat_ids:
-    - 123456789
-    - 987654321
+bots:
   safe_mode: true
+  telegram:
+    token: "123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"
+    allowed_chat_ids:
+      - 123456789
+      - 987654321
 ```
+
+### `bots` fields
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `safe_mode` | bool | `true` | Passed to the agent's `ChatRequest.SafeMode` field. Applies to all bots. |
+
+### `bots.telegram` fields
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `token` | string | (required) | Bot token from Telegram's [@BotFather](https://t.me/BotFather) |
 | `allowed_chat_ids` | []int64 | (required) | Telegram chat IDs authorized to use the bot. Messages from other chats are rejected. |
-| `safe_mode` | bool | `true` | Passed to the agent's `ChatRequest.SafeMode` field |
 
-The token can also be set via environment variable:
+### Environment variables
 
-```bash
-export DAGU_TELEGRAM_TOKEN="123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"
-```
+| Variable | Config equivalent |
+|----------|-------------------|
+| `DAGU_BOTS_TELEGRAM_TOKEN` | `bots.telegram.token` |
+| `DAGU_BOTS_TELEGRAM_ALLOWED_CHAT_IDS` | `bots.telegram.allowed_chat_ids` |
+| `DAGU_BOTS_SAFE_MODE` | `bots.safe_mode` |
 
-The environment variable takes precedence over the config file value. `allowed_chat_ids` and `safe_mode` can only be set in the config file.
+The environment variable takes precedence over the config file value for the token.
 
 ### Finding your chat ID
 
@@ -109,7 +115,7 @@ The bot tracks token usage across all messages in a session. When total tokens e
 
 ## DAG Run Notifications
 
-When a `DAGRunStore` is available (it is in both `start-all` and standalone `telegram` modes), the bot starts a **DAG run monitor** that polls for completed runs and sends notifications.
+When a `DAGRunStore` is available (it is in both `server` and `start-all` modes), the bot starts a **DAG run monitor** that polls for completed runs and sends notifications.
 
 ### Monitored statuses
 
