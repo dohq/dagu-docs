@@ -58,7 +58,7 @@ bots:
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `provider` | string | `""` (disabled) | Which bot to run. Currently only `"telegram"` is supported. If empty, no bot starts. |
+| `provider` | string | `""` (disabled) | Which bot to run. Set to `"telegram"` or `"slack"`. If empty, no bot starts. Only one provider can be active at a time. |
 | `safe_mode` | bool | `true` | Passed to the agent's `ChatRequest.SafeMode` field. Applies to all bots. |
 
 ### `bots.telegram` fields
