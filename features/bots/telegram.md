@@ -2,6 +2,10 @@
 
 A Telegram bot that maps each Telegram chat to a Dagu AI agent session. Messages sent in Telegram are forwarded to the agent, and agent responses are sent back to Telegram. When a DAG run completes, the bot can also send AI-generated notifications.
 
+## Prerequisites
+
+Before setting up the bot, configure the AI agent in the Web UI. Go to **Agent Settings** (`/agent-settings`) and set your LLM provider and API key. The bot forwards messages to the built-in agent, so it must be configured first. See [Agent Overview](/features/agent/) for details.
+
 ## Creating a Telegram Bot
 
 Before configuring Dagu, you need to create a bot on Telegram and get its token.
