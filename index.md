@@ -175,7 +175,7 @@ See [Examples](/writing-workflows/examples) for more patterns.
     <p>What is Dagu and how it works</p>
   </div>
   <div class="step-card">
-    <h3><a href="/getting-started/">Getting Started</a></h3>
+    <h3><a href="/getting-started/quickstart">Getting Started</a></h3>
     <p>Installation and first workflow</p>
   </div>
   <div class="step-card">
