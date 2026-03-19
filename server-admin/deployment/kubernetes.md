@@ -100,7 +100,7 @@ Additional per-component environment variables:
   `DAGU_COORDINATOR_HOST=0.0.0.0`
   `DAGU_COORDINATOR_ADVERTISE=<fullname>-coordinator.<namespace>.svc.cluster.local`
 - Worker:
-  `WORKER_ID` from `metadata.name`
+  `DAGU_WORKER_ID` from `metadata.name`
 
 Container commands are fixed by the templates:
 
