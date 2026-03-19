@@ -40,6 +40,8 @@ scheduler:
 
 When enabled, access the health endpoint at `http://localhost:8090/health`.
 
+In high-availability deployments, every scheduler process exposes `/health`, including standby instances that are still waiting on the scheduler lock. Use the system status view or service registry status to distinguish the active scheduler from inactive standbys.
+
 **Note**: The health check only runs when using `dagu scheduler` directly, not with `dagu start-all`.
 
 ### Zombie Detection
