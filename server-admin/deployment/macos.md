@@ -46,6 +46,11 @@ Contents:
     <true/>
     <key>KeepAlive</key>
     <true/>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
     <key>StandardOutPath</key>
     <string>/tmp/dagu.out.log</string>
     <key>StandardErrorPath</key>
@@ -53,6 +58,8 @@ Contents:
 </dict>
 </plist>
 ```
+
+`launchd` does not load your interactive shell profile. If a command works in Terminal but not inside a Dagu workflow, add the directory that contains that command to the LaunchAgent `PATH` or use the command's absolute path in the workflow.
 
 ## Start Service
 

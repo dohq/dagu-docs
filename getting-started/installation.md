@@ -25,6 +25,8 @@ curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installe
 
 The wizard uses friendly defaults. On Linux it can also create a `systemd` service. On macOS it can install a LaunchAgent.
 
+When the installer sets up a background service, it also captures a service `PATH` from the environment you ran the installer from. That makes commands such as `claude`, `node`, or other CLI tools available to workflow steps that run in the background service. If you install additional CLI tools later, rerun the installer or use an absolute command path in the workflow.
+
 ### Windows
 
 ::: code-group
