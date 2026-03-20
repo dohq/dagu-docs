@@ -71,20 +71,21 @@ steps:
 
 ## AI Coding Tool Integration
 
-Run `dagu ai install` to teach external AI coding tools (Claude Code, Codex, Gemini CLI, etc.) how to write correct Dagu DAG files. The command auto-detects installed tools and copies skill files into each tool's configuration directory.
+Install the Dagu skill for external AI coding tools (Claude Code, Codex, Gemini CLI, etc.) so they can write correct Dagu DAG files.
+
+Use Dagu's built-in installer:
 
 ```bash
-# Interactive — prompts for each detected tool
-dagu ai install
-
-# Non-interactive — installs to all detected tools
-dagu ai install --yes
-
-# Explicit — installs only into the specified skills directory
 dagu ai install --skills-dir ~/.agents/skills
 ```
 
-See [`ai` in CLI Commands](/getting-started/cli#ai) for details.
+Or use the shared `skills` CLI:
+
+```bash
+npx skills add https://github.com/dagu-org/dagu --skill dagu
+```
+
+See [`ai` in CLI Commands](/getting-started/cli#ai) for more details.
 
 ## See Also
 

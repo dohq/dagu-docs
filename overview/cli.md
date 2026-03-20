@@ -245,18 +245,19 @@ Features:
 ### AI Coding Tool Integration
 
 #### Install Dagu Skill
+Use Dagu's built-in installer:
+
 ```bash
-# Auto-detect installed tools and install the Dagu DAG authoring skill
-dagu ai install
-
-# Skip prompts — install to all detected tools
-dagu ai install --yes
-
-# Install only into an explicit skills directory
 dagu ai install --skills-dir ~/.agents/skills
 ```
 
-Supported tools: Claude Code, Codex, OpenCode, Gemini CLI, Copilot CLI. See [`ai install` reference](/getting-started/cli#ai-install) for detection logic and install paths.
+Or use the shared `skills` CLI:
+
+```bash
+npx skills add https://github.com/dagu-org/dagu --skill dagu
+```
+
+See [CLI Commands](/getting-started/cli#ai) for more details.
 
 ## Advanced Usage
 

@@ -43,26 +43,23 @@ See [Installation Guide](/getting-started/installation) for more options.
 
 ## AI-Assisted Workflow Authoring
 
-If you use an AI coding tool (Claude Code, Codex, OpenCode, Gemini CLI, or Copilot CLI), you can install the Dagu skill so the AI knows how to write correct DAG YAML files:
+If you use an AI coding tool (Claude Code, Codex, OpenCode, Gemini CLI, or Copilot CLI), install the Dagu skill so the AI knows how to write correct DAG YAML files.
+
+Use Dagu's built-in installer:
 
 ```bash
-dagu ai install
-
-# Install only into a specific skills directory
 dagu ai install --skills-dir ~/.agents/skills
 ```
 
-This auto-detects installed tools and prompts you for each one. Use `--yes` to skip prompts:
+Or use the shared `skills` CLI:
 
 ```bash
-dagu ai install --yes
+npx skills add https://github.com/dagu-org/dagu --skill dagu
 ```
-
-If you pass one or more `--skills-dir` values, Dagu skips auto-detection and installs only into those skills directories.
 
 After installation, your AI coding tool can generate, edit, and debug Dagu DAG definitions with knowledge of the full YAML schema, all 18+ executor types, CLI commands, and common pitfalls.
 
-See [`dagu ai install`](/getting-started/cli#ai-install) for details on detection logic, custom skills directories, and install locations.
+See [CLI Commands](/getting-started/cli#ai) for more details.
 
 ## Your First Workflow
 
