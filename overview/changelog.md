@@ -1,6 +1,39 @@
 # Changelog
 
-> **Note**: For patch version release notes (e.g., v2.0.1, v2.0.2), see the [GitHub Releases](https://github.com/dagu-org/dagu/releases) page.
+## v2.3.3 (2026-03-22)
+
+## Added
+
+- feat(jq): accept file input via config.input and file:// prefix ([#1821](https://github.com/dagu-org/dagu/pull/1821)) [@yottahmd](https://github.com/yottahmd)
+- feat: allow variable references in repeat_policy numeric fields ([#1822](https://github.com/dagu-org/dagu/pull/1822)) [@yottahmd](https://github.com/yottahmd)
+- feat(http): add format string config option for response output ([#1826](https://github.com/dagu-org/dagu/pull/1826)) [@mvanhorn](https://github.com/mvanhorn)
+- Add feature to change cleanup time after signal ([#25](https://github.com/dagu-org/dagu/pull/25)) [@yottahmd](https://github.com/yottahmd)
+
+## Changed
+
+- refactor: make scheduler proc-authoritative ([#1824](https://github.com/dagu-org/dagu/pull/1824)) [@yottahmd](https://github.com/yottahmd)
+
+## Fixed
+
+- Fix issues ([#17](https://github.com/dagu-org/dagu/pull/17)) [@yottahmd](https://github.com/yottahmd)
+- fix(ui): standardize conditional swr query enabling ([#1816](https://github.com/dagu-org/dagu/pull/1816)) [@yottahmd](https://github.com/yottahmd)
+- fix: prevent bot notification replay ([#1817](https://github.com/dagu-org/dagu/pull/1817)) [@yottahmd](https://github.com/yottahmd)
+- fix(installer): remove --ignore-missing flag from sha256sum for BusyBox compatibility ([#1819](https://github.com/dagu-org/dagu/pull/1819)) [@yottahmd](https://github.com/yottahmd)
+- fix: allow env: to reference params: values ([#1820](https://github.com/dagu-org/dagu/pull/1820)) [@yottahmd](https://github.com/yottahmd)
+- fix(ui): enable live updates for Yesterday section in cockpit ([#1825](https://github.com/dagu-org/dagu/pull/1825)) [@yottahmd](https://github.com/yottahmd)
+- fix: bound live UI reads and DAG run timeouts ([#1827](https://github.com/dagu-org/dagu/pull/1827)) [@yottahmd](https://github.com/yottahmd)
+- fix: keep doc folders alphabetical under file sorting ([#1828](https://github.com/dagu-org/dagu/pull/1828)) [@yottahmd](https://github.com/yottahmd)
+- fix: clean up failed command temp scripts ([#1829](https://github.com/dagu-org/dagu/pull/1829)) [@yottahmd](https://github.com/yottahmd)
+- Fix bug ([#22](https://github.com/dagu-org/dagu/pull/22)) [@yottahmd](https://github.com/yottahmd)
+- Fix too small graph for a little DAG ([#23](https://github.com/dagu-org/dagu/pull/23)) [@yottahmd](https://github.com/yottahmd)
+- Fix retry policy and process terminate behavior ([#24](https://github.com/dagu-org/dagu/pull/24)) [@yottahmd](https://github.com/yottahmd)
+
+## Contributors
+
+Thanks to our contributors for this release:
+
+- [@mvanhorn](https://github.com/mvanhorn)
+- [@jeremydelattre59](https://github.com/jeremydelattre59)
 
 ## v2.3.1 (2026-03-19)
 
