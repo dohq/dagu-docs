@@ -2,18 +2,18 @@
 
 ## v2.3.3 (2026-03-22)
 
-## Added
+### Added
 
 - feat(jq): accept file input via config.input and file:// prefix ([#1821](https://github.com/dagu-org/dagu/pull/1821)) [@yottahmd](https://github.com/yottahmd)
 - feat: allow variable references in repeat_policy numeric fields ([#1822](https://github.com/dagu-org/dagu/pull/1822)) [@yottahmd](https://github.com/yottahmd)
 - feat(http): add format string config option for response output ([#1826](https://github.com/dagu-org/dagu/pull/1826)) [@mvanhorn](https://github.com/mvanhorn)
 - Add feature to change cleanup time after signal ([#25](https://github.com/dagu-org/dagu/pull/25)) [@yottahmd](https://github.com/yottahmd)
 
-## Changed
+### Changed
 
 - refactor: make scheduler proc-authoritative ([#1824](https://github.com/dagu-org/dagu/pull/1824)) [@yottahmd](https://github.com/yottahmd)
 
-## Fixed
+### Fixed
 
 - Fix issues ([#17](https://github.com/dagu-org/dagu/pull/17)) [@yottahmd](https://github.com/yottahmd)
 - fix(ui): standardize conditional swr query enabling ([#1816](https://github.com/dagu-org/dagu/pull/1816)) [@yottahmd](https://github.com/yottahmd)
@@ -28,12 +28,16 @@
 - Fix too small graph for a little DAG ([#23](https://github.com/dagu-org/dagu/pull/23)) [@yottahmd](https://github.com/yottahmd)
 - Fix retry policy and process terminate behavior ([#24](https://github.com/dagu-org/dagu/pull/24)) [@yottahmd](https://github.com/yottahmd)
 
-## Contributors
+### Contributors
 
 Thanks to our contributors for this release:
 
-- [@mvanhorn](https://github.com/mvanhorn)
-- [@jeremydelattre59](https://github.com/jeremydelattre59)
+| Contribution | Contributor |
+| --- | --- |
+| Format string config option for HTTP response output ([#1826](https://github.com/dagu-org/dagu/pull/1826)) | [@mvanhorn](https://github.com/mvanhorn) |
+| Handler On Abort display bug report ([#1476](https://github.com/dagu-org/dagu/issues/1476)) | [@jeremydelattre59](https://github.com/jeremydelattre59) (report) |
+
+**Full Changelog**: [v2.3.1...v2.3.3](https://github.com/dagu-org/dagu/compare/v2.3.1...v2.3.3)
 
 ## v2.3.1 (2026-03-19)
 
