@@ -921,11 +921,11 @@ For iterating over a list of items, use [`parallel`](#parallel-execution) instea
 
 | Field | Type | Description | Default |
 |-------|------|-------------|---------|
-| `repeat` | string | Repeat mode: `"while"` or `"until"` | - |
-| `interval_sec` | integer | Base interval between repetitions (seconds) | - |
+| `repeat` | string/boolean | Repeat mode: `"while"`, `"until"`, or `true` (legacy alias for `"while"`) | - |
+| `interval_sec` | integer/string | Base interval between repetitions (seconds). Accepts variable references like `$VAR` or `${VAR}` resolved at runtime. | - |
 | `backoff` | any | Exponential backoff multiplier. `true` = 2.0, or specify custom number > 1.0 | - |
-| `max_interval_sec` | integer | Maximum interval between repetitions (seconds) | - |
-| `limit` | integer | Maximum number of executions | - |
+| `max_interval_sec` | integer/string | Maximum interval between repetitions (seconds). Accepts variable references. | - |
+| `limit` | integer/string | Maximum number of executions. Accepts variable references. | - |
 | `condition` | string | Condition to evaluate | - |
 | `expected` | string | Expected value/pattern | - |
 | `exit_code` | array | Exit codes that trigger repeat | - |

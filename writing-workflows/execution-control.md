@@ -273,3 +273,18 @@ steps:
       limit: 50
       # Intervals: 2s, 3s, 4.5s, 6.75s, 10.125s...
 ```
+
+#### Variable References in Repeat Policy
+
+The `interval_sec`, `limit`, and `max_interval_sec` fields accept variable references (`$VAR`, `${VAR}`, or backtick command substitutions) that are resolved at runtime:
+
+```yaml
+steps:
+  - command: echo "repeating"
+    repeat_policy:
+      repeat: true
+      limit: $REPEAT_LIMIT
+      interval_sec: ${POLL_INTERVAL}
+```
+
+The values must resolve to valid integers at runtime.

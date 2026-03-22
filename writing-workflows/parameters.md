@@ -227,6 +227,19 @@ steps:
   - command: python processor.py --input "${INPUT_FILE}" --threads "${THREADS}" --date "${DATE}" --home "${HOME_DIR}"
 ```
 
+`env:` values can also reference `params:` values using `${param_name}`, since parameters are resolved before environment variables:
+
+```yaml
+params:
+  data_dir: /tmp/foo
+
+env:
+  - FULL_PATH: "${data_dir}/output"
+
+steps:
+  - command: echo "${FULL_PATH}"  # Outputs: /tmp/foo/output
+```
+
 ## Runtime Overrides Stay Literal
 
 Runtime overrides are never evaluated, even when a param uses `eval`. This applies to:

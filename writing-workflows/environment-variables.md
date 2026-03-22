@@ -137,6 +137,35 @@ env:
   - CONFIG_FILE: ${BASE_PATH}/config.yaml
 ```
 
+### Referencing Parameters
+
+DAG-level `env:` values can reference `params:` values using `${param_name}`. Parameters are resolved before environment variables, so param values are available during env evaluation:
+
+```yaml
+params:
+  data_dir: /tmp/foo
+
+env:
+  - FULL_PATH: "${data_dir}/output"
+
+steps:
+  - command: echo "${FULL_PATH}"  # Outputs: /tmp/foo/output
+```
+
+Chained references work too. An env variable can reference a param, and a later env variable can reference that env variable:
+
+```yaml
+params:
+  base: /data
+
+env:
+  - DIR: "${base}/subdir"
+  - FULL: "${DIR}/file.txt"
+
+steps:
+  - command: echo "${FULL}"  # Outputs: /data/subdir/file.txt
+```
+
 ### Command Substitution
 
 Execute commands at DAG load time using backticks:

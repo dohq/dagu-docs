@@ -528,6 +528,32 @@ steps:
 
 **Backoff Formula**: `interval * (backoff ^ attemptCount)`
 
+### Variable References in Repeat Policy
+
+The `interval_sec`, `limit`, and `max_interval_sec` fields accept variable references (`$VAR`, `${VAR}`, or backtick command substitutions) that are resolved at runtime. This lets you parameterize repeat behavior through environment variables or DAG parameters.
+
+```yaml
+steps:
+  - command: echo "repeating"
+    repeat_policy:
+      repeat: true
+      limit: $REPEAT_LIMIT
+      interval_sec: ${POLL_INTERVAL}
+```
+
+Command substitutions also work:
+
+```yaml
+steps:
+  - command: echo "repeating"
+    repeat_policy:
+      repeat: true
+      limit: "`echo 3`"
+      interval_sec: 0
+```
+
+The values must resolve to valid integers at runtime. If a variable reference cannot be resolved or does not produce an integer, the step fails during preparation.
+
 ## Continue On Conditions
 
 ### Continue on Failure

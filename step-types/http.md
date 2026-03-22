@@ -21,7 +21,8 @@ steps:
 | `timeout` | Timeout in seconds | `30` |
 | `silent` | Return body only (suppress status/headers on success) | `true` |
 | `debug` | Enable debug mode (logs request/response details) | `true` |
-| `json` | Format output as structured JSON | `true` |
+| `format` | Response output format. `"json"` for structured output (status code, headers, body). | `"json"` |
+| `json` | Legacy boolean alias for `format: "json"`. Either field works. | `true` |
 | `tls_skip_verify` | Skip TLS certificate verification | `true` |
 
 ## Examples
@@ -94,18 +95,20 @@ steps:
 
 ### JSON Output Mode
 
-Use `json: true` to get structured JSON output including status code and headers:
+Use `format: "json"` to get structured JSON output including status code and headers:
 
 ```yaml
 steps:
   - id: api_call
     type: http
     config:
-      json: true
+      format: "json"
       silent: true
     command: GET https://api.example.com/data
     output: RESPONSE
 ```
+
+The legacy `json: true` boolean is still supported and behaves identically to `format: "json"`.
 
 Output format:
 ```json

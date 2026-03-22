@@ -17,6 +17,65 @@ Output: `"John Doe"`
 
 ## Configuration
 
+| Field | Description |
+|-------|-------------|
+| `raw` | Output raw strings without JSON encoding (like `jq -r`). Default: `false`. |
+| `input` | File path to read JSON input from. Mutually exclusive with `script`. |
+
+### Input Sources
+
+The JQ executor accepts JSON input from one of three sources. Exactly one must be provided.
+
+**Inline JSON via `script:`**
+
+```yaml
+steps:
+  - id: inline
+    type: jq
+    command: '.name'
+    script: '{"name": "Alice"}'
+```
+
+**File path via `config.input`**
+
+Read JSON from a file. The path is evaluated at runtime, so step references like `${step_id.stdout}` work:
+
+```yaml
+type: graph
+steps:
+  - id: producer
+    command: 'echo ''{"items": [{"name": "a"}, {"name": "b"}]}'''
+
+  - id: filter
+    depends: [producer]
+    type: jq
+    config:
+      raw: true
+      input: "${producer.stdout}"
+    command: '.items[] | .name'
+    output: RESULT
+```
+
+**File path via `file://` prefix on `script:`**
+
+```yaml
+type: graph
+steps:
+  - id: producer
+    command: 'echo ''{"items": [{"name": "a"}, {"name": "b"}]}'''
+
+  - id: filter
+    depends: [producer]
+    type: jq
+    config:
+      raw: true
+    script: "file://${producer.stdout}"
+    command: '.items[] | .name'
+    output: RESULT
+```
+
+`config.input` and `script` are mutually exclusive. Setting both produces a validation error.
+
 ### Raw Output
 
 By default, results are returned as pretty-printed JSON. Enable raw output
