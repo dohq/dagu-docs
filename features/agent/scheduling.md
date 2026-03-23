@@ -5,7 +5,7 @@ Agent steps work with `schedule` like any other step type. Add a `schedule` fiel
 ## Prerequisites
 
 - The scheduler must be running (`dagu scheduler` or `dagu start-all`)
-- An agent model must be configured in Agent Settings (`/settings/agent`)
+- An agent model must be configured in Agent Settings (`/agent-settings`)
 - See [Scheduling](/writing-workflows/scheduling) for cron syntax and scheduler setup
 - See [Agent Step](/features/agent/step) for agent configuration
 

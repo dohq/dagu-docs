@@ -1,6 +1,6 @@
 # Agent Step
 
-Run the AI agent as a workflow step. The agent executes a multi-turn tool-calling loop — it reads files, runs commands, edits code, and searches the web to accomplish the task described in `messages`.
+Run the AI agent as a workflow step. The agent executes a multi-turn tool-calling loop to accomplish the task described in `messages`. It can read files, run commands, edit code, and use provider-native web search when enabled.
 
 ## Basic Usage
 
@@ -15,7 +15,7 @@ steps:
     output: ANALYSIS_RESULT
 ```
 
-The agent uses the default model configured in Agent Settings (`/settings/agent`). No per-step model configuration is needed.
+The agent uses the default model configured in Agent Settings (`/agent-settings`). No per-step model configuration is needed.
 
 ## Configuration
 
@@ -34,7 +34,6 @@ steps:
       prompt: |
         Focus only on files in /etc/app/.
       max_iterations: 30
-      safe_mode: true
     messages:
       - role: user
         content: "Fix the invalid database_url in /etc/app/config.yaml"
@@ -53,11 +52,11 @@ steps:
 | `prompt` | string | — | Additional instructions appended to the built-in system prompt. |
 | `max_iterations` | int | `50` | Maximum tool-call rounds before the agent stops. |
 | `web_search` | object | — | Provider-native web search configuration. Overrides the global agent web search setting. See [Web Search](#web-search). |
-| `safe_mode` | bool | `true` | When `true`, bash commands matching dangerous patterns require HITL approval. |
+| `safe_mode` | bool | `true` | Passed through to the agent loop for compatibility with interactive sessions. Agent steps do not show approval prompts; bash commands denied by policy are blocked. |
 
 ## Model Resolution
 
-The agent step resolves its model from the global Agent Settings (configured at `/settings/agent`):
+The agent step resolves its model from the global Agent Settings (configured at `/agent-settings`):
 
 1. If `agent.model` is set in the step, look up that model ID in the global `ModelStore`
 2. If `agent.model` is omitted, use the global default model (`DefaultModelID` from Agent Settings)
@@ -74,7 +73,6 @@ defaults:
   agent:
     model: claude-opus
     soul: tsumugi
-    safe_mode: true
     max_iterations: 30
 
 steps:
@@ -82,7 +80,7 @@ steps:
     messages:
       - role: user
         content: "Analyze the logs"
-    # Uses defaults: model=claude-opus, soul=tsumugi, safe_mode=true, max_iterations=30
+    # Uses defaults: model=claude-opus, soul=tsumugi, max_iterations=30
 
   - type: agent
     agent:
@@ -106,7 +104,7 @@ steps:
 | `memory` | object | Default memory configuration |
 | `prompt` | string | Default additional system prompt instructions |
 | `max_iterations` | int | Default max tool-call rounds |
-| `safe_mode` | bool | Default safe mode setting |
+| `safe_mode` | bool | Default safe mode setting. Agent-step deny rules still block without prompting. |
 
 ## Tools
 
@@ -120,7 +118,6 @@ The agent step has access to these tools:
 | `read` | Read file contents with line numbers (max 1MB, 2000 lines default) |
 | `patch` | Create, edit, or delete files |
 | `think` | Record reasoning without executing actions |
-| `read_schema` | Look up DAG YAML schema documentation |
 | `use_skill` | Execute a skill from the skill store (available when skills are configured) |
 | `search_skills` | Search available skills by query (available when skills are configured) |
 | `remote_agent` | Delegate tasks to agents on remote nodes (available when remote nodes are configured) |
@@ -165,6 +162,8 @@ If `read` is disabled in global Agent Settings and the step specifies `enabled: 
 
 Bash command policy rules are loaded from the global Agent Settings and enforced via a `BeforeToolExecHook` on every bash tool call. Rules are evaluated in order; the first matching rule determines the action.
 
+Agent steps do not have an interactive approval UI. If a command is denied by policy, the step receives a policy error instead of a prompt.
+
 ### Step-Level Bash Policy
 
 The step can define its own bash policy rules via `tools.bash_policy`:
@@ -187,7 +186,7 @@ agent:
 | Field | Type | Values | Description |
 |-------|------|--------|-------------|
 | `default_behavior` | string | `allow`, `deny` | Action when no rule matches. Global default: `allow`. |
-| `deny_behavior` | string | `block`, `hitl` | What happens when denied. `hitl` degrades to `block` in agent steps (no UI). Global default: `ask_user` (treated as `block`). |
+| `deny_behavior` | string | `ask_user`, `block` | What happens when denied. In agent steps, `ask_user` behaves like `block` because there is no approval UI. Global default: `ask_user`. |
 | `rules[].name` | string | — | Human-readable rule name. |
 | `rules[].pattern` | string | — | Regex pattern matched against each command segment. Required. |
 | `rules[].action` | string | `allow`, `deny` | Action when pattern matches. Required. |
@@ -320,7 +319,6 @@ steps:
         enabled:
           - read
           - think
-      safe_mode: false
     messages:
       - role: user
         content: "Analyze the architecture of this codebase without modifying anything"
@@ -395,8 +393,6 @@ steps:
 
   - id: execute
     type: agent
-    agent:
-      safe_mode: true
     messages:
       - role: user
         content: "Execute the approved migration plan: ${MIGRATION_PLAN}"

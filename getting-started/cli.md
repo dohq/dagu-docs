@@ -57,10 +57,7 @@ Run a DAG workflow.
 dagu start [options] DAG_NAME_OR_FILE [-- PARAMS...]
 ```
 
-**Interactive Mode:**
-- If no DAG file is specified, opens an interactive selector
-- Only available in terminal (TTY) environments
-- Shows enhanced progress display during execution
+`dagu start` requires exactly one DAG name or file path.
 
 **Options:**
 - `--params, -p` - Parameters as JSON
@@ -73,9 +70,6 @@ dagu start [options] DAG_NAME_OR_FILE [-- PARAMS...]
 ```bash
 # Basic run
 dagu start my-workflow.yaml
-
-# Interactive mode (no file specified)
-dagu start
 
 # With parameters (note the -- separator)
 dagu start etl.yaml -- DATE=2024-01-01 ENV=prod
@@ -118,8 +112,8 @@ dagu restart [options] DAG_NAME
 - `--run-id, -r` - Run to restart (optional)
 
 ```bash
-dagu restart my-workflow                  # Restart latest
-dagu restart --run-id=20240101_120000 etl # Restart specific
+dagu restart my-workflow                   # Restart the currently running DAG-run
+dagu restart --run-id=20240101_120000 etl  # Restart a specific running DAG-run
 ```
 
 ### `retry`

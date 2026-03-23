@@ -14,7 +14,7 @@ Once configured, click the **Agent** button at the bottom-left corner of any pag
 
 ## Available Tools
 
-The agent has access to 12 built-in tools:
+The agent can use these built-in tools. Some are only available when the corresponding feature is configured:
 
 | Tool | Description |
 |------|-------------|
@@ -24,12 +24,13 @@ The agent has access to 12 built-in tools:
 | `think` | Record reasoning without side effects |
 | `navigate` | Open pages in the Dagu UI |
 | `ask_user` | Prompt the user with options or free-text input |
-| `read_schema` | Look up DAG YAML schema documentation |
 | `delegate` | Spawn sub-agents for parallel tasks |
-| `use_skill` | Execute a skill from the skill store |
-| `search_skills` | Search available skills by query |
-| `remote_agent` | Delegate tasks to agents on remote nodes |
-| `list_remote_nodes` | List available remote nodes |
+| `use_skill` | Execute a skill from the skill store (when skills are configured) |
+| `search_skills` | Search available skills by query (when skills are configured) |
+| `remote_agent` | Delegate tasks to agents on remote nodes (when remote nodes are configured) |
+| `list_remote_nodes` | List available remote nodes (when remote nodes are configured) |
+
+Provider-native web search is configured in model and agent settings rather than exposed as a separate callable tool.
 
 Tools can be individually enabled or disabled in the Tool Policy section of the settings page.
 

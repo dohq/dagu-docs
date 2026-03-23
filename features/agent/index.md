@@ -63,8 +63,8 @@ The input area includes dropdowns to override the default model and select a sou
 
 Toggle the shield icon in the header to enable/disable safe mode:
 
-- **On** (default): Bash commands that match deny rules trigger an approval prompt
-- **Off**: All commands execute immediately without approval
+- **On** (default): Bash commands denied by policy with `ask_user` behavior trigger an approval prompt
+- **Off**: Those same commands run immediately without prompting. Commands denied with `block` still fail.
 
 ### Sending Messages
 
@@ -74,6 +74,8 @@ Toggle the shield icon in the header to enable/disable safe mode:
 
 ## Available Tools
 
+The agent tool registry currently includes these tools. Skills and remote-node tools appear only when those features are configured:
+
 | Tool | Description |
 |------|-------------|
 | `bash` | Execute shell commands (120s default timeout, 600s max) |
@@ -82,12 +84,13 @@ Toggle the shield icon in the header to enable/disable safe mode:
 | `think` | Record reasoning without side effects |
 | `navigate` | Open pages in the Dagu UI |
 | `ask_user` | Prompt the user with options or free-text input |
-| `read_schema` | Look up DAG YAML schema documentation |
 | `delegate` | Spawn sub-agents for parallel tasks |
 | `use_skill` | Execute a skill from the skill store (when skills are configured) |
 | `search_skills` | Search available skills by query (when skills are configured) |
 | `remote_agent` | Delegate tasks to agents on remote nodes (when remote nodes are configured) |
 | `list_remote_nodes` | List available remote nodes (when remote nodes are configured) |
+
+Provider-native web search is configured separately in agent settings. It is not exposed as a standalone tool.
 
 Tools can be individually enabled/disabled in the Tool Policy section of the settings page.
 
@@ -117,13 +120,13 @@ Pattern: ^rm\s+      Action: deny
 Pattern: ^chmod\s+    Action: deny
 ```
 
-When a command is denied with `ask_user` behavior, a prompt appears showing the command and working directory. The user can approve or reject. Approval times out after 5 minutes.
+When a command is denied with `ask_user` behavior and safe mode is on, a prompt appears showing the command and working directory. The user can approve or reject. Approval times out after 5 minutes. When safe mode is off, `ask_user` behaves like allow. `block` always blocks.
 
 The policy also blocks shell constructs that could bypass rule matching: backticks, `$(...)` command substitution, heredocs (`<<`), and process substitution (`<(...)`, `>(...)`).
 
 ## Configuration Storage
 
-Agent configuration is stored in `{DAGU_HOME}/data/agent/config.json`. The actual structure:
+Agent configuration is stored in `{DAGU_HOME}/data/agent/config.json`. A typical structure looks like:
 
 ```json
 {
@@ -139,7 +142,7 @@ Agent configuration is stored in `{DAGU_HOME}/data/agent/config.json`. The actua
   },
   "enabledSkills": [],
   "selectedSoulId": "",
-  "webSearch": { "enabled": false }
+  "webSearch": { "enabled": true }
 }
 ```
 

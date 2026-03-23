@@ -36,9 +36,6 @@ dagu version
 # Basic execution
 dagu start my-workflow.yaml
 
-# Interactive DAG selection (when no file is specified)
-dagu start
-
 # With named parameters (use -- separator)
 dagu start etl.yaml -- DATE=2024-01-01 ENV=prod
 
@@ -55,6 +52,8 @@ dagu enqueue my-workflow.yaml
 dagu dequeue default
 ```
 
+`dagu start` requires a DAG name or file path.
+
 #### Stop a Running Workflow
 ```bash
 # Stop currently running workflow
@@ -69,10 +68,10 @@ dagu stop my-workflow.yaml
 
 #### Restart a Workflow
 ```bash
-# Restart latest run
+# Restart the currently running DAG-run for this workflow
 dagu restart my-workflow
 
-# Restart specific run
+# Restart a specific running DAG-run
 dagu restart --run-id=20240101_120000 my-workflow
 ```
 
@@ -228,19 +227,6 @@ dagu worker \
 ```
 
 Workers automatically register in the service registry system and poll the coordinator for matching tasks based on their labels.
-
-### Interactive DAG Selection
-
-When you run `dagu start` without specifying a DAG file, an interactive selector appears:
-
-```bash
-dagu start
-```
-
-Features:
-- Browse available DAGs with filtering
-- Enter parameters interactively
-- Confirm before execution
 
 ### AI Coding Tool Integration
 

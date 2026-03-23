@@ -31,7 +31,7 @@ Run individual GitHub Actions inside Dagu by delegating execution to [nektos/act
 2. Execute the workflow with:
 
    ```bash
-   dagu run gha-hello.yaml
+   dagu start gha-hello.yaml
    ```
 
 The first step runs the referenced GitHub Action inside an ephemeral workflow powered by `nektos/act`. Dagu binds the step's working directory into the runner container (so files persist locally), evaluates `params` into the action `with:` block, and exposes the step's `output` as an environment variable for downstream steps. The follow-up command step can read `ACTION_OUTPUT` like any other Dagu variable.
@@ -41,8 +41,7 @@ The first step runs the referenced GitHub Action inside an ephemeral workflow po
 Let Dagu trigger your GitHub Action on a cron schedule:
 
 ```yaml
-schedules:
-  - cron: "0 7 * * 1-5"      # Weekdays at 07:00 server time
+schedule: "0 7 * * 1-5"      # Weekdays at 07:00 server time
 
 secrets:
   - name: GITHUB_TOKEN
@@ -68,7 +67,7 @@ steps:
     command: echo "Open PRs: ${PR_COUNT.count}"
 ```
 
-The first step runs `actions/github-script` inside an isolated Act runner container, executes the JavaScript snippet, and exposes its output as `PR_COUNT`. The follow-up command uses the standard command executor on the host, so no GitHub Action runtime is required locally. The scheduler evaluates the cron expression using the server timezone and executes the DAG automatically, but you can still run it ad-hoc (`dagu run pr-count.yaml`) before enabling the schedule.
+The first step runs `actions/github-script` inside an isolated Act runner container, executes the JavaScript snippet, and exposes its output as `PR_COUNT`. The follow-up command uses the standard command executor on the host, so no GitHub Action runtime is required locally. The scheduler evaluates the cron expression using the server timezone and executes the DAG automatically, but you can still run it ad-hoc (`dagu start pr-count.yaml`) before enabling the schedule.
 
 ## Basic Usage
 
@@ -91,9 +90,10 @@ steps:
 ```
 
 - `command` holds the action reference (`owner/repo@ref`).
-- `executor` can be the shorthand `gha` shown above, or a map with `type: gha` when you need to add `config`.
+- `type` can be `gha`, `github_action`, or `github-action`.
 - `working_dir` is set at the DAG level and determines the workspace Dagu mounts into the action container (defaults to the process CWD if omitted).
-- `executor.config` contains runner configuration options (see Configuration section below).
+- Override per step with `working_dir` when you need a dedicated workspace.
+- `config` contains runner configuration options (see Configuration section below).
 - `params` maps directly to the `with:` block in GitHub Actions YAML. Values support the same variable substitution rules as other step fields.
 
 ## Working Directory
@@ -101,7 +101,7 @@ steps:
 Actions run in the step's resolved `working_dir`:
 
 - Defaults to the DAG's `working_dir`, or the process CWD if none is configured.
-- Override per step with `working_dir` / `dir` when you need a dedicated workspace.
+- Override per step with `working_dir` when you need a dedicated workspace.
 - Files created by actions remain in that directory because the workspace is bind-mounted into the runner container.
 
 ## Passing Secrets
@@ -128,7 +128,7 @@ steps:
 
 ## Configuration
 
-The `executor.config` object accepts the following parameters:
+The step `config` object accepts the following parameters:
 
 ### `runner`
 
@@ -222,7 +222,7 @@ artifacts:
 
 ## Limitations
 
-- Only single-step workflows are supported today; each Dagu step maps to a single GitHub Action invocation.
+- Each Dagu step maps to a single GitHub Action invocation. Compose multiple Dagu steps when you need a larger workflow.
 - The executor synthesises a minimal `push` event payload. Actions that rely on richer event context may need additional wiring.
 - Marketplace actions fetch remote resources on demand. Make sure your environment allows outbound requests and Docker image pulls.
 

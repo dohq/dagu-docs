@@ -307,14 +307,14 @@ Click the **Agent** button at the bottom-left corner of any page.
 ### Capabilities
 
 - Create and edit DAG YAML files
-- Execute shell commands (with approval for dangerous operations)
-- Read files and look up DAG schema documentation
+- Execute shell commands subject to the configured bash policy
+- Read files and edit repository content
 - Navigate to UI pages
-- Search the web for documentation
+- Use skills or remote nodes when those features are configured
 
 ### Configuration
 
-Configure the agent at `/settings/agent` (requires admin role).
+Configure the agent at `/agent-settings` (requires admin role).
 
 See [Agent](/features/agent/) for complete documentation.
 
@@ -346,10 +346,10 @@ export DAGU_TERMINAL_MAX_SESSIONS=5
 - Consider enabling authentication when using terminal
 - Terminal sessions are logged in the audit log
 
-## Audit Logs (Pro)
+## Audit Logs
 
-::: info Pro License
-Audit logs require a [Dagu Pro license](https://dagu.sh/pricing).
+::: info Self-Host License
+On self-hosted Dagu, audit logs require an active [self-host license](https://dagu.sh/pricing). Hosted Dagu Cloud includes audit logging by default.
 :::
 
 The Audit Logs page (under Settings) provides a searchable log of security-sensitive operations.

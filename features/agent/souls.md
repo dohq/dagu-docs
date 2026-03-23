@@ -67,7 +67,7 @@ When no soul is selected, or the selected soul cannot be found, the agent falls 
 
 ### Via Web UI
 
-Navigate to **Agent Settings** (`/settings/agent`) and use the soul selector dropdown in the General Settings section.
+Navigate to **Agent Settings** (`/agent-settings`) and use the soul selector dropdown in the General Settings section.
 
 ### Via API
 
