@@ -1,5 +1,23 @@
 # Changelog
 
+## v2.3.5 (2026-03-24)
+
+### Fixed
+
+- fix: retry dispatch on transient coordinator failures (#1837) ([#1839](https://github.com/dagu-org/dagu/pull/1839)) [@yottahmd](https://github.com/yottahmd)
+- fix: pass runtime environment to precondition shell commands ([#1840](https://github.com/dagu-org/dagu/pull/1840)) [@yottahmd](https://github.com/yottahmd)
+
+### Contributors
+
+Thanks to our contributors for this release:
+
+| Contribution | Contributor |
+| --- | --- |
+| BUG: Preconditions: conditions was broken ([#1838](https://github.com/dagu-org/dagu/issues/1838)) | [@thimuslux](https://github.com/thimuslux) (report) |
+| Bug: some scheduled tasks are queued but not run ([#1837](https://github.com/dagu-org/dagu/issues/1837)) | [@jonasban](https://github.com/jonasban) (report) |
+
+**Full Changelog**: [v2.3.4...v2.3.5](https://github.com/dagu-org/dagu/compare/v2.3.4...v2.3.5)
+
 ## v2.3.4 (2026-03-23)
 
 ## Fixed
