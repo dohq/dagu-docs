@@ -1,3 +1,5 @@
+<div v-pre>
+
 # Template
 
 Render Go templates with structured data. The `template` executor processes a `script` body as a [Go `text/template`](https://pkg.go.dev/text/template) and writes the result to stdout or a file. It is useful for generating configuration files, reports, or any text output from structured data without spawning a shell.
@@ -233,3 +235,5 @@ script: '{{ .csv | split "," | count }}'
 script: '{{ .domains | uniq | sortAlpha | join "," }}'
 # slim-sprig list functions return []any; join accepts both []string and []any
 ```
+
+</div>
