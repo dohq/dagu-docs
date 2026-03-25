@@ -203,6 +203,7 @@ export default withMermaid(
     lang: "en-US",
     lastUpdated: true,
     cleanUrls: true,
+    srcExclude: ["feature-request-*.md"],
 
     head: [
       [
