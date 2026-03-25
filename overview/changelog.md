@@ -4,16 +4,27 @@
 
 ### Added
 
-- feat: add `template` executor for inline text rendering ([#1845](https://github.com/dagu-org/dagu/pull/1845)) — Render Go templates with structured data. See [Template step type](/step-types/template).
-- feat: support slim-sprig functions in template steps ([#1850](https://github.com/dagu-org/dagu/pull/1850)) — Template steps include functions from slim-sprig (hermetic subset).
-- feat: support step-scoped access to captured output values ([#1844](https://github.com/dagu-org/dagu/pull/1844)) — Use `${step_id.output}` to reference a step's captured output value directly. See [Data Flow](/writing-workflows/data-flow#step-output-references).
+- feat: support step-scoped access to captured output values ([#1844](https://github.com/dagu-org/dagu/pull/1844)) [@yottahmd](https://github.com/yottahmd)
+- feat: add template executor for inline text rendering ([#1845](https://github.com/dagu-org/dagu/pull/1845)) [@yottahmd](https://github.com/yottahmd)
+- feat: support slim-sprig functions in template steps (#1848) ([#1850](https://github.com/dagu-org/dagu/pull/1850)) [@yottahmd](https://github.com/yottahmd)
 
 ### Fixed
 
-- fix: add Docker daemon connection vars to env whitelist ([#1846](https://github.com/dagu-org/dagu/pull/1846)) — `DOCKER_HOST`, `DOCKER_TLS_VERIFY`, `DOCKER_CERT_PATH`, and `DOCKER_API_VERSION` are now automatically passed to step processes.
-- fix: resolve env-provider secrets in parent before subprocess filtering ([#1853](https://github.com/dagu-org/dagu/pull/1853)) — Env-provider secrets are pre-resolved in the parent process so subprocesses can access them even when the source variable is not in the whitelist.
-- fix: prevent scheduler split-brain via fence token and self-fencing ([#1854](https://github.com/dagu-org/dagu/pull/1854)) — The scheduler lock now uses fence tokens to prevent two schedulers from running simultaneously after a lock theft.
-- fix: prevent distributed runs from remaining running after execution stops ([#1851](https://github.com/dagu-org/dagu/pull/1851)) — Distributed runs with stale leases are now detected and marked as failed by the coordinator's zombie detector.
+- fix: add Docker daemon connection vars to env whitelist ([#1846](https://github.com/dagu-org/dagu/pull/1846)) [@yottahmd](https://github.com/yottahmd)
+- fix: prevent distributed runs from remaining running after execution stops ([#1851](https://github.com/dagu-org/dagu/pull/1851)) [@yottahmd](https://github.com/yottahmd)
+- fix: resolve env-provider secrets in parent before subprocess filtering ([#1853](https://github.com/dagu-org/dagu/pull/1853)) [@yottahmd](https://github.com/yottahmd)
+- fix: prevent scheduler split-brain via fence token and self-fencing ([#1854](https://github.com/dagu-org/dagu/pull/1854)) [@yottahmd](https://github.com/yottahmd)
+
+### Contributors
+
+Thanks to our contributors for this release:
+
+| Contribution | Contributor |
+| --- | --- |
+| Bug: some scheduled tasks are queued but not run ([#1837](https://github.com/dagu-org/dagu/issues/1837) and [#1849](https://github.com/dagu-org/dagu/issues/1849)) | [@jonasban](https://github.com/jonasban) (report) |
+| Is the DOCKER_HOST environment variable no longer effective in dagu? ([#1843](https://github.com/dagu-org/dagu/issues/1843)) | [@jerry-yuan](https://github.com/jerry-yuan) (report) |
+| Since 2.3.3 secrets doesn't work with "env" provider ([#1852](https://github.com/dagu-org/dagu/issues/1852)) | [@abylon-io](https://github.com/abylon-io) (report) |
+
 
 **Full Changelog**: [v2.3.6...v2.3.7](https://github.com/dagu-org/dagu/compare/v2.3.6...v2.3.7)
 
