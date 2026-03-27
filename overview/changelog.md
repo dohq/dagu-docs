@@ -1,5 +1,27 @@
 # Changelog
 
+## v2.3.8 (2026-03-27)
+
+### Added
+
+- [Feat] history is now displayed in execution order instead of alphabetic order ([#1859](https://github.com/dagu-org/dagu/pull/1859)) [@nikkeitk](https://github.com/nikkeitk)
+
+### Fixed
+
+- fix: recover stale queued distributed runs stuck after worker ack ([#1857](https://github.com/dagu-org/dagu/pull/1857)) [@yottahmd](https://github.com/yottahmd)
+- Preserve DAG env parity in subprocess relaunches ([#1860](https://github.com/dagu-org/dagu/pull/1860)) [@yottahmd](https://github.com/yottahmd)
+
+### Contributors
+
+Thanks to our contributors for this release:
+
+| Contribution | Contributor |
+| --- | --- |
+| Bug: some scheduled tasks are queued but not run ([#1837](https://github.com/dagu-org/dagu/issues/1837)) | [@jonasban](https://github.com/jonasban) (report) |
+| [Feat] history is now displayed in execution order instead of alphabetic order ([#1859](https://github.com/dagu-org/dagu/pull/1859)) | [@nikkeitk](https://github.com/nikkeitk) |
+| [Feat] step in order in history ([#1087](https://github.com/dagu-org/dagu/issues/1087)) | [@jeremydelattre59](https://github.com/jeremydelattre59) (report) |
+| bug: block variables resolve empty for enqueued runs but work for start ([#1856](https://github.com/dagu-org/dagu/issues/1856)) | [@mvgijssel](https://github.com/mvgijssel) (report) |
+
 ## v2.3.7 (2026-03-25)
 
 ### Added
