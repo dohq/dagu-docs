@@ -54,7 +54,8 @@ Running tests:
 
 ```bash
 make lint
-make test
+make test            # includes installer shell regression tests
+make test-installer  # installer shell regression tests only
 ```
 
 Running test with coverage:

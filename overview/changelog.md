@@ -1,5 +1,29 @@
 # Changelog
 
+## v2.3.10 (2026-03-29)
+
+### Added
+
+- feat: add JSON Schema validation for step outputs ([#1867](https://github.com/dagu-org/dagu/pull/1867)) [@mprabhoo](https://github.com/mprabhoo)
+- feat: unify params and output schema handling ([#1869](https://github.com/dagu-org/dagu/pull/1869)) [@yottahmd](https://github.com/yottahmd)
+- feat: support one-off start schedules ([#1872](https://github.com/dagu-org/dagu/pull/1872)) [@yottahmd](https://github.com/yottahmd)
+- feat: add built-in REST API docs ([#1874](https://github.com/dagu-org/dagu/pull/1874)) [@yottahmd](https://github.com/yottahmd)
+
+### Fixed
+
+- fix: track installer tmpfiles in parent shell ([#1870](https://github.com/dagu-org/dagu/pull/1870)) [@yottahmd](https://github.com/yottahmd)
+- fix: preserve env-backed secrets for scheduler subprocess runs ([#1877](https://github.com/dagu-org/dagu/pull/1877)) [@yottahmd](https://github.com/yottahmd)
+
+### Contributors
+
+Thanks to our contributors for this release:
+
+| Contribution | Contributor |
+| --- | --- |
+| feat: add JSON Schema validation for step outputs ([#1867](https://github.com/dagu-org/dagu/pull/1867)) | [@mprabhoo](https://github.com/mprabhoo) |
+
+**Full Changelog**: [v2.3.9...v2.3.10](https://github.com/dagu-org/dagu/compare/v2.3.9...v2.3.10)
+
 ## v2.3.9 (2026-03-28)
 
 ### Fixed

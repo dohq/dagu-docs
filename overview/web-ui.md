@@ -100,25 +100,12 @@ The DAG list can be sorted by:
 - **Name**: Alphabetical order
 - **Status**: Current execution status  
 - **Last Run**: Most recent execution time
-- **Schedule**: Cron schedule
-- **Suspended**: Suspension state
+- **Live / Schedule**: Scheduler-backed next run ordering plus schedule labels and live toggle state
 
-Configure default sorting in `config.yaml`:
-```yaml
-ui:
-  dags:
-    sort_field: "lastRun"  # Default sort field
-    sort_order: "desc"     # Default sort order (asc/desc)
-```
-
-Or via environment variables:
-```bash
-export DAGU_UI_DAGS_SORT_FIELD=lastRun
-export DAGU_UI_DAGS_SORT_ORDER=desc
-```
+The Web UI initializes this page with `name` / `asc` and sends explicit `sort` and `order` query parameters on requests. `ui.dags.sort_field` and `ui.dags.sort_order` are API fallback settings for clients that omit those parameters.
 
 ::: info Backend Sorting
-Only the `name` field is sorted server-side. Other fields (status, lastRun, schedule, suspended) are sorted client-side for performance.
+`name` and `nextRun` are sorted server-side. `status` and `lastRun` are browser-side sorts on the current page only.
 :::
 
 ## DAG Details
@@ -395,7 +382,7 @@ ui:
   max_dashboard_page_limit: 100  # Items per page
   log_encoding_charset: utf-8   # Log encoding
   dags:
-    sort_field: "name"         # Default sort field
+    sort_field: "name"         # Default request sort field (`name` or `nextRun`)
     sort_order: "asc"          # Default sort order
 ```
 

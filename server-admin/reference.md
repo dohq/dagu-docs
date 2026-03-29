@@ -100,7 +100,7 @@ ui:
   log_encoding_charset: "utf-8"  # Character encoding for log files (see supported encodings below)
   max_dashboard_page_limit: 100
   dags:
-    sort_field: "name"        # Default sort field (name/status/lastRun/schedule/suspended)
+    sort_field: "name"        # Default DAG list request sort field (`name` or `nextRun`)
     sort_order: "asc"         # Default sort order (asc/desc)
 
 latest_status_today: true      # Show only today's status
@@ -296,7 +296,7 @@ Builtin-specific OIDC settings (only used when `auth.mode=builtin`):
 - `DAGU_UI_NAVBAR_TITLE` - Nav bar title
 - `DAGU_UI_LOG_ENCODING_CHARSET` - Log file character encoding (see [Supported Log Encodings](#supported-log-encodings))
 - `DAGU_UI_MAX_DASHBOARD_PAGE_LIMIT` - Dashboard limit
-- `DAGU_UI_DAGS_SORT_FIELD` - Default DAGs page sort field
+- `DAGU_UI_DAGS_SORT_FIELD` - Default DAGs page request sort field (`name` or `nextRun`)
 - `DAGU_UI_DAGS_SORT_ORDER` - Default DAGs page sort order
 
 ### Queue

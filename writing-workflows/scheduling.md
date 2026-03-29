@@ -1,6 +1,6 @@
 # Scheduling
 
-Automate workflow execution with cron-based scheduling.
+Automate workflow execution with cron schedules and one-off start times.
 
 ## Prerequisites
 
@@ -138,6 +138,51 @@ schedule: "CRON_TZ=Asia/Tokyo 0 9 * * *"  # 9 AM Tokyo time
 
 See [tz database timezones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for valid values.
 
+## One-Off Schedules
+
+Use `at` entries when a DAG should run exactly once at a specific timestamp. Dagu accepts them in top-level `schedule` arrays and under `schedule.start`:
+
+```yaml
+schedule:
+  - at: "2026-03-29T09:30:00+09:00"
+steps:
+  - command: echo "Run once"
+```
+
+Or under `schedule.start`:
+
+```yaml
+schedule:
+  start:
+    - at: "2026-03-29T09:30:00+09:00"
+steps:
+  - command: echo "Run once"
+```
+
+The explicit form is also accepted:
+
+```yaml
+schedule:
+  start:
+    - kind: at
+      at: "2026-03-29T09:30:00+09:00"
+```
+
+Rules:
+
+- `at` is supported in top-level `schedule` arrays and under `schedule.start`.
+- The timestamp must be RFC 3339 with an explicit offset or `Z`.
+- Seconds must be `:00`. Minute precision is required.
+- Dagu runs that timestamp once and then marks it consumed so it is not dispatched again.
+
+You can mix cron and one-off entries in top-level `schedule` arrays and in `schedule.start`:
+
+```yaml
+schedule:
+  - "0 9 * * MON-FRI"
+  - at: "2026-03-29T09:30:00+09:00"
+```
+
 ## Start/Stop Schedules
 
 Control long-running processes:
@@ -149,6 +194,8 @@ schedule:
 steps:
   - command: echo "Running service"
 ```
+
+`stop` and `restart` schedules remain cron-only. One-off `at` entries are rejected there.
 
 Multiple start/stop times:
 

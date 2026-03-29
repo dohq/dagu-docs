@@ -12,6 +12,8 @@ For the complete API documentation with all endpoints, see [REST API Reference](
 - **Content-Type**: `application/json`
 - **Required Headers**: `Accept: application/json`
 
+Mounted deployments can change both the server base path and the API base path. The live OpenAPI document advertises the mounted API path in `servers[0].url` so generated clients can target `/api/v1`, `/dagu/api/v1`, `/dagu/rest`, or any other configured mount point correctly.
+
 ## Authentication
 
 The REST API supports three authentication methods:
@@ -32,6 +34,16 @@ curl http://localhost:8080/api/v1/health
 
 Response includes server status, version, uptime, and timestamp.
 
+### OpenAPI Document
+
+Fetch the normalized OpenAPI document served by the current Dagu instance:
+
+```bash
+curl http://localhost:8080/api/v1/openapi.json
+```
+
+When authentication is enabled, `/openapi.json` requires the same auth as the rest of the API. The web UI also exposes a live viewer at `/api-docs`, which loads this document with the current session.
+
 ### DAG Management
 
 #### List DAGs
@@ -40,14 +52,20 @@ Response includes server status, version, uptime, and timestamp.
 curl http://localhost:8080/api/v1/dags
 
 # With filtering and pagination
-curl "http://localhost:8080/api/v1/dags?page=1&perPage=10&name=example&tag=prod"
+curl "http://localhost:8080/api/v1/dags?page=1&perPage=10&name=example&tags=prod"
 
-# With sorting (only 'name' field is supported)
+# Sort alphabetically
 curl "http://localhost:8080/api/v1/dags?sort=name&order=desc"
+
+# Sort by the scheduler's next planned run time
+curl "http://localhost:8080/api/v1/dags?sort=nextRun&order=asc"
 ```
 
-::: info Sorting Limitations
-The API only supports server-side sorting by the `name` field. While the API accepts `sort` parameter with value `name` only, the UI can perform client-side sorting for other fields like status, lastRun, schedule, and suspended.
+::: info Supported Sort Fields
+`GET /api/v1/dags` supports server-side sorting by `name` and `nextRun`.
+
+- `name`: case-insensitive DAG name sort
+- `nextRun`: earlier scheduled run times first in ascending order; DAGs without schedules appear last
 :::
 
 #### Get DAG Details
@@ -195,10 +213,12 @@ Notes:
 { "dagRunId": "<run-id>" }
 ```
 
-#### Stop DAG Run
+#### Stop or Cancel DAG Run
 ```bash
 curl -X POST http://localhost:8080/api/v1/dag-runs/my-dag/20240101_120000/stop
 ```
+
+This endpoint stops a running DAG run. It can also cancel a failed root DAG run that is still pending DAG-level automatic retry.
 
 #### Retry DAG Run
 ```bash
@@ -284,6 +304,7 @@ Common error codes:
         "description": "Example DAG",
         "tags": ["example", "demo"]
       },
+      "nextRun": "2026-03-29T09:30:00+09:00",
       "latestDAGRun": {
         "dagRunId": "20240101_120000",
         "name": "example_dag",
@@ -304,6 +325,8 @@ Common error codes:
   }
 }
 ```
+
+`schedule` entries are recurring cron objects such as `{"expression":"0 * * * *"}` or typed one-off start entries such as `{"kind":"at","at":"2026-03-29T09:30:00+09:00"}`. `nextRun` is the scheduler-aware next planned run time for that DAG. For a pending one-off start entry, `nextRun` can remain visible even after that timestamp has passed, until the scheduler consumes it.
 
 ### Health Check Response
 ```json

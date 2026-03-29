@@ -5,6 +5,9 @@
 - **Base URL**: `http://localhost:8080/api/v1`
 - **Content-Type**: `application/json`
 - **OpenAPI Version**: 3.0.0
+- **Live OpenAPI Document**: `GET /api/v1/openapi.json`
+
+The web UI also includes a live API docs page at `/api-docs`. It renders the same OpenAPI document served by `/api/v1/openapi.json` using the current session. With builtin auth, the viewer pre-fills the stored bearer token for interactive requests.
 
 ### Authentication
 
@@ -53,6 +56,18 @@ Checks the health status of the Dagu server.
 - `uptime`: Server uptime in seconds
 - `timestamp`: Current server time
 
+### OpenAPI Document
+
+**Endpoint**: `GET /api/v1/openapi.json`
+
+Returns the normalized OpenAPI document served by this Dagu instance.
+
+**Notes**:
+
+- When authentication is enabled, this endpoint is authenticated like the rest of the API.
+- The response advertises the mounted API path in `servers[0].url` such as `/api/v1`, `/dagu/api/v1`, or `/dagu/rest`.
+- The document includes the `/openapi.json` path itself, so clients can discover it from the schema.
+
 ## DAG Management Endpoints
 
 ### List DAGs
@@ -68,6 +83,8 @@ Retrieves DAG definitions with optional filtering by name and tags.
 | perPage | integer | Items per page (max 1000) | 50 |
 | name | string | Filter DAGs by name | - |
 | tags | string | Filter by tags. Comma-separated. Syntax: `key`, `key=value`, `!key`, `key*`, `key=value*`. Supports `*` and `?` wildcards. AND logic. | - |
+| sort | string | Sort field: `name` or `nextRun` | `ui.dags.sort_field` (fallback `name`) |
+| order | string | Sort order: `asc` or `desc` | `ui.dags.sort_order` (fallback `asc`) |
 | remoteNode | string | Remote node name | "local" |
 
 **Response (200)**:
@@ -85,6 +102,7 @@ Retrieves DAG definitions with optional filtering by name and tags.
         "defaultParams": "{}",
         "tags": ["example", "demo"]
       },
+      "nextRun": "2026-03-29T09:30:00+09:00",
       "latestDAGRun": {
         "dagRunId": "20240101_120000",
         "name": "example_dag",
@@ -108,6 +126,8 @@ Retrieves DAG definitions with optional filtering by name and tags.
   }
 }
 ```
+
+`schedule` entries are recurring cron objects such as `{"expression":"0 * * * *"}` or typed one-off start entries such as `{"kind":"at","at":"2026-03-29T09:30:00+09:00"}`. `nextRun` is the scheduler-aware next planned run time for that DAG. For a pending one-off start entry, `nextRun` can remain visible even after that timestamp has passed, until the scheduler consumes it.
 
 ### Create DAG
 
@@ -1096,11 +1116,11 @@ Fetches detailed status of a specific DAG run. You can use the special value "la
 }
 ```
 
-### Stop DAG Run
+### Stop or Cancel DAG Run
 
 **Endpoint**: `POST /api/v1/dag-runs/{name}/{dagRunId}/stop`
 
-Forcefully stops a running DAG run.
+Forcefully stops a running DAG run, or cancels a failed root DAG run that is still pending DAG-level automatic retry.
 
 **Response (200)**: Success
 

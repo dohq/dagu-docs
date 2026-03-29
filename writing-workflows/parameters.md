@@ -40,12 +40,30 @@ params:
     minimum: 1
     maximum: 100
 
-# 6. External JSON Schema validation
+# 6. Schema-backed params via local file or URL
 params:
   schema: ./schemas/params.json
   values:
     environment: staging
     batch_size: 25
+
+# 7. Schema-backed params with an inline JSON Schema object
+params:
+  schema:
+    type: object
+    properties:
+      environment:
+        type: string
+        enum: [dev, staging, prod]
+    required: [environment]
+  values:
+    environment: staging
+
+# 8. Schema-backed params with a boolean schema
+params:
+  schema: true
+  values:
+    environment: staging
 ```
 
 Legacy map form is still supported:
@@ -273,9 +291,9 @@ The Web UI uses `paramDefs` from `GET /api/v1/dags/{fileName}` to render typed c
 
 When a param uses `eval`, `paramDefs.default` still reflects only the literal `default` field, if one exists. Computed defaults such as `` `nproc` `` or `$BASE_DIR/out` are resolved by the server at start/enqueue time, not by the client.
 
-## External JSON Schema Validation
+## Schema-Backed Validation
 
-Use external schema mode for advanced validation that does not fit the inline subset, such as nested objects, conditional rules, or shared `$ref` definitions.
+Use schema-backed params when you need validation that does not fit the inline subset, such as nested objects, conditional rules, or shared `$ref` definitions.
 
 ```yaml
 params:
@@ -290,7 +308,41 @@ The schema can be:
 - **Local file**: `./schemas/params.json` or `/absolute/path/to/schema.json`
 - **Remote URL**: `https://example.com/schemas/params.json`
 
-`values:` provides defaults that are validated against the external schema.
+`schema:` can be:
+
+- **Local file**: `./schemas/params.json` or `/absolute/path/to/schema.json`
+- **Remote URL**: `https://example.com/schemas/params.json`
+- **Inline object**: a JSON Schema object embedded directly in YAML
+- **Boolean schema**: `true` to accept any object, `false` to reject all input
+
+`values:` provides defaults that are validated against the schema.
+
+Inline object example:
+
+```yaml
+params:
+  schema:
+    type: object
+    properties:
+      environment:
+        type: string
+        enum: [dev, staging, prod]
+      replicas:
+        type: integer
+        minimum: 1
+        maximum: 10
+        default: 3
+    required: [environment]
+  values:
+    environment: staging
+```
+
+Compatibility notes:
+
+- `params: { schema: prod }` without `values:` is still treated as a legacy named parameter, not schema mode.
+- `params: { schema: true }` without `values:` is also treated as a legacy named parameter.
+- Boolean schema mode becomes active only when `values:` is present.
+- A string `schema:` value without `values:` is treated as schema mode only when it looks like a file path or URL.
 
 ## Enforcing Fixed Parameters
 

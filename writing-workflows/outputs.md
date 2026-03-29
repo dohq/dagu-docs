@@ -1,6 +1,6 @@
 # DAG Run Outputs
 
-Collect and access step outputs from completed DAG runs.
+Collect, validate, and access step outputs from completed DAG runs.
 
 ## Overview
 
@@ -77,6 +77,43 @@ steps:
 | `name` | Yes | Variable name to capture (same as string form) |
 | `key` | No | Custom key for `outputs.json`. Default: variable name converted to camelCase |
 | `omit` | No | When `true`, output is usable within the DAG but excluded from `outputs.json` |
+| `schema` | No | JSON Schema declaration used to validate the captured stdout. Accepts the same declaration types as `params.schema`: string reference, inline object, or boolean schema |
+
+### Validate Captured Output
+
+Use `output.schema` when a step should fail unless its captured stdout matches JSON Schema:
+
+```yaml
+steps:
+  - id: generate_report
+    command: 'echo ''{"summary":"ok","confidence":0.95}'''
+    output:
+      name: RESULT
+      schema:
+        type: object
+        properties:
+          summary: { type: string }
+          confidence: { type: number, minimum: 0.0, maximum: 1.0 }
+        required: [summary, confidence]
+```
+
+You can also point at a schema file or URL:
+
+```yaml
+output:
+  name: RESULT
+  schema: ./schemas/report-output.json
+```
+
+Validation rules:
+
+- Schema validation is available only in the object form of `output`.
+- Dagu validates the captured stdout after the command succeeds.
+- The captured value must be valid JSON.
+- Validation failure marks the step as failed.
+- The stored output value is still the original trimmed stdout string.
+
+Primitive schemas also require JSON syntax. For example, a `type: string` schema expects captured output like `"ok"`, not bare `ok`.
 
 ## Output Collection
 

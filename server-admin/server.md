@@ -102,7 +102,7 @@ ui:
   log_encoding_charset: "utf-8"   # Log file encoding (see reference for supported encodings)
   max_dashboard_page_limit: 100    # Max items on dashboard
   dags:
-    sort_field: "name"           # Default sort field (name/status/lastRun/schedule/suspended)
+    sort_field: "name"           # Default DAG list request sort field (`name` or `nextRun`)
     sort_order: "asc"            # Default sort order (asc/desc)
 
 # Latest Status Configuration
@@ -194,7 +194,7 @@ All options support `DAGU_` prefix:
 - `DAGU_AUTH_OIDC_BUTTON_LABEL` - SSO login button text
 
 **UI:**
-- `DAGU_UI_DAGS_SORT_FIELD` - Default DAGs page sort field
+- `DAGU_UI_DAGS_SORT_FIELD` - Default DAGs page request sort field (`name` or `nextRun`)
 - `DAGU_UI_DAGS_SORT_ORDER` - Default DAGs page sort order
 
 **Terminal:**

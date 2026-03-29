@@ -12,7 +12,7 @@ description: "What this workflow does"
 tags: {env: prod, team: platform}  # Optional: key-value tags
 
 # Scheduling
-schedule: "0 * * * *"      # Optional: cron expression
+schedule: "0 * * * *"      # Optional: cron expression or typed start/stop/restart schedule map
 
 # Execution control
 max_active_steps: 10         # Max parallel steps
@@ -95,7 +95,7 @@ steps:
 
 | Field | Type | Description | Default |
 |-------|------|-------------|---------|
-| `schedule` | string/array | Cron expression(s) | - |
+| `schedule` | string/array/object | Cron expression(s), one-off `at` entries in top-level arrays, or a `start`/`stop`/`restart` schedule map. `start` also accepts one-off `at` entries. | - |
 | `skip_if_successful` | boolean | Skip if already succeeded today | `false` |
 | `restart_wait_sec` | integer | Wait seconds before restart | `0` |
 | `catchup_window` | string | Lookback horizon for replaying missed cron runs on scheduler restart. Duration string (e.g. `"6h"`, `"2d12h"`). If omitted, missed runs are not replayed. | - |
@@ -115,6 +115,21 @@ schedule:
 # With timezone
 schedule: "CRON_TZ=America/New_York 0 9 * * *"
 
+# One-off schedule
+schedule:
+  - at: "2026-03-29T09:30:00+09:00"
+
+# One-off start time
+schedule:
+  start:
+    - at: "2026-03-29T09:30:00+09:00"
+
+# Equivalent explicit kind
+schedule:
+  start:
+    - kind: at
+      at: "2026-03-29T09:30:00+09:00"
+
 # Start/stop schedules
 schedule:
   start:
@@ -124,6 +139,8 @@ schedule:
   restart:
     - "0 12 * * MON-FRI"  # Restart at noon
 ```
+
+`at` is supported in top-level `schedule` arrays and under `schedule.start`. `stop` and `restart` remain cron-only. The timestamp must be an RFC 3339 timestamp with an explicit offset or `Z`, and seconds must be `:00`.
 
 ### Execution Control Fields
 
@@ -261,6 +278,7 @@ Top-level DAG `params:` supports:
 - Ordered lists of strings or single-key maps
 - Inline rich definitions in list form using objects with a required `name` field
 - External schema mode with `{ schema, values }`
+- In schema mode, `schema` can be a local path/URL string, an inline JSON Schema object, or a boolean schema
 
 Literal `default` values stay inert. Inline rich definitions may also set `eval` to compute the effective default at execution time.
 
@@ -302,6 +320,8 @@ Inline definition fields use `snake_case` in YAML:
 Inline types affect validation and typed UI controls. Runtime shell variables and `DAG_PARAMS_JSON` remain string-based.
 
 If both `eval` and `default` are present, `eval` wins at execution time and `default` becomes the literal fallback and display value.
+
+For backward compatibility, `params: { schema: prod }` and `params: { schema: true }` remain legacy named params unless `values` is also present or `schema` is an inline object/path-like reference.
 
 #### `params[].eval`
 
@@ -816,12 +836,14 @@ steps:
 | `stdout` | string | Redirect stdout to file | - |
 | `stderr` | string | Redirect stderr to file | - |
 | `log_output` | string | Override DAG-level log output mode for this step | DAG's log_output |
-| `output` | string | Capture output to variable | - |
+| `output` | string/object | Capture output to a variable. Object form supports `name`, `key`, `omit`, and `schema`. | - |
 | `env` | array/object | Step-specific environment variables (overrides DAG-level) | - |
 | `call` | string | Name of a DAG to execute as a sub DAG-run | - |
 | `params` | string/object | Parameters passed to sub DAGs or executor-specific inputs (e.g., GitHub Actions `with:` map) | - |
 
 `shell` accepts either a string (e.g., `"bash -e"`) or an array (e.g., `["bash", "-e"]`). DAG-level values expand environment variables when the workflow loads; step-level values are evaluated at runtime so you can reference parameters, secrets, or previous outputs.
+
+When `output` uses object form, `schema` accepts a JSON Schema declaration as a string reference, inline object, or boolean schema. The captured stdout must be valid JSON for schema validation to pass.
 
 ### Parallel Execution
 
