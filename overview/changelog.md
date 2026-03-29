@@ -4,7 +4,7 @@
 
 ### Added
 
-- feat: add JSON Schema validation for step outputs ([#1867](https://github.com/dagu-org/dagu/pull/1867)) [@mprabhoo](https://github.com/mprabhoo)
+- feat: add JSON Schema validation for step outputs ([#1867](https://github.com/dagu-org/dagu/pull/1867)) [@mbprabhoo](https://github.com/mbprabhoo)
 - feat: unify params and output schema handling ([#1869](https://github.com/dagu-org/dagu/pull/1869)) [@yottahmd](https://github.com/yottahmd)
 - feat: support one-off start schedules ([#1872](https://github.com/dagu-org/dagu/pull/1872)) [@yottahmd](https://github.com/yottahmd)
 - feat: add built-in REST API docs ([#1874](https://github.com/dagu-org/dagu/pull/1874)) [@yottahmd](https://github.com/yottahmd)
@@ -20,7 +20,11 @@ Thanks to our contributors for this release:
 
 | Contribution | Contributor |
 | --- | --- |
-| feat: add JSON Schema validation for step outputs ([#1867](https://github.com/dagu-org/dagu/pull/1867)) | [@mprabhoo](https://github.com/mprabhoo) |
+| feat: add JSON Schema validation for step outputs ([#1867](https://github.com/dagu-org/dagu/pull/1867)) | [@mbprabhoo](https://github.com/mbprabhoo) |
+| [BUG] cleanup_tmpfiles in installer.sh does not clear tmp dir ([#1868](https://github.com/dagu-org/dagu/issues/1868)) | [@jeremydelattre59](https://github.com/jeremydelattre59) (report) |
+| [Feature] Schedule one-off execution ([#1865](https://github.com/dagu-org/dagu/issues/1865)), [Feature] Built in REST API docs ([#1866](https://github.com/dagu-org/dagu/issues/1866)) | [@bagemt](https://github.com/bagemt) (report) |
+| Secrets does not work with the ‘env’ provider and a scheduled DAG ([#1864](https://github.com/dagu-org/dagu/issues/1864)) | [@abylon-io](https://github.com/abylon-io) (report) |
+
 
 **Full Changelog**: [v2.3.9...v2.3.10](https://github.com/dagu-org/dagu/compare/v2.3.9...v2.3.10)
 
