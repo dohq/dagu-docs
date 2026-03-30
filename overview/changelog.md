@@ -1,5 +1,25 @@
 # Changelog
 
+## v2.3.11 (2026-03-30)
+
+### Added
+
+- feat: support bulk DAG-run selection and actions ([#1881](https://github.com/dagu-org/dagu/pull/1881)) [@yottahmd](https://github.com/yottahmd)
+
+### Fixed
+
+- fix(ui): restore split scrolling in REST API docs ([#1880](https://github.com/dagu-org/dagu/pull/1880)) [@yottahmd](https://github.com/yottahmd)
+
+### Contributors
+
+Thanks to our contributors for this release:
+
+| Contribution | Contributor |
+| --- | --- |
+| The new REST API is not scrollable ([#1879](https://github.com/dagu-org/dagu/issues/1879)) | [@bagemt](https://github.com/bagemt) (report) |
+
+**Full Changelog**: [v2.3.10...v2.3.11](https://github.com/dagu-org/dagu/compare/v2.3.10...v2.3.11)
+
 ## v2.3.10 (2026-03-29)
 
 ### Added
