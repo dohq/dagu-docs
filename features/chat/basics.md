@@ -31,6 +31,8 @@ steps:
 The `local` provider works with any OpenAI-compatible API including Ollama, vLLM, and LM Studio. Provider aliases `ollama`, `vllm`, and `llama` also map to `local`.
 :::
 
+For detailed setup and troubleshooting, especially for Ollama base URLs and Web UI agent configuration, see [Local AI](/features/chat/local-ai).
+
 ## Configuration
 
 ### LLM Configuration (`llm` field)
@@ -69,7 +71,7 @@ Enable extended thinking/reasoning mode for more thorough, accurate responses on
 | OpenAI | `reasoning.effort` | o1, o3, GPT-5 models |
 | Gemini | `thinkingLevel` / `thinkingBudget` | Gemini 2.5+, Gemini 3 models |
 | OpenRouter | Unified `reasoning` | Auto-mapped to underlying provider |
-| Local | Not supported | Thinking APIs vary by model; configure natively |
+| Local | Not currently serialized by Dagu's local provider | Some local servers now document reasoning controls, but Dagu's current local-provider request builder sends standard chat-completions fields only |
 
 **Effort Level Mapping:**
 
@@ -232,6 +234,8 @@ steps:
       - role: user
         content: "Hello!"
 ```
+
+See [Local AI](/features/chat/local-ai) for the correct Ollama `base_url`, current limitations, and common `404` causes.
 
 ### Custom Endpoint
 

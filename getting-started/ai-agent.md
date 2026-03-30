@@ -12,6 +12,8 @@ The Dagu agent is an LLM-powered assistant integrated into the Web UI. It can re
 
 Once configured, click the **Agent** button at the bottom-left corner of any page to start chatting.
 
+If you are using Ollama or another local model server, read [Local AI](/features/chat/local-ai) before setting the `Base URL`. Dagu expects an OpenAI-compatible base such as `http://localhost:11434/v1`, not a native Ollama endpoint like `/api/generate`.
+
 ## Available Tools
 
 The agent can use these built-in tools. Some are only available when the corresponding feature is configured:

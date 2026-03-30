@@ -26,7 +26,7 @@ Click **Add Model** to configure an LLM provider. Each model has:
 | Provider | yes | `anthropic`, `openai`, `gemini`, `openrouter`, `zai`, or `local` |
 | Model | yes | Model identifier (e.g., `claude-sonnet-4-5`, `gpt-4o`) |
 | API Key | yes* | Provider API key. Not required for `local` provider. |
-| Base URL | no | Custom endpoint. Required for `local` provider (e.g., `http://localhost:11434/v1`). |
+| Base URL | no | Custom endpoint. For `local`, if omitted, Dagu defaults to `http://localhost:11434/v1`. |
 | Context Window | no | Token context size |
 | Max Output Tokens | no | Maximum output tokens |
 | Input Cost / 1M | no | Cost per 1M input tokens (for cost tracking) |
@@ -34,6 +34,8 @@ Click **Add Model** to configure an LLM provider. Each model has:
 | Supports Thinking | no | Enable extended thinking capability |
 
 The settings page includes presets for common models (Claude, GPT-4, Gemini, etc.) that pre-fill these fields.
+
+For Ollama and other local model servers, see [Local AI](/features/chat/local-ai) for the exact `Base URL` format Dagu expects.
 
 ### 3. Set a Default Model
 
