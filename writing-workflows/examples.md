@@ -1340,6 +1340,27 @@ steps:
 
 <div class="example-card">
 
+### Kubernetes Job
+
+```yaml
+kubernetes:
+  namespace: batch
+  service_account: dagu-runner
+
+steps:
+  - id: report
+    type: k8s
+    config:
+      image: alpine:3.20
+    command: [sh, -c, 'echo hello from kubernetes']
+```
+
+<a href="/step-types/kubernetes" class="learn-more">Learn more →</a>
+
+</div>
+
+<div class="example-card">
+
 ### Exec Into Existing Container
 
 ```yaml

@@ -162,6 +162,7 @@ See [Architecture](/overview/architecture) for details.
 | `agent` | LLM-powered agent with tool-calling loop |
 | `ssh` | Remote command execution via SSH |
 | `docker` | Container execution with volume mounts and registry auth |
+| `k8s`, `kubernetes` | Run a step as a Kubernetes Job with DAG-level defaults |
 | `http` | HTTP/REST API requests |
 | `approval` | Human approval gate (field on any step type) |
 | `jq` | JSON query and transformation |

@@ -570,6 +570,42 @@ When configured at the DAG level, all redis steps inherit the connection setting
 
 See [Redis Executor](/step-types/redis) for full documentation.
 
+### Kubernetes Configuration
+
+| Field | Type | Description | Default |
+|-------|------|-------------|---------|
+| `kubernetes` | object | Default Kubernetes configuration for explicit `k8s` / `kubernetes` steps | - |
+
+```yaml
+kubernetes:
+  namespace: batch
+  context: production
+  service_account: dagu-runner
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+
+steps:
+  - id: report
+    type: k8s
+    config:
+      image: alpine:3.20
+    command: echo hello
+```
+
+When configured at the DAG level, only steps with `type: k8s` or `type: kubernetes` inherit these defaults. The root `kubernetes:` block does not change the executor type of plain command steps.
+
+Step-level `config` overrides DAG-level `kubernetes` using Kubernetes-specific merge rules:
+- scalar values replace DAG defaults
+- nested objects merge by key with the step value winning
+- arrays replace the DAG value wholesale
+- empty objects and empty arrays can be used to clear inherited nested values
+
+The DAG-level block accepts the same fields as the step-level Kubernetes executor config, except `image` is optional at the DAG level and must still be provided by the effective step config.
+
+See [Kubernetes Step](/step-types/kubernetes) for the full executor reference and examples.
+
 ### Working Directory and Volume Resolution
 
 When using container volumes with relative paths, the paths are resolved relative to the DAG's `working_dir`:
@@ -806,7 +842,7 @@ Commands run in order and stop on first failure. Retries restart from the first 
 
 **Supported step types:** shell, command, docker, container, ssh
 
-**Not supported:** jq, http, archive, mail, github_action, dag, template
+**Not supported:** jq, http, archive, mail, github_action, dag, template, k8s, kubernetes
 
 These step types do not support multi-command arrays. Use `script:` for `template` steps. Unsupported configurations are rejected at parse time.
 

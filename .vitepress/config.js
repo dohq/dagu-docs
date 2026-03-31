@@ -64,6 +64,7 @@ const fullSidebar = [
       { text: "Shell (macOS / Linux)", link: "/step-types/shell-unix" },
       { text: "Shell (Windows)", link: "/step-types/shell-windows" },
       { text: "Docker", link: "/step-types/docker" },
+      { text: "Kubernetes", link: "/step-types/kubernetes" },
       { text: "HTTP", link: "/step-types/http" },
       { text: "SSH", link: "/step-types/ssh" },
       { text: "SFTP", link: "/step-types/sftp" },

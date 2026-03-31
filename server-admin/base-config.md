@@ -356,6 +356,24 @@ redis:
   tls: false
 ```
 
+#### Kubernetes Configuration
+
+```yaml
+# base.yaml
+kubernetes:
+  context: production
+  namespace: batch
+  service_account: dagu-runner
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+```
+
+These defaults apply only to steps that explicitly use `type: k8s` or `type: kubernetes`. DAG-level or step-level Kubernetes config can override them.
+
+See [Kubernetes Step](/step-types/kubernetes) for the full executor reference, merge behavior, and field examples.
+
 ### Container Defaults
 
 Set default Docker container configuration:
@@ -536,6 +554,15 @@ ssh:
 s3:
   region: us-east-1
   bucket: company-data-lake
+
+# Kubernetes defaults for batch jobs
+kubernetes:
+  namespace: batch
+  service_account: dagu-runner
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
 ```
 
 ## Common Patterns
