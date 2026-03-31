@@ -5,7 +5,7 @@ Workflow Operator is Dagu's persistent chatbot/operator layer for Slack and Tele
 Only one messaging connector can be active at a time. Technically this is configured via `bots.provider` in the config file or the `DAGU_BOTS_PROVIDER` environment variable.
 
 ::: tip Prerequisite
-Configure the AI agent first. Go to **Agent Settings** (`/agent-settings`) in the Web UI and set your model, tool policy, and related defaults. See [Agent Settings](/features/agent/settings) for details.
+Configure the AI agent first. Go to **Agent Settings** (`/agent-settings`) in the Web UI and set your model, tool policy, and related defaults. Start with [Agent Settings](/features/agent/settings/), then use [Models & Providers](/features/agent/settings/models) and [Tool Permissions & Bash Policy](/features/agent/settings/controls) as needed.
 :::
 
 ## Available Platforms
@@ -26,4 +26,4 @@ That means:
 - Tool permissions and bash policy still apply
 - Provider-specific model issues such as local-model endpoint configuration still matter
 
-Start with [Agent Settings](/features/agent/settings), then return here to configure Slack or Telegram.
+Start with [Agent Settings](/features/agent/settings/), then return here to configure Slack or Telegram.

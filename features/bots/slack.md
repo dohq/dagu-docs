@@ -4,7 +4,7 @@ Workflow Operator on Slack uses a Slack bot to map each Slack channel to a persi
 
 ## Prerequisites
 
-Before setting up Workflow Operator on Slack, configure the AI agent in the Web UI. Go to **Agent Settings** (`/agent-settings`) and set up the agent model, tool policy, and other defaults first. The Slack bot forwards messages to the built-in agent, so it must be configured before Slack can use it. See [Agent Settings](/features/agent/settings) for details.
+Before setting up Workflow Operator on Slack, configure the AI agent in the Web UI. Go to **Agent Settings** (`/agent-settings`) and set up the agent model, tool policy, and other defaults first. The Slack bot forwards messages to the built-in agent, so it must be configured before Slack can use it. Start with [Agent Settings](/features/agent/settings/), then use [Models & Providers](/features/agent/settings/models) and [Tool Permissions & Bash Policy](/features/agent/settings/controls) for the concrete setup pieces.
 
 ## Creating a Slack App
 

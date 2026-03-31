@@ -19,6 +19,8 @@ Both of these Dagu features use that same local-provider stack:
 - The Web UI agent model configuration under `/agent-settings`
 - Workflow chat steps using `type: chat`
 
+For the Web UI path, see [Models & Providers](/features/agent/settings/models) alongside this page.
+
 ## Provider Names
 
 ### In Workflow YAML
@@ -46,7 +48,7 @@ steps:
 
 ### In the Web UI Agent Settings
 
-In the Web UI, choose `Local` from the provider dropdown. The UI stores a model config and the agent backend uses that config when it creates provider clients.
+In the Web UI, choose `Local` from the provider dropdown. The UI stores a model config and the agent backend uses that config when it creates provider clients. See [Models & Providers](/features/agent/settings/models) for the settings-page behavior.
 
 ## Ollama: Use the OpenAI-Compatible Base URL
 
@@ -277,4 +279,5 @@ That is also expected with the current code paths:
 
 - [Basic Chat](/features/chat/basics)
 - [Agent](/features/agent/)
+- [Models & Providers](/features/agent/settings/models)
 - [AI Agent Getting Started](/getting-started/ai-agent)

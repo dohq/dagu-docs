@@ -14,7 +14,7 @@ Once configured, click the **Agent** button at the bottom-left corner of any pag
 
 If you are using Ollama or another local model server, read [Local AI](/features/chat/local-ai) before setting the `Base URL`. Dagu expects an OpenAI-compatible base such as `http://localhost:11434/v1`, not a native Ollama endpoint like `/api/generate`.
 
-For the full built-in agent configuration surface, see [Agent Settings](/features/agent/settings). That page covers model management, tool permissions, souls, bash policy, and web search.
+For the full built-in agent configuration surface, start with [Agent Settings](/features/agent/settings/). The settings docs are split into focused pages for models, tool policy, personality, and web search.
 
 ## Available Tools
 
@@ -36,7 +36,7 @@ The agent can use these built-in tools. Some are only available when the corresp
 
 Provider-native web search is configured in model and agent settings rather than exposed as a separate callable tool.
 
-Tools can be individually enabled or disabled in the Tool Policy section of the settings page.
+Tools can be individually enabled or disabled in [Tool Permissions & Bash Policy](/features/agent/settings/controls).
 
 ## Agent in Workflows
 
@@ -95,7 +95,10 @@ See [`ai` in CLI Commands](/getting-started/cli#ai) for more details.
 ## See Also
 
 - [Full Agent Documentation](/features/agent/) — Complete guide to the agent's features and configuration
-- [Agent Settings](/features/agent/settings) — Configure the built-in Web UI agent
+- [Agent Settings](/features/agent/settings/) — Start here for the built-in Web UI agent settings
+- [Models & Providers](/features/agent/settings/models) — Add models and set the default model
+- [Tool Permissions & Bash Policy](/features/agent/settings/controls) — Control tools and bash rules
+- [Personality & Web Search](/features/agent/settings/behavior) — Configure souls and provider-native search
 - [Agent Step](/features/agent/step) — Using the agent as a workflow step
 - [Tools Reference](/features/agent/tools) — Detailed tool parameter documentation
 - [Workflow Operator](/features/bots/) — Use the built-in agent from Slack or Telegram

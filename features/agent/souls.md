@@ -1,6 +1,6 @@
 # Souls
 
-Souls define the agent's identity, priorities, and communication style. Each soul is a Markdown file with YAML frontmatter that gets injected into the agent's system prompt. You can create multiple souls and switch between them from Agent Settings.
+Souls define the agent's identity, priorities, and communication style. Each soul is a Markdown file with YAML frontmatter that gets injected into the agent's system prompt. You can create multiple souls and switch between them from [Personality & Web Search](/features/agent/settings/behavior).
 
 ## File Format
 
@@ -67,7 +67,9 @@ When no soul is selected, or the selected soul cannot be found, the agent falls 
 
 ### Via Web UI
 
-Navigate to **Agent Settings** (`/agent-settings`) and use the soul selector dropdown in the General Settings section.
+Navigate to **Agent Settings** (`/agent-settings`) and use the **Agent Personality** selector in the Web UI.
+
+The settings behavior is documented on [Personality & Web Search](/features/agent/settings/behavior).
 
 ### Via API
 
@@ -138,10 +140,11 @@ You focus on infrastructure, monitoring, and deployment workflows.
 - Include command examples when relevant.
 ```
 
-Then select it from Agent Settings or via the API.
+Then select it from [Personality & Web Search](/features/agent/settings/behavior) or via the API.
 
 ## See Also
 
 - [Agent Overview](/features/agent/) — Chat interface and configuration
+- [Personality & Web Search](/features/agent/settings/behavior) — Choose the default soul in the Web UI
 - [Agent Step](/features/agent/step) — Using souls in DAG agent steps
 - [Git Sync](/server-admin/git-sync) — Synchronizing soul files with Git

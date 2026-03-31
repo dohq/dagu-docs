@@ -16,7 +16,10 @@ Click the **Agent** button at the bottom-left corner of any page. The button sho
 
 Use this section as the entry point for the agent-related docs:
 
-- [Settings](/features/agent/settings) — Configure the built-in Web UI agent, models, tool policy, souls, and web search
+- [Settings Overview](/features/agent/settings/) — Start here for the built-in Web UI agent settings
+- [Models & Providers](/features/agent/settings/models) — Enable the built-in agent, add models, and set the default model
+- [Tool Permissions & Bash Policy](/features/agent/settings/controls) — Decide which tools the agent may use and how bash commands are filtered
+- [Personality & Web Search](/features/agent/settings/behavior) — Choose the default soul and provider-native web search behavior
 - [Agent Step](/features/agent/step) — Run the agent as a workflow step inside a DAG
 - [Tools Reference](/features/agent/tools) — Understand the built-in tools and their parameters
 - [Workflow Operator](/features/bots/) — Use the built-in agent through Slack or Telegram chatbots
@@ -24,16 +27,14 @@ Use this section as the entry point for the agent-related docs:
 
 ## Settings
 
-All built-in agent configuration is managed through the Web UI at `/agent-settings` and is documented on the dedicated [Settings](/features/agent/settings) page.
+All built-in agent configuration is managed through the Web UI at `/agent-settings`.
 
-That page covers:
+The documentation is split into smaller pages:
 
-- Enabling or disabling the built-in agent
-- Adding and managing models
-- Setting the default model
-- Selecting the default soul/personality
-- Configuring tool permissions and bash policy
-- Enabling provider-native web search
+- [Settings Overview](/features/agent/settings/)
+- [Models & Providers](/features/agent/settings/models)
+- [Tool Permissions & Bash Policy](/features/agent/settings/controls)
+- [Personality & Web Search](/features/agent/settings/behavior)
 
 For Ollama and other local model servers, see [Local AI](/features/chat/local-ai) for the exact `Base URL` format Dagu expects.
 
@@ -90,13 +91,13 @@ The agent tool registry currently includes these tools. Skills and remote-node t
 
 Provider-native web search is configured separately in agent settings. It is not exposed as a standalone tool.
 
-Tools can be individually enabled/disabled in the Tool Policy section of the settings page.
+Tools can be individually enabled or disabled in [Tool Permissions & Bash Policy](/features/agent/settings/controls).
 
 See [Tools Reference](/features/agent/tools) for full parameter documentation.
 
 ## Bash Command Policy
 
-Bash command execution is controlled by a configurable policy with regex-based rules. Configure this in the Tool Policy section of the settings page.
+Bash command execution is controlled by a configurable policy with regex-based rules. Configure this in [Tool Permissions & Bash Policy](/features/agent/settings/controls).
 
 | Setting | Values | Default | Description |
 |---------|--------|---------|-------------|
@@ -148,7 +149,10 @@ Models are stored separately and managed through their own API. Do not edit thes
 
 ## See Also
 
-- [Settings](/features/agent/settings) — Configure the built-in Web UI agent
+- [Settings Overview](/features/agent/settings/) — Start here for the built-in Web UI agent settings
+- [Models & Providers](/features/agent/settings/models) — Built-in agent model registry and default model behavior
+- [Tool Permissions & Bash Policy](/features/agent/settings/controls) — Global tool gating and bash command filtering
+- [Personality & Web Search](/features/agent/settings/behavior) — Default soul and provider-native web search
 - [Agent Step](/features/agent/step) — Run the agent as a workflow step (`type: agent`)
 - [Tools Reference](/features/agent/tools) — Full parameter documentation for each tool
 - [Memory](/features/agent/memory) — Persistent context across sessions

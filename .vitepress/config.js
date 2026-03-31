@@ -90,7 +90,16 @@ const fullSidebar = [
     text: "AI Agent",
     items: [
       { text: "Overview", link: "/features/agent/" },
-      { text: "Settings", link: "/features/agent/settings" },
+      {
+        text: "Settings",
+        collapsed: false,
+        items: [
+          { text: "Overview", link: "/features/agent/settings/" },
+          { text: "Models & Providers", link: "/features/agent/settings/models" },
+          { text: "Tool Permissions", link: "/features/agent/settings/controls" },
+          { text: "Personality & Web Search", link: "/features/agent/settings/behavior" },
+        ],
+      },
       { text: "Agent Step", link: "/features/agent/step" },
       { text: "Tools Reference", link: "/features/agent/tools" },
       { text: "Memory", link: "/features/agent/memory" },
@@ -98,7 +107,7 @@ const fullSidebar = [
       { text: "Scheduling", link: "/features/agent/scheduling" },
       { text: "Nesting", link: "/features/agent/nesting" },
       {
-        text: "Chat Bot",
+        text: "Chat Bot Settings",
         collapsed: false,
         items: [
           { text: "Overview", link: "/features/bots/" },
