@@ -1,4 +1,4 @@
-# Workflow Operator
+# Workflow Operator (Chat Bot)
 
 Workflow Operator is Dagu's persistent chatbot/operator layer for Slack and Telegram. Slack and Telegram bots act as connectors that map conversations in those platforms to agent sessions, forward messages in both directions, and keep follow-up in the same context.
 
