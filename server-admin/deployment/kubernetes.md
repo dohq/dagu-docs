@@ -102,6 +102,8 @@ Additional per-component environment variables:
 - Worker:
   `DAGU_WORKER_ID` from `metadata.name`
 
+The chart also supports a shared `extraEnv` value. Every entry in `extraEnv` is added to the `env:` list of the coordinator, scheduler, UI, and all worker Deployments.
+
 Container commands are fixed by the templates:
 
 ```text
@@ -155,6 +157,10 @@ peer:
 ```
 
 The `auth.mode`, `auth.builtin.token.secret`, and `auth.builtin.token.ttl` fields come from `values.yaml`. The other fields shown above are fixed by the chart templates.
+
+When `config.envPassthrough` is non-empty, the chart also writes top-level `env_passthrough` into `dagu.yaml`.
+
+When `config.envPassthroughPrefixes` is non-empty, the chart also writes top-level `env_passthrough_prefixes` into `dagu.yaml`.
 
 The UI Deployment also sets `DAGU_PORT=<ui.service.port>`. That environment variable overrides `port` from `dagu.yaml` at runtime when `ui.service.port` is changed from the default.
 
@@ -218,9 +224,73 @@ persistence:
   size: 10Gi
   storageClass: ""
   skipValidation: false
+
+config:
+  envPassthrough: []
+  envPassthroughPrefixes: []
+
+extraEnv: []
 ```
 
 `image.pullPolicy` is the actual key used by the chart. `pull_policy` is not used.
+
+## Step Environment Passthrough
+
+The chart exposes Dagu's environment passthrough settings through `values.yaml -> config`:
+
+```yaml
+config:
+  envPassthrough:
+    - SSL_CERT_FILE
+    - HTTP_PROXY
+    - HTTPS_PROXY
+    - NO_PROXY
+  envPassthroughPrefixes:
+    - AWS_
+```
+
+Those values only change Dagu's filter. They do not create container environment variables.
+
+If the variable must come from the pod environment, inject it with `extraEnv`:
+
+```yaml
+extraEnv:
+  - name: HTTP_PROXY
+    value: http://proxy.example.com:8080
+  - name: HTTPS_PROXY
+    value: http://proxy.example.com:8080
+  - name: NO_PROXY
+    value: 127.0.0.1,localhost,.svc,.cluster.local
+  - name: SSL_CERT_FILE
+    value: /etc/ssl/certs/custom-ca.pem
+```
+
+Combined example:
+
+```yaml
+config:
+  envPassthrough:
+    - SSL_CERT_FILE
+    - HTTP_PROXY
+    - HTTPS_PROXY
+    - NO_PROXY
+
+extraEnv:
+  - name: HTTP_PROXY
+    value: http://proxy.example.com:8080
+  - name: HTTPS_PROXY
+    value: http://proxy.example.com:8080
+  - name: NO_PROXY
+    value: 127.0.0.1,localhost,.svc,.cluster.local
+  - name: SSL_CERT_FILE
+    value: /etc/ssl/certs/custom-ca.pem
+```
+
+With that configuration:
+
+- the container processes receive the variables from `extraEnv`
+- Dagu forwards the listed variables into step execution
+- variables not present in the pod environment are not created by `config.envPassthrough`
 
 ## Persistence Rules
 

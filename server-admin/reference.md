@@ -107,6 +107,11 @@ latest_status_today: true      # Show only today's status
 
 # Execution
 default_execution_mode: "local"  # "local" (default) or "distributed"
+env_passthrough:
+  - SSL_CERT_FILE
+  - HTTP_PROXY
+env_passthrough_prefixes:
+  - AWS_
 
 # Queues
 queues:
@@ -210,7 +215,7 @@ git_sync:
 
 All options support `DAGU_` prefix.
 
-**Note:** For security, Dagu filters which system environment variables are passed to step processes and sub DAGs. System variables are available for expansion (`${VAR}`) in DAG configuration, but only whitelisted variables (`PATH`, `HOME`, `LANG`, `TZ`, `SHELL`) and variables with allowed prefixes (`DAGU_*`, `LC_*`, `DAG_*`) are passed to the step execution environment. See [Operations - Security](/server-admin/operations#security) for details.
+**Note:** Dagu filters which system environment variables are passed to step processes and sub-DAG executions. Built-in forwarding includes the platform allowlist plus the prefixes `DAGU_`, `DAG_`, `LC_`, and `KUBERNETES_`. You can extend that set with top-level `env_passthrough` and `env_passthrough_prefixes`. See [Operations - Security](/server-admin/operations#security) for exact behavior.
 
 ### Server
 - `DAGU_HOST` - Server host (default: `127.0.0.1`)
@@ -218,6 +223,8 @@ All options support `DAGU_` prefix.
 - `DAGU_BASE_PATH` - Base path for reverse proxy
 - `DAGU_API_BASE_URL` - **DEPRECATED** - Use `api_base_path` config instead
 - `DAGU_TZ` - Server timezone
+- `DAGU_ENV_PASSTHROUGH` - Comma-separated exact env var names to forward to step execution
+- `DAGU_ENV_PASSTHROUGH_PREFIXES` - Comma-separated env var prefixes to forward to step execution
 - `DAGU_DEBUG` - Enable debug mode
 - `DAGU_LOG_FORMAT` - Log format (`text`/`json`)
 - `DAGU_HEADLESS` - Run without UI
