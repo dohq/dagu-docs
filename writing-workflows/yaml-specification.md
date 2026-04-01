@@ -604,6 +604,15 @@ Step-level `config` overrides DAG-level `kubernetes` using Kubernetes-specific m
 
 The DAG-level block accepts the same fields as the step-level Kubernetes executor config, except `image` is optional at the DAG level and must still be provided by the effective step config.
 
+That includes cluster selection, image/runtime settings, env and env sources, resources, service account, scheduling controls, labels/annotations, volumes, lifecycle controls, and the typed Kubernetes additions:
+
+- `security_context`
+- `pod_security_context`
+- `affinity`
+- `termination_grace_period_seconds`
+- `priority_class_name`
+- `pod_failure_policy`
+
 See [Kubernetes Step](/step-types/kubernetes) for the full executor reference and examples.
 
 ### Working Directory and Volume Resolution

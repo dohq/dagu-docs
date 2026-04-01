@@ -142,6 +142,7 @@ steps:
 - Kubernetes exposes a merged container log stream, so stdout and stderr are streamed as a single log stream for this executor.
 - `cleanup_policy` defaults to `delete`, which removes the Job after completion.
 - `cleanup_policy: keep` keeps the Job after normal completion or job-reported failure.
+- `cleanup_policy: keep` also keeps the Job when pod scheduling fails before the workload starts.
 - Cancellation, kill, and timeout paths still force cleanup even when `cleanup_policy` is `keep`.
 
 ## Configuration Reference
@@ -158,8 +159,11 @@ steps:
 | `service_account` | Pod service account name | cluster default |
 | `image_pull_policy` | Pull policy: `Always`, `IfNotPresent`, `Never` | unset |
 | `image_pull_secrets` | Secret names for private registries | - |
+| `priority_class_name` | Pod priority class name | unset |
+| `termination_grace_period_seconds` | Pod shutdown grace period in seconds | cluster default |
 
 `image_pull_policy` is case-insensitive. When omitted, Dagu leaves it unset.
+`termination_grace_period_seconds` must be non-negative.
 
 ### Environment
 
@@ -194,6 +198,15 @@ config:
         name: app-secrets
 ```
 
+Rules enforced by Dagu:
+
+- Every `env` entry must include `name`.
+- `value` and `value_from` are mutually exclusive.
+- `value_from` must define exactly one source.
+- `secret_key_ref.name`, `secret_key_ref.key`, `config_map_key_ref.name`, `config_map_key_ref.key`, and `field_ref.field_path` are required when their source is used.
+- Every `env_from` entry must define exactly one of `config_map_ref` or `secret_ref`.
+- `config_map_ref.name` and `secret_ref.name` are required.
+
 ### Resources, Scheduling, and Metadata
 
 | Field | Description |
@@ -202,10 +215,159 @@ config:
 | `resources.limits` | Resource limits map, typically `cpu` / `memory` |
 | `node_selector` | Pod node selector labels |
 | `tolerations` | Pod tolerations |
+| `affinity` | Node affinity, pod affinity, and pod anti-affinity |
 | `labels` | Labels applied to both the Job and Pod |
 | `annotations` | Annotations applied to both the Job and Pod |
 
-Resource quantities use Kubernetes quantity syntax such as `100m`, `128Mi`, or `1Gi`. Invalid quantities are rejected during config validation.
+Resource quantities use Kubernetes quantity syntax such as `100m`, `128Mi`, or `1Gi`. Invalid or negative quantities are rejected during config validation.
+
+### Security Context
+
+`security_context` configures container-level Linux security settings:
+
+```yaml
+config:
+  security_context:
+    run_as_user: 1000
+    run_as_group: 1000
+    run_as_non_root: true
+    privileged: false
+    read_only_root_filesystem: true
+    allow_privilege_escalation: false
+    capabilities:
+      drop: [ALL]
+    seccomp_profile:
+      type: RuntimeDefault
+```
+
+Supported fields:
+
+- `run_as_user`
+- `run_as_group`
+- `run_as_non_root`
+- `privileged`
+- `read_only_root_filesystem`
+- `allow_privilege_escalation`
+- `capabilities.add`
+- `capabilities.drop`
+- `seccomp_profile.type`
+- `seccomp_profile.localhost_profile`
+
+Rules enforced by Dagu:
+
+- `run_as_user` and `run_as_group` must be non-negative when set.
+- `capabilities.add` and `capabilities.drop` must contain only non-empty strings.
+- `seccomp_profile.type` must be `RuntimeDefault`, `Unconfined`, or `Localhost`.
+- `seccomp_profile.localhost_profile` is required only when `type` is `Localhost`.
+
+### Pod Security Context
+
+`pod_security_context` configures Pod-level Linux defaults:
+
+```yaml
+config:
+  pod_security_context:
+    run_as_user: 1000
+    run_as_group: 1000
+    run_as_non_root: true
+    fs_group: 2000
+    fs_group_change_policy: OnRootMismatch
+    supplemental_groups: [3000, 4000]
+    sysctls:
+      - name: net.ipv4.ip_unprivileged_port_start
+        value: "0"
+    seccomp_profile:
+      type: RuntimeDefault
+```
+
+Supported fields:
+
+- `run_as_user`
+- `run_as_group`
+- `run_as_non_root`
+- `fs_group`
+- `fs_group_change_policy`
+- `supplemental_groups`
+- `sysctls[].name`
+- `sysctls[].value`
+- `seccomp_profile.type`
+- `seccomp_profile.localhost_profile`
+
+Rules enforced by Dagu:
+
+- `run_as_user`, `run_as_group`, `fs_group`, and every `supplemental_groups` entry must be non-negative.
+- `fs_group_change_policy` must be `Always` or `OnRootMismatch` when set.
+- Every `sysctls` entry must include non-empty `name` and `value`.
+- `seccomp_profile` uses the same validation rules as `security_context`.
+
+Container-level `security_context` and Pod-level `pod_security_context` can both be set. Dagu maps both to Kubernetes and does not try to collapse them into one structure.
+
+### Affinity
+
+`affinity` supports the typed subset implemented by the executor:
+
+```yaml
+config:
+  affinity:
+    node_affinity:
+      required_during_scheduling_ignored_during_execution:
+        node_selector_terms:
+          - match_expressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values: [amd64]
+      preferred_during_scheduling_ignored_during_execution:
+        - weight: 50
+          preference:
+            match_expressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values: [ap-northeast-1a]
+    pod_anti_affinity:
+      preferred_during_scheduling_ignored_during_execution:
+        - weight: 100
+          pod_affinity_term:
+            topology_key: kubernetes.io/hostname
+            label_selector:
+              match_labels:
+                app: report-worker
+```
+
+Supported fields:
+
+- `node_affinity.required_during_scheduling_ignored_during_execution.node_selector_terms[].match_expressions[]`
+- `node_affinity.preferred_during_scheduling_ignored_during_execution[].weight`
+- `node_affinity.preferred_during_scheduling_ignored_during_execution[].preference.match_expressions[]`
+- `pod_affinity.required_during_scheduling_ignored_during_execution[]`
+- `pod_affinity.preferred_during_scheduling_ignored_during_execution[].weight`
+- `pod_affinity.preferred_during_scheduling_ignored_during_execution[].pod_affinity_term`
+- `pod_anti_affinity` with the same shape as `pod_affinity`
+- `label_selector.match_labels`
+- `label_selector.match_expressions`
+- `namespace_selector.match_labels`
+- `namespace_selector.match_expressions`
+- `namespaces`
+- `topology_key`
+
+Rules enforced by Dagu:
+
+- Node selector requirement operators must be `In`, `NotIn`, `Exists`, `DoesNotExist`, `Gt`, or `Lt`.
+- `In` and `NotIn` require at least one value.
+- `Exists` and `DoesNotExist` require `values` to be empty.
+- `Gt` and `Lt` require exactly one integer value.
+- Pod and label selector operators are limited to `In`, `NotIn`, `Exists`, and `DoesNotExist`.
+- Every preferred affinity weight must be between `1` and `100`.
+- Every pod affinity or anti-affinity term must set `topology_key`.
+- `namespaces` entries must be non-empty strings.
+
+At the DAG or base level, `affinity: {}` clears inherited affinity defaults. You can also clear only the required node-affinity block with:
+
+```yaml
+config:
+  affinity:
+    node_affinity:
+      required_during_scheduling_ignored_during_execution: {}
+```
 
 ### Job Lifecycle
 
@@ -215,11 +377,51 @@ Resource quantities use Kubernetes quantity syntax such as `100m`, `128Mi`, or `
 | `backoff_limit` | Kubernetes Job retry count | `0` |
 | `ttl_after_finished` | Kubernetes TTL-after-finished in seconds | - |
 | `cleanup_policy` | `delete` or `keep` | `delete` |
+| `pod_failure_policy` | Kubernetes Job pod failure policy rules | - |
 
 Notes:
 
 - `active_deadline`, `backoff_limit`, and `ttl_after_finished` must be non-negative.
 - `ttl_after_finished` matters only if the Job remains after completion, for example with `cleanup_policy: keep`.
+
+`pod_failure_policy` supports this typed subset:
+
+```yaml
+config:
+  pod_failure_policy:
+    rules:
+      - action: FailJob
+        on_exit_codes:
+          operator: In
+          values: [42]
+      - action: Ignore
+        on_pod_conditions:
+          - type: DisruptionTarget
+```
+
+Supported fields:
+
+- `rules[].action`
+- `rules[].on_exit_codes.container_name`
+- `rules[].on_exit_codes.operator`
+- `rules[].on_exit_codes.values`
+- `rules[].on_pod_conditions[].type`
+- `rules[].on_pod_conditions[].status`
+
+Rules enforced by Dagu:
+
+- `rules` may contain at most `20` rules.
+- Each rule must define exactly one of `on_exit_codes` or `on_pod_conditions`.
+- Supported `action` values are `FailJob`, `Ignore`, and `Count`.
+- `FailIndex` is rejected because this executor creates non-indexed Jobs.
+- `on_exit_codes.operator` must be `In` or `NotIn`.
+- `on_exit_codes.values` must contain `1` to `255` unique integers.
+- With `operator: In`, exit code `0` is not allowed.
+- `on_pod_conditions` may contain at most `20` patterns per rule.
+- `on_pod_conditions[].type` is required.
+- `on_pod_conditions[].status` may be `True`, `False`, or `Unknown`. If omitted, Kubernetes defaults it to `True`.
+
+At the DAG or base level, `pod_failure_policy: {}` or `pod_failure_policy: { rules: [] }` clears inherited rules.
 
 ### Volumes
 
@@ -277,6 +479,20 @@ kubernetes:
   namespace: batch
   service_account: dagu-runner
   image_pull_secrets: [regcred]
+  pod_security_context:
+    run_as_non_root: true
+    fs_group: 2000
+    seccomp_profile:
+      type: RuntimeDefault
+  affinity:
+    pod_anti_affinity:
+      preferred_during_scheduling_ignored_during_execution:
+        - weight: 100
+          pod_affinity_term:
+            topology_key: kubernetes.io/hostname
+            label_selector:
+              match_labels:
+                app: dagu-job
   resources:
     requests:
       cpu: "100m"
@@ -295,6 +511,15 @@ steps:
       image: ghcr.io/example/migrator:2026-03-31
       cleanup_policy: keep
       ttl_after_finished: 3600
+      priority_class_name: batch-high
+      security_context:
+        run_as_user: 1000
+        run_as_group: 1000
+        run_as_non_root: true
+        read_only_root_filesystem: true
+        allow_privilege_escalation: false
+        capabilities:
+          drop: [ALL]
       env:
         - name: DATABASE_URL
           value_from:
@@ -308,10 +533,29 @@ steps:
     depends: [migrate]
     config:
       image: ghcr.io/example/report:2026-03-31
+      termination_grace_period_seconds: 30
       annotations:
         batch.example.com/purpose: nightly-report
+      pod_failure_policy:
+        rules:
+          - action: FailJob
+            on_exit_codes:
+              operator: In
+              values: [42]
     command: [app, report, --date, "${DATE}"]
 ```
+
+## Unsupported Fields
+
+The current executor does not expose:
+
+- raw Pod spec or Job spec passthrough
+- Job `parallelism`, `completions`, `completion_mode`, or `success_policy`
+- `restart_policy` configuration
+- Windows-specific security options
+- SELinux, AppArmor, or `proc_mount` settings
+
+If a field is not listed on this page, assume it is not currently supported by the executor.
 
 ## See Also
 

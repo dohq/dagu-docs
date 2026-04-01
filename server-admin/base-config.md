@@ -372,6 +372,13 @@ kubernetes:
 
 These defaults apply only to steps that explicitly use `type: k8s` or `type: kubernetes`. DAG-level or step-level Kubernetes config can override them.
 
+The base-level `kubernetes:` block accepts the same field surface as step-level Kubernetes `config`, except `image` is optional at the base level and must still be present in the effective step config after inheritance. That includes:
+
+- cluster selection and runtime fields such as `kubeconfig`, `context`, `namespace`, `image_pull_policy`, and `working_dir`
+- env and env source fields such as `env` and `env_from`
+- scheduling, security, and lifecycle fields such as `service_account`, `node_selector`, `tolerations`, `security_context`, `pod_security_context`, `affinity`, `termination_grace_period_seconds`, `priority_class_name`, `active_deadline`, `backoff_limit`, `ttl_after_finished`, `cleanup_policy`, and `pod_failure_policy`
+- metadata and storage fields such as `labels`, `annotations`, `volumes`, and `volume_mounts`
+
 See [Kubernetes Step](/step-types/kubernetes) for the full executor reference, merge behavior, and field examples.
 
 ### Container Defaults
