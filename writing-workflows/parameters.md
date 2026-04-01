@@ -64,6 +64,18 @@ params:
   schema: true
   values:
     environment: staging
+
+# 9. Top-level inline JSON Schema
+params:
+  type: object
+  properties:
+    environment:
+      type: string
+      enum: [dev, staging, prod]
+    batch_size:
+      type: integer
+      default: 25
+  required: [environment]
 ```
 
 Legacy map form is still supported:
@@ -74,7 +86,14 @@ params:
   PORT: 8080
 ```
 
-Prefer the ordered list form for authored DAGs. It preserves declaration order for UI rendering and help output.
+Top-level inline JSON Schema is recognized only when the top-level `params:` object includes both:
+
+- `type: object`
+- `properties:`
+
+`properties:` by itself is not enough to activate schema mode. For example, `params: { properties: { foo: bar } }` remains a legacy named parameter map.
+
+Prefer the ordered list form for authored DAGs when a flat list of scalar parameters is enough. Use schema-backed params when you need nested objects, arrays, or JSON Schema rules outside the inline rich subset.
 
 ## Inline Rich Definitions
 
@@ -154,6 +173,13 @@ steps:
 
 The shell sees `"3"`, not a typed integer object.
 
+Top-level inline JSON Schema and `params.schema` use the same runtime validation path:
+
+- named overrides are parsed and validated against the schema
+- positional overrides are rejected
+- defaults from the schema are merged before validation
+- shell-visible runtime values and `DAGU_PARAMS_JSON` remain string-based
+
 ## Dynamic Defaults with `eval`
 
 Use `eval` when a parameter should derive its effective default from the runtime environment.
@@ -204,7 +230,7 @@ params:
 
 ## Parameter JSON Payload
 
-Every step receives the merged parameter payload through `DAG_PARAMS_JSON`.
+Every step receives the merged parameter payload through `DAGU_PARAMS_JSON`.
 
 - For resolved DAG parameters, the JSON payload remains a string-only object such as `{"instance_count":"3","debug":"false"}`.
 - Raw JSON input may be supplied as either an object or an array. For named parameters, prefer a JSON object such as `{"region":"us-west-2","count":"5"}`.
@@ -287,13 +313,13 @@ dagu start workflow.yaml -- '{"environment":"prod","batch_size":50}'
 dagu start workflow.yaml -- '["input.csv",{"ENVIRONMENT":"prod"}]'
 ```
 
-The Web UI uses `paramDefs` from `GET /api/v1/dags/{fileName}` to render typed controls in the start/enqueue modal when the DAG exposes inline definitions or representable external schema metadata. Param descriptions are shown inline below each typed control. For named params, typed clients should submit a JSON object payload. If no typed metadata is available, the UI falls back to the raw parameter editor.
+The Web UI uses `paramDefs` from `GET /api/v1/dags/{fileName}` to render typed controls in the start/enqueue modal when the DAG exposes inline rich definitions, top-level inline JSON Schema metadata, or representable external schema metadata. Param descriptions are shown inline below each typed control. For named params, typed clients should submit a JSON object payload. If no typed metadata is available, the UI falls back to the raw parameter editor.
 
 When a param uses `eval`, `paramDefs.default` still reflects only the literal `default` field, if one exists. Computed defaults such as `` `nproc` `` or `$BASE_DIR/out` are resolved by the server at start/enqueue time, not by the client.
 
 ## Schema-Backed Validation
 
-Use schema-backed params when you need validation that does not fit the inline subset, such as nested objects, conditional rules, or shared `$ref` definitions.
+Use schema-backed params when you need validation that does not fit the inline rich subset, such as nested objects, arrays, conditional rules, or shared `$ref` definitions.
 
 ```yaml
 params:
@@ -304,11 +330,6 @@ params:
 ```
 
 The schema can be:
-
-- **Local file**: `./schemas/params.json` or `/absolute/path/to/schema.json`
-- **Remote URL**: `https://example.com/schemas/params.json`
-
-`schema:` can be:
 
 - **Local file**: `./schemas/params.json` or `/absolute/path/to/schema.json`
 - **Remote URL**: `https://example.com/schemas/params.json`
@@ -343,6 +364,39 @@ Compatibility notes:
 - `params: { schema: true }` without `values:` is also treated as a legacy named parameter.
 - Boolean schema mode becomes active only when `values:` is present.
 - A string `schema:` value without `values:` is treated as schema mode only when it looks like a file path or URL.
+
+## Top-Level Inline JSON Schema
+
+Top-level inline JSON Schema is an alternative to `params: { schema, values }` when you want the schema itself to be the `params:` value.
+
+```yaml
+params:
+  type: object
+  properties:
+    environment:
+      type: string
+      enum: [dev, staging, prod]
+    batch_size:
+      type: integer
+      minimum: 1
+      maximum: 100
+      default: 25
+    debug:
+      type: boolean
+      default: false
+  required: [environment]
+  additionalProperties: false
+```
+
+Behavior:
+
+- The top-level object must include `type: object` and `properties`.
+- Metadata loads derive `paramDefs` and `defaultParams` from scalar property defaults.
+- Runtime overrides must be named (`environment=prod`), not positional (`prod`).
+- If `additionalProperties: false` is set, unknown named overrides are rejected.
+- JSON Schema keywords outside the inline rich subset are passed through to runtime validation.
+
+This form is useful when you want JSON Schema validation but do not need a separate `values:` object for defaults.
 
 ## Enforcing Fixed Parameters
 

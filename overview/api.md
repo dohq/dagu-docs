@@ -73,9 +73,11 @@ curl "http://localhost:8080/api/v1/dags?sort=nextRun&order=asc"
 curl http://localhost:8080/api/v1/dags/my-dag.yaml
 ```
 
-The DAG detail response includes `evalParams` and `paramDefs` when Dagu can derive parameter metadata. `evalParams` tells clients whether YAML-authored defaults are evaluated at runtime. `paramDefs` carries typed metadata for inline rich `params:` definitions and representable external schemas. For named params, clients should submit a JSON object payload; JSON arrays are mainly for positional or mixed raw input.
+The DAG detail response includes `paramDefs` when Dagu can derive parameter metadata. `paramDefs` carries typed metadata for inline rich `params:` definitions, top-level inline JSON Schema, and representable external schemas. For named params, clients should submit a JSON object payload; JSON arrays are mainly for positional or mixed raw input.
 
-When `evalParams` is `true`, `paramDefs.default` still represents the authored default template. Clients should treat dynamic defaults such as `${BASE_DIR}/out` or `` `nproc` `` as display metadata and let the server perform the actual evaluation.
+`defaultParams` is a shell-style string of resolved default pairs such as `environment="staging" batch_size="25"`. It is not JSON.
+
+When a param uses inline `eval`, `paramDefs.default` still represents only the authored literal `default`, if one exists. Computed defaults such as `${BASE_DIR}/out` or `` `nproc` `` are resolved by the server when the DAG is started.
 
 #### Create New DAG
 ```bash

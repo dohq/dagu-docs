@@ -277,6 +277,7 @@ Top-level DAG `params:` supports:
 - Named strings such as `params: ENV=dev PORT=8080`
 - Ordered lists of strings or single-key maps
 - Inline rich definitions in list form using objects with a required `name` field
+- Top-level inline JSON Schema using `type: object` plus `properties`
 - External schema mode with `{ schema, values }`
 - In schema mode, `schema` can be a local path/URL string, an inline JSON Schema object, or a boolean schema
 
@@ -321,7 +322,11 @@ Inline types affect validation and typed UI controls. Runtime shell variables an
 
 If both `eval` and `default` are present, `eval` wins at execution time and `default` becomes the literal fallback and display value.
 
-For backward compatibility, `params: { schema: prod }` and `params: { schema: true }` remain legacy named params unless `values` is also present or `schema` is an inline object/path-like reference.
+For backward compatibility:
+
+- `params: { schema: prod }` remains a legacy named param unless `schema` looks like a file path or URL or `values` is also present.
+- `params: { schema: true }` remains a legacy named param unless `values` is also present.
+- `params: { properties: { foo: bar } }` remains a legacy named param map unless the same object also has `type: object`.
 
 #### `params[].eval`
 

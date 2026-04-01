@@ -329,7 +329,11 @@ Fetches detailed information about a specific DAG.
 
 `paramDefs` is additive metadata derived from DAG-level `params:`. Typed clients can use it to render start/enqueue controls. When Dagu cannot derive a faithful typed field model, the field is omitted and clients should fall back to the raw parameter editor.
 
-`evalParams` indicates whether YAML-authored defaults are evaluated at runtime. Even when `evalParams` is `true`, `paramDefs.default` remains the raw authored default. Clients should not evaluate template defaults locally.
+`paramDefs` can be derived from inline rich params, top-level inline JSON Schema, and representable external schemas.
+
+`defaultParams` is the resolved shell-style default parameter string, not JSON. For example: `environment="staging" batch_size="25"`.
+
+When an inline rich param uses `eval`, `paramDefs.default` remains only the authored literal `default`, if one exists. Clients should not evaluate template defaults locally.
 
 ### Delete DAG
 
