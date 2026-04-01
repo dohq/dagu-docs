@@ -4,21 +4,37 @@ Dagu provides multiple ways to handle data and variables in your DAGs, from simp
 
 ## Environment Variables
 
-### System Environment Variable Security
+### System Environment Variable Filtering
 
-For security, Dagu limits which system environment variables are passed to step processes and sub DAGs.
+Dagu filters the process environment before it builds the step execution environment and before it starts sub-DAG executions.
 
-**How It Works:**
+System environment variables are still available for expansion (`${VAR}`) in DAG configuration. For non-shell executors, OS-only variables in executor config, step `env:`, and similar fields pass through unchanged when they are not resolved by Dagu. `template` steps are a special case: the `script` body is not expanded by Dagu, while `config.data` values are expanded before rendering.
 
-System environment variables are available for expansion (`${VAR}`) in the DAG-level `env:` block during configuration parsing. For non-shell executors (docker, http, ssh, etc.), OS-only variables in executor config, step env, and scripts pass through unchanged — only variables defined in the DAG scope are expanded. `template` steps are a special case: the `script` body is not expanded by Dagu, while `config.data` values are expanded before rendering. Filtered variables are passed to the step execution environment.
+The built-in forwarded environment is:
 
-**Filtered Variables:**
+- Unix and macOS exact names: `PATH`, `HOME`, `USER`, `SHELL`, `TMPDIR`, `TERM`, `EDITOR`, `VISUAL`, `LANG`, `LC_ALL`, `LC_CTYPE`, `TZ`, `LD_LIBRARY_PATH`, `XDG_CONFIG_HOME`, `XDG_DATA_HOME`, `XDG_CACHE_HOME`, `DOCKER_HOST`, `DOCKER_TLS_VERIFY`, `DOCKER_CERT_PATH`, `DOCKER_API_VERSION`
+- Windows exact names: `USERPROFILE`, `SYSTEMROOT`, `WINDIR`, `SYSTEMDRIVE`, `COMSPEC`, `PATHEXT`, `TEMP`, `TMP`, `PATH`, `PSMODULEPATH`, `HOME`, `DOCKER_HOST`, `DOCKER_TLS_VERIFY`, `DOCKER_CERT_PATH`, `DOCKER_API_VERSION`
+- Allowed prefixes on all platforms: `DAGU_`, `DAG_`, `LC_`, `KUBERNETES_`
 
-Only these are automatically passed to step processes:
-- **Whitelisted:** `PATH`, `HOME`, `LANG`, `TZ`, `SHELL`
-- **Allowed Prefixes:** `DAGU_*`, `LC_*`, `DAG_*`
+You can add exact names and prefixes in Dagu configuration:
 
-The `DAG_*` prefix includes special variables automatically set by Dagu for each step execution.
+```yaml
+env_passthrough:
+  - SSL_CERT_FILE
+  - HTTP_PROXY
+
+env_passthrough_prefixes:
+  - AWS_
+```
+
+Or with environment variables:
+
+```bash
+export DAGU_ENV_PASSTHROUGH=SSL_CERT_FILE,HTTP_PROXY
+export DAGU_ENV_PASSTHROUGH_PREFIXES=AWS_
+```
+
+These settings do not create variables by themselves. They only allow matching variables that already exist in Dagu's process environment to be forwarded to steps.
 
 **To Use Sensitive Variables:**
 
@@ -37,7 +53,7 @@ Or use `.env` files (recommended):
 dotenv: .env.secrets
 ```
 
-This prevents accidental exposure of sensitive variables to step processes.
+This keeps step environment contents explicit.
 
 ### DAG-Level Environment Variables
 

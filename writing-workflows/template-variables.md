@@ -6,25 +6,41 @@ For a complete list of the automatically injected run metadata, see [Special Env
 
 ### System Environment Variable Filtering
 
-For security, Dagu filters which system environment variables are passed to step processes and sub DAGs.
+Dagu filters the process environment before it builds the step execution environment.
 
-**How It Works:**
+System environment variables are still available for expansion (`${VAR}`) while Dagu parses the DAG, but only a filtered subset is forwarded to step processes and sub-DAG executions.
 
-System environment variables are available for expansion (`${VAR}`) when the DAG configuration is parsed, but only filtered variables are passed to the actual step execution environment.
+The built-in forwarded variables are platform-dependent:
 
-**Filtered Variables:**
+- Unix and macOS exact names: `PATH`, `HOME`, `USER`, `SHELL`, `TMPDIR`, `TERM`, `EDITOR`, `VISUAL`, `LANG`, `LC_ALL`, `LC_CTYPE`, `TZ`, `LD_LIBRARY_PATH`, `XDG_CONFIG_HOME`, `XDG_DATA_HOME`, `XDG_CACHE_HOME`, `DOCKER_HOST`, `DOCKER_TLS_VERIFY`, `DOCKER_CERT_PATH`, `DOCKER_API_VERSION`
+- Windows exact names: `USERPROFILE`, `SYSTEMROOT`, `WINDIR`, `SYSTEMDRIVE`, `COMSPEC`, `PATHEXT`, `TEMP`, `TMP`, `PATH`, `PSMODULEPATH`, `HOME`, `DOCKER_HOST`, `DOCKER_TLS_VERIFY`, `DOCKER_CERT_PATH`, `DOCKER_API_VERSION`
+- Allowed prefixes on all platforms: `DAGU_`, `DAG_`, `LC_`, `KUBERNETES_`
 
-The following system environment variables are automatically passed to step processes and sub DAGs (platform-dependent):
+`DAG_` includes the runtime variables Dagu sets for each step. `KUBERNETES_` allows in-cluster API discovery variables such as `KUBERNETES_SERVICE_HOST` and `KUBERNETES_SERVICE_PORT`.
 
-- **Unix/macOS:** `PATH`, `HOME`, `USER`, `SHELL`, `TMPDIR`, `TERM`, `EDITOR`, `VISUAL`, `LANG`, `LC_ALL`, `LC_CTYPE`, `TZ`, `LD_LIBRARY_PATH`, `XDG_CONFIG_HOME`, `XDG_DATA_HOME`, `XDG_CACHE_HOME`, `DOCKER_HOST`, `DOCKER_TLS_VERIFY`, `DOCKER_CERT_PATH`, `DOCKER_API_VERSION`
-- **Windows:** `USERPROFILE`, `SYSTEMROOT`, `WINDIR`, `SYSTEMDRIVE`, `COMSPEC`, `PATHEXT`, `TEMP`, `TMP`, `PATH`, `PSMODULEPATH`, `HOME`, `DOCKER_HOST`, `DOCKER_TLS_VERIFY`, `DOCKER_CERT_PATH`, `DOCKER_API_VERSION`
-- **Allowed Prefixes (all platforms):** `DAGU_*`, `LC_*`, `DAG_*`
+You can extend the forwarded set in server configuration with top-level `env_passthrough` and `env_passthrough_prefixes`. The matching env vars are only forwarded if they already exist in Dagu's own process environment.
 
-The `DAG_*` prefix includes the special environment variables that Dagu automatically sets (see below).
+```yaml
+# config.yaml
+env_passthrough:
+  - SSL_CERT_FILE
+  - HTTP_PROXY
+  - HTTPS_PROXY
+  - NO_PROXY
 
-**What This Means:**
+env_passthrough_prefixes:
+  - AWS_
+  - CUSTOM_CA_
+```
 
-You can use `${AWS_SECRET_ACCESS_KEY}` in your DAG YAML for variable expansion, but the `AWS_SECRET_ACCESS_KEY` variable itself won't be available in the environment when your step commands run unless you explicitly define it in the `env` section.
+The same settings are available through:
+
+- `DAGU_ENV_PASSTHROUGH=SSL_CERT_FILE,HTTP_PROXY,HTTPS_PROXY,NO_PROXY`
+- `DAGU_ENV_PASSTHROUGH_PREFIXES=AWS_,CUSTOM_CA_`
+
+On Unix, exact-name and prefix matching are case-sensitive. On Windows, they are case-insensitive.
+
+If a variable is not in the forwarded set, it can still be referenced during DAG parsing, but it will not appear in the step process environment unless you copy it into `env:`, `dotenv`, or `secrets:`.
 
 ### Defining Environment Variables
 
