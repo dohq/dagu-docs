@@ -66,7 +66,17 @@ The upgrade command automatically detects how Dagu was installed:
 
 ## Update Notifications
 
-Dagu caches update check results for 24 hours. When an update is available, you'll see a notification in the web UI.
+Dagu caches update check results for 24 hours. When automatic checks are enabled, an available update appears as a notification in the web UI.
+
+Automatic checks are controlled by the main server config and are enabled by default:
+
+```yaml
+check_updates: true
+```
+
+Disable them with `check_updates: false` or `DAGU_CHECK_UPDATES=false`.
+
+This only affects automatic web UI notifications. Manual commands such as `dagu upgrade` and `dagu upgrade --check` still work.
 
 ## Examples
 

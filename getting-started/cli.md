@@ -278,6 +278,7 @@ dagu server [options]
 - `--host, -s` - Host (default: localhost)
 - `--port, -p` - Port (default: 8080)
 - `--dags, -d` - DAGs directory
+- `--check-updates` - Enable automatic web UI update checks
 
 ```bash
 dagu server                               # Default settings
@@ -312,6 +313,7 @@ dagu start-all [options]
 - `--host, -s` - Host (default: localhost)
 - `--port, -p` - Port (default: 8080)
 - `--dags, -d` - DAGs directory
+- `--check-updates` - Enable automatic web UI update checks
 - `--coordinator.host` - Coordinator bind address (default: 127.0.0.1)
 - `--coordinator.advertise` - Address to advertise in service registry
 - `--coordinator.port` - Coordinator gRPC port (default: 50055)

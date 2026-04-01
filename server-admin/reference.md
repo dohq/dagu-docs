@@ -16,6 +16,7 @@ tz: "America/New_York"
 debug: false
 log_format: "text"         # "text" or "json"
 headless: false
+check_updates: true       # Automatic web UI update checks (default: true)
 skip_examples: false       # Skip creating example DAGs
 metrics: "private"        # Metrics endpoint: "private" (default) or "public"
 
@@ -228,6 +229,7 @@ All options support `DAGU_` prefix.
 - `DAGU_DEBUG` - Enable debug mode
 - `DAGU_LOG_FORMAT` - Log format (`text`/`json`)
 - `DAGU_HEADLESS` - Run without UI
+- `DAGU_CHECK_UPDATES` - Enable automatic web UI update checks (default: `true`)
 - `DAGU_LATEST_STATUS_TODAY` - Show only today's status
 - `DAGU_SKIP_EXAMPLES` - Skip automatic creation of example DAGs (default: `false`)
 - `DAGU_SERVER_METRICS` - Metrics endpoint access: `private` (default) or `public`
@@ -598,6 +600,7 @@ peer:
 - `log_format`: `text`
 - `host`: `127.0.0.1`
 - `port`: `8080`
+- `check_updates`: `true`
 - `metrics`: `private`
 - `default_execution_mode`: `local`
 - `coordinator.enabled`: `true`

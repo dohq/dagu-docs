@@ -39,6 +39,7 @@ debug: false              # Debug mode
 log_format: "text"         # Log format: "text" or "json"
 access_log_mode: "all"     # Access log mode: "all" (default), "non-public", or "none"
 headless: false           # Run without Web UI
+check_updates: true       # Automatic web UI update checks (default: true)
 metrics: "private"        # Metrics endpoint access: "private" (default) or "public"
 
 # Directory Paths (must be under "paths" key)
@@ -162,6 +163,7 @@ All options support `DAGU_` prefix:
 - `DAGU_DEBUG` - Debug mode
 - `DAGU_LOG_FORMAT` - Log format (`text`/`json`)
 - `DAGU_ACCESS_LOG_MODE` - Access log mode: `all` (default), `non-public`, or `none`
+- `DAGU_CHECK_UPDATES` - Enable automatic web UI update checks (default: `true`)
 - `DAGU_SERVER_METRICS` - Metrics endpoint access: `private` (default) or `public`
 
 **Paths:**
