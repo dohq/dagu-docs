@@ -4,7 +4,7 @@
 
 ### Fixed
 
-- fix: dashboard page includes queued runs unintentionally
+- fix: exclude queued dag runs from dashboard
 
 **Full Changelog**: [v2.4.2...v2.4.3](https://github.com/dagu-org/dagu/compare/v2.4.2...v2.4.3)
 
