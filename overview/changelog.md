@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.4.3 (2026-04-05)
+
+### Fixed
+
+- fix: dashboard page includes queued runs unintentionally
+
+**Full Changelog**: [v2.4.2...v2.4.3](https://github.com/dagu-org/dagu/compare/v2.4.2...v2.4.3)
+
 ## v2.4.2 (2026-04-05)
 
 ### Added
