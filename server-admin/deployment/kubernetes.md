@@ -81,7 +81,7 @@ Replace `<your-rwx-storage-class>` with a StorageClass in your cluster that supp
 
 `charts/dagu/Chart.yaml` defines the chart `version`, which is the version published in the Helm repository.
 
-The deployed container image comes from `values.yaml -> image.repository` and `values.yaml -> image.tag`. With the current defaults, the chart deploys `ghcr.io/dagu-org/dagu:latest`.
+The deployed container image comes from `values.yaml -> image.repository` and `values.yaml -> image.tag`. With the current defaults, the chart deploys `ghcr.io/dagucloud/dagu:latest`.
 
 ## Pod Configuration
 
@@ -184,7 +184,7 @@ The chart currently defines these top-level values in `charts/dagu/values.yaml`:
 
 ```yaml
 image:
-  repository: ghcr.io/dagu-org/dagu
+  repository: ghcr.io/dagucloud/dagu
   tag: latest
   pullPolicy: IfNotPresent
 

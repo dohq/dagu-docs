@@ -245,7 +245,7 @@ docker run -d \
   -e DAGU_AUTH_BUILTIN_INITIAL_ADMIN_PASSWORD=your-secure-password \
   -p 8080:8080 \
   -v dagu-data:/var/lib/dagu \
-  ghcr.io/dagu-org/dagu:latest
+  ghcr.io/dagucloud/dagu:latest
 # Admin auto-created on first startup; omit INITIAL_ADMIN vars to use the /setup page instead
 ```
 

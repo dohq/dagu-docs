@@ -79,7 +79,7 @@ docker run -d \
   --name dagu \
   -p 8080:8080 \
   -v ~/.dagu:/var/lib/dagu \
-  ghcr.io/dagu-org/dagu:latest \
+  ghcr.io/dagucloud/dagu:latest \
   dagu start-all
 ```
 
@@ -264,7 +264,7 @@ npx skills add https://github.com/dagu-org/dagu --skill dagu
 ```yaml
 services:
   dagu:
-    image: ghcr.io/dagu-org/dagu:latest
+    image: ghcr.io/dagucloud/dagu:latest
     ports:
       - "8080:8080"
     environment:
@@ -288,7 +288,7 @@ For Docker executor support:
 ```yaml
 services:
   dagu:
-    image: ghcr.io/dagu-org/dagu:latest
+    image: ghcr.io/dagucloud/dagu:latest
     ports:
       - "8080:8080"
     volumes:

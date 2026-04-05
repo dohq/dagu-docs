@@ -9,7 +9,7 @@ docker run -d \
   --name dagu \
   -p 8525:8080 \
   -v dagu-data:/var/lib/dagu \
-  ghcr.io/dagu-org/dagu:latest
+  ghcr.io/dagucloud/dagu:latest
 ```
 
 ## With Custom DAGs Directory
@@ -22,7 +22,7 @@ docker run -d \
   -v dagu-data:/var/lib/dagu \
   -e DAGU_HOST=0.0.0.0 \
   -e DAGU_PORT=8080 \
-  ghcr.io/dagu-org/dagu:latest
+  ghcr.io/dagucloud/dagu:latest
 ```
 
 ## With Docker Executor Support
@@ -34,7 +34,7 @@ docker run -d \
   -v dagu-data:/var/lib/dagu \
   -v /var/run/docker.sock:/var/run/docker.sock \
   --user 0:0 \
-  ghcr.io/dagu-org/dagu:latest
+  ghcr.io/dagucloud/dagu:latest
 ```
 
 ## Environment Variables
@@ -49,7 +49,7 @@ docker run -d \
   -e DAGU_TZ=America/New_York \
   -e DAGU_AUTH_BASIC_USERNAME=admin \
   -e DAGU_AUTH_BASIC_PASSWORD=password \
-  ghcr.io/dagu-org/dagu:latest
+  ghcr.io/dagucloud/dagu:latest
 ```
 
 ## Container Management

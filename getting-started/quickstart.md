@@ -26,7 +26,7 @@ irm https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.ps1 |
 ```
 
 ```bash [Docker]
-docker pull ghcr.io/dagu-org/dagu:latest
+docker pull ghcr.io/dagucloud/dagu:latest
 ```
 
 ```bash [Homebrew]
@@ -110,7 +110,7 @@ dagu start hello
 ```bash [Docker]
 docker run --rm \
   -v ~/.dagu:/var/lib/dagu \
-  ghcr.io/dagu-org/dagu:latest \
+  ghcr.io/dagucloud/dagu:latest \
   dagu start hello
 ```
 
@@ -148,7 +148,7 @@ dagu status hello
 ```bash [Docker]
 docker run --rm \
   -v ~/.dagu:/var/lib/dagu \
-  ghcr.io/dagu-org/dagu:latest \
+  ghcr.io/dagucloud/dagu:latest \
   dagu status hello
 ```
 
@@ -178,7 +178,7 @@ dagu history hello --format csv
 # View recent runs
 docker run --rm \
   -v ~/.dagu:/var/lib/dagu \
-  ghcr.io/dagu-org/dagu:latest \
+  ghcr.io/dagucloud/dagu:latest \
   dagu history hello
 ```
 
@@ -205,7 +205,7 @@ dagu start-all
 docker run -d \
   -p 8080:8080 \
   -v ~/.dagu:/var/lib/dagu \
-  ghcr.io/dagu-org/dagu:latest \
+  ghcr.io/dagucloud/dagu:latest \
   dagu start-all
 ```
 

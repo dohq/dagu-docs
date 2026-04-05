@@ -53,7 +53,7 @@ curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installe
 ```
 
 ```bash [Docker]
-docker run --rm -v ~/.dagu:/var/lib/dagu -p 8080:8080 ghcr.io/dagu-org/dagu:latest dagu start-all
+docker run --rm -v ~/.dagu:/var/lib/dagu -p 8080:8080 ghcr.io/dagucloud/dagu:latest dagu start-all
 ```
 
 ```bash [Homebrew]

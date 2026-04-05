@@ -517,7 +517,7 @@ Mount the Docker socket and run as root to use Docker inside your containers:
 # compose.yml for Dagu with Docker support
 services:
   dagu:
-    image: ghcr.io/dagu-org/dagu:latest
+    image: ghcr.io/dagucloud/dagu:latest
     ports:
       - 8080:8080
     volumes:

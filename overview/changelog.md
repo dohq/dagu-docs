@@ -2461,7 +2461,7 @@ Try the beta version:
 
 ```bash
 # Docker
-docker run --rm -p 8080:8080 ghcr.io/dagu-org/dagu:latest dagu start-all
+docker run --rm -p 8080:8080 ghcr.io/dagucloud/dagu:latest dagu start-all
 
 # Or download specific version
 curl -L https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | bash -s -- --version v1.17.0-beta
