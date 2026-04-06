@@ -1,5 +1,65 @@
 # Changelog
 
+## v2.4.3 (2026-04-05)
+
+### Fixed
+
+- fix: exclude queued dag runs from dashboard
+
+**Full Changelog**: [v2.4.2...v2.4.3](https://github.com/dagu-org/dagu/compare/v2.4.2...v2.4.3)
+
+## v2.4.2 (2026-04-05)
+
+### Added
+
+- feat: add centralized event store ([#1885](https://github.com/dagu-org/dagu/pull/1885)) [@yottahmd](https://github.com/yottahmd)
+- feat: add kubernetes step executor and DAG defaults ([#1886](https://github.com/dagu-org/dagu/pull/1886)) [@yottahmd](https://github.com/yottahmd)
+- feat: add inline JSON Schema validation for DAG params (closes #1182) ([#1887](https://github.com/dagu-org/dagu/pull/1887)) [@mbprabhoo](https://github.com/mbprabhoo)
+- feat: support OpenAI Codex auth and reasoning effort in agent settings ([#1921](https://github.com/dagu-org/dagu/pull/1921)) [@yottahmd](https://github.com/yottahmd)
+- feat: add configurable env passthrough for step execution ([#1925](https://github.com/dagu-org/dagu/pull/1925)) [@yottahmd](https://github.com/yottahmd)
+- feat: add configurable automatic update checks ([#1941](https://github.com/dagu-org/dagu/pull/1941)) [@yottahmd](https://github.com/yottahmd)
+- Add event feed UI and harden event-driven bot notifications ([#1946](https://github.com/dagu-org/dagu/pull/1946)) [@yottahmd](https://github.com/yottahmd)
+- feat(coordinator): support IPv6 address format and improve address pa… ([#1947](https://github.com/dagu-org/dagu/pull/1947)) [@artikell](https://github.com/artikell)
+- feat: replace CLI remote nodes with contexts ([#1949](https://github.com/dagu-org/dagu/pull/1949)) [@yottahmd](https://github.com/yottahmd)
+- feat: add cursor pagination for dag runs ([#1952](https://github.com/dagu-org/dagu/pull/1952)) [@yottahmd](https://github.com/yottahmd)
+- feat: show next scheduled dag run in details ([#1953](https://github.com/dagu-org/dagu/pull/1953)) [@yottahmd](https://github.com/yottahmd)
+- spec: inherit DAG type from base config before build ([#1964](https://github.com/dagu-org/dagu/pull/1964)) [@yottahmd](https://github.com/yottahmd)
+- feat: improve queue browsing and dequeue reliability ([#1967](https://github.com/dagu-org/dagu/pull/1967)) [@yottahmd](https://github.com/yottahmd)
+- feat: paginate cockpit and dashboard dag runs ([#1969](https://github.com/dagu-org/dagu/pull/1969)) [@yottahmd](https://github.com/yottahmd)
+
+### Fixed
+
+- fix: preserve inline schema params metadata and legacy map handling ([#1923](https://github.com/dagu-org/dagu/pull/1923)) [@yottahmd](https://github.com/yottahmd)
+- fix: preserve kubernetes discovery env for worker command steps ([#1924](https://github.com/dagu-org/dagu/pull/1924)) [@yottahmd](https://github.com/yottahmd)
+- fix: allow keyless local agent setup ([#1936](https://github.com/dagu-org/dagu/pull/1936)) [@yottahmd](https://github.com/yottahmd)
+- fix: redesign global search with cursor feeds ([#1945](https://github.com/dagu-org/dagu/pull/1945)) [@yottahmd](https://github.com/yottahmd)
+- fix: warn on misleading cron step values ([#1948](https://github.com/dagu-org/dagu/pull/1948)) [@tmchow](https://github.com/tmchow)
+- fix: stop dashboard and cockpit dag run refetch loop ([#1954](https://github.com/dagu-org/dagu/pull/1954)) [@yottahmd](https://github.com/yottahmd)
+- fix: restore immediate bot activity indicators ([#1956](https://github.com/dagu-org/dagu/pull/1956)) [@yottahmd](https://github.com/yottahmd)
+- fix: expand runtime vars in output paths ([#1957](https://github.com/dagu-org/dagu/pull/1957)) [@yottahmd](https://github.com/yottahmd)
+- fix: preserve restored step config on approval resume ([#1959](https://github.com/dagu-org/dagu/pull/1959)) [@yottahmd](https://github.com/yottahmd)
+- Fix reschedule for inline DAG run snapshots ([#1965](https://github.com/dagu-org/dagu/pull/1965)) [@yottahmd](https://github.com/yottahmd)
+- fix: route reschedule through enqueue ([#1966](https://github.com/dagu-org/dagu/pull/1966)) [@yottahmd](https://github.com/yottahmd)
+- fix: replace app live polling with event-driven SSE updates ([#1968](https://github.com/dagu-org/dagu/pull/1968)) [@yottahmd](https://github.com/yottahmd)
+
+### Contributors
+
+Thanks to our contributors for this release:
+
+| Contribution | Contributor |
+| --- | --- |
+| feat: add inline JSON Schema validation for DAG params (closes #1182) ([#1887](https://github.com/dagu-org/dagu/pull/1887)) | [@mbprabhoo](https://github.com/mbprabhoo) |
+| Local Agent Provider Unnecessarily Requires API Key ([#1882](https://github.com/dagu-org/dagu/issues/1882)) | [@arky](https://github.com/arky) (report) |
+| feat(coordinator): support IPv6 address format and improve address pa… ([#1947](https://github.com/dagu-org/dagu/pull/1947)) | [@artikell](https://github.com/artikell) |
+| fix: warn on misleading cron step values ([#1948](https://github.com/dagu-org/dagu/pull/1948)) | [@tmchow](https://github.com/tmchow) |
+| schedule is not executed according to the schedule ([#639](https://github.com/dagu-org/dagu/issues/639)) | [@JuchangGit](https://github.com/JuchangGit) (report) |
+| Display when is the next scheduled dag run ([#1950](https://github.com/dagu-org/dagu/issues/1950)), Add support for inheritance of type field from base config ([#1961](https://github.com/dagu-org/dagu/issues/1961)) | [@bagemt](https://github.com/bagemt) (report) |
+| DAGU_RUN_STEP_NAME empty in step's stdout attribute ([#1955](https://github.com/dagu-org/dagu/issues/1955)) | [@dev-epices](https://github.com/dev-epices) (report) |
+| registry_auths and step env lost after approval step resume ([#1958](https://github.com/dagu-org/dagu/issues/1958)) | [@pengu-fr](https://github.com/pengu-fr) (report) |
+
+
+**Full Changelog**: [v2.3.11...v2.4.2](https://github.com/dagu-org/dagu/compare/v2.3.11...v2.4.2)
+
 ## v2.3.11 (2026-03-30)
 
 ### Added
@@ -2461,7 +2521,7 @@ Try the beta version:
 
 ```bash
 # Docker
-docker run --rm -p 8080:8080 ghcr.io/dagu-org/dagu:latest dagu start-all
+docker run --rm -p 8080:8080 ghcr.io/dagucloud/dagu:latest dagu start-all
 
 # Or download specific version
 curl -L https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | bash -s -- --version v1.17.0-beta

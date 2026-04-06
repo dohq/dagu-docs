@@ -56,7 +56,7 @@ docker run -d \
   -e DAGU_AUTH_BASIC_USERNAME=admin \
   -e DAGU_AUTH_BASIC_PASSWORD=secret \
   -p 8080:8080 \
-  ghcr.io/dagu-org/dagu:latest
+  ghcr.io/dagucloud/dagu:latest
 ```
 
 ## Topics

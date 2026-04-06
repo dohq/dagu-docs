@@ -226,7 +226,7 @@ curl -X PATCH http://localhost:8080/api/v1/users/{user-id} \
 ```yaml
 services:
   dagu:
-    image: ghcr.io/dagu-org/dagu:latest
+    image: ghcr.io/dagucloud/dagu:latest
     environment:
       - DAGU_AUTH_MODE=builtin
       - DAGU_AUTH_TOKEN_SECRET=change-me-to-secure-random-string

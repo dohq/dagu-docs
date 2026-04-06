@@ -179,7 +179,7 @@ env:
 
 ### Referencing System Variables
 
-For security, Dagu filters which system environment variables are available. To use system variables in your workflow, explicitly reference them:
+System environment variables are available during DAG parsing, so you can reference them in `env:` values even when they are not forwarded to the final step process environment:
 
 ```yaml
 env:
@@ -188,7 +188,7 @@ env:
   - DATABASE_URL: ${DATABASE_URL}
 ```
 
-See [Security Considerations](#security-considerations) for details on variable filtering.
+See [Security Considerations](#security-considerations) for the exact filtering rules.
 
 ## Step-Level Variables
 
@@ -301,16 +301,37 @@ For detailed precedence rules, see [Variables Reference - Precedence](/writing-w
 
 ### System Environment Filtering
 
-Dagu filters which system environment variables are passed to step processes for security.
+Dagu filters the process environment before it builds the step execution environment.
 
-**Automatically passed:**
-- `PATH`, `HOME`, `LANG`, `TZ`, `SHELL`
-- Variables with prefixes: `DAGU_*`, `LC_*`, `DAG_*`
+Built-in forwarded variables:
 
-**Filtered out:**
-- All other system variables (e.g., `AWS_SECRET_ACCESS_KEY`, `DATABASE_URL`)
+- Unix and macOS exact names: `PATH`, `HOME`, `USER`, `SHELL`, `TMPDIR`, `TERM`, `EDITOR`, `VISUAL`, `LANG`, `LC_ALL`, `LC_CTYPE`, `TZ`, `LD_LIBRARY_PATH`, `XDG_CONFIG_HOME`, `XDG_DATA_HOME`, `XDG_CACHE_HOME`, `DOCKER_HOST`, `DOCKER_TLS_VERIFY`, `DOCKER_CERT_PATH`, `DOCKER_API_VERSION`
+- Windows exact names: `USERPROFILE`, `SYSTEMROOT`, `WINDIR`, `SYSTEMDRIVE`, `COMSPEC`, `PATHEXT`, `TEMP`, `TMP`, `PATH`, `PSMODULEPATH`, `HOME`, `DOCKER_HOST`, `DOCKER_TLS_VERIFY`, `DOCKER_CERT_PATH`, `DOCKER_API_VERSION`
+- Prefixes on all platforms: `DAGU_`, `DAG_`, `LC_`, `KUBERNETES_`
 
-**To use sensitive system variables**, explicitly reference them in your `env:` section:
+You can add more forwarded variables with top-level config:
+
+```yaml
+env_passthrough:
+  - SSL_CERT_FILE
+  - HTTP_PROXY
+  - HTTPS_PROXY
+  - NO_PROXY
+
+env_passthrough_prefixes:
+  - AWS_
+```
+
+Or with environment variables:
+
+```bash
+export DAGU_ENV_PASSTHROUGH=SSL_CERT_FILE,HTTP_PROXY,HTTPS_PROXY,NO_PROXY
+export DAGU_ENV_PASSTHROUGH_PREFIXES=AWS_
+```
+
+These settings only forward matching variables that already exist in Dagu's process environment. They do not define new variables.
+
+To make a variable available regardless of the host filter, copy it into your workflow explicitly:
 
 ```yaml
 env:

@@ -6,7 +6,7 @@
 # compose.yaml
 services:
   dagu:
-    image: ghcr.io/dagu-org/dagu:latest
+    image: ghcr.io/dagucloud/dagu:latest
     container_name: dagu-dev
     hostname: dagu-dev
 

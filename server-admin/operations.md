@@ -88,7 +88,7 @@ version: '3.8'
 
 services:
   dagu:
-    image: ghcr.io/dagu-org/dagu:latest
+    image: ghcr.io/dagucloud/dagu:latest
     container_name: dagu
     restart: unless-stopped
     
@@ -361,28 +361,45 @@ handler_on:
 
 ### Environment Variable Filtering
 
-Dagu implements environment variable filtering to prevent accidental exposure of sensitive data to step processes and sub DAGs.
+Dagu filters the process environment before it builds the step execution environment and before it starts sub-DAG executions.
 
-**How It Works:**
+System environment variables are still available for `${VAR}` expansion when Dagu parses the DAG.
 
-System environment variables are available for variable expansion (`${VAR}`) when parsing the DAG configuration, but only filtered variables are passed to the actual step execution environment and sub DAG processes.
+Built-in forwarded variables:
 
-**Filtered Variables (passed to step processes):**
+- Unix and macOS exact names: `PATH`, `HOME`, `USER`, `SHELL`, `TMPDIR`, `TERM`, `EDITOR`, `VISUAL`, `LANG`, `LC_ALL`, `LC_CTYPE`, `TZ`, `LD_LIBRARY_PATH`, `XDG_CONFIG_HOME`, `XDG_DATA_HOME`, `XDG_CACHE_HOME`, `DOCKER_HOST`, `DOCKER_TLS_VERIFY`, `DOCKER_CERT_PATH`, `DOCKER_API_VERSION`
+- Windows exact names: `USERPROFILE`, `SYSTEMROOT`, `WINDIR`, `SYSTEMDRIVE`, `COMSPEC`, `PATHEXT`, `TEMP`, `TMP`, `PATH`, `PSMODULEPATH`, `HOME`, `DOCKER_HOST`, `DOCKER_TLS_VERIFY`, `DOCKER_CERT_PATH`, `DOCKER_API_VERSION`
+- Prefixes on all platforms: `DAGU_`, `DAG_`, `LC_`, `KUBERNETES_`
 
-Only these system environment variables are automatically passed to step processes and sub DAGs:
-
-- **Whitelisted:** `PATH`, `HOME`, `LANG`, `TZ`, `SHELL`
-- **Allowed Prefixes:** `DAGU_*`, `LC_*`, `DAG_*`
-
-**Note:** Dagu automatically sets special variables with the `DAG_*` prefix for every step execution:
+Dagu also sets runtime variables with the `DAG_` prefix for each step execution:
 - `DAG_NAME`, `DAG_RUN_ID`, `DAG_RUN_STEP_NAME`
 - `DAG_RUN_LOG_FILE`, `DAG_RUN_STEP_STDOUT_FILE`, `DAG_RUN_STEP_STDERR_FILE`
 
-You can still use `${SYSTEM_VAR}` in your DAG YAML for variable expansion during configuration parsing, but the variable itself won't be in the step process environment unless it's whitelisted or explicitly defined in the `env` section.
+You can extend the forwarded set in Dagu configuration:
 
-**Using Sensitive Variables:**
+```yaml
+env_passthrough:
+  - SSL_CERT_FILE
+  - HTTP_PROXY
+  - HTTPS_PROXY
+  - NO_PROXY
 
-The recommended approach is to use `.env` files to provide sensitive credentials to workflows:
+env_passthrough_prefixes:
+  - AWS_
+```
+
+Or with environment variables:
+
+```bash
+export DAGU_ENV_PASSTHROUGH=SSL_CERT_FILE,HTTP_PROXY,HTTPS_PROXY,NO_PROXY
+export DAGU_ENV_PASSTHROUGH_PREFIXES=AWS_
+```
+
+These settings only forward matching variables that already exist in the Dagu process environment. On Unix, matching is case-sensitive. On Windows, matching is case-insensitive.
+
+If a variable is not forwarded automatically, you can still make it available to the step by defining it explicitly in the workflow.
+
+Use `.env`, `env:`, or `secrets:` when you want step environment contents to be explicit:
 
 ```yaml
 # workflow.yaml
@@ -400,7 +417,7 @@ AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 DATABASE_PASSWORD=secure-password
 ```
 
-Alternatively, if you need to pass through system environment variables, you must explicitly reference them:
+You can also copy selected process variables into workflow `env:`:
 
 ```yaml
 # workflow.yaml
