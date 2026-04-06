@@ -10,6 +10,8 @@ The current implementation uses:
 - UI label: `OpenAI Codex`
 - Auth provider name: `ChatGPT Plus/Pro (Codex Subscription)`
 
+![Screenshot of the OpenAI Codex provider card in agent settings, showing connection status and account ID](/agent-settings-openai-codex.png)
+
 ## What This Provider Uses
 
 For `openai-codex`, Dagu stores an OAuth credential for the selected node and resolves it at request time.

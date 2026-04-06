@@ -8,13 +8,15 @@ Dagu is a local-first workflow engine. It is declarative, file-based, self-conta
 
 ## Key Capabilities
 
-- **Single binary deployment** - Install and run without external services
 - **Declarative YAML** - JSON Schema validation with clear error messages
 - **Composable workflows** - Nest sub-DAGs with parameters (depth limited only by available memory)
 - **Distributed execution** - Route tasks to workers via labels (GPU, region, etc.)
-- **Built-in scheduling** - Cron expressions with start/stop/restart support
-- **Workflow Operator** - Manage workflows and debug issues from Slack or Telegram
+- **Scheduler** - Cron expressions with start/stop/restart support
+- **AI Agent integration** - Built-in AI agent for workflow management and workflow steps operate on your computer
+- **Durable execution** - Automatic retries, hooks, and state persistence for long-running workflows
 - **Web UI** - Monitor, control, and debug workflows in real-time
+
+**The Dagu Difference**: Keep workflow orchestration separate from business logic. Define workflows declaratively, stay zero-invasive to application code, and get a more capable alternative to cron without taking on Airflow-level complexity.
 
 ## AI Agent
 

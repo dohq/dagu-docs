@@ -5,8 +5,8 @@ layout: doc
 <img src="/hero-logo.webp" alt="Dagu" style="display: block; margin: 0 auto; width: 100%">
 
 <div class="tagline" style="text-align: center;">
-  <h2>Local-first workflow engine.</h2>
-  <p>Declarative, file-based, self-contained, and air-gapped ready. One binary that scales from laptop to distributed cluster.</p>
+  <h2>Local-first Workflow Engine</h2>
+  <p>Declarative, self-contained, and air-gapped ready. One binary that scales from laptop to distributed cluster.</p>
 </div>
 
 <div class="hero-section">
@@ -23,6 +23,10 @@ Explore without installing: [Live Demo](https://demo-instance.dagu.sh/)
 
 Credentials: `demouser` / `demouser`
 :::
+
+## The Dagu Difference
+
+Keep workflow orchestration separate from business logic. Define workflows declaratively, stay zero-invasive to application code, and get a more capable alternative to cron without taking on Airflow-level complexity.
 
 ## Why Dagu?
 
