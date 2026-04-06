@@ -8,21 +8,21 @@ Get up and running with Dagu in under 2 minutes.
 
 ```bash [macOS/Linux]
 # Install to ~/.local/bin (default, no sudo required)
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | bash
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.sh | bash
 
 # Install specific version
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | bash -s -- --version vX.Y.Z
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.sh | bash -s -- --version vX.Y.Z
 
 # Install to custom directory
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | bash -s -- --install-dir /usr/local/bin
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.sh | bash -s -- --install-dir /usr/local/bin
 ```
 
 ```powershell [Windows]
 # Open the guided installer with recommended defaults
-irm https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.ps1 | iex
+irm https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.ps1 | iex
 
 # Install specific version
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.ps1))) -Version vX.Y.Z
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.ps1))) -Version vX.Y.Z
 ```
 
 ```bash [Docker]
@@ -34,7 +34,7 @@ brew install dagu
 ```
 
 ```bash [npm]
-npm install -g --ignore-scripts=false @dagu-org/dagu
+npm install -g --ignore-scripts=false @dagucloud/dagu
 ```
 
 :::
@@ -58,7 +58,7 @@ dagu ai install --yes
 Fallback via the shared `skills` CLI:
 
 ```bash
-npx skills add https://github.com/dagu-org/dagu --skill dagu
+npx skills add https://github.com/dagucloud/dagu --skill dagu
 ```
 
 For explicit skills directories, see the [Installation Guide](/getting-started/installation) and [CLI Commands](/getting-started/cli#ai).

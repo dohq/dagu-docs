@@ -84,7 +84,7 @@ steps:
     command: actions/checkout@v4          # Action to run
     type: gha                             # Aliases: github_action, github-action
     params:
-      repository: dagu-org/dagu
+      repository: dagucloud/dagu
       ref: main
       token: "${GITHUB_TOKEN}"            # Evaluation happens at runtime
 ```

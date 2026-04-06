@@ -43,7 +43,7 @@ The upgrade command automatically detects how Dagu was installed:
 | Method | Self-Upgrade | Recommended Action |
 |--------|--------------|-------------------|
 | Binary download | Yes | `dagu upgrade` |
-| Go install | No | `go install github.com/dagu-org/dagu@latest` |
+| Go install | No | `go install github.com/dagucloud/dagu@latest` |
 | Homebrew | No | `brew upgrade dagu` |
 | Snap | No | `snap refresh dagu` |
 | Docker | No | Pull latest image |

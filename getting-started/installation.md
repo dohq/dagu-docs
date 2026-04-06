@@ -16,10 +16,10 @@ The script installers are the recommended path for most users, especially if you
 
 ```bash
 # Open the guided installer with recommended defaults
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | bash
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.sh | bash
 
 # Store temporary files outside /tmp (for example, on a NAS with a small /tmp)
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | \
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.sh | \
   bash -s -- --working-dir /volume1/tmp
 ```
 
@@ -33,24 +33,24 @@ When the installer sets up a background service, it also captures a service `PAT
 
 ```powershell [PowerShell]
 # Open the guided installer with recommended defaults
-irm https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.ps1 | iex
+irm https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.ps1 | iex
 
 # Install specific version
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.ps1))) -Version vX.Y.Z
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.ps1))) -Version vX.Y.Z
 
 # Install to custom directory
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.ps1))) -Version latest -InstallDir "C:\tools\dagu"
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.ps1))) -Version latest -InstallDir "C:\tools\dagu"
 ```
 
 ```cmd [CMD/PowerShell]
 REM Install latest version
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.cmd -o installer.cmd && .\installer.cmd && del installer.cmd
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.cmd -o installer.cmd && .\installer.cmd && del installer.cmd
 
 REM Install specific version
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.cmd -o installer.cmd && .\installer.cmd -Version vX.Y.Z && del installer.cmd
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.cmd -o installer.cmd && .\installer.cmd -Version vX.Y.Z && del installer.cmd
 
 REM Install to custom directory
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.cmd -o installer.cmd && .\installer.cmd -Version latest -InstallDir "C:\tools\dagu" && del installer.cmd
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.cmd -o installer.cmd && .\installer.cmd -Version latest -InstallDir "C:\tools\dagu" && del installer.cmd
 ```
 
 :::
@@ -63,7 +63,7 @@ The Windows wizard can also install Dagu as a Windows service using a version-pi
 If you plan to run Dagu as a Windows service, the installer will prompt to elevate automatically. For non-interactive setups, start PowerShell as Administrator and run:
 
 ```powershell
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.ps1))) `
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.ps1))) `
   -Version latest `
   -Service yes `
   -InstallDir "C:\Program Files\Dagu" `
@@ -90,7 +90,7 @@ Visit http://localhost:8080. See [Docker Images](/server-admin/deployment/docker
 ### npm
 
 ```bash
-npm install -g --ignore-scripts=false @dagu-org/dagu
+npm install -g --ignore-scripts=false @dagucloud/dagu
 ```
 
 This installs Dagu globally with automatic platform detection.
@@ -103,7 +103,7 @@ brew install dagu
 
 ### Manual Download
 
-Download from [GitHub Releases](https://github.com/dagu-org/dagu/releases).
+Download from [GitHub Releases](https://github.com/dagucloud/dagu/releases).
 
 ## Installation Options
 
@@ -111,23 +111,23 @@ Download from [GitHub Releases](https://github.com/dagu-org/dagu/releases).
 
 ```bash
 # Install to custom location
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | \
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.sh | \
   bash -s -- --install-dir ~/bin
 
 # Install to system-wide location (requires sudo)
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | \
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.sh | \
   bash -s -- --install-dir /usr/local/bin
 
 # Install specific version
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | \
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.sh | \
   bash -s -- --version vX.Y.Z
 
 # Combine options
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | \
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.sh | \
   bash -s -- --version vX.Y.Z --install-dir ~/bin
 
 # Use a custom working directory for temporary files
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | \
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.sh | \
   bash -s -- --working-dir /volume1/tmp
 ```
 
@@ -135,18 +135,18 @@ curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installe
 
 ```bash
 # Linux/macOS: install, start a background service, and create the first admin
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | \
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.sh | \
   bash -s -- --service yes --admin-username admin --admin-password 'change-me-now'
 
 # Linux: force a system service and install to /usr/local/bin
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | \
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.sh | \
   bash -s -- --service yes --service-scope system --install-dir /usr/local/bin \
     --admin-username admin --admin-password 'change-me-now'
 ```
 
 ```powershell
 # Windows: install as a service and create the first admin
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.ps1))) `
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.ps1))) `
   -Service yes `
   -AdminUsername admin `
   -AdminPassword "change-me-now"
@@ -155,12 +155,12 @@ curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installe
 ### Non-Interactive / CI
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | \
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.sh | \
   bash -s -- --dry-run --no-prompt --version latest
 ```
 
 ```powershell
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.ps1))) `
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.ps1))) `
   -DryRun -NoPrompt -Version latest
 ```
 
@@ -186,15 +186,15 @@ Use the extra flags only when you want a deeper cleanup.
 
 ```bash
 # Remove Dagu, its background service, and the installer PATH block
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | \
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.sh | \
   bash -s -- --uninstall
 
 # Also delete the detected Dagu data directory
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | \
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.sh | \
   bash -s -- --uninstall --purge-data
 
 # Also remove Dagu AI skill installs
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | \
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.sh | \
   bash -s -- --uninstall --remove-skill
 ```
 
@@ -202,11 +202,11 @@ Linux examples:
 
 ```bash
 # Uninstall only the user-scoped Linux service and matching install
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | \
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.sh | \
   bash -s -- --uninstall --service-scope user
 
 # Uninstall a custom install directory non-interactively
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | \
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.sh | \
   bash -s -- --uninstall --install-dir /usr/local/bin --no-prompt
 ```
 
@@ -214,21 +214,21 @@ curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installe
 
 ```powershell
 # Remove Dagu, its Windows service, and PATH entry
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.ps1))) `
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.ps1))) `
   -Uninstall
 
 # Also delete the detected Dagu data directory
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.ps1))) `
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.ps1))) `
   -Uninstall -PurgeData
 
 # Also remove Dagu AI skill installs
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.ps1))) `
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.ps1))) `
   -Uninstall -RemoveSkill
 ```
 
 ```cmd
 REM Remove Dagu with the CMD launcher
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.cmd -o installer.cmd && .\installer.cmd -Uninstall && del installer.cmd
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.cmd -o installer.cmd && .\installer.cmd -Uninstall && del installer.cmd
 ```
 
 Notes:
@@ -256,7 +256,7 @@ dagu ai install --skills-dir ~/.agents/skills
 Or use the shared installer as a fallback:
 
 ```bash
-npx skills add https://github.com/dagu-org/dagu --skill dagu
+npx skills add https://github.com/dagucloud/dagu --skill dagu
 ```
 
 ### Docker Compose
@@ -310,7 +310,7 @@ Requirements:
 - Make
 
 ```bash
-git clone https://github.com/dagu-org/dagu.git
+git clone https://github.com/dagucloud/dagu.git
 cd dagu
 
 # Build everything

@@ -89,7 +89,7 @@ dagu ai install --skills-dir ~/.agents/skills
 Or use the shared `skills` CLI:
 
 ```bash
-npx skills add https://github.com/dagu-org/dagu --skill dagu
+npx skills add https://github.com/dagucloud/dagu --skill dagu
 ```
 
 See [`ai` in CLI Commands](/getting-started/cli#ai) for more details.

@@ -709,7 +709,7 @@ This copies the bundled skill directly and skips cloning the repository.
 If you prefer the shared `skills` CLI instead:
 
 ```bash
-npx skills add https://github.com/dagu-org/dagu --skill dagu
+npx skills add https://github.com/dagucloud/dagu --skill dagu
 ```
 
 For details on the upstream shared installer, see [vercel-labs/skills](https://github.com/vercel-labs/skills).

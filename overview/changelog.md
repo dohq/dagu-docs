@@ -6,41 +6,41 @@
 
 - fix: exclude queued dag runs from dashboard
 
-**Full Changelog**: [v2.4.2...v2.4.3](https://github.com/dagu-org/dagu/compare/v2.4.2...v2.4.3)
+**Full Changelog**: [v2.4.2...v2.4.3](https://github.com/dagucloud/dagu/compare/v2.4.2...v2.4.3)
 
 ## v2.4.2 (2026-04-05)
 
 ### Added
 
-- feat: add centralized event store ([#1885](https://github.com/dagu-org/dagu/pull/1885)) [@yottahmd](https://github.com/yottahmd)
-- feat: add kubernetes step executor and DAG defaults ([#1886](https://github.com/dagu-org/dagu/pull/1886)) [@yottahmd](https://github.com/yottahmd)
-- feat: add inline JSON Schema validation for DAG params (closes #1182) ([#1887](https://github.com/dagu-org/dagu/pull/1887)) [@mbprabhoo](https://github.com/mbprabhoo)
-- feat: support OpenAI Codex auth and reasoning effort in agent settings ([#1921](https://github.com/dagu-org/dagu/pull/1921)) [@yottahmd](https://github.com/yottahmd)
-- feat: add configurable env passthrough for step execution ([#1925](https://github.com/dagu-org/dagu/pull/1925)) [@yottahmd](https://github.com/yottahmd)
-- feat: add configurable automatic update checks ([#1941](https://github.com/dagu-org/dagu/pull/1941)) [@yottahmd](https://github.com/yottahmd)
-- Add event feed UI and harden event-driven bot notifications ([#1946](https://github.com/dagu-org/dagu/pull/1946)) [@yottahmd](https://github.com/yottahmd)
-- feat(coordinator): support IPv6 address format and improve address pa… ([#1947](https://github.com/dagu-org/dagu/pull/1947)) [@artikell](https://github.com/artikell)
-- feat: replace CLI remote nodes with contexts ([#1949](https://github.com/dagu-org/dagu/pull/1949)) [@yottahmd](https://github.com/yottahmd)
-- feat: add cursor pagination for dag runs ([#1952](https://github.com/dagu-org/dagu/pull/1952)) [@yottahmd](https://github.com/yottahmd)
-- feat: show next scheduled dag run in details ([#1953](https://github.com/dagu-org/dagu/pull/1953)) [@yottahmd](https://github.com/yottahmd)
-- spec: inherit DAG type from base config before build ([#1964](https://github.com/dagu-org/dagu/pull/1964)) [@yottahmd](https://github.com/yottahmd)
-- feat: improve queue browsing and dequeue reliability ([#1967](https://github.com/dagu-org/dagu/pull/1967)) [@yottahmd](https://github.com/yottahmd)
-- feat: paginate cockpit and dashboard dag runs ([#1969](https://github.com/dagu-org/dagu/pull/1969)) [@yottahmd](https://github.com/yottahmd)
+- feat: add centralized event store ([#1885](https://github.com/dagucloud/dagu/pull/1885)) [@yottahmd](https://github.com/yottahmd)
+- feat: add kubernetes step executor and DAG defaults ([#1886](https://github.com/dagucloud/dagu/pull/1886)) [@yottahmd](https://github.com/yottahmd)
+- feat: add inline JSON Schema validation for DAG params (closes #1182) ([#1887](https://github.com/dagucloud/dagu/pull/1887)) [@mbprabhoo](https://github.com/mbprabhoo)
+- feat: support OpenAI Codex auth and reasoning effort in agent settings ([#1921](https://github.com/dagucloud/dagu/pull/1921)) [@yottahmd](https://github.com/yottahmd)
+- feat: add configurable env passthrough for step execution ([#1925](https://github.com/dagucloud/dagu/pull/1925)) [@yottahmd](https://github.com/yottahmd)
+- feat: add configurable automatic update checks ([#1941](https://github.com/dagucloud/dagu/pull/1941)) [@yottahmd](https://github.com/yottahmd)
+- Add event feed UI and harden event-driven bot notifications ([#1946](https://github.com/dagucloud/dagu/pull/1946)) [@yottahmd](https://github.com/yottahmd)
+- feat(coordinator): support IPv6 address format and improve address pa… ([#1947](https://github.com/dagucloud/dagu/pull/1947)) [@artikell](https://github.com/artikell)
+- feat: replace CLI remote nodes with contexts ([#1949](https://github.com/dagucloud/dagu/pull/1949)) [@yottahmd](https://github.com/yottahmd)
+- feat: add cursor pagination for dag runs ([#1952](https://github.com/dagucloud/dagu/pull/1952)) [@yottahmd](https://github.com/yottahmd)
+- feat: show next scheduled dag run in details ([#1953](https://github.com/dagucloud/dagu/pull/1953)) [@yottahmd](https://github.com/yottahmd)
+- spec: inherit DAG type from base config before build ([#1964](https://github.com/dagucloud/dagu/pull/1964)) [@yottahmd](https://github.com/yottahmd)
+- feat: improve queue browsing and dequeue reliability ([#1967](https://github.com/dagucloud/dagu/pull/1967)) [@yottahmd](https://github.com/yottahmd)
+- feat: paginate cockpit and dashboard dag runs ([#1969](https://github.com/dagucloud/dagu/pull/1969)) [@yottahmd](https://github.com/yottahmd)
 
 ### Fixed
 
-- fix: preserve inline schema params metadata and legacy map handling ([#1923](https://github.com/dagu-org/dagu/pull/1923)) [@yottahmd](https://github.com/yottahmd)
-- fix: preserve kubernetes discovery env for worker command steps ([#1924](https://github.com/dagu-org/dagu/pull/1924)) [@yottahmd](https://github.com/yottahmd)
-- fix: allow keyless local agent setup ([#1936](https://github.com/dagu-org/dagu/pull/1936)) [@yottahmd](https://github.com/yottahmd)
-- fix: redesign global search with cursor feeds ([#1945](https://github.com/dagu-org/dagu/pull/1945)) [@yottahmd](https://github.com/yottahmd)
-- fix: warn on misleading cron step values ([#1948](https://github.com/dagu-org/dagu/pull/1948)) [@tmchow](https://github.com/tmchow)
-- fix: stop dashboard and cockpit dag run refetch loop ([#1954](https://github.com/dagu-org/dagu/pull/1954)) [@yottahmd](https://github.com/yottahmd)
-- fix: restore immediate bot activity indicators ([#1956](https://github.com/dagu-org/dagu/pull/1956)) [@yottahmd](https://github.com/yottahmd)
-- fix: expand runtime vars in output paths ([#1957](https://github.com/dagu-org/dagu/pull/1957)) [@yottahmd](https://github.com/yottahmd)
-- fix: preserve restored step config on approval resume ([#1959](https://github.com/dagu-org/dagu/pull/1959)) [@yottahmd](https://github.com/yottahmd)
-- Fix reschedule for inline DAG run snapshots ([#1965](https://github.com/dagu-org/dagu/pull/1965)) [@yottahmd](https://github.com/yottahmd)
-- fix: route reschedule through enqueue ([#1966](https://github.com/dagu-org/dagu/pull/1966)) [@yottahmd](https://github.com/yottahmd)
-- fix: replace app live polling with event-driven SSE updates ([#1968](https://github.com/dagu-org/dagu/pull/1968)) [@yottahmd](https://github.com/yottahmd)
+- fix: preserve inline schema params metadata and legacy map handling ([#1923](https://github.com/dagucloud/dagu/pull/1923)) [@yottahmd](https://github.com/yottahmd)
+- fix: preserve kubernetes discovery env for worker command steps ([#1924](https://github.com/dagucloud/dagu/pull/1924)) [@yottahmd](https://github.com/yottahmd)
+- fix: allow keyless local agent setup ([#1936](https://github.com/dagucloud/dagu/pull/1936)) [@yottahmd](https://github.com/yottahmd)
+- fix: redesign global search with cursor feeds ([#1945](https://github.com/dagucloud/dagu/pull/1945)) [@yottahmd](https://github.com/yottahmd)
+- fix: warn on misleading cron step values ([#1948](https://github.com/dagucloud/dagu/pull/1948)) [@tmchow](https://github.com/tmchow)
+- fix: stop dashboard and cockpit dag run refetch loop ([#1954](https://github.com/dagucloud/dagu/pull/1954)) [@yottahmd](https://github.com/yottahmd)
+- fix: restore immediate bot activity indicators ([#1956](https://github.com/dagucloud/dagu/pull/1956)) [@yottahmd](https://github.com/yottahmd)
+- fix: expand runtime vars in output paths ([#1957](https://github.com/dagucloud/dagu/pull/1957)) [@yottahmd](https://github.com/yottahmd)
+- fix: preserve restored step config on approval resume ([#1959](https://github.com/dagucloud/dagu/pull/1959)) [@yottahmd](https://github.com/yottahmd)
+- Fix reschedule for inline DAG run snapshots ([#1965](https://github.com/dagucloud/dagu/pull/1965)) [@yottahmd](https://github.com/yottahmd)
+- fix: route reschedule through enqueue ([#1966](https://github.com/dagucloud/dagu/pull/1966)) [@yottahmd](https://github.com/yottahmd)
+- fix: replace app live polling with event-driven SSE updates ([#1968](https://github.com/dagucloud/dagu/pull/1968)) [@yottahmd](https://github.com/yottahmd)
 
 ### Contributors
 
@@ -48,27 +48,27 @@ Thanks to our contributors for this release:
 
 | Contribution | Contributor |
 | --- | --- |
-| feat: add inline JSON Schema validation for DAG params (closes #1182) ([#1887](https://github.com/dagu-org/dagu/pull/1887)) | [@mbprabhoo](https://github.com/mbprabhoo) |
-| Local Agent Provider Unnecessarily Requires API Key ([#1882](https://github.com/dagu-org/dagu/issues/1882)) | [@arky](https://github.com/arky) (report) |
-| feat(coordinator): support IPv6 address format and improve address pa… ([#1947](https://github.com/dagu-org/dagu/pull/1947)) | [@artikell](https://github.com/artikell) |
-| fix: warn on misleading cron step values ([#1948](https://github.com/dagu-org/dagu/pull/1948)) | [@tmchow](https://github.com/tmchow) |
-| schedule is not executed according to the schedule ([#639](https://github.com/dagu-org/dagu/issues/639)) | [@JuchangGit](https://github.com/JuchangGit) (report) |
-| Display when is the next scheduled dag run ([#1950](https://github.com/dagu-org/dagu/issues/1950)), Add support for inheritance of type field from base config ([#1961](https://github.com/dagu-org/dagu/issues/1961)) | [@bagemt](https://github.com/bagemt) (report) |
-| DAGU_RUN_STEP_NAME empty in step's stdout attribute ([#1955](https://github.com/dagu-org/dagu/issues/1955)) | [@dev-epices](https://github.com/dev-epices) (report) |
-| registry_auths and step env lost after approval step resume ([#1958](https://github.com/dagu-org/dagu/issues/1958)) | [@pengu-fr](https://github.com/pengu-fr) (report) |
+| feat: add inline JSON Schema validation for DAG params (closes #1182) ([#1887](https://github.com/dagucloud/dagu/pull/1887)) | [@mbprabhoo](https://github.com/mbprabhoo) |
+| Local Agent Provider Unnecessarily Requires API Key ([#1882](https://github.com/dagucloud/dagu/issues/1882)) | [@arky](https://github.com/arky) (report) |
+| feat(coordinator): support IPv6 address format and improve address pa… ([#1947](https://github.com/dagucloud/dagu/pull/1947)) | [@artikell](https://github.com/artikell) |
+| fix: warn on misleading cron step values ([#1948](https://github.com/dagucloud/dagu/pull/1948)) | [@tmchow](https://github.com/tmchow) |
+| schedule is not executed according to the schedule ([#639](https://github.com/dagucloud/dagu/issues/639)) | [@JuchangGit](https://github.com/JuchangGit) (report) |
+| Display when is the next scheduled dag run ([#1950](https://github.com/dagucloud/dagu/issues/1950)), Add support for inheritance of type field from base config ([#1961](https://github.com/dagucloud/dagu/issues/1961)) | [@bagemt](https://github.com/bagemt) (report) |
+| DAGU_RUN_STEP_NAME empty in step's stdout attribute ([#1955](https://github.com/dagucloud/dagu/issues/1955)) | [@dev-epices](https://github.com/dev-epices) (report) |
+| registry_auths and step env lost after approval step resume ([#1958](https://github.com/dagucloud/dagu/issues/1958)) | [@pengu-fr](https://github.com/pengu-fr) (report) |
 
 
-**Full Changelog**: [v2.3.11...v2.4.2](https://github.com/dagu-org/dagu/compare/v2.3.11...v2.4.2)
+**Full Changelog**: [v2.3.11...v2.4.2](https://github.com/dagucloud/dagu/compare/v2.3.11...v2.4.2)
 
 ## v2.3.11 (2026-03-30)
 
 ### Added
 
-- feat: support bulk DAG-run selection and actions ([#1881](https://github.com/dagu-org/dagu/pull/1881)) [@yottahmd](https://github.com/yottahmd)
+- feat: support bulk DAG-run selection and actions ([#1881](https://github.com/dagucloud/dagu/pull/1881)) [@yottahmd](https://github.com/yottahmd)
 
 ### Fixed
 
-- fix(ui): restore split scrolling in REST API docs ([#1880](https://github.com/dagu-org/dagu/pull/1880)) [@yottahmd](https://github.com/yottahmd)
+- fix(ui): restore split scrolling in REST API docs ([#1880](https://github.com/dagucloud/dagu/pull/1880)) [@yottahmd](https://github.com/yottahmd)
 
 ### Contributors
 
@@ -76,23 +76,23 @@ Thanks to our contributors for this release:
 
 | Contribution | Contributor |
 | --- | --- |
-| The new REST API is not scrollable ([#1879](https://github.com/dagu-org/dagu/issues/1879)) | [@bagemt](https://github.com/bagemt) (report) |
+| The new REST API is not scrollable ([#1879](https://github.com/dagucloud/dagu/issues/1879)) | [@bagemt](https://github.com/bagemt) (report) |
 
-**Full Changelog**: [v2.3.10...v2.3.11](https://github.com/dagu-org/dagu/compare/v2.3.10...v2.3.11)
+**Full Changelog**: [v2.3.10...v2.3.11](https://github.com/dagucloud/dagu/compare/v2.3.10...v2.3.11)
 
 ## v2.3.10 (2026-03-29)
 
 ### Added
 
-- feat: add JSON Schema validation for step outputs ([#1867](https://github.com/dagu-org/dagu/pull/1867)) [@mbprabhoo](https://github.com/mbprabhoo)
-- feat: unify params and output schema handling ([#1869](https://github.com/dagu-org/dagu/pull/1869)) [@yottahmd](https://github.com/yottahmd)
-- feat: support one-off start schedules ([#1872](https://github.com/dagu-org/dagu/pull/1872)) [@yottahmd](https://github.com/yottahmd)
-- feat: add built-in REST API docs ([#1874](https://github.com/dagu-org/dagu/pull/1874)) [@yottahmd](https://github.com/yottahmd)
+- feat: add JSON Schema validation for step outputs ([#1867](https://github.com/dagucloud/dagu/pull/1867)) [@mbprabhoo](https://github.com/mbprabhoo)
+- feat: unify params and output schema handling ([#1869](https://github.com/dagucloud/dagu/pull/1869)) [@yottahmd](https://github.com/yottahmd)
+- feat: support one-off start schedules ([#1872](https://github.com/dagucloud/dagu/pull/1872)) [@yottahmd](https://github.com/yottahmd)
+- feat: add built-in REST API docs ([#1874](https://github.com/dagucloud/dagu/pull/1874)) [@yottahmd](https://github.com/yottahmd)
 
 ### Fixed
 
-- fix: track installer tmpfiles in parent shell ([#1870](https://github.com/dagu-org/dagu/pull/1870)) [@yottahmd](https://github.com/yottahmd)
-- fix: preserve env-backed secrets for scheduler subprocess runs ([#1877](https://github.com/dagu-org/dagu/pull/1877)) [@yottahmd](https://github.com/yottahmd)
+- fix: track installer tmpfiles in parent shell ([#1870](https://github.com/dagucloud/dagu/pull/1870)) [@yottahmd](https://github.com/yottahmd)
+- fix: preserve env-backed secrets for scheduler subprocess runs ([#1877](https://github.com/dagucloud/dagu/pull/1877)) [@yottahmd](https://github.com/yottahmd)
 
 ### Contributors
 
@@ -100,19 +100,19 @@ Thanks to our contributors for this release:
 
 | Contribution | Contributor |
 | --- | --- |
-| feat: add JSON Schema validation for step outputs ([#1867](https://github.com/dagu-org/dagu/pull/1867)) | [@mbprabhoo](https://github.com/mbprabhoo) |
-| [BUG] cleanup_tmpfiles in installer.sh does not clear tmp dir ([#1868](https://github.com/dagu-org/dagu/issues/1868)) | [@jeremydelattre59](https://github.com/jeremydelattre59) (report) |
-| [Feature] Schedule one-off execution ([#1865](https://github.com/dagu-org/dagu/issues/1865)), [Feature] Built in REST API docs ([#1866](https://github.com/dagu-org/dagu/issues/1866)) | [@bagemt](https://github.com/bagemt) (report) |
-| Secrets does not work with the ‘env’ provider and a scheduled DAG ([#1864](https://github.com/dagu-org/dagu/issues/1864)) | [@abylon-io](https://github.com/abylon-io) (report) |
+| feat: add JSON Schema validation for step outputs ([#1867](https://github.com/dagucloud/dagu/pull/1867)) | [@mbprabhoo](https://github.com/mbprabhoo) |
+| [BUG] cleanup_tmpfiles in installer.sh does not clear tmp dir ([#1868](https://github.com/dagucloud/dagu/issues/1868)) | [@jeremydelattre59](https://github.com/jeremydelattre59) (report) |
+| [Feature] Schedule one-off execution ([#1865](https://github.com/dagucloud/dagu/issues/1865)), [Feature] Built in REST API docs ([#1866](https://github.com/dagucloud/dagu/issues/1866)) | [@bagemt](https://github.com/bagemt) (report) |
+| Secrets does not work with the ‘env’ provider and a scheduled DAG ([#1864](https://github.com/dagucloud/dagu/issues/1864)) | [@abylon-io](https://github.com/abylon-io) (report) |
 
 
-**Full Changelog**: [v2.3.9...v2.3.10](https://github.com/dagu-org/dagu/compare/v2.3.9...v2.3.10)
+**Full Changelog**: [v2.3.9...v2.3.10](https://github.com/dagucloud/dagu/compare/v2.3.9...v2.3.10)
 
 ## v2.3.9 (2026-03-28)
 
 ### Fixed
 
-- fix: dependency vulnerabilities reported in #1862 ([#1863](https://github.com/dagu-org/dagu/pull/1863)) [@yottahmd](https://github.com/yottahmd)
+- fix: dependency vulnerabilities reported in #1862 ([#1863](https://github.com/dagucloud/dagu/pull/1863)) [@yottahmd](https://github.com/yottahmd)
 
 ### Contributors
 
@@ -120,18 +120,18 @@ Thanks to our contributors for this release:
 
 | Contribution | Contributor |
 | --- | --- |
-| High and critical fixable vulnerabilities ([#1862](https://github.com/dagu-org/dagu/issues/1862)) | [@gchiesa](https://github.com/gchiesa) (report) |
+| High and critical fixable vulnerabilities ([#1862](https://github.com/dagucloud/dagu/issues/1862)) | [@gchiesa](https://github.com/gchiesa) (report) |
 
 ## v2.3.8 (2026-03-27)
 
 ### Added
 
-- [Feat] history is now displayed in execution order instead of alphabetic order ([#1859](https://github.com/dagu-org/dagu/pull/1859)) [@nikkeitk](https://github.com/nikkeitk)
+- [Feat] history is now displayed in execution order instead of alphabetic order ([#1859](https://github.com/dagucloud/dagu/pull/1859)) [@nikkeitk](https://github.com/nikkeitk)
 
 ### Fixed
 
-- fix: recover stale queued distributed runs stuck after worker ack ([#1857](https://github.com/dagu-org/dagu/pull/1857)) [@yottahmd](https://github.com/yottahmd)
-- Preserve DAG env parity in subprocess relaunches ([#1860](https://github.com/dagu-org/dagu/pull/1860)) [@yottahmd](https://github.com/yottahmd)
+- fix: recover stale queued distributed runs stuck after worker ack ([#1857](https://github.com/dagucloud/dagu/pull/1857)) [@yottahmd](https://github.com/yottahmd)
+- Preserve DAG env parity in subprocess relaunches ([#1860](https://github.com/dagucloud/dagu/pull/1860)) [@yottahmd](https://github.com/yottahmd)
 
 ### Contributors
 
@@ -139,26 +139,26 @@ Thanks to our contributors for this release:
 
 | Contribution | Contributor |
 | --- | --- |
-| Bug: some scheduled tasks are queued but not run ([#1837](https://github.com/dagu-org/dagu/issues/1837)) | [@jonasban](https://github.com/jonasban) (report) |
-| Bug: DAG did not start after coordinator dispatch ([#1858](https://github.com/dagu-org/dagu/issues/1858)) | [@pommetjehorlepiep](https://github.com/pommetjehorlepiep) (report) |
-| [Feat] history is now displayed in execution order instead of alphabetic order ([#1859](https://github.com/dagu-org/dagu/pull/1859)) | [@nikkeitk](https://github.com/nikkeitk) |
-| [Feat] step in order in history ([#1087](https://github.com/dagu-org/dagu/issues/1087)) | [@jeremydelattre59](https://github.com/jeremydelattre59) (report) |
-| bug: block variables resolve empty for enqueued runs but work for start ([#1856](https://github.com/dagu-org/dagu/issues/1856)) | [@mvgijssel](https://github.com/mvgijssel) (report) |
+| Bug: some scheduled tasks are queued but not run ([#1837](https://github.com/dagucloud/dagu/issues/1837)) | [@jonasban](https://github.com/jonasban) (report) |
+| Bug: DAG did not start after coordinator dispatch ([#1858](https://github.com/dagucloud/dagu/issues/1858)) | [@pommetjehorlepiep](https://github.com/pommetjehorlepiep) (report) |
+| [Feat] history is now displayed in execution order instead of alphabetic order ([#1859](https://github.com/dagucloud/dagu/pull/1859)) | [@nikkeitk](https://github.com/nikkeitk) |
+| [Feat] step in order in history ([#1087](https://github.com/dagucloud/dagu/issues/1087)) | [@jeremydelattre59](https://github.com/jeremydelattre59) (report) |
+| bug: block variables resolve empty for enqueued runs but work for start ([#1856](https://github.com/dagucloud/dagu/issues/1856)) | [@mvgijssel](https://github.com/mvgijssel) (report) |
 
 ## v2.3.7 (2026-03-25)
 
 ### Added
 
-- feat: support step-scoped access to captured output values ([#1844](https://github.com/dagu-org/dagu/pull/1844)) [@yottahmd](https://github.com/yottahmd)
-- feat: add template executor for inline text rendering ([#1845](https://github.com/dagu-org/dagu/pull/1845)) [@yottahmd](https://github.com/yottahmd)
-- feat: support slim-sprig functions in template steps (#1848) ([#1850](https://github.com/dagu-org/dagu/pull/1850)) [@yottahmd](https://github.com/yottahmd)
+- feat: support step-scoped access to captured output values ([#1844](https://github.com/dagucloud/dagu/pull/1844)) [@yottahmd](https://github.com/yottahmd)
+- feat: add template executor for inline text rendering ([#1845](https://github.com/dagucloud/dagu/pull/1845)) [@yottahmd](https://github.com/yottahmd)
+- feat: support slim-sprig functions in template steps (#1848) ([#1850](https://github.com/dagucloud/dagu/pull/1850)) [@yottahmd](https://github.com/yottahmd)
 
 ### Fixed
 
-- fix: add Docker daemon connection vars to env whitelist ([#1846](https://github.com/dagu-org/dagu/pull/1846)) [@yottahmd](https://github.com/yottahmd)
-- fix: prevent distributed runs from remaining running after execution stops ([#1851](https://github.com/dagu-org/dagu/pull/1851)) [@yottahmd](https://github.com/yottahmd)
-- fix: resolve env-provider secrets in parent before subprocess filtering ([#1853](https://github.com/dagu-org/dagu/pull/1853)) [@yottahmd](https://github.com/yottahmd)
-- fix: prevent scheduler split-brain via fence token and self-fencing ([#1854](https://github.com/dagu-org/dagu/pull/1854)) [@yottahmd](https://github.com/yottahmd)
+- fix: add Docker daemon connection vars to env whitelist ([#1846](https://github.com/dagucloud/dagu/pull/1846)) [@yottahmd](https://github.com/yottahmd)
+- fix: prevent distributed runs from remaining running after execution stops ([#1851](https://github.com/dagucloud/dagu/pull/1851)) [@yottahmd](https://github.com/yottahmd)
+- fix: resolve env-provider secrets in parent before subprocess filtering ([#1853](https://github.com/dagucloud/dagu/pull/1853)) [@yottahmd](https://github.com/yottahmd)
+- fix: prevent scheduler split-brain via fence token and self-fencing ([#1854](https://github.com/dagucloud/dagu/pull/1854)) [@yottahmd](https://github.com/yottahmd)
 
 ### Contributors
 
@@ -166,19 +166,19 @@ Thanks to our contributors for this release:
 
 | Contribution | Contributor |
 | --- | --- |
-| Bug: some scheduled tasks are queued but not run ([#1837](https://github.com/dagu-org/dagu/issues/1837) and [#1849](https://github.com/dagu-org/dagu/issues/1849)) | [@jonasban](https://github.com/jonasban) (report) |
-| Is the DOCKER_HOST environment variable no longer effective in dagu? ([#1843](https://github.com/dagu-org/dagu/issues/1843)) | [@jerry-yuan](https://github.com/jerry-yuan) (report) |
-| Since 2.3.3 secrets doesn't work with "env" provider ([#1852](https://github.com/dagu-org/dagu/issues/1852)) | [@abylon-io](https://github.com/abylon-io) (report) |
+| Bug: some scheduled tasks are queued but not run ([#1837](https://github.com/dagucloud/dagu/issues/1837) and [#1849](https://github.com/dagucloud/dagu/issues/1849)) | [@jonasban](https://github.com/jonasban) (report) |
+| Is the DOCKER_HOST environment variable no longer effective in dagu? ([#1843](https://github.com/dagucloud/dagu/issues/1843)) | [@jerry-yuan](https://github.com/jerry-yuan) (report) |
+| Since 2.3.3 secrets doesn't work with "env" provider ([#1852](https://github.com/dagucloud/dagu/issues/1852)) | [@abylon-io](https://github.com/abylon-io) (report) |
 
 
-**Full Changelog**: [v2.3.6...v2.3.7](https://github.com/dagu-org/dagu/compare/v2.3.6...v2.3.7)
+**Full Changelog**: [v2.3.6...v2.3.7](https://github.com/dagucloud/dagu/compare/v2.3.6...v2.3.7)
 
 ## v2.3.5 (2026-03-24)
 
 ### Fixed
 
-- fix: retry dispatch on transient coordinator failures (#1837) ([#1839](https://github.com/dagu-org/dagu/pull/1839)) [@yottahmd](https://github.com/yottahmd)
-- fix: pass runtime environment to precondition shell commands ([#1840](https://github.com/dagu-org/dagu/pull/1840)) [@yottahmd](https://github.com/yottahmd)
+- fix: retry dispatch on transient coordinator failures (#1837) ([#1839](https://github.com/dagucloud/dagu/pull/1839)) [@yottahmd](https://github.com/yottahmd)
+- fix: pass runtime environment to precondition shell commands ([#1840](https://github.com/dagucloud/dagu/pull/1840)) [@yottahmd](https://github.com/yottahmd)
 
 ### Contributors
 
@@ -186,41 +186,41 @@ Thanks to our contributors for this release:
 
 | Contribution | Contributor |
 | --- | --- |
-| BUG: Preconditions: conditions was broken ([#1838](https://github.com/dagu-org/dagu/issues/1838)) | [@thimuslux](https://github.com/thimuslux) (report) |
-| Bug: some scheduled tasks are queued but not run ([#1837](https://github.com/dagu-org/dagu/issues/1837)) | [@jonasban](https://github.com/jonasban) (report) |
+| BUG: Preconditions: conditions was broken ([#1838](https://github.com/dagucloud/dagu/issues/1838)) | [@thimuslux](https://github.com/thimuslux) (report) |
+| Bug: some scheduled tasks are queued but not run ([#1837](https://github.com/dagucloud/dagu/issues/1837)) | [@jonasban](https://github.com/jonasban) (report) |
 
-**Full Changelog**: [v2.3.4...v2.3.5](https://github.com/dagu-org/dagu/compare/v2.3.4...v2.3.5)
+**Full Changelog**: [v2.3.4...v2.3.5](https://github.com/dagucloud/dagu/compare/v2.3.4...v2.3.5)
 
 ## v2.3.4 (2026-03-23)
 
 ## Fixed
 
-- fix(config): preserve implicit local timezone behavior ([#1831](https://github.com/dagu-org/dagu/pull/1831)) [@yottahmd](https://github.com/yottahmd)
-- fix: initialize compacted session loop immediately ([#1832](https://github.com/dagu-org/dagu/pull/1832)) [@yottahmd](https://github.com/yottahmd)
-- fix: reject unknown named DAG start parameters ([#1834](https://github.com/dagu-org/dagu/pull/1834)) [@yottahmd](https://github.com/yottahmd)
+- fix(config): preserve implicit local timezone behavior ([#1831](https://github.com/dagucloud/dagu/pull/1831)) [@yottahmd](https://github.com/yottahmd)
+- fix: initialize compacted session loop immediately ([#1832](https://github.com/dagucloud/dagu/pull/1832)) [@yottahmd](https://github.com/yottahmd)
+- fix: reject unknown named DAG start parameters ([#1834](https://github.com/dagucloud/dagu/pull/1834)) [@yottahmd](https://github.com/yottahmd)
 
 ## v2.3.3 (2026-03-22)
 
 ### Added
 
-- feat(jq): accept file input via config.input and file:// prefix ([#1821](https://github.com/dagu-org/dagu/pull/1821)) [@yottahmd](https://github.com/yottahmd)
-- feat: allow variable references in repeat_policy numeric fields ([#1822](https://github.com/dagu-org/dagu/pull/1822)) [@yottahmd](https://github.com/yottahmd)
-- feat(http): add format string config option for response output ([#1826](https://github.com/dagu-org/dagu/pull/1826)) [@mvanhorn](https://github.com/mvanhorn)
+- feat(jq): accept file input via config.input and file:// prefix ([#1821](https://github.com/dagucloud/dagu/pull/1821)) [@yottahmd](https://github.com/yottahmd)
+- feat: allow variable references in repeat_policy numeric fields ([#1822](https://github.com/dagucloud/dagu/pull/1822)) [@yottahmd](https://github.com/yottahmd)
+- feat(http): add format string config option for response output ([#1826](https://github.com/dagucloud/dagu/pull/1826)) [@mvanhorn](https://github.com/mvanhorn)
 
 ### Changed
 
-- refactor: make scheduler proc-authoritative ([#1824](https://github.com/dagu-org/dagu/pull/1824)) [@yottahmd](https://github.com/yottahmd)
+- refactor: make scheduler proc-authoritative ([#1824](https://github.com/dagucloud/dagu/pull/1824)) [@yottahmd](https://github.com/yottahmd)
 
 ### Fixed
 
-- fix(ui): standardize conditional swr query enabling ([#1816](https://github.com/dagu-org/dagu/pull/1816)) [@yottahmd](https://github.com/yottahmd)
-- fix: prevent bot notification replay ([#1817](https://github.com/dagu-org/dagu/pull/1817)) [@yottahmd](https://github.com/yottahmd)
-- fix(installer): remove --ignore-missing flag from sha256sum for BusyBox compatibility ([#1819](https://github.com/dagu-org/dagu/pull/1819)) [@yottahmd](https://github.com/yottahmd)
-- fix: allow env: to reference params: values ([#1820](https://github.com/dagu-org/dagu/pull/1820)) [@yottahmd](https://github.com/yottahmd)
-- fix(ui): enable live updates for Yesterday section in cockpit ([#1825](https://github.com/dagu-org/dagu/pull/1825)) [@yottahmd](https://github.com/yottahmd)
-- fix: bound live UI reads and DAG run timeouts ([#1827](https://github.com/dagu-org/dagu/pull/1827)) [@yottahmd](https://github.com/yottahmd)
-- fix: keep doc folders alphabetical under file sorting ([#1828](https://github.com/dagu-org/dagu/pull/1828)) [@yottahmd](https://github.com/yottahmd)
-- fix: clean up failed command temp scripts ([#1829](https://github.com/dagu-org/dagu/pull/1829)) [@yottahmd](https://github.com/yottahmd)
+- fix(ui): standardize conditional swr query enabling ([#1816](https://github.com/dagucloud/dagu/pull/1816)) [@yottahmd](https://github.com/yottahmd)
+- fix: prevent bot notification replay ([#1817](https://github.com/dagucloud/dagu/pull/1817)) [@yottahmd](https://github.com/yottahmd)
+- fix(installer): remove --ignore-missing flag from sha256sum for BusyBox compatibility ([#1819](https://github.com/dagucloud/dagu/pull/1819)) [@yottahmd](https://github.com/yottahmd)
+- fix: allow env: to reference params: values ([#1820](https://github.com/dagucloud/dagu/pull/1820)) [@yottahmd](https://github.com/yottahmd)
+- fix(ui): enable live updates for Yesterday section in cockpit ([#1825](https://github.com/dagucloud/dagu/pull/1825)) [@yottahmd](https://github.com/yottahmd)
+- fix: bound live UI reads and DAG run timeouts ([#1827](https://github.com/dagucloud/dagu/pull/1827)) [@yottahmd](https://github.com/yottahmd)
+- fix: keep doc folders alphabetical under file sorting ([#1828](https://github.com/dagucloud/dagu/pull/1828)) [@yottahmd](https://github.com/yottahmd)
+- fix: clean up failed command temp scripts ([#1829](https://github.com/dagucloud/dagu/pull/1829)) [@yottahmd](https://github.com/yottahmd)
 
 ### Contributors
 
@@ -228,36 +228,36 @@ Thanks to our contributors for this release:
 
 | Contribution | Contributor |
 | --- | --- |
-| feat(http): add format string config option for response output ([#1826](https://github.com/dagu-org/dagu/pull/1826)) | [@mvanhorn](https://github.com/mvanhorn) |
-| [BUG] ignore-missing parameter for sha256sum does not exist for QNAP NAS for installer.sh ([#1818](https://github.com/dagu-org/dagu/issues/1818)) | [@jeremydelattre59](https://github.com/jeremydelattre59) (report) |
+| feat(http): add format string config option for response output ([#1826](https://github.com/dagucloud/dagu/pull/1826)) | [@mvanhorn](https://github.com/mvanhorn) |
+| [BUG] ignore-missing parameter for sha256sum does not exist for QNAP NAS for installer.sh ([#1818](https://github.com/dagucloud/dagu/issues/1818)) | [@jeremydelattre59](https://github.com/jeremydelattre59) (report) |
 
-**Full Changelog**: [v2.3.1...v2.3.3](https://github.com/dagu-org/dagu/compare/v2.3.1...v2.3.3)
+**Full Changelog**: [v2.3.1...v2.3.3](https://github.com/dagucloud/dagu/compare/v2.3.1...v2.3.3)
 
 ## v2.3.1 (2026-03-19)
 
 ### Added
 
-- Coordinator and Worker Health Endpoints: New `/healthz` endpoints for the coordinator and worker services, enabling native health checks in Kubernetes and other orchestrators. ([#1802](https://github.com/dagu-org/dagu/pull/1802))
+- Coordinator and Worker Health Endpoints: New `/healthz` endpoints for the coordinator and worker services, enabling native health checks in Kubernetes and other orchestrators. ([#1802](https://github.com/dagucloud/dagu/pull/1802))
 
 ### Changed
 
-- Vault Environment Variable Renamed: The HashiCorp Vault environment variable has been renamed for consistency with the `DAGU_` prefix convention. ([#1801](https://github.com/dagu-org/dagu/pull/1801))
-- Centralized Vault Config Defaults: Vault configuration defaults are now centralized, reducing duplication and improving maintainability. ([#1804](https://github.com/dagu-org/dagu/pull/1804))
+- Vault Environment Variable Renamed: The HashiCorp Vault environment variable has been renamed for consistency with the `DAGU_` prefix convention. ([#1801](https://github.com/dagucloud/dagu/pull/1801))
+- Centralized Vault Config Defaults: Vault configuration defaults are now centralized, reducing duplication and improving maintainability. ([#1804](https://github.com/dagucloud/dagu/pull/1804))
 
 ### Fixed
 
-- Retry Endpoint Blocking: The retry API endpoint now returns immediately without blocking until the DAG run completes. ([#1786](https://github.com/dagu-org/dagu/pull/1786))
-- Scheduler Health Server Startup: The health server now starts before the scheduler acquires its lock, ensuring health checks pass during lock contention. ([#1789](https://github.com/dagu-org/dagu/pull/1789))
-- Duplicate Workers Across Coordinators: Workers are now deduplicated across multiple coordinator instances in distributed mode, preventing ghost entries in the System Status page. ([#1791](https://github.com/dagu-org/dagu/pull/1791))
-- Bot Session Continuity: Hardened Slack and Telegram bot session management for improved continuity and responsiveness. ([#1793](https://github.com/dagu-org/dagu/pull/1793))
-- Retry Scanner Scope: Narrowed the retry scanner's DAG-run scan scope to reduce unnecessary I/O. ([#1794](https://github.com/dagu-org/dagu/pull/1794))
-- Cancel Failed Auto-Retry DAG Runs: Failed DAG runs with auto-retry enabled can now be properly canceled. ([#1795](https://github.com/dagu-org/dagu/pull/1795))
-- Parallel Scheduling During Sub-DAG Retries: Fixed a deadlock where sub-DAG retries blocked parallel scheduling of other DAGs. ([#1796](https://github.com/dagu-org/dagu/pull/1796))
-- Parallel Sub-DAG Item Targets: Resolved variable expansion for `parallel` item targets in sub-DAG paths and hardened cancellation handling. ([#1797](https://github.com/dagu-org/dagu/pull/1797))
-- Bot Notifications Consolidation: Consolidated and hardened bot notification delivery to prevent duplicate or dropped messages. ([#1798](https://github.com/dagu-org/dagu/pull/1798))
-- SSE Topics and Dev Asset Versioning: Hardened SSE topic routing and fixed dev asset cache-busting. ([#1799](https://github.com/dagu-org/dagu/pull/1799))
-- Agent Approval Prompts: Fixed agent approval prompts being prematurely dismissed during long-running approval waits. ([#1800](https://github.com/dagu-org/dagu/pull/1800))
-- DAG File Traversal via Encoded Slashes: Rejected encoded slashes in DAG file paths to prevent path traversal attacks. ([#1803](https://github.com/dagu-org/dagu/pull/1803))
+- Retry Endpoint Blocking: The retry API endpoint now returns immediately without blocking until the DAG run completes. ([#1786](https://github.com/dagucloud/dagu/pull/1786))
+- Scheduler Health Server Startup: The health server now starts before the scheduler acquires its lock, ensuring health checks pass during lock contention. ([#1789](https://github.com/dagucloud/dagu/pull/1789))
+- Duplicate Workers Across Coordinators: Workers are now deduplicated across multiple coordinator instances in distributed mode, preventing ghost entries in the System Status page. ([#1791](https://github.com/dagucloud/dagu/pull/1791))
+- Bot Session Continuity: Hardened Slack and Telegram bot session management for improved continuity and responsiveness. ([#1793](https://github.com/dagucloud/dagu/pull/1793))
+- Retry Scanner Scope: Narrowed the retry scanner's DAG-run scan scope to reduce unnecessary I/O. ([#1794](https://github.com/dagucloud/dagu/pull/1794))
+- Cancel Failed Auto-Retry DAG Runs: Failed DAG runs with auto-retry enabled can now be properly canceled. ([#1795](https://github.com/dagucloud/dagu/pull/1795))
+- Parallel Scheduling During Sub-DAG Retries: Fixed a deadlock where sub-DAG retries blocked parallel scheduling of other DAGs. ([#1796](https://github.com/dagucloud/dagu/pull/1796))
+- Parallel Sub-DAG Item Targets: Resolved variable expansion for `parallel` item targets in sub-DAG paths and hardened cancellation handling. ([#1797](https://github.com/dagucloud/dagu/pull/1797))
+- Bot Notifications Consolidation: Consolidated and hardened bot notification delivery to prevent duplicate or dropped messages. ([#1798](https://github.com/dagucloud/dagu/pull/1798))
+- SSE Topics and Dev Asset Versioning: Hardened SSE topic routing and fixed dev asset cache-busting. ([#1799](https://github.com/dagucloud/dagu/pull/1799))
+- Agent Approval Prompts: Fixed agent approval prompts being prematurely dismissed during long-running approval waits. ([#1800](https://github.com/dagucloud/dagu/pull/1800))
+- DAG File Traversal via Encoded Slashes: Rejected encoded slashes in DAG file paths to prevent path traversal attacks. ([#1803](https://github.com/dagucloud/dagu/pull/1803))
 
 ### Contributors
 
@@ -265,32 +265,32 @@ Thanks to our contributors for this release:
 
 | Contribution | Contributor |
 | --- | --- |
-| Retry endpoint non-blocking fix ([#1786](https://github.com/dagu-org/dagu/pull/1786)) | [@mvanhorn](https://github.com/mvanhorn) |
-| Vault environment variable rename ([#1801](https://github.com/dagu-org/dagu/pull/1801)) | [@dohq](https://github.com/dohq) |
-| Retry endpoint blocking bug report ([#608](https://github.com/dagu-org/dagu/issues/608)) | [@kamandir](https://github.com/kamandir) (report) |
-| Scheduler health check misbehavior in multi-instance deployments ([#1156](https://github.com/dagu-org/dagu/issues/1156)) | [@jonasban](https://github.com/jonasban) (report) |
-| Incorrect System Status in distributed mode ([#1787](https://github.com/dagu-org/dagu/issues/1787)), coordinator/worker health endpoint request ([#1788](https://github.com/dagu-org/dagu/issues/1788)) | [@jonasban](https://github.com/jonasban) (report) |
-| Task with retry stays in running state, blocking scheduling ([#1792](https://github.com/dagu-org/dagu/issues/1792)) | [@mtaohuang](https://github.com/mtaohuang) (report) |
-| Variables not resolved in sub-DAG paths with `parallel` ([#1790](https://github.com/dagu-org/dagu/issues/1790)) | [@VKdennis](https://github.com/VKdennis) (report) |
+| Retry endpoint non-blocking fix ([#1786](https://github.com/dagucloud/dagu/pull/1786)) | [@mvanhorn](https://github.com/mvanhorn) |
+| Vault environment variable rename ([#1801](https://github.com/dagucloud/dagu/pull/1801)) | [@dohq](https://github.com/dohq) |
+| Retry endpoint blocking bug report ([#608](https://github.com/dagucloud/dagu/issues/608)) | [@kamandir](https://github.com/kamandir) (report) |
+| Scheduler health check misbehavior in multi-instance deployments ([#1156](https://github.com/dagucloud/dagu/issues/1156)) | [@jonasban](https://github.com/jonasban) (report) |
+| Incorrect System Status in distributed mode ([#1787](https://github.com/dagucloud/dagu/issues/1787)), coordinator/worker health endpoint request ([#1788](https://github.com/dagucloud/dagu/issues/1788)) | [@jonasban](https://github.com/jonasban) (report) |
+| Task with retry stays in running state, blocking scheduling ([#1792](https://github.com/dagucloud/dagu/issues/1792)) | [@mtaohuang](https://github.com/mtaohuang) (report) |
+| Variables not resolved in sub-DAG paths with `parallel` ([#1790](https://github.com/dagucloud/dagu/issues/1790)) | [@VKdennis](https://github.com/VKdennis) (report) |
 
-**Full Changelog**: [v2.3.0...v2.3.1](https://github.com/dagu-org/dagu/compare/v2.3.0...v2.3.1)
+**Full Changelog**: [v2.3.0...v2.3.1](https://github.com/dagucloud/dagu/compare/v2.3.0...v2.3.1)
 
 ## v2.3.0 (2026-03-16)
 
 ### Added
 
-- HashiCorp Vault Integration: Secrets can now be sourced from HashiCorp Vault. Supports KV v1 and v2 secret engines with token and AppRole authentication. Vault secrets are referenced in DAG YAML via `secrets:` block and resolved at runtime. ([#1757](https://github.com/dagu-org/dagu/pull/1757))
-- Slack Bot for AI Agent Interaction: Interact with the Dagu AI agent directly from Slack. Send messages in configured channels to create, debug, and manage DAG workflows through conversational chat. ([#1785](https://github.com/dagu-org/dagu/pull/1785))
-- Telegram Bot for AI Agent Interaction: Interact with the Dagu AI agent via Telegram. Supports the same conversational workflow management as the Slack bot. ([#1783](https://github.com/dagu-org/dagu/pull/1783))
-- Rich DAG Params with Typed Run Modal: DAG parameters now support a rich schema with `type`, `default`, `options`, and `description` fields. The Start/Enqueue modals render typed inputs (text, number, select, checkbox, textarea) based on the parameter definitions. ([#1770](https://github.com/dagu-org/dagu/pull/1770))
-- `params[].eval` for DAG Param Defaults: Parameters can define an `eval` field containing a shell expression evaluated at runtime to compute the default value (e.g., `eval: "date +%Y-%m-%d"`). ([#1775](https://github.com/dagu-org/dagu/pull/1775))
-- DAG-Level Retry Policy: New top-level `retryPolicy` field enables automatic retry of entire DAG runs on failure, with configurable `limit` and `intervalSec`. Auto-retry metadata is surfaced in the DAG run list. ([#1774](https://github.com/dagu-org/dagu/pull/1774), [#1779](https://github.com/dagu-org/dagu/pull/1779))
-- Z.AI (GLM Models) as LLM Provider: Added Z.AI as a supported LLM provider for the AI agent and chat steps. ([#1780](https://github.com/dagu-org/dagu/pull/1780))
-- Auto-Provision Initial Admin User: The initial admin user can now be provisioned via config (`auth.builtin.initial_admin`) or environment variables, enabling headless deployment without the `/setup` page. ([#1765](https://github.com/dagu-org/dagu/pull/1765))
-- Schedule Time Propagation: The original scheduled time is now preserved and propagated through the DAG run lifecycle, including retries and sub-DAG invocations. ([#1763](https://github.com/dagu-org/dagu/pull/1763))
-- Catchup Runs via Enqueue Path: Catchup (missed schedule) runs are now routed through the enqueue path with deterministic IDs, ensuring consistent behavior with regular scheduled runs. ([#1772](https://github.com/dagu-org/dagu/pull/1772))
-- Server-Side Sorting for Doc Tree Sidebar: The doc tree sidebar now supports server-side sorting for improved performance with large doc collections. ([#1759](https://github.com/dagu-org/dagu/pull/1759))
-- Multi-Select, Batch Delete & Keyboard Shortcuts for Doc Tree: Select multiple documents with Shift/Ctrl+click or keyboard shortcuts and delete them in bulk. ([#1756](https://github.com/dagu-org/dagu/pull/1756))
+- HashiCorp Vault Integration: Secrets can now be sourced from HashiCorp Vault. Supports KV v1 and v2 secret engines with token and AppRole authentication. Vault secrets are referenced in DAG YAML via `secrets:` block and resolved at runtime. ([#1757](https://github.com/dagucloud/dagu/pull/1757))
+- Slack Bot for AI Agent Interaction: Interact with the Dagu AI agent directly from Slack. Send messages in configured channels to create, debug, and manage DAG workflows through conversational chat. ([#1785](https://github.com/dagucloud/dagu/pull/1785))
+- Telegram Bot for AI Agent Interaction: Interact with the Dagu AI agent via Telegram. Supports the same conversational workflow management as the Slack bot. ([#1783](https://github.com/dagucloud/dagu/pull/1783))
+- Rich DAG Params with Typed Run Modal: DAG parameters now support a rich schema with `type`, `default`, `options`, and `description` fields. The Start/Enqueue modals render typed inputs (text, number, select, checkbox, textarea) based on the parameter definitions. ([#1770](https://github.com/dagucloud/dagu/pull/1770))
+- `params[].eval` for DAG Param Defaults: Parameters can define an `eval` field containing a shell expression evaluated at runtime to compute the default value (e.g., `eval: "date +%Y-%m-%d"`). ([#1775](https://github.com/dagucloud/dagu/pull/1775))
+- DAG-Level Retry Policy: New top-level `retryPolicy` field enables automatic retry of entire DAG runs on failure, with configurable `limit` and `intervalSec`. Auto-retry metadata is surfaced in the DAG run list. ([#1774](https://github.com/dagucloud/dagu/pull/1774), [#1779](https://github.com/dagucloud/dagu/pull/1779))
+- Z.AI (GLM Models) as LLM Provider: Added Z.AI as a supported LLM provider for the AI agent and chat steps. ([#1780](https://github.com/dagucloud/dagu/pull/1780))
+- Auto-Provision Initial Admin User: The initial admin user can now be provisioned via config (`auth.builtin.initial_admin`) or environment variables, enabling headless deployment without the `/setup` page. ([#1765](https://github.com/dagucloud/dagu/pull/1765))
+- Schedule Time Propagation: The original scheduled time is now preserved and propagated through the DAG run lifecycle, including retries and sub-DAG invocations. ([#1763](https://github.com/dagucloud/dagu/pull/1763))
+- Catchup Runs via Enqueue Path: Catchup (missed schedule) runs are now routed through the enqueue path with deterministic IDs, ensuring consistent behavior with regular scheduled runs. ([#1772](https://github.com/dagucloud/dagu/pull/1772))
+- Server-Side Sorting for Doc Tree Sidebar: The doc tree sidebar now supports server-side sorting for improved performance with large doc collections. ([#1759](https://github.com/dagucloud/dagu/pull/1759))
+- Multi-Select, Batch Delete & Keyboard Shortcuts for Doc Tree: Select multiple documents with Shift/Ctrl+click or keyboard shortcuts and delete them in bulk. ([#1756](https://github.com/dagucloud/dagu/pull/1756))
 - Helm Chart Repository: Official Helm chart published for Kubernetes deployment.
 - Discard Changes Button: Spec and doc editors now include a discard changes button to revert unsaved edits.
 - Mobile-Responsive Cockpit Layout: The cockpit kanban board uses a tabbed layout on mobile devices.
@@ -298,24 +298,24 @@ Thanks to our contributors for this release:
 
 ### Changed
 
-- Step Name Limit Relaxed to 255 Characters: The maximum step name length has been increased from 40 to 255 characters. ([#1753](https://github.com/dagu-org/dagu/pull/1753))
-- Abort Handler Renamed to `onAbort`: The abort handler contract has been renamed from `onExit` semantics to the explicit `onAbort` name for clarity. ([#1764](https://github.com/dagu-org/dagu/pull/1764))
-- DAG Params Treated as Literal Values: DAG parameters are now treated as literal values by default — OS environment variable expansion in params has been removed to prevent unintended substitution. ([#1767](https://github.com/dagu-org/dagu/pull/1767))
+- Step Name Limit Relaxed to 255 Characters: The maximum step name length has been increased from 40 to 255 characters. ([#1753](https://github.com/dagucloud/dagu/pull/1753))
+- Abort Handler Renamed to `onAbort`: The abort handler contract has been renamed from `onExit` semantics to the explicit `onAbort` name for clarity. ([#1764](https://github.com/dagucloud/dagu/pull/1764))
+- DAG Params Treated as Literal Values: DAG parameters are now treated as literal values by default — OS environment variable expansion in params has been removed to prevent unintended substitution. ([#1767](https://github.com/dagucloud/dagu/pull/1767))
 
 ### Fixed
 
-- JQ Step Large Number Output: Fixed raw output mode producing scientific notation for large numbers in the jq step. ([#1754](https://github.com/dagu-org/dagu/pull/1754))
-- `onAbort` Label in Lifecycle Hooks: The lifecycle hooks UI now correctly displays the `onAbort` label instead of the old name. ([#1760](https://github.com/dagu-org/dagu/pull/1760))
-- YAML Spec Workspace Tag on Enqueue: YAML spec is now saved with the workspace tag at enqueue time from the cockpit page. ([#1758](https://github.com/dagu-org/dagu/pull/1758))
-- Shared Storage Paths in Kubernetes: Aligned shared storage paths in the Helm chart for correct volume mounting. ([#1766](https://github.com/dagu-org/dagu/pull/1766))
-- SSE Connection Stability: Stabilized multiplexed SSE connection management to prevent dropped events and reconnection storms. ([#1768](https://github.com/dagu-org/dagu/pull/1768))
-- Queue Startup Lookup Churn: Reduced unnecessary DAG lookups during queue startup in the scheduler. ([#1769](https://github.com/dagu-org/dagu/pull/1769))
-- AI Installer and Skills Dirs: Hardened the AI installer and added support for explicit skills directories. ([#1771](https://github.com/dagu-org/dagu/pull/1771))
-- False Positive Zombie Detector Kills: Eliminated false positive kills by the zombie detector when DAG runs are slow but still active. ([#1773](https://github.com/dagu-org/dagu/pull/1773))
-- Terminal WebSocket Bridge Lifecycle: Hardened the terminal WebSocket bridge lifecycle to prevent orphaned connections. ([#1777](https://github.com/dagu-org/dagu/pull/1777))
-- Container Env Variable Resolution: DAG `env` and `params` references are now correctly resolved in container environment variables. ([#1778](https://github.com/dagu-org/dagu/pull/1778))
-- Agent Chat SSE Transport: Hardened the agent chat SSE transport for improved reliability. ([#1781](https://github.com/dagu-org/dagu/pull/1781))
-- Graceful Shutdown: Improved graceful shutdown handling for both the HTTP server and scheduler to prevent in-flight request loss. ([#1782](https://github.com/dagu-org/dagu/pull/1782))
+- JQ Step Large Number Output: Fixed raw output mode producing scientific notation for large numbers in the jq step. ([#1754](https://github.com/dagucloud/dagu/pull/1754))
+- `onAbort` Label in Lifecycle Hooks: The lifecycle hooks UI now correctly displays the `onAbort` label instead of the old name. ([#1760](https://github.com/dagucloud/dagu/pull/1760))
+- YAML Spec Workspace Tag on Enqueue: YAML spec is now saved with the workspace tag at enqueue time from the cockpit page. ([#1758](https://github.com/dagucloud/dagu/pull/1758))
+- Shared Storage Paths in Kubernetes: Aligned shared storage paths in the Helm chart for correct volume mounting. ([#1766](https://github.com/dagucloud/dagu/pull/1766))
+- SSE Connection Stability: Stabilized multiplexed SSE connection management to prevent dropped events and reconnection storms. ([#1768](https://github.com/dagucloud/dagu/pull/1768))
+- Queue Startup Lookup Churn: Reduced unnecessary DAG lookups during queue startup in the scheduler. ([#1769](https://github.com/dagucloud/dagu/pull/1769))
+- AI Installer and Skills Dirs: Hardened the AI installer and added support for explicit skills directories. ([#1771](https://github.com/dagucloud/dagu/pull/1771))
+- False Positive Zombie Detector Kills: Eliminated false positive kills by the zombie detector when DAG runs are slow but still active. ([#1773](https://github.com/dagucloud/dagu/pull/1773))
+- Terminal WebSocket Bridge Lifecycle: Hardened the terminal WebSocket bridge lifecycle to prevent orphaned connections. ([#1777](https://github.com/dagucloud/dagu/pull/1777))
+- Container Env Variable Resolution: DAG `env` and `params` references are now correctly resolved in container environment variables. ([#1778](https://github.com/dagucloud/dagu/pull/1778))
+- Agent Chat SSE Transport: Hardened the agent chat SSE transport for improved reliability. ([#1781](https://github.com/dagucloud/dagu/pull/1781))
+- Graceful Shutdown: Improved graceful shutdown handling for both the HTTP server and scheduler to prevent in-flight request loss. ([#1782](https://github.com/dagucloud/dagu/pull/1782))
 - First Chat Message Visibility: The first chat message in new agent sessions is now displayed immediately.
 - Auto-Retry Badge Display: The auto-retry badge is now only shown when the DAG run status is `failed`.
 - Sidebar Default State: The sidebar is now expanded by default for better discoverability.
@@ -330,43 +330,43 @@ Thanks to our contributors for this release:
 
 | Contribution | Contributor |
 | --- | --- |
-| Relax step name limit to 255 characters ([#1753](https://github.com/dagu-org/dagu/pull/1753)), fix onAbort label in lifecycle hooks UI ([#1760](https://github.com/dagu-org/dagu/pull/1760)) | [@SergioChan](https://github.com/SergioChan) |
-| Fix raw output mode for large numbers in jq step ([#1754](https://github.com/dagu-org/dagu/pull/1754)) | [@tushar5526](https://github.com/tushar5526) |
-| HashiCorp Vault integration ([#1757](https://github.com/dagu-org/dagu/pull/1757)) | [@dohq](https://github.com/dohq) |
-| Step name 40-character limit issue report ([#1189](https://github.com/dagu-org/dagu/issues/1189)) | [@jonathonc](https://github.com/jonathonc) (report) |
-| JQ step scientific notation output bug report ([#1648](https://github.com/dagu-org/dagu/issues/1648)) | [@insanity54](https://github.com/insanity54) (report) |
-| Handler On Abort display bug report ([#1476](https://github.com/dagu-org/dagu/issues/1476)) | [@jeremydelattre59](https://github.com/jeremydelattre59) (report) |
-| Container env variable resolution bug report ([#1776](https://github.com/dagu-org/dagu/issues/1776)) | [@Popo8701](https://github.com/Popo8701) (report) |
-| Dynamic parameter in UI feature request ([#1761](https://github.com/dagu-org/dagu/issues/1761)) | [@YLombardi](https://github.com/YLombardi) (request) |
-| High memory usage report related to queue improvements ([#546](https://github.com/dagu-org/dagu/issues/546)) | [@helmut72](https://github.com/helmut72) (report) |
+| Relax step name limit to 255 characters ([#1753](https://github.com/dagucloud/dagu/pull/1753)), fix onAbort label in lifecycle hooks UI ([#1760](https://github.com/dagucloud/dagu/pull/1760)) | [@SergioChan](https://github.com/SergioChan) |
+| Fix raw output mode for large numbers in jq step ([#1754](https://github.com/dagucloud/dagu/pull/1754)) | [@tushar5526](https://github.com/tushar5526) |
+| HashiCorp Vault integration ([#1757](https://github.com/dagucloud/dagu/pull/1757)) | [@dohq](https://github.com/dohq) |
+| Step name 40-character limit issue report ([#1189](https://github.com/dagucloud/dagu/issues/1189)) | [@jonathonc](https://github.com/jonathonc) (report) |
+| JQ step scientific notation output bug report ([#1648](https://github.com/dagucloud/dagu/issues/1648)) | [@insanity54](https://github.com/insanity54) (report) |
+| Handler On Abort display bug report ([#1476](https://github.com/dagucloud/dagu/issues/1476)) | [@jeremydelattre59](https://github.com/jeremydelattre59) (report) |
+| Container env variable resolution bug report ([#1776](https://github.com/dagucloud/dagu/issues/1776)) | [@Popo8701](https://github.com/Popo8701) (report) |
+| Dynamic parameter in UI feature request ([#1761](https://github.com/dagucloud/dagu/issues/1761)) | [@YLombardi](https://github.com/YLombardi) (request) |
+| High memory usage report related to queue improvements ([#546](https://github.com/dagucloud/dagu/issues/546)) | [@helmut72](https://github.com/helmut72) (report) |
 
-**Full Changelog**: [v2.2.4...v2.3.0](https://github.com/dagu-org/dagu/compare/v2.2.4...v2.3.0)
+**Full Changelog**: [v2.2.4...v2.3.0](https://github.com/dagucloud/dagu/compare/v2.2.4...v2.3.0)
 
 ## v2.2.4 (2026-03-11)
 
 ### Added
 
-- `dagu ai install` Command: New command to install Dagu as an AI coding tool skill (e.g., for Claude Code, Codex). Automatically sets up skill configuration for supported tools. ([#1750](https://github.com/dagu-org/dagu/pull/1750))
-- Built-in AI Agent References: The AI agent now ships with built-in reference documents (schema, executors, CLI, env vars, coding agents) that are seeded to the data directory and available in the agent prompt. ([#1751](https://github.com/dagu-org/dagu/pull/1751))
+- `dagu ai install` Command: New command to install Dagu as an AI coding tool skill (e.g., for Claude Code, Codex). Automatically sets up skill configuration for supported tools. ([#1750](https://github.com/dagucloud/dagu/pull/1750))
+- Built-in AI Agent References: The AI agent now ships with built-in reference documents (schema, executors, CLI, env vars, coding agents) that are seeded to the data directory and available in the agent prompt. ([#1751](https://github.com/dagucloud/dagu/pull/1751))
 
 ### Fixed
 
-- SSE Endpoint Authentication: Basic auth credentials are now required for SSE (Server-Sent Events) endpoints, closing an unauthenticated access path. ([#1752](https://github.com/dagu-org/dagu/pull/1752))
+- SSE Endpoint Authentication: Basic auth credentials are now required for SSE (Server-Sent Events) endpoints, closing an unauthenticated access path. ([#1752](https://github.com/dagucloud/dagu/pull/1752))
 - Mermaid Dark Mode: Fixed mermaid diagram rendering in dark mode and improved code block text visibility in docs preview.
 
 ## v2.2.0 (2026-03-08)
 
 ### Added
 
-- Generic Approval Field for Human-in-the-Loop: Any step type now supports a top-level `approval` field for human-in-the-loop workflows. The dedicated `hitl` executor has been removed — use `approval: true` (or `approval: "custom message"`) on any step instead. Steps with approval enabled pause execution and wait for manual approval before running. ([#1743](https://github.com/dagu-org/dagu/pull/1743))
-- `DAG_RUN_WORK_DIR` Special Environment Variable: New built-in variable exposing the working directory for the current DAG run attempt. Available in all step types and automatically set by the runtime. ([#1735](https://github.com/dagu-org/dagu/pull/1735))
-- `DAG_DOCS_DIR` and `DAG_PARAMS_JSON` Special Environment Variables: `DAG_DOCS_DIR` provides the path to the docs directory. `DAG_PARAMS_JSON` provides all DAG parameters as a JSON object. ([#1731](https://github.com/dagu-org/dagu/pull/1731))
-- Tags Parameter for Start and Enqueue APIs: The start and enqueue API endpoints now accept a `tags` parameter for tagging DAG runs at creation time. ([#1730](https://github.com/dagu-org/dagu/pull/1730))
-- Auto-Create Default `base.yaml` on First Run: A default `base.yaml` with comprehensive field reference comments is automatically generated when the base config file does not exist. ([#1737](https://github.com/dagu-org/dagu/pull/1737))
-- Script Error Line Annotation: When a shell script step fails, the error message now includes the content of the failing line, making it easier to diagnose script errors. Empty scripts are preserved on failure for debugging. ([#1733](https://github.com/dagu-org/dagu/pull/1733))
-- Multiline Parameter Input: The Start and Enqueue modals now support multiline text input for parameters using a textarea. ([#1742](https://github.com/dagu-org/dagu/pull/1742))
-- Copy File Path Button in Doc Editor: A button in the doc editor header lets you copy the file path to clipboard. ([#1741](https://github.com/dagu-org/dagu/pull/1741))
-- Batch Delete for Git-Sync Items: Multiple git-sync items can now be selected and deleted in bulk. ([#1736](https://github.com/dagu-org/dagu/pull/1736))
+- Generic Approval Field for Human-in-the-Loop: Any step type now supports a top-level `approval` field for human-in-the-loop workflows. The dedicated `hitl` executor has been removed — use `approval: true` (or `approval: "custom message"`) on any step instead. Steps with approval enabled pause execution and wait for manual approval before running. ([#1743](https://github.com/dagucloud/dagu/pull/1743))
+- `DAG_RUN_WORK_DIR` Special Environment Variable: New built-in variable exposing the working directory for the current DAG run attempt. Available in all step types and automatically set by the runtime. ([#1735](https://github.com/dagucloud/dagu/pull/1735))
+- `DAG_DOCS_DIR` and `DAG_PARAMS_JSON` Special Environment Variables: `DAG_DOCS_DIR` provides the path to the docs directory. `DAG_PARAMS_JSON` provides all DAG parameters as a JSON object. ([#1731](https://github.com/dagucloud/dagu/pull/1731))
+- Tags Parameter for Start and Enqueue APIs: The start and enqueue API endpoints now accept a `tags` parameter for tagging DAG runs at creation time. ([#1730](https://github.com/dagucloud/dagu/pull/1730))
+- Auto-Create Default `base.yaml` on First Run: A default `base.yaml` with comprehensive field reference comments is automatically generated when the base config file does not exist. ([#1737](https://github.com/dagucloud/dagu/pull/1737))
+- Script Error Line Annotation: When a shell script step fails, the error message now includes the content of the failing line, making it easier to diagnose script errors. Empty scripts are preserved on failure for debugging. ([#1733](https://github.com/dagucloud/dagu/pull/1733))
+- Multiline Parameter Input: The Start and Enqueue modals now support multiline text input for parameters using a textarea. ([#1742](https://github.com/dagucloud/dagu/pull/1742))
+- Copy File Path Button in Doc Editor: A button in the doc editor header lets you copy the file path to clipboard. ([#1741](https://github.com/dagucloud/dagu/pull/1741))
+- Batch Delete for Git-Sync Items: Multiple git-sync items can now be selected and deleted in bulk. ([#1736](https://github.com/dagucloud/dagu/pull/1736))
 - Cockpit Review Column: The cockpit kanban board now includes a "Review" column for DAG runs in waiting/approval status. The cockpit is now the default landing page.
 - Cockpit Toolbar on Docs Page: The CockpitToolbar is available on the Docs page for quick access to DAG preview and start actions.
 - Agent DAG Authoring Guidance: The agent system prompt now includes DAG authoring guidance for better workflow generation.
@@ -380,10 +380,10 @@ Thanks to our contributors for this release:
 
 ### Fixed
 
-- Base Config Propagation in Distributed Mode: Base configuration is now correctly propagated to workers in distributed mode. ([#1745](https://github.com/dagu-org/dagu/pull/1745))
-- Step ID Hyphen Validation: Step IDs containing hyphens are now rejected to avoid shell variable expansion conflicts. ([#1738](https://github.com/dagu-org/dagu/pull/1738))
-- Zombie Detector Status Overwrite: The zombie detector now reads the full status from the attempt before overwriting, preventing data loss. ([#1734](https://github.com/dagu-org/dagu/pull/1734))
-- Parameter Space-Splitting on Restore: Parameter values are now properly quoted when restoring a DAG from status, preventing space-splitting issues. ([#1732](https://github.com/dagu-org/dagu/pull/1732))
+- Base Config Propagation in Distributed Mode: Base configuration is now correctly propagated to workers in distributed mode. ([#1745](https://github.com/dagucloud/dagu/pull/1745))
+- Step ID Hyphen Validation: Step IDs containing hyphens are now rejected to avoid shell variable expansion conflicts. ([#1738](https://github.com/dagucloud/dagu/pull/1738))
+- Zombie Detector Status Overwrite: The zombie detector now reads the full status from the attempt before overwriting, preventing data loss. ([#1734](https://github.com/dagucloud/dagu/pull/1734))
+- Parameter Space-Splitting on Restore: Parameter values are now properly quoted when restoring a DAG from status, preventing space-splitting issues. ([#1732](https://github.com/dagucloud/dagu/pull/1732))
 - Graph Node Label for Auto-Generated Names: Step ID is now displayed as the graph node label when the step name is auto-generated.
 - Git-Sync Forget Dialog Overflow: Long filenames no longer overflow the git-sync forget dialog.
 - Cockpit Preview Modal: Fixed tab switching, modal staying open after starting a DAG, and showing the specific enqueued run instead of the global latest.
@@ -396,8 +396,8 @@ Thanks to our contributors for this release:
 
 ### Added
 
-- Cockpit Workspace Kanban View: New cockpit page with workspace-based kanban board for visualizing DAG runs by date. Includes workspace selector with "All workspaces" default, localStorage persistence for selected workspace, and server-timezone-aware date handling. ([#1728](https://github.com/dagu-org/dagu/pull/1728))
-- File-Based Index for DAG and DAG Run Stores: New indexing layer for DAG and DAG run file stores, improving lookup performance. ([#1729](https://github.com/dagu-org/dagu/pull/1729))
+- Cockpit Workspace Kanban View: New cockpit page with workspace-based kanban board for visualizing DAG runs by date. Includes workspace selector with "All workspaces" default, localStorage persistence for selected workspace, and server-timezone-aware date handling. ([#1728](https://github.com/dagucloud/dagu/pull/1728))
+- File-Based Index for DAG and DAG Run Stores: New indexing layer for DAG and DAG run file stores, improving lookup performance. ([#1729](https://github.com/dagucloud/dagu/pull/1729))
 - `DAGU_DOCS_DIR` Environment Variable: Docs directory is now independently configurable via `DAGU_DOCS_DIR` env var or `paths.docs_dir` in config YAML (default: `{dags_dir}/docs`). Previously the docs directory was always derived from `DAGsDir`.
 - Document Management in Tabs/Editor: Per-tab dropdown menu with Close, Close Others, Close All, and Delete Document actions. Trash icon in editor header bar. Confirmation modals for bulk close when unsaved changes exist.
 
@@ -416,7 +416,7 @@ Thanks to our contributors for this release:
 
 ### Changed
 
-- OS Environment Variable Expansion: OS environment variables (e.g., `$HOME`, `$PATH`) are no longer expanded by Dagu for non-shell executor types (docker, http, ssh, jq, mail, s3, redis, etc.) **and DAG-level configuration fields** (`ssh`, `smtp`, `s3`, `registry_auths`). Only variables explicitly defined in the DAG scope (`env:`, `params:`, `secrets:`, step outputs) are expanded. OS variables pass through unchanged, letting the target environment (container, remote shell, etc.) resolve them. Shell command execution is unaffected. See [RFC 007](https://github.com/dagu-org/dagu/blob/main/rfcs/implemented/007-os-env-expansion-rules.md).
+- OS Environment Variable Expansion: OS environment variables (e.g., `$HOME`, `$PATH`) are no longer expanded by Dagu for non-shell executor types (docker, http, ssh, jq, mail, s3, redis, etc.) **and DAG-level configuration fields** (`ssh`, `smtp`, `s3`, `registry_auths`). Only variables explicitly defined in the DAG scope (`env:`, `params:`, `secrets:`, step outputs) are expanded. OS variables pass through unchanged, letting the target environment (container, remote shell, etc.) resolve them. Shell command execution is unaffected. See [RFC 007](https://github.com/dagucloud/dagu/blob/main/rfcs/implemented/007-os-env-expansion-rules.md).
   To use a local OS variable in a config field, explicitly import it via the `env:` block:
 
   ```yaml
@@ -429,7 +429,7 @@ Thanks to our contributors for this release:
     key: ${HOME_DIR}/.ssh/deploy_key  # Expanded — HOME_DIR is DAG-scoped
   ```
 
-- Auth by Default: The default authentication mode changed from `none` to `builtin`. New installations require creating an admin account via the `/setup` page on first visit. The JWT token secret is auto-generated and persisted to `{dataDir}/auth/token_secret` if not explicitly configured. See [RFC 018](https://github.com/dagu-org/dagu/blob/main/rfcs/draft/018-auth-by-default.md).
+- Auth by Default: The default authentication mode changed from `none` to `builtin`. New installations require creating an admin account via the `/setup` page on first visit. The JWT token secret is auto-generated and persisted to `{dataDir}/auth/token_secret` if not explicitly configured. See [RFC 018](https://github.com/dagucloud/dagu/blob/main/rfcs/draft/018-auth-by-default.md).
 - DAG Type Validation: DAGs with `type: chain` (the default) no longer allow the `depends` field on steps. Chain execution runs steps sequentially in definition order, making explicit dependencies redundant. To use the `depends` field for custom execution order, set `type: graph` explicitly. This change prevents confusion between chain's implicit sequential ordering and graph's explicit dependency-based execution.
 
 ### Removed
@@ -1547,7 +1547,7 @@ Thanks to our contributors for this release:
 | Remote node selection with builtin auth bug report (#1475) | [@jeremydelattre59](https://github.com/jeremydelattre59) |
 | Singleton enqueue feedback | [@ghansham](https://github.com/ghansham) |
 
-**Full Changelog**: [v1.26.2...v1.26.3](https://github.com/dagu-org/dagu/compare/v1.26.2...v1.26.3)
+**Full Changelog**: [v1.26.2...v1.26.3](https://github.com/dagucloud/dagu/compare/v1.26.2...v1.26.3)
 
 ## v1.26.2 (2025-12-10)
 
@@ -1595,7 +1595,7 @@ Thanks to our contributors for this release:
 | Queued DAGs not starting bug report (#1437) | [@kriyanshii](https://github.com/kriyanshii) |
 | Init handler field feedback | [@ghansham](https://github.com/ghansham) |
 
-**Full Changelog**: [v1.25.1...v1.26.0](https://github.com/dagu-org/dagu/compare/v1.25.1...v1.26.0)
+**Full Changelog**: [v1.25.1...v1.26.0](https://github.com/dagucloud/dagu/compare/v1.25.1...v1.26.0)
 
 ## v1.25.1 (2025-12-05)
 
@@ -1843,7 +1843,7 @@ Thanks to our contributors for this release:
 | Distributed execution lock issue on Kubernetes (#1353) | [@yangkghjh](https://github.com/yangkghjh) |
 | Shell-like parameter expansion feature request (#1352) | [@ghansham](https://github.com/ghansham) |
 
-**Full Changelog**: [v1.23.2...v1.23.3](https://github.com/dagu-org/dagu/compare/v1.23.2...v1.23.3)
+**Full Changelog**: [v1.23.2...v1.23.3](https://github.com/dagucloud/dagu/compare/v1.23.2...v1.23.3)
 
 ## v1.23.2 (2025-10-22)
 
@@ -1860,7 +1860,7 @@ Thanks to our contributors for this release:
 | DAG manual launch bug report and detailed reproduction (#1345) | [@jeremydelattre59](https://github.com/jeremydelattre59) |
 | WebUI blank page MIME type error report (#1350) | [@overflowy](https://github.com/overflowy) |
 
-**Full Changelog**: [v1.23.1...v1.23.2](https://github.com/dagu-org/dagu/compare/v1.23.1...v1.23.2)
+**Full Changelog**: [v1.23.1...v1.23.2](https://github.com/dagucloud/dagu/compare/v1.23.1...v1.23.2)
 
 ## v1.23.1 (2025-10-21)
 
@@ -1872,7 +1872,7 @@ Thanks to our contributors for this release:
 
 No external contributors for this release - documentation update only.
 
-**Full Changelog**: [v1.23.0...v1.23.1](https://github.com/dagu-org/dagu/compare/v1.23.0...v1.23.1)
+**Full Changelog**: [v1.23.0...v1.23.1](https://github.com/dagucloud/dagu/compare/v1.23.0...v1.23.1)
 
 ## v1.23.0 (2025-10-21)
 
@@ -1984,7 +1984,7 @@ Thanks to our contributors for this release:
 | Parallel execution with JSON references issue report | [@tetedange13](https://github.com/tetedange13) |
 | Queue feature implementation feedback | [@ghansham](https://github.com/ghansham) |
 
-**Full Changelog**: [v1.21.0...v1.22.0](https://github.com/dagu-org/dagu/compare/v1.21.0...v1.22.0)
+**Full Changelog**: [v1.21.0...v1.22.0](https://github.com/dagucloud/dagu/compare/v1.21.0...v1.22.0)
 
 ## v1.21.0 (2025-08-17)
 
@@ -2017,7 +2017,7 @@ Thanks to our contributors for this release:
 | Singleton flag feature request (split start API) | [@Kaiden0001](https://github.com/Kaiden0001) |
 | Coordinator hostname resolution issue and solution | [@peterbuga](https://github.com/peterbuga) |
 
-**Full Changelog**: [v1.20.0...v1.21.0](https://github.com/dagu-org/dagu/compare/v1.20.0...v1.21.0)
+**Full Changelog**: [v1.20.0...v1.21.0](https://github.com/dagucloud/dagu/compare/v1.20.0...v1.21.0)
 
 ## v1.20.0 (2025-08-10)
 
@@ -2053,7 +2053,7 @@ Thanks to our contributors for this release:
 | DAG run configuration with parameter locking | [@kriyanshii](https://github.com/kriyanshii) |
 | Timeout issues report and feedback | [@jrisch](https://github.com/jrisch) |
 
-**Full Changelog**: [v1.19.0...v1.20.0](https://github.com/dagu-org/dagu/compare/v1.19.0...v1.20.0)
+**Full Changelog**: [v1.19.0...v1.20.0](https://github.com/dagucloud/dagu/compare/v1.19.0...v1.20.0)
 
 ## v1.19.0 (2025-08-06)
 
@@ -2094,7 +2094,7 @@ Thanks to our contributors for this release:
 | Container registry authentication feature request | [@vnghia](https://github.com/vnghia) |
 | Scheduler heartbeat monitoring feedback | [@jrisch](https://github.com/jrisch) |
 
-**Full Changelog**: [v1.18.6...v1.19.0](https://github.com/dagu-org/dagu/compare/v1.18.6...v1.19.0)
+**Full Changelog**: [v1.18.6...v1.19.0](https://github.com/dagucloud/dagu/compare/v1.18.6...v1.19.0)
 
 ## v1.18.6 (2025-08-03)
 
@@ -2120,7 +2120,7 @@ Thanks to our contributors for this release:
 | Health check race condition (report) | [@jonasban](https://github.com/jonasban) |
 | Upgraded Node.js to 22 | [@reneleonhardt](https://github.com/reneleonhardt) |
 
-**Full Changelog**: [v1.18.0...v1.18.6](https://github.com/dagu-org/dagu/compare/v1.18.5...v1.18.6)
+**Full Changelog**: [v1.18.0...v1.18.6](https://github.com/dagucloud/dagu/compare/v1.18.5...v1.18.6)
 
 ## v1.18.0 (2025-07-29)
 
@@ -2139,7 +2139,7 @@ Thanks to our contributors for this release:
 - Scheduler Health Check: Added health check endpoint for scheduler monitoring (#1129) - Thanks to [@jonasban](https://github.com/jonasban) for the feature request
 - Default DAG Sorting Configuration: Added configuration for default DAG list sorting (#1135)
 - GitHub Repository Link: Added GitHub repository link to sidebar
-- npm Installation Support: Added global npm package for easy cross-platform installation via `npm install -g @dagu-org/dagu`
+- npm Installation Support: Added global npm package for easy cross-platform installation via `npm install -g @dagucloud/dagu`
 
 ### Improvements
 
@@ -2181,10 +2181,10 @@ Thanks to our contributors for this release:
 
 ### New Contributors
 
-- [@Sarvesh-11](https://github.com/Sarvesh-11) made their first contribution in [PR 1091](https://github.com/dagu-org/dagu/pull/1091)
-- [@reneleonhardt](https://github.com/reneleonhardt) made their first contribution in [PR 1127](https://github.com/dagu-org/dagu/pull/1127)
+- [@Sarvesh-11](https://github.com/Sarvesh-11) made their first contribution in [PR 1091](https://github.com/dagucloud/dagu/pull/1091)
+- [@reneleonhardt](https://github.com/reneleonhardt) made their first contribution in [PR 1127](https://github.com/dagucloud/dagu/pull/1127)
 
-**Full Changelog**: [v1.17.4...v1.18.0](https://github.com/dagu-org/dagu/compare/v1.17.4...v1.18.0)
+**Full Changelog**: [v1.17.4...v1.18.0](https://github.com/dagucloud/dagu/compare/v1.17.4...v1.18.0)
 
 ## v1.17.4 (2025-06-30)
 
@@ -2400,7 +2400,7 @@ New "partial success" status for workflows where some steps succeed and others f
 - New `/api/v1` endpoints with refactored schema
 - Better abstractions and cleaner interfaces
 - Improved error handling and response formats
-- See [OpenAPI spec](https://github.com/dagu-org/dagu/blob/main/api/v1/api.yaml) for details
+- See [OpenAPI spec](https://github.com/dagucloud/dagu/blob/main/api/v1/api.yaml) for details
 
 ### Docker Improvements
 
@@ -2524,7 +2524,7 @@ Try the beta version:
 docker run --rm -p 8080:8080 ghcr.io/dagucloud/dagu:latest dagu start-all
 
 # Or download specific version
-curl -L https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | bash -s -- --version v1.17.0-beta
+curl -L https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.sh | bash -s -- --version v1.17.0-beta
 ```
 
 ---
@@ -2735,7 +2735,7 @@ Thanks to our contributor for this release:
 
 ## Previous Versions
 
-For older versions, please refer to the [GitHub releases page](https://github.com/dagu-org/dagu/releases).
+For older versions, please refer to the [GitHub releases page](https://github.com/dagucloud/dagu/releases).
 
 ## Version Support
 

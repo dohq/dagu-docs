@@ -45,15 +45,15 @@ Keep workflow orchestration separate from business logic. Define workflows decla
 ::: code-group
 
 ```bash [macOS/Linux]
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.sh | bash
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.sh | bash
 ```
 
 ```powershell [Windows (PowerShell)]
-irm https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.ps1 | iex
+irm https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.ps1 | iex
 ```
 
 ```cmd [Windows (CMD)]
-curl -fsSL https://raw.githubusercontent.com/dagu-org/dagu/main/scripts/installer.cmd -o installer.cmd && .\installer.cmd && del installer.cmd
+curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.cmd -o installer.cmd && .\installer.cmd && del installer.cmd
 ```
 
 ```bash [Docker]
@@ -65,7 +65,7 @@ brew install dagu
 ```
 
 ```bash [npm]
-npm install -g --ignore-scripts=false @dagu-org/dagu
+npm install -g --ignore-scripts=false @dagucloud/dagu
 ```
 
 :::
@@ -213,7 +213,7 @@ See [Examples](/writing-workflows/examples) for more patterns.
 ## Community
 
 <div class="community-links">
-  <a href="https://github.com/dagu-org/dagu" class="community-link">
+  <a href="https://github.com/dagucloud/dagu" class="community-link">
     <span class="icon">GitHub</span>
   </a>
   <a href="https://discord.gg/gpahPUjGRk" class="community-link">
@@ -222,7 +222,7 @@ See [Examples](/writing-workflows/examples) for more patterns.
   <a href="https://bsky.app/profile/dagu-org.bsky.social" class="community-link">
     <span class="icon">Bluesky</span>
   </a>
-  <a href="https://github.com/dagu-org/dagu/issues" class="community-link">
+  <a href="https://github.com/dagucloud/dagu/issues" class="community-link">
     <span class="icon">Issues</span>
   </a>
 </div>

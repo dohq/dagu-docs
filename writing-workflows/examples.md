@@ -1440,7 +1440,7 @@ steps:
   - command: actions/checkout@v4
     type: gha
     params:
-      repository: dagu-org/dagu
+      repository: dagucloud/dagu
       ref: main
       token: "${GITHUB_TOKEN}"
 ```
