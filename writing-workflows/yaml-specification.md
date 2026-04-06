@@ -434,13 +434,13 @@ container:
 
 ### Secrets
 
-The `secrets` block defines environment variables whose values are fetched at runtime from external providers. Each item is an object with the following fields:
+The `secrets` block defines environment variables whose values are fetched at runtime from a provider. Each item is an object with the following fields:
 
 | Field | Type | Description |
 |-------|------|-------------|
 | `name` | string | Environment variable name exposed to steps (required) |
-| `provider` | string | Secret provider identifier (required). Built-in providers are `env` and `file`. |
-| `key` | string | Provider-specific key (required). For the `env` provider this is the source environment variable; for `file` it is a file path. |
+| `provider` | string | Secret provider identifier (required). Built-in providers are `env`, `file`, and `vault`. |
+| `key` | string | Provider-specific key (required). For `env` this is the source variable name. For `file` this is a path. For `vault` this is a Vault path or a `path/field` pair, depending on `options.field`. |
 | `options` | object | Provider-specific options (optional). Values must be strings. |
 
 Example:
@@ -455,9 +455,9 @@ secrets:
     key: ../secrets/api-token    # Relative paths resolve using working_dir then DAG file directory
 ```
 
-Secret values are injected after DAG-level variables and built-in runtime variables, meaning they take precedence over everything except step-level overrides. Resolved values never touch persistent storage and are automatically masked in logs and captured step output.
+Secret values are injected after DAG-level variables and built-in runtime variables, meaning they take precedence over everything except step-level overrides. Dagu masks resolved secret values in its managed logs and captured outputs, but workflow code can still write those values elsewhere.
 
-See [Secrets](/writing-workflows/secrets) for provider reference, masking behavior, and extension tips.
+See [Secrets](/writing-workflows/secrets) for provider behavior and lookup rules.
 
 ### SSH Configuration
 

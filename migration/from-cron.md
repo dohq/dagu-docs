@@ -217,7 +217,7 @@ secrets:
     key: /run/secrets/db-password
 ```
 
-Every `dagu exec` command inherits these secrets and they are **automatically scrubbed from logs**:
+Every `dagu exec` command inherits these secrets, and Dagu masks the resolved values in its managed logs and captured outputs:
 
 ```bash
 # API_TOKEN is available to the script but masked in logs
@@ -234,7 +234,7 @@ dagu exec --base ~/configs/prod-base.yaml -- ./deploy.sh
 dagu exec --base ~/configs/staging-base.yaml -- ./deploy.sh
 ```
 
-Secrets are resolved at runtime and never persisted to disk or run history. See [Secrets](/writing-workflows/secrets) for provider details.
+Secrets are resolved during execution. Dagu does not serialize the resolved secret env vars into the DAG spec, and it masks those values in Dagu-managed logs and captured outputs. Workflow code can still write them elsewhere. See [Secrets](/writing-workflows/secrets) for provider behavior.
 
 ## Lifecycle Hooks via Base Configuration
 

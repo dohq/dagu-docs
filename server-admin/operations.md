@@ -399,11 +399,22 @@ These settings only forward matching variables that already exist in the Dagu pr
 
 If a variable is not forwarded automatically, you can still make it available to the step by defining it explicitly in the workflow.
 
-Use `.env`, `env:`, or `secrets:` when you want step environment contents to be explicit:
+Use `.env` or `env:` when you want non-sensitive step environment contents to be explicit. For credentials and other secrets, prefer the `secrets:` block so values are resolved at runtime and masked in logs:
 
 ```yaml
 # workflow.yaml
-dotenv: .env.secrets  # Load from .env file (not tracked in git)
+dotenv: .env.runtime  # Load non-sensitive defaults from a file
+
+secrets:
+  - name: AWS_ACCESS_KEY_ID
+    provider: env
+    key: PROD_AWS_ACCESS_KEY_ID
+  - name: AWS_SECRET_ACCESS_KEY
+    provider: env
+    key: PROD_AWS_SECRET_ACCESS_KEY
+  - name: DATABASE_PASSWORD
+    provider: file
+    key: /run/secrets/db-password
 
 steps:
   - id: deploy
@@ -411,24 +422,25 @@ steps:
 ```
 
 ```bash
-# .env.secrets (add to .gitignore)
-AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
-AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
-DATABASE_PASSWORD=secure-password
+# .env.runtime (safe to keep local; do not store secrets here)
+AWS_REGION=ap-northeast-1
+S3_BUCKET=my-bucket
 ```
 
-You can also copy selected process variables into workflow `env:`:
+If you need to copy a non-sensitive process variable into workflow `env:`, do it explicitly:
 
 ```yaml
 # workflow.yaml
 env:
-  - AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}      # Explicit reference
-  - AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+  - AWS_REGION: ${AWS_REGION}
+  - S3_BUCKET: ${S3_BUCKET}
 
 steps:
   - id: deploy
-    command: aws s3 sync ./build s3://my-bucket
+    command: aws s3 sync ./build s3://${S3_BUCKET}
 ```
+
+See [Secrets](/writing-workflows/secrets) for provider details and masking behavior.
 
 ### Process Isolation
 

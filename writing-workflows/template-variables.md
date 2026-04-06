@@ -40,7 +40,7 @@ The same settings are available through:
 
 On Unix, exact-name and prefix matching are case-sensitive. On Windows, they are case-insensitive.
 
-If a variable is not in the forwarded set, it can still be referenced during DAG parsing, but it will not appear in the step process environment unless you copy it into `env:`, `dotenv`, or `secrets:`.
+If a variable is not in the forwarded set, it can still be referenced during DAG parsing, but it will not appear in the step process environment unless you copy it into `env:`, `dotenv`, or `secrets:`. Use `secrets:` for credentials and other sensitive values.
 
 ### Defining Environment Variables
 
@@ -51,10 +51,10 @@ env:
   - LOG_LEVEL: debug
   - DATA_DIR: /tmp/data
   - API_URL: https://api.example.com
-  - API_KEY: ${SECRET_API_KEY}  # Explicitly reference system environment
+  - AWS_REGION: ${AWS_REGION}   # Explicitly reference a non-sensitive system variable
 ```
 
-**Important:** To use sensitive system environment variables in your workflows, you must explicitly reference them in your `env` section as shown above. They will not be automatically available.
+**Important:** Sensitive system environment variables should normally be declared through `secrets:` rather than copied into `env:`. Explicit `env:` references are better suited to non-sensitive values.
 
 ### Variable Expansion
 

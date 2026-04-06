@@ -179,13 +179,28 @@ env:
 
 ### Referencing System Variables
 
-System environment variables are available during DAG parsing, so you can reference them in `env:` values even when they are not forwarded to the final step process environment:
+System environment variables are available during DAG parsing, so you can reference them in `env:` values even when they are not forwarded to the final step process environment. This is best for non-sensitive values:
 
 ```yaml
 env:
-  - AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-  - AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-  - DATABASE_URL: ${DATABASE_URL}
+  - AWS_REGION: ${AWS_REGION}
+  - AWS_PROFILE: ${AWS_PROFILE}
+  - DATABASE_HOST: ${DATABASE_HOST}
+```
+
+For credentials and other secrets, use the `secrets:` block instead of copying them through `env:`:
+
+```yaml
+secrets:
+  - name: AWS_ACCESS_KEY_ID
+    provider: env
+    key: PROD_AWS_ACCESS_KEY_ID
+  - name: AWS_SECRET_ACCESS_KEY
+    provider: env
+    key: PROD_AWS_SECRET_ACCESS_KEY
+  - name: DATABASE_URL
+    provider: env
+    key: PROD_DATABASE_URL
 ```
 
 See [Security Considerations](#security-considerations) for the exact filtering rules.
@@ -331,27 +346,27 @@ export DAGU_ENV_PASSTHROUGH_PREFIXES=AWS_
 
 These settings only forward matching variables that already exist in Dagu's process environment. They do not define new variables.
 
-To make a variable available regardless of the host filter, copy it into your workflow explicitly:
+To make a non-sensitive variable available regardless of the host filter, copy it into your workflow explicitly:
 
 ```yaml
 env:
-  - AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-  - AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+  - AWS_REGION: ${AWS_REGION}
+  - AWS_PROFILE: ${AWS_PROFILE}
 ```
 
 ### Sensitive Values
 
-For truly sensitive values, use the [Secrets](/writing-workflows/secrets) feature instead of `env:`:
+For sensitive values, use the [Secrets](/writing-workflows/secrets) feature instead of `env:`:
 
 ```yaml
 secrets:
-  - name: API_TOKEN
+  - name: AWS_SECRET_ACCESS_KEY
     provider: env
-    key: PROD_API_TOKEN
+    key: PROD_AWS_SECRET_ACCESS_KEY
 
 steps:
   - command: ./deploy.sh
-    # API_TOKEN is available but masked in logs
+    # AWS_SECRET_ACCESS_KEY is available but masked in logs
 ```
 
 ## See Also
