@@ -30,7 +30,9 @@ Dagu looks for the base configuration file based on your directory structure:
 |------|------------------|
 | **XDG** (default) | `~/.config/dagu/base.yaml` |
 | **Unified** (`DAGU_HOME` set) | `{DAGU_HOME}/base.yaml` |
-| **Legacy** (`~/.dagu` exists) | `~/.dagu/base.yaml` |
+| **Existing Dagu home** (`~/.dagu` exists) | `~/.dagu/base.yaml` |
+
+If `DAGU_HOME` is not set and `~/.dagu` already exists, Dagu continues using that directory as the application home.
 
 ### Custom Location
 
