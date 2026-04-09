@@ -587,7 +587,7 @@ Custom harness definition fields:
 Definition rules:
 
 - custom harness names cannot be `claude`, `codex`, `copilot`, `opencode`, or `pi`
-- `prompt_flag` is required only when `prompt_mode: flag`
+- `prompt_flag` is required and only valid when `prompt_mode: flag`
 - unknown keys in a harness definition are rejected
 
 If a DAG is loaded with a base config:
@@ -617,7 +617,7 @@ Flag generation rules:
 - `true` becomes a bare flag
 - `false` and empty strings are omitted
 - arrays become repeated flags
-- built-in providers use `--key`
+- built-in providers use `--key` and normalize `snake_case` keys to kebab-case flag names
 - custom definitions use `--key`, `-key`, or `option_flags` according to the selected harness definition
 - provider-specific flag names and values are not validated by Dagu
 

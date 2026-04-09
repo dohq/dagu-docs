@@ -4,11 +4,11 @@ Run CLI-based coding agents as workflow steps.
 
 The harness executor starts a subprocess, captures stdout and stderr, and uses the process exit status as the step result.
 
-The resolved CLI binary must either be available in `PATH` or be referenced by path. Dagu resolves the primary provider and every fallback provider before execution. If any referenced binary is missing, step setup fails before the step runs.
+The selected attempt's CLI binary must either be available in `PATH` or be referenced by path. Dagu resolves each provider binary when that attempt runs, so a missing fallback binary does not fail a successful primary attempt.
 
 ## Step Contract
 
-- `command` is the prompt. In practice, use a single string for harness steps.
+- `command` is the prompt. Harness steps accept a single command string; command arrays are rejected.
 - `script` is optional extra stdin content.
 - After DAG-level defaults are applied, the step needs a provider.
 - `config.provider` may be a built-in provider or a name defined under top-level `harnesses:`.
@@ -42,7 +42,7 @@ Built-in providers have fixed prompt placement:
 For built-in providers:
 
 - the prompt is always passed on the command line
-- additional config keys become CLI flags
+- additional config keys become CLI flags, with `snake_case` keys normalized to kebab-case
 - `script`, if present, is piped to stdin unchanged
 
 ## Custom Harness Definitions
@@ -202,7 +202,8 @@ Flag token selection:
 
 Additional details:
 
-- config keys are passed through exactly as written; Dagu does not rename them
+- built-in providers normalize `snake_case` keys to kebab-case flag names, so `max_turns` becomes `--max-turns`
+- custom harness definitions keep keys as written unless `option_flags` overrides them
 - keys are emitted in lexicographic order for deterministic argv generation
 - reserved keys are `provider` and `fallback`
 - Dagu does not validate provider-specific flag names or values
@@ -263,6 +264,7 @@ steps:
 Behavior:
 
 - Dagu tries the primary provider first, then each fallback in order
+- fallback entries are flat provider configs; nested `fallback` blocks are not supported
 - if the step context is cancelled, remaining fallbacks are skipped
 - stdout from failed attempts is discarded
 - stderr from every attempt remains in the step logs
