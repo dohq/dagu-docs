@@ -147,7 +147,7 @@ Visit [http://localhost:8080](http://localhost:8080)
 
 ## Built-in Executors
 
-Dagu includes 17 built-in step executors. Each runs within the Dagu process (or worker). No plugins or external runtimes required.
+Dagu includes 18 built-in step executors. Each runs within the Dagu process (or worker). No plugins or external runtimes required.
 
 | Executor | Purpose |
 |----------|---------|
@@ -167,6 +167,7 @@ Dagu includes 17 built-in step executors. Each runs within the Dagu process (or 
 | `template` | Text generation with template rendering |
 | `chat` | LLM inference (OpenAI, Anthropic, Google Gemini, OpenRouter) |
 | `agentstep` | Multi-step LLM agent execution with tool calling |
+| `harness` | Run coding agent CLIs (Claude Code, Codex, OpenCode, Pi) as workflow steps |
 | `gha` | GitHub Actions execution |
 
 See [Step Types](/step-types/shell) for configuration details of each executor.
@@ -412,7 +413,7 @@ Full CLI and environment variable reference: [CLI](/overview/cli) | [Configurati
   </div>
   <div class="step-card">
     <h3><a href="/step-types/shell">Step Types</a></h3>
-    <p>All 17 executor types</p>
+    <p>All 18 executor types</p>
   </div>
   <div class="step-card">
     <h3><a href="/server-admin/distributed/">Distributed Execution</a></h3>

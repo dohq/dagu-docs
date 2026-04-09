@@ -858,7 +858,7 @@ Commands run in order and stop on first failure. Retries restart from the first 
 
 **Supported step types:** shell, command, docker, container, ssh
 
-**Not supported:** jq, http, archive, mail, github_action, dag, template, k8s, kubernetes
+**Not supported:** jq, http, archive, mail, github_action, dag, template, k8s, kubernetes, harness
 
 These step types do not support multi-command arrays. Use `script:` for `template` steps. Unsupported configurations are rejected at parse time.
 
@@ -1093,7 +1093,7 @@ When using `container`, you cannot use `executor` or `script` fields on the same
 
 | Field | Type | Description | Default |
 |-------|------|-------------|---------|
-| `type` | string | Step type (ssh, http, jq, mail, etc.) | shell |
+| `type` | string | Step type (ssh, http, jq, mail, harness, etc.) | shell |
 | `config` | object | Step type-specific configuration | - |
 
 ```yaml
