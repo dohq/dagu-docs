@@ -1,39 +1,226 @@
 # Harness
 
-Run coding agent CLIs as workflow steps. The harness executor spawns a coding agent as a subprocess in non-interactive mode, captures its stdout/stderr, and reports its exit code.
+Run CLI-based coding agents as workflow steps.
 
-The CLI binary must be pre-installed and available in `PATH`. If the binary is not found, the step fails at setup time before execution begins.
+The harness executor starts a subprocess, captures stdout and stderr, and uses the process exit status as the step result.
 
-## Basic Usage
+The resolved CLI binary must either be available in `PATH` or be referenced by path. Dagu resolves the primary provider and every fallback provider before execution. If any referenced binary is missing, step setup fails before the step runs.
+
+## Step Contract
+
+- `command` is the prompt. In practice, use a single string for harness steps.
+- `script` is optional extra stdin content.
+- After DAG-level defaults are applied, the step needs a provider.
+- `config.provider` may be a built-in provider or a name defined under top-level `harnesses:`.
+- `config.provider` may contain `${VAR}` interpolation and is resolved after interpolation at runtime.
+
+Example:
 
 ```yaml
 steps:
-  - name: generate-tests
+  - name: review
     type: harness
-    command: "Write unit tests for the auth module"
+    command: "Review the current branch and list problems"
     config:
       provider: claude
       model: sonnet
       bare: true
 ```
 
-The `command` field is the prompt sent to the coding agent. The `config.provider` field is required. All other config keys are passed directly as CLI flags (`--key value` for strings/numbers, `--key` for booleans).
+## Built-in Providers
 
-## DAG-level Defaults
+Built-in providers have fixed prompt placement:
 
-You can define a top-level `harness:` block to share default provider settings across all harness steps:
+| Provider | Binary | Base invocation |
+|----------|--------|-----------------|
+| `claude` | `claude` | `claude -p "<prompt>"` |
+| `codex` | `codex` | `codex exec "<prompt>"` |
+| `copilot` | `copilot` | `copilot -p "<prompt>"` |
+| `opencode` | `opencode` | `opencode run "<prompt>"` |
+| `pi` | `pi` | `pi -p "<prompt>"` |
+
+For built-in providers:
+
+- the prompt is always passed on the command line
+- additional config keys become CLI flags
+- `script`, if present, is piped to stdin unchanged
+
+## Custom Harness Definitions
+
+Use top-level `harnesses:` to define named custom harness adapters.
+
+```yaml
+harnesses:
+  gemini:
+    binary: gemini
+    prefix_args: ["run"]
+    prompt_mode: flag
+    prompt_flag: --prompt
+    option_flags:
+      model: --model
+
+steps:
+  - name: summarize
+    type: harness
+    command: "Summarize the repository status"
+    config:
+      provider: gemini
+      model: gemini-2.5-pro
+```
+
+Custom harness definition fields:
+
+| Field | Type | Required | Default | Meaning |
+|-------|------|----------|---------|---------|
+| `binary` | string | yes | - | CLI binary name or path |
+| `prefix_args` | string[] | no | `[]` | Arguments emitted before prompt placement and generated flags |
+| `prompt_mode` | `arg` \| `flag` \| `stdin` | no | `arg` | How the prompt is passed |
+| `prompt_flag` | string | only for `flag` mode | - | Exact flag token used for the prompt |
+| `prompt_position` | `before_flags` \| `after_flags` | no | `before_flags` | Where prompt tokens go relative to generated flags |
+| `flag_style` | `gnu_long` \| `single_dash` | no | `gnu_long` | Default generated flag token style |
+| `option_flags` | object | no | - | Exact flag token overrides per config key |
+
+Rules enforced by Dagu:
+
+- custom harness names cannot be `claude`, `codex`, `copilot`, `opencode`, or `pi`
+- `prompt_flag` is valid only when `prompt_mode: flag`
+- unknown keys inside a harness definition are rejected
+
+### Custom Prompt Placement
+
+`prompt_mode: arg`
+
+```yaml
+harnesses:
+  aider:
+    binary: aider
+    prefix_args: ["exec"]
+    prompt_mode: arg
+    prompt_position: after_flags
+    flag_style: single_dash
+
+steps:
+  - type: harness
+    command: "Review the auth module"
+    config:
+      provider: aider
+      model: sonnet
+```
+
+Generated argv:
+
+```text
+aider exec -model sonnet "Review the auth module"
+```
+
+`prompt_mode: flag`
+
+```yaml
+harnesses:
+  gemini:
+    binary: gemini
+    prefix_args: ["run"]
+    prompt_mode: flag
+    prompt_flag: --prompt
+    option_flags:
+      model: --model
+
+steps:
+  - type: harness
+    command: "Review the auth module"
+    config:
+      provider: gemini
+      model: gemini-2.5-pro
+```
+
+Generated argv:
+
+```text
+gemini run --prompt "Review the auth module" --model gemini-2.5-pro
+```
+
+`prompt_mode: stdin`
+
+```yaml
+harnesses:
+  llm:
+    binary: my-agent
+    prefix_args: ["exec"]
+    prompt_mode: stdin
+
+steps:
+  - type: harness
+    command: "Review this patch"
+    script: |
+      diff --git a/main.go b/main.go
+      ...
+    config:
+      provider: llm
+      format: json
+```
+
+Generated argv:
+
+```text
+my-agent exec --format json
+```
+
+Stdin content:
+
+```text
+Review this patch
+
+diff --git a/main.go b/main.go
+...
+```
+
+For `stdin` mode:
+
+- if `script` is empty, stdin is just the prompt
+- if both `command` and `script` are present, stdin is `prompt + "\n\n" + script`
+
+## Config-to-Flag Mapping
+
+After removing reserved keys, Dagu converts remaining config entries to CLI flags.
+
+| YAML value | Result |
+|------------|--------|
+| `key: "value"` | `flag value` |
+| `key: true` | bare `flag` |
+| `key: false` | omitted |
+| `key: ""` | omitted |
+| `key: 20` | `flag 20` |
+| `key: 5.5` | `flag 5.5` |
+| `key: [a, b]` | `flag a flag b` |
+
+Flag token selection:
+
+- built-in providers use `--key`
+- custom definitions with `flag_style: gnu_long` use `--key`
+- custom definitions with `flag_style: single_dash` use `-key`
+- `option_flags.<key>` overrides the exact token for that key
+
+Additional details:
+
+- config keys are passed through exactly as written; Dagu does not rename them
+- keys are emitted in lexicographic order for deterministic argv generation
+- reserved keys are `provider` and `fallback`
+- Dagu does not validate provider-specific flag names or values
+
+## DAG-Level Defaults
+
+Top-level `harness:` provides defaults for harness steps.
 
 ```yaml
 harness:
   provider: claude
   model: sonnet
-  bare: true
   fallback:
     - provider: codex
       full-auto: true
 
 steps:
-  - command: "Write tests for the auth module" # inferred as type: harness
+  - command: "Write tests for the auth module"
 
   - type: harness
     command: "Fix the flaky integration tests"
@@ -44,237 +231,64 @@ steps:
 
 Merge rules:
 
-- DAG-level `harness:` is the base config for every harness step.
-- Step-level `config:` overrides the primary DAG-level keys on conflict.
-- Step-level `fallback:` replaces the DAG-level fallback list; it is not merged.
-- If a DAG has `harness:` and a step omits `type:`, Dagu treats that step as `type: harness`.
-
-## Providers
-
-Each provider maps to a specific CLI tool and its non-interactive invocation mode:
-
-| Provider | Binary | Invocation |
-|----------|--------|------------|
-| `claude` | `claude` | `claude -p "<prompt>" [flags]` |
-| `codex` | `codex` | `codex exec "<prompt>" [flags]` |
-| `copilot` | `copilot` | `copilot -p "<prompt>" [flags]` |
-| `opencode` | `opencode` | `opencode run "<prompt>" [flags]` |
-| `pi` | `pi` | `pi -p "<prompt>" [flags]` |
-
-## How Config Maps to CLI Flags
-
-Config keys are converted to CLI flags unless they are reserved by the harness executor.
-
-| YAML type | CLI output | Example |
-|-----------|-----------|---------|
-| `key: "value"` | `--key value` | `model: sonnet` → `--model sonnet` |
-| `key: true` | `--key` | `bare: true` → `--bare` |
-| `key: false` | *(omitted)* | `bare: false` → *(nothing)* |
-| `key: 123` | `--key 123` | `max-turns: 20` → `--max-turns 20` |
-| `key: [a, b]` | `--key a --key b` | *(repeated flag)* |
-
-Reserved keys are not passed through as CLI flags:
-
-- `provider`
-- `binary`
-- `prompt_args`
-- `fallback`
-
-Config keys are the exact CLI flag names without the `--` prefix. Refer to each provider's CLI documentation for available flags.
+- DAG-level `harness:` is the base config for every harness step
+- step-level `config:` overrides primary keys from DAG-level `harness:`
+- step-level `fallback:` replaces the DAG-level fallback list; it is not merged
+- if a DAG has `harness:` and a step omits `type:`, Dagu treats that step as `type: harness`
 
 ## Fallbacks
 
-Use `config.fallback` to provide alternative provider configs that are tried in order if the primary attempt fails:
+`config.fallback` is an ordered list of alternative provider configs.
 
 ```yaml
+harnesses:
+  gemini:
+    binary: gemini
+    prefix_args: ["run"]
+    prompt_mode: flag
+    prompt_flag: --prompt
+
 steps:
   - name: implement
     type: harness
     command: "Implement the feature and add tests"
     config:
       provider: claude
-      model: sonnet
-      bare: true
       fallback:
         - provider: codex
-          full-auto: true
-        - provider: copilot
-          yolo: true
-          silent: true
+        - provider: gemini
+          model: gemini-2.5-pro
 ```
 
-Fallback behavior:
+Behavior:
 
-- Dagu tries the primary provider first, then each fallback in order.
-- If the step context is cancelled (timeout, DAG stop), remaining fallbacks are skipped.
-- Only the successful attempt's stdout is emitted as the step output.
-- Stderr from every attempt remains visible in the step logs.
+- Dagu tries the primary provider first, then each fallback in order
+- if the step context is cancelled, remaining fallbacks are skipped
+- stdout from failed attempts is discarded
+- stderr from every attempt remains in the step logs
 
-## Custom Binaries
-
-Use `binary` and `prompt_args` when the CLI is not one of the built-in providers:
+## Parameterized Provider Selection
 
 ```yaml
-steps:
-  - name: custom-agent
-    type: harness
-    command: "Summarize the repository status"
-    config:
-      binary: gemini
-      prompt_args: ["-p"]
-      model: gemini-2.5-pro
-      yolo: true
-```
-
-Specify either `provider` or `binary`, not both.
-
-## Stdin Piping
-
-If the step has a `script` field, its content is piped to the CLI's stdin:
-
-```yaml
-steps:
-  - name: review-code
-    type: harness
-    command: "Review this code for security issues"
-    script: |
-      func handleLogin(w http.ResponseWriter, r *http.Request) {
-          username := r.FormValue("username")
-          query := fmt.Sprintf("SELECT * FROM users WHERE name = '%s'", username)
-          db.Query(query)
-      }
-    config:
-      provider: claude
-      model: sonnet
-```
-
-## Examples
-
-### Claude Code
-
-```yaml
-steps:
-  - name: analyze
-    type: harness
-    command: "Analyze the codebase and list all public API endpoints as JSON"
-    config:
-      provider: claude
-      model: sonnet
-      output-format: json
-      bare: true
-      permission-mode: plan
-      max-turns: 10
-      max-budget-usd: 1.00
-      allowedTools: "Bash,Read,Edit"
-    output: API_ENDPOINTS
-```
-
-### Codex
-
-```yaml
-steps:
-  - name: fix-tests
-    type: harness
-    command: "Run the test suite, identify failures, and fix them"
-    config:
-      provider: codex
-      model: gpt-5-codex
-      full-auto: true
-      sandbox: workspace-write
-      ephemeral: true
-      skip-git-repo-check: true
-    dir: ./src
-```
-
-### Copilot
-
-```yaml
-steps:
-  - name: refactor
-    type: harness
-    command: "Refactor the database layer to use connection pooling"
-    config:
-      provider: copilot
-      autopilot: true
-      yolo: true
-      silent: true
-      no-ask-user: true
-      no-auto-update: true
-    timeout_sec: 300
-```
-
-### OpenCode
-
-```yaml
-steps:
-  - name: refactor
-    type: harness
-    command: "Refactor the database layer to use connection pooling"
-    config:
-      provider: opencode
-      format: json
-```
-
-### Pi
-
-```yaml
-steps:
-  - name: design
-    type: harness
-    command: "Design a rate limiting middleware for the API gateway"
-    config:
-      provider: pi
-      thinking: high
-      tools: read,bash
-```
-
-### With Timeout and Retry
-
-Dagu's standard step-level `timeout_sec` and `retry_policy` work with harness steps:
-
-```yaml
-steps:
-  - name: generate
-    type: harness
-    command: "Generate integration tests for the payment service"
-    config:
-      provider: claude
-      model: opus
-      effort: max
-      max-turns: 30
-    timeout_sec: 300
-    retry_policy:
-      limit: 2
-      interval_sec: 10
-```
-
-### Variable Substitution in Config
-
-Config values support `${VAR}` expansion, including `provider`. Interpolated scalar strings such as `"true"` and `"10"` are coerced before flags are generated, so parameterized booleans and numbers work the same way as literal YAML values.
-
-```yaml
-env:
-  - MODEL: sonnet
+params:
   - PROVIDER: claude
-  - FULL_AUTO: true
 
 steps:
   - name: task
     type: harness
-    command: "Implement the feature described in ${SPEC_FILE}"
+    command: "Analyze the repository layout"
     config:
       provider: "${PROVIDER}"
-      model: "${MODEL}"
-      full-auto: "${FULL_AUTO}"
-      effort: high
 ```
+
+Interpolated scalar strings are normalized before flags are generated, so values such as `"true"`, `"10"`, and `"5.5"` become booleans or numbers.
 
 ## Exit Codes
 
-| Exit Code | Meaning |
+| Exit code | Meaning |
 |-----------|---------|
-| 0 | CLI completed successfully |
-| 1 | CLI reported an error (check stderr in step logs) |
-| 124 | Step timed out (Dagu killed the process) |
+| `0` | CLI completed successfully |
+| `124` | Step context was cancelled or timed out |
+| any other non-zero value | The child process exit code, or `1` when setup failed before a process exit code existed |
 
-On non-zero exit, the last 1KB of stderr is included in the error message.
+On failure, Dagu includes the last 1024 bytes of stderr in the returned error message.

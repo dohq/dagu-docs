@@ -542,31 +542,61 @@ See [Chat Executor](/features/chat/) for full documentation.
 
 | Field | Type | Description | Default |
 |-------|------|-------------|---------|
-| `harness` | object | Default harness configuration for coding-agent steps | - |
+| `harnesses` | object | Named custom harness definitions available to harness steps | - |
+| `harness` | object | Default harness configuration inherited by harness steps | - |
 
 ```yaml
+harnesses:
+  gemini:
+    binary: gemini
+    prefix_args: ["run"]
+    prompt_mode: flag
+    prompt_flag: --prompt
+
 harness:
-  provider: claude
-  model: sonnet
-  bare: true
+  provider: gemini
+  model: gemini-2.5-pro
   fallback:
-    - provider: codex
-      full-auto: true
-    - provider: copilot
-      yolo: true
-      silent: true
+    - provider: claude
+      model: sonnet
 
 steps:
-  - command: "Write tests" # inferred as type: harness
+  - command: "Summarize the repository status" # inferred as type: harness
 
   - type: harness
-    command: "Fix bugs"
+    command: "Review the auth module"
     config:
-      model: opus
-      effort: high
+      provider: claude
+      bare: true
 ```
 
-When configured at the DAG level, harness steps inherit the root `harness:` block.
+`harnesses:` is a map from provider name to a custom harness definition. The name is referenced from `config.provider`.
+
+Custom harness definition fields:
+
+| Field | Type | Required | Default |
+|-------|------|----------|---------|
+| `binary` | string | yes | - |
+| `prefix_args` | string[] | no | `[]` |
+| `prompt_mode` | `arg` \| `flag` \| `stdin` | no | `arg` |
+| `prompt_flag` | string | only for `flag` mode | - |
+| `prompt_position` | `before_flags` \| `after_flags` | no | `before_flags` |
+| `flag_style` | `gnu_long` \| `single_dash` | no | `gnu_long` |
+| `option_flags` | object | no | - |
+
+Definition rules:
+
+- custom harness names cannot be `claude`, `codex`, `copilot`, `opencode`, or `pi`
+- `prompt_flag` is required only when `prompt_mode: flag`
+- unknown keys in a harness definition are rejected
+
+If a DAG is loaded with a base config:
+
+- `harnesses` entries merge by name
+- redefining the same name replaces the entire inherited definition
+- `harnesses.<name>: null` deletes the inherited definition
+
+`harness:` is the DAG-level default config for harness steps.
 
 - Steps with `type: harness` inherit the DAG-level primary config.
 - Steps without an explicit `type:` are treated as `type: harness` when `harness:` is present.
@@ -575,12 +605,26 @@ When configured at the DAG level, harness steps inherit the root `harness:` bloc
 
 The `harness:` block accepts the same fields as step-level harness `config:`:
 
-- `provider` for built-in providers such as `claude`, `codex`, `copilot`, `opencode`, and `pi`
-- `binary` and `prompt_args` for custom CLIs
+- `provider`, which may be a built-in provider or a custom name from `harnesses:`
 - arbitrary CLI flag keys passed through to the provider
 - `fallback`, an ordered list of alternative provider configs
 
-Reserved keys `provider`, `binary`, `prompt_args`, and `fallback` are consumed by the harness executor and are not passed through as CLI flags.
+Reserved keys `provider` and `fallback` are consumed by the harness executor and are not passed through as CLI flags.
+
+Flag generation rules:
+
+- strings and numbers become `flag value`
+- `true` becomes a bare flag
+- `false` and empty strings are omitted
+- arrays become repeated flags
+- built-in providers use `--key`
+- custom definitions use `--key`, `-key`, or `option_flags` according to the selected harness definition
+- provider-specific flag names and values are not validated by Dagu
+
+`script` handling depends on the resolved provider:
+
+- built-in providers and custom `arg` / `flag` definitions pass `command` on argv and pipe `script` to stdin
+- custom `stdin` definitions put the prompt on stdin; if both `command` and `script` are present, stdin is `prompt + "\n\n" + script`
 
 See [Harness Step](/step-types/harness) for provider details, fallback behavior, and examples.
 
