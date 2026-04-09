@@ -167,7 +167,7 @@ Dagu includes 18 built-in step executors. Each runs within the Dagu process (or 
 | `template` | Text generation with template rendering |
 | `chat` | LLM inference (OpenAI, Anthropic, Google Gemini, OpenRouter) |
 | `agentstep` | Multi-step LLM agent execution with tool calling |
-| `harness` | Run coding agent CLIs (Claude Code, Codex, OpenCode, Pi) as workflow steps |
+| `harness` | Run coding agent CLIs (Claude Code, Codex, Copilot, OpenCode, Pi) as workflow steps |
 | `gha` | GitHub Actions execution |
 
 See [Step Types](/step-types/shell) for configuration details of each executor.

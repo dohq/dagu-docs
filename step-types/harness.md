@@ -1,6 +1,6 @@
 # Harness
 
-Run coding agent CLIs as workflow steps. The harness executor spawns a coding agent (Claude Code, Codex, OpenCode, or Pi) as a subprocess in non-interactive mode, captures its stdout/stderr, and reports its exit code.
+Run coding agent CLIs as workflow steps. The harness executor spawns a coding agent as a subprocess in non-interactive mode, captures its stdout/stderr, and reports its exit code.
 
 The CLI binary must be pre-installed and available in `PATH`. If the binary is not found, the step fails at setup time before execution begins.
 
@@ -13,98 +13,41 @@ steps:
     command: "Write unit tests for the auth module"
     config:
       provider: claude
+      model: sonnet
+      bare: true
 ```
 
-The `command` field is the prompt sent to the coding agent. The `config.provider` field is required.
+The `command` field is the prompt sent to the coding agent. The `config.provider` field is required. All other config keys are passed directly as CLI flags (`--key value` for strings/numbers, `--key` for booleans).
 
 ## Providers
 
 Each provider maps to a specific CLI tool and its non-interactive invocation mode:
 
-| Provider | Binary | Invocation | Install |
-|----------|--------|------------|---------|
-| `claude` | `claude` | `claude -p "<prompt>"` | [Claude Code](https://docs.anthropic.com/en/docs/claude-code) |
-| `codex` | `codex` | `codex exec "<prompt>"` | [Codex CLI](https://github.com/openai/codex) |
-| `opencode` | `opencode` | `opencode run "<prompt>"` | [OpenCode](https://opencode.ai) |
-| `pi` | `pi` | `pi -p "<prompt>"` | [Pi Coding Agent](https://github.com/badlogic/pi-mono) |
+| Provider | Binary | Invocation |
+|----------|--------|------------|
+| `claude` | `claude` | `claude -p "<prompt>" [flags]` |
+| `codex` | `codex` | `codex exec "<prompt>" [flags]` |
+| `copilot` | `copilot` | `copilot -p "<prompt>" [flags]` |
+| `opencode` | `opencode` | `opencode run "<prompt>" [flags]` |
+| `pi` | `pi` | `pi -p "<prompt>" [flags]` |
 
-## Common Configuration
+## How Config Maps to CLI Flags
 
-These fields work across all providers (where the provider supports them):
+Config keys (except `provider`) are converted to CLI flags:
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `provider` | string | **Required.** One of: `claude`, `codex`, `opencode`, `pi` |
-| `model` | string | Model name passed to the provider's `--model` flag |
-| `effort` | string | One of: `low`, `medium`, `high`, `max`. Mapped differently per provider (see below) |
-| `max_turns` | integer | Maximum agentic iterations. Passed as `--max-turns` to Claude |
-| `output_format` | string | One of: `text`, `json`, `stream-json`. Mapped to each provider's output flag |
-| `extra_flags` | string[] | Additional CLI flags appended verbatim to the command |
+| YAML type | CLI output | Example |
+|-----------|-----------|---------|
+| `key: "value"` | `--key value` | `model: sonnet` → `--model sonnet` |
+| `key: true` | `--key` | `bare: true` → `--bare` |
+| `key: false` | *(omitted)* | `bare: false` → *(nothing)* |
+| `key: 123` | `--key 123` | `max-turns: 20` → `--max-turns 20` |
+| `key: [a, b]` | `--key a --key b` | *(repeated flag)* |
 
-### Effort Mapping
-
-The `effort` field is translated differently per provider:
-
-| Effort | Claude | Codex | OpenCode | Pi |
-|--------|--------|-------|----------|-----|
-| `low` | `--effort low` | (no effect) | (no effect) | `--thinking low` |
-| `medium` | `--effort medium` | (no effect) | (no effect) | `--thinking medium` |
-| `high` | `--effort high` | `--full-auto` | (no effect) | `--thinking high` |
-| `max` | `--effort max` | `--full-auto` | (no effect) | `--thinking xhigh` |
-
-### Output Format Mapping
-
-| Format | Claude | Codex | OpenCode | Pi |
-|--------|--------|-------|----------|-----|
-| `json` | `--output-format json` | `--json` | `--format json` | `--mode json` |
-| `stream-json` | `--output-format stream-json` | (no effect) | (no effect) | (no effect) |
-
-## Claude Configuration
-
-| Field | Type | CLI Flag |
-|-------|------|----------|
-| `allowed_tools` | string | `--allowedTools` (e.g., `"Bash,Read,Edit"`) |
-| `disallowed_tools` | string | `--disallowedTools` |
-| `permission_mode` | string | `--permission-mode` (e.g., `auto`, `plan`, `bypassPermissions`) |
-| `system_prompt` | string | `--system-prompt` (replaces the default system prompt) |
-| `append_system_prompt` | string | `--append-system-prompt` (appended to default system prompt) |
-| `max_budget_usd` | number | `--max-budget-usd` |
-| `bare` | boolean | `--bare` (skip auto-discovery of hooks, skills, MCP, CLAUDE.md) |
-| `add_dir` | string | `--add-dir` (grant access to an additional directory) |
-| `worktree` | boolean | `--worktree` (run in an isolated git worktree) |
-
-## Codex Configuration
-
-| Field | Type | CLI Flag |
-|-------|------|----------|
-| `sandbox` | string | `--sandbox` (`read-only`, `workspace-write`, `danger-full-access`) |
-| `full_auto` | boolean | `--full-auto` (also set automatically when `effort` is `high` or `max`) |
-| `output_schema` | string | `--output-schema` (path to JSON schema for structured output) |
-| `ephemeral` | boolean | `--ephemeral` (don't persist session files) |
-| `skip_git_repo_check` | boolean | `--skip-git-repo-check` |
-
-## OpenCode Configuration
-
-| Field | Type | CLI Flag |
-|-------|------|----------|
-| `agent` | string | `--agent` (agent name) |
-| `file` | string | `--file` (attach file to message) |
-| `title` | string | `--title` (session title) |
-
-## Pi Configuration
-
-| Field | Type | CLI Flag |
-|-------|------|----------|
-| `thinking` | string | `--thinking` (`off`, `minimal`, `low`, `medium`, `high`, `xhigh`). Overrides `effort` if both are set. |
-| `pi_provider` | string | `--provider` (LLM provider: `anthropic`, `openai`, `google`, etc.) |
-| `tools` | string | `--tools` (comma-separated tool list: `read`, `bash`, `edit`, `write`) |
-| `no_tools` | boolean | `--no-tools` (disable all tools) |
-| `no_extensions` | boolean | `--no-extensions` (disable extension auto-discovery) |
-| `session` | string | `--session` (session path or UUID) |
+Config keys are the exact CLI flag names without the `--` prefix. Refer to each provider's CLI documentation for available flags.
 
 ## Stdin Piping
 
-If the step has a `script` field, its content is piped to the CLI's stdin. This is useful for providing supplementary context alongside the prompt:
+If the step has a `script` field, its content is piped to the CLI's stdin:
 
 ```yaml
 steps:
@@ -122,11 +65,9 @@ steps:
       model: sonnet
 ```
 
-The prompt is passed via the CLI flag (`-p` for Claude, `exec` positional arg for Codex, etc.) and the script content arrives on stdin.
-
 ## Examples
 
-### Claude Code with Output Capture
+### Claude Code
 
 ```yaml
 steps:
@@ -136,20 +77,16 @@ steps:
     config:
       provider: claude
       model: sonnet
-      output_format: json
+      output-format: json
       bare: true
-      permission_mode: plan
-      max_turns: 10
-      max_budget_usd: 1.00
+      permission-mode: plan
+      max-turns: 10
+      max-budget-usd: 1.00
+      allowedTools: "Bash,Read,Edit"
     output: API_ENDPOINTS
-
-  - name: process
-    command: echo "${API_ENDPOINTS}" | jq '.endpoints | length'
-    depends:
-      - analyze
 ```
 
-### Codex with Full Auto
+### Codex
 
 ```yaml
 steps:
@@ -159,14 +96,31 @@ steps:
     config:
       provider: codex
       model: gpt-5-codex
-      effort: high
+      full-auto: true
       sandbox: workspace-write
       ephemeral: true
-      skip_git_repo_check: true
+      skip-git-repo-check: true
     dir: ./src
 ```
 
-### OpenCode with JSON Output
+### Copilot
+
+```yaml
+steps:
+  - name: refactor
+    type: harness
+    command: "Refactor the database layer to use connection pooling"
+    config:
+      provider: copilot
+      autopilot: true
+      yolo: true
+      silent: true
+      no-ask-user: true
+      no-auto-update: true
+    timeout_sec: 300
+```
+
+### OpenCode
 
 ```yaml
 steps:
@@ -175,11 +129,10 @@ steps:
     command: "Refactor the database layer to use connection pooling"
     config:
       provider: opencode
-      model: anthropic/claude-sonnet-4-20250514
-      output_format: json
+      format: json
 ```
 
-### Pi with Thinking
+### Pi
 
 ```yaml
 steps:
@@ -188,26 +141,8 @@ steps:
     command: "Design a rate limiting middleware for the API gateway"
     config:
       provider: pi
-      pi_provider: anthropic
-      model: claude-sonnet-4-20250514
       thinking: high
       tools: read,bash
-```
-
-### Using extra_flags
-
-For CLI flags not yet modeled in the config, use `extra_flags`:
-
-```yaml
-steps:
-  - name: task
-    type: harness
-    command: "Summarize the project"
-    config:
-      provider: claude
-      extra_flags:
-        - "--verbose"
-        - "--no-session-persistence"
 ```
 
 ### With Timeout and Retry
@@ -223,7 +158,7 @@ steps:
       provider: claude
       model: opus
       effort: max
-      max_turns: 30
+      max-turns: 30
     timeout_sec: 300
     retry_policy:
       limit: 2

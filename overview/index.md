@@ -171,7 +171,7 @@ See [Architecture](/overview/architecture) for details.
 | `template` | Text rendering with Go templates and structured data |
 | `mail` | Email notifications with attachments |
 | `dag` | Sub-workflow execution (hierarchical composition) |
-| `harness` | Run coding agent CLIs (Claude Code, Codex, OpenCode, Pi) |
+| `harness` | Run coding agent CLIs (Claude Code, Codex, Copilot, OpenCode, Pi) |
 
 See [Step Types Reference](/step-types/shell) for configuration details.
 
