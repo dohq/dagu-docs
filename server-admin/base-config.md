@@ -306,11 +306,11 @@ step_types:
           type: integer
           default: 2
     template:
-      exec:
-        command: /bin/echo
-        args:
-          - {$input: message}
-          - {$input: repeat}
+      script: |
+        #!/bin/bash
+        for ((i=0; i<{{ .input.repeat }}; i++)); do
+          printf '%s\n' {{ json .input.message }}
+        done
 ```
 
 Any DAG loaded with this base config can use:

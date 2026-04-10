@@ -228,10 +228,9 @@ step_types:
         message:
           type: string
     template:
-      exec:
-        command: /bin/echo
-        args:
-          - {$input: message}
+      script: |
+        #!/bin/bash
+        printf '%s\n' {{ json .input.message }}
 
 steps:
   - type: greet
@@ -239,7 +238,7 @@ steps:
       message: hello
 ```
 
-Schema defaults can be applied to the `config` object, the result is validated against `input_schema`, and then the template expands to a builtin step before execution. See [Custom Step Types](/writing-workflows/custom-step-types) for the full rules.
+The common case is a `type: command` custom step with a templated `script`. Schema defaults can be applied to the `config` object, the result is validated against `input_schema`, and then the template expands to a builtin step before execution. See [Custom Step Types](/writing-workflows/custom-step-types) for the full rules.
 
 ## Scheduling
 

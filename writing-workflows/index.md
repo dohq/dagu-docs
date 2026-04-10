@@ -88,10 +88,9 @@ step_types:
         message:
           type: string
     template:
-      exec:
-        command: /bin/echo
-        args:
-          - {$input: message}
+      script: |
+        #!/bin/bash
+        printf '%s\n' {{ json .input.message }}
 
 steps:
   - type: greet
@@ -99,7 +98,7 @@ steps:
       message: hello
 ```
 
-The step call site supplies typed `config`, the schema can apply defaults, and the template expands to a normal builtin step before execution. See [Custom Step Types](/writing-workflows/custom-step-types) for the exact rules.
+The most common pattern is a `type: command` custom step with a templated `script`. The step call site supplies typed `config`, the schema can apply defaults, and the template expands to a normal builtin step before execution. See [Custom Step Types](/writing-workflows/custom-step-types) for the exact rules.
 
 ## Guide Sections
 

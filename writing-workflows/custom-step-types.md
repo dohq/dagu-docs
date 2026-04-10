@@ -28,11 +28,11 @@ step_types:
           type: integer
           default: 2
     template:
-      exec:
-        command: /bin/echo
-        args:
-          - {$input: message}
-          - {$input: repeat}
+      script: |
+        #!/bin/bash
+        for ((i=0; i<{{ .input.repeat }}; i++)); do
+          printf '%s\n' {{ json .input.message }}
+        done
 
 steps:
   - type: greet
@@ -40,7 +40,7 @@ steps:
       message: hello
 ```
 
-This expands to a builtin `command` step at load time. `config.repeat` defaults to `2`, so the step runs `/bin/echo hello 2`. If `name` is omitted, the generated name uses the custom type prefix, such as `greet_1`.
+This expands to a builtin `command` step at load time. `config.repeat` defaults to `2`, and because the template uses a shebang with no `template.shell`, Bash runs the script. If `name` is omitted, the generated name uses the custom type prefix, such as `greet_1`.
 
 ## Definition Fields
 
@@ -96,6 +96,38 @@ template:
 
 `$input` path resolution supports dotted object fields and numeric array indexes such as `items.0.name`.
 
+## Script Templates
+
+For `command`-backed or `shell`-backed custom step types, `template.script` is usually the simplest and most common option.
+
+```yaml
+step_types:
+  bash_snippet:
+    type: command
+    input_schema:
+      type: object
+      additionalProperties: false
+      required: [message]
+      properties:
+        message:
+          type: string
+    template:
+      script: |
+        #!/bin/bash
+        printf '%s\n' {{ json .input.message }}
+
+steps:
+  - type: bash_snippet
+    config:
+      message: xxx
+```
+
+Rules:
+
+- Put `script` in the custom step `template`, not at the custom-step call site.
+- If `template.script` has a shebang and you do not set `template.shell`, the shebang interpreter is used.
+- If you set `template.shell`, that shell runs the script instead, so the shebang is not used for interpreter selection.
+
 ## Call-Site Fields
 
 When a step uses a custom type, `config` is input to the custom definition. It is not merged directly into builtin executor config.
@@ -124,10 +156,9 @@ step_types:
         message:
           type: string
     template:
-      exec:
-        command: /bin/echo
-        args:
-          - {$input: message}
+      script: |
+        #!/bin/bash
+        printf '%s\n' {{ json .input.message }}
 ```
 
 `hello.yaml`
