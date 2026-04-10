@@ -77,7 +77,6 @@ const fullSidebar = [
       { text: "S3", link: "/step-types/s3" },
       { text: "Redis", link: "/step-types/redis" },
       { text: "Archive", link: "/step-types/archive" },
-      { text: "GitHub Actions", link: "/step-types/github-actions" },
       {
         text: "SQL",
         collapsed: false,

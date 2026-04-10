@@ -948,7 +948,7 @@ Commands run in order and stop on first failure. Retries restart from the first 
 
 **Supported step types:** shell, command, docker, container, ssh
 
-**Not supported:** jq, http, archive, mail, github_action, dag, template, k8s, kubernetes, harness
+**Not supported:** jq, http, archive, mail, dag, template, k8s, kubernetes, harness
 
 These step types do not support multi-command arrays. Use `script:` for `template` steps. Unsupported configurations are rejected at parse time.
 
@@ -981,7 +981,7 @@ steps:
 | `output` | string/object | Capture output to a variable. Object form supports `name`, `key`, `omit`, and `schema`. | - |
 | `env` | array/object | Step-specific environment variables (overrides DAG-level) | - |
 | `call` | string | Name of a DAG to execute as a sub DAG-run | - |
-| `params` | string/object | Parameters passed to sub DAGs or executor-specific inputs (e.g., GitHub Actions `with:` map) | - |
+| `params` | string/object | Parameters passed to sub DAGs or executor-specific inputs | - |
 
 `shell` accepts either a string (e.g., `"bash -e"`) or an array (e.g., `["bash", "-e"]`). DAG-level values expand environment variables when the workflow loads; step-level values are evaluated at runtime so you can reference parameters, secrets, or previous outputs.
 

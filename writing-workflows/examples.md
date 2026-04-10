@@ -1427,30 +1427,6 @@ steps:
 
 <div class="example-card">
 
-### GitHub Actions (Experimental)
-
-```yaml
-secrets:
-  - name: GITHUB_TOKEN
-    provider: env
-    key: GITHUB_TOKEN
-
-working_dir: /tmp/workspace
-steps:
-  - command: actions/checkout@v4
-    type: gha
-    params:
-      repository: dagucloud/dagu
-      ref: main
-      token: "${GITHUB_TOKEN}"
-```
-
-<a href="/step-types/github-actions" class="learn-more">Learn more →</a>
-
-</div>
-
-<div class="example-card">
-
 ### Remote Commands via SSH
 
 ```yaml
