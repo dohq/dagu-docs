@@ -324,7 +324,7 @@ steps:
 
 Base-config and DAG-local `step_types` are merged per YAML document. If a DAG declares the same custom type name as the base config, Dagu fails the load with a duplicate-definition error.
 
-`config` at the call site is validated against `input_schema`, schema defaults are applied, and `template` expands to a builtin step before normal step validation runs.
+Schema defaults are applied to `config` at the call site, the result is validated against `input_schema`, and `template` expands to a builtin step before normal step validation runs.
 
 See [Custom Step Types](/writing-workflows/custom-step-types) for the exact field rules and template behavior.
 

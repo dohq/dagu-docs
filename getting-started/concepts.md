@@ -239,7 +239,7 @@ steps:
       message: hello
 ```
 
-The `config` object is validated against `input_schema`, then the template expands to a builtin step before execution. See [Custom Step Types](/writing-workflows/custom-step-types) for the full rules.
+Schema defaults can be applied to the `config` object, the result is validated against `input_schema`, and then the template expands to a builtin step before execution. See [Custom Step Types](/writing-workflows/custom-step-types) for the full rules.
 
 ## Scheduling
 

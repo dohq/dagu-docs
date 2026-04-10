@@ -82,7 +82,7 @@ Rules:
 
 - Missing template keys are errors.
 - The only built-in helper is `json`.
-- `config` is validated first, then schema defaults are applied, then the template is rendered.
+- Schema defaults are applied to `config`, then the result is validated, then the template is rendered.
 - Use `{$input: path.to.value}` for typed injection without string conversion.
 
 ```yaml
@@ -176,7 +176,7 @@ handler_on:
 
 ## Direct Exec
 
-Use `exec` when you want explicit argv with no shell parsing.
+For `command`-backed or `shell`-backed custom step templates, use `exec` when you want explicit argv with no shell parsing.
 
 ```yaml
 steps:
@@ -189,7 +189,7 @@ steps:
         - 10
 ```
 
-`exec` is a normal step field, so custom step templates can use it too. It is mutually exclusive with `command` and `script`, and it cannot be combined with `shell` or `shell_packages`.
+For custom step types whose `type` is `command` or `shell`, `template.exec` is valid. It is mutually exclusive with `command` and `script`, and it cannot be combined with `shell` or `shell_packages`.
 
 ## Related
 

@@ -975,7 +975,7 @@ These step types do not support multi-command arrays. Use `script:` for `templat
 
 #### Direct Exec
 
-`exec` runs a binary with explicit argv and no shell parsing.
+For direct command execution steps, `exec` runs a binary with explicit argv and no shell parsing.
 
 ```yaml
 steps:
@@ -992,6 +992,7 @@ Rules:
 
 - `exec.command` is required.
 - `exec.args` accepts strings, numbers, and booleans.
+- `exec` is supported only for direct command execution (`command`, `shell`, or the default command step type).
 - `exec` cannot be combined with `command`, `script`, `shell`, or `shell_packages`.
 - `working_dir`, `env`, `stdout`, `stderr`, `retry_policy`, `output`, and other normal orchestration fields still apply.
 
@@ -1238,7 +1239,7 @@ steps:
     command: extract
 ```
 
-If `type` refers to a custom step type, `config` is validated against that definition's `input_schema` and then used to render its `template`. Custom step call sites can still set orchestration fields such as `depends`, `retry_policy`, `env`, `timeout_sec`, `output`, and `approval`, but action-defining fields such as `command`, `exec`, `script`, `shell`, `call`, `parallel`, `container`, `llm`, `messages`, `agent`, and `routes` are rejected at the call site.
+If `type` refers to a custom step type, schema defaults are applied to `config`, the result is validated against that definition's `input_schema`, and then it is used to render the definition's `template`. Custom step call sites can still set orchestration fields such as `depends`, `retry_policy`, `env`, `timeout_sec`, `output`, and `approval`, but action-defining fields such as `command`, `exec`, `script`, `shell`, `shell_packages`, `working_dir`, `call`, `params`, `parallel`, `container`, `llm`, `messages`, `agent`, `value`, and `routes` are rejected at the call site.
 
 See [Custom Step Types](/writing-workflows/custom-step-types) for the exact allowed field set.
 
