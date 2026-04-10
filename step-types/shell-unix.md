@@ -30,10 +30,16 @@ Run commands and scripts on Unix-like systems (macOS, Linux, BSD).
         echo "Multi-line command block"
         echo "Runs as a script (not split into args)"
   ```
-- **Command + args array**:
+- **Structured direct exec**:
   ```yaml
   steps:
-    - command: [python3, -u, app.py, --limit, "10"]
+    - exec:
+        command: /usr/bin/python3
+        args:
+          - -u
+          - app.py
+          - --limit
+          - 10
   ```
 - **Script block**:
   ```yaml
@@ -52,7 +58,7 @@ Run commands and scripts on Unix-like systems (macOS, Linux, BSD).
         import sys
         print("Args:", sys.argv)
   ```
-- **Working directory and env**: Use `working_dir`/`dir` and `env` on the step (or DAG defaults) to control context.
+- **Working directory and env**: Use `working_dir` and `env` on the step (or DAG defaults) to control context.
 
 ## Script Behavior (Unix)
 
@@ -78,16 +84,20 @@ Run commands and scripts on Unix-like systems (macOS, Linux, BSD).
   nix-shell must be installed separately. Dagu runs inside `nix-shell --run ...`; it defaults to `--pure` if you do not supply purity flags. Include any flags you need (such as `--impure`) in the `shell` array. When Dagu supplies the shell, it prepends `set -e;` to the command string unless you already provided it.
 
 - **Direct execution (no shell parsing)**  
-  `shell: direct` runs binaries without shell features; use array form:
+  Use `exec:` for explicit argv:
   ```yaml
   steps:
-    - shell: direct
-      command: [/usr/bin/python3, -u, script.py]
+    - exec:
+        command: /usr/bin/python3
+        args:
+          - -u
+          - script.py
   ```
+  `exec` cannot be combined with `command`, `script`, `shell`, or `shell_packages`.
 
 ## Tips
 
-- Prefer array syntax for commands with flags to avoid quoting surprises.
+- Prefer `exec.args` when you need explicit argv with flags.
 - Keep DAG-level shells stable; override per-step only when you need a different interpreter.
 - Use shebangs in multi-line scripts when you want a specific interpreter without repeating `shell`.
 - When using nix-shell, list every tool your step needs in `shell_packages` for reproducibility.

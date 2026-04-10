@@ -33,11 +33,15 @@ Run commands and scripts on Windows using PowerShell, pwsh, or cmd.exe.
         echo Multi-line command block
         echo Runs as a script (not split into args)
   ```
-- **Command + args array**:
+- **Structured direct exec**:
   ```yaml
   steps:
-    - shell: cmd
-      command: [cmd, /c, echo, Hello from cmd array]
+    - exec:
+        command: C:\Windows\System32\cmd.exe
+        args:
+          - /c
+          - echo
+          - Hello from cmd argv
   ```
 - **Script block**:
   ```yaml
@@ -55,7 +59,7 @@ Run commands and scripts on Windows using PowerShell, pwsh, or cmd.exe.
       script: |
         Write-Host "Inline ps1 body"
   ```
-- **Working directory and env**: Use `working_dir`/`dir` and `env` on the step (or DAG defaults) to control context.
+- **Working directory and env**: Use `working_dir` and `env` on the step (or DAG defaults) to control context.
 
 ## Script Behavior (Windows)
 
@@ -82,16 +86,20 @@ Run commands and scripts on Windows using PowerShell, pwsh, or cmd.exe.
   ```
 
 - **Direct execution (no shell parsing)**  
-  `shell: direct` bypasses shell parsing; use array form:
+  Use `exec:` for explicit argv:
   ```yaml
   steps:
-    - shell: direct
-      command: ["C:\\Program Files\\Git\\bin\\bash.exe", -c, "echo from bash in direct mode"]
+    - exec:
+        command: "C:\\Program Files\\Git\\bin\\bash.exe"
+        args:
+          - -c
+          - echo from bash in direct mode
   ```
+  `exec` cannot be combined with `command`, `script`, `shell`, or `shell_packages`.
 
 ## Tips
 
-- Prefer array syntax for commands with flags to avoid quoting surprises.
+- Prefer `exec.args` when you need explicit argv with flags.
 - Choose PowerShell for richer scripting; use `cmd` only when you need cmd.exe semantics.
 - Keep DAG-level shells stable; override per-step only when a different interpreter is required.
 - For `.ps1/.cmd/.bat` scripts in the working directory, use explicit relative or absolute paths to avoid PATH lookup issues.

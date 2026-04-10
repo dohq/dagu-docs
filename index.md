@@ -145,31 +145,32 @@ dagu start-all
 
 Visit [http://localhost:8080](http://localhost:8080)
 
-## Built-in Executors
+## Built-in Step Types
 
-Dagu includes 18 built-in step executors. Each runs within the Dagu process (or worker). No plugins or external runtimes required.
+Common built-in step types include:
 
-| Executor | Purpose |
+| Step type | Purpose |
 |----------|---------|
-| `command` | Shell commands and scripts (bash, sh, PowerShell, custom shells) |
-| `docker` | Run containers with registry auth, volume mounts, resource limits |
-| `kubernetes` | Execute Kubernetes Pods with resource requests, service accounts, namespaces |
-| `ssh` | Remote command execution with key-based auth and SFTP file transfer |
-| `http` | HTTP requests (GET, POST, PUT, DELETE) with headers and authentication |
-| `sql` | Query PostgreSQL and SQLite with parameterized queries and result capture |
-| `redis` | Redis commands, pipelines, and Lua scripts |
-| `s3` | Upload, download, list, and delete S3 objects |
-| `jq` | JSON transformation using jq expressions |
-| `mail` | Send email via SMTP |
-| `archive` | Create zip/tar archives with glob patterns |
-| `dag` | Invoke another DAG as a sub-workflow with parameter passing |
-| `router` | Conditional step routing based on expressions |
-| `template` | Text generation with template rendering |
-| `chat` | LLM inference (OpenAI, Anthropic, Google Gemini, OpenRouter) |
-| `agentstep` | Multi-step LLM agent execution with tool calling |
-| `harness` | Run coding agent CLIs (Claude Code, Codex, Copilot, OpenCode, Pi) as workflow steps |
+| `command`, `shell` | Local shell commands and scripts |
+| `docker`, `container` | Run in a Docker container or exec into an existing container |
+| `kubernetes`, `k8s` | Run a step as a Kubernetes workload |
+| `harness` | Run CLI-based coding agents and custom harness adapters |
+| `ssh` | Remote command execution |
+| `sftp` | Remote file transfer |
+| `http` | HTTP requests |
+| `postgres`, `sqlite` | SQL queries |
+| `redis` | Redis commands and scripts |
+| `s3` | S3 object operations |
+| `jq` | JSON transformation |
+| `mail` | Email delivery |
+| `archive` | Archive create/extract |
+| `dag` | Sub-DAG execution |
+| `router` | Route execution to downstream steps by value |
+| `template` | Template rendering |
+| `chat` | LLM chat completion |
+| `agent` | Tool-using agent step |
 
-See [Step Types](/step-types/shell) for configuration details of each executor.
+DAGs can also declare reusable `step_types` that expand to builtin step types at load time. See [Custom Step Types](/writing-workflows/custom-step-types) and [Step Types](/step-types/shell) for the exact configuration surface.
 
 ## Scheduling and Reliability
 

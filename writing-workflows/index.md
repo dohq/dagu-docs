@@ -72,6 +72,35 @@ Configuration precedence: System defaults → Base config → DAG config
 
 See [Base Configuration](/server-admin/base-config) for complete documentation on all available fields.
 
+## Custom Step Types
+
+Define reusable step types in `step_types` when you want a typed wrapper around a builtin step type.
+
+```yaml
+step_types:
+  greet:
+    type: command
+    input_schema:
+      type: object
+      additionalProperties: false
+      required: [message]
+      properties:
+        message:
+          type: string
+    template:
+      exec:
+        command: /bin/echo
+        args:
+          - {$input: message}
+
+steps:
+  - type: greet
+    config:
+      message: hello
+```
+
+The step call site supplies typed `config`, the schema can apply defaults, and the template expands to a normal builtin step before execution. See [Custom Step Types](/writing-workflows/custom-step-types) for the exact rules.
+
 ## Guide Sections
 
 1. **[Basics](/writing-workflows/basics)** - Steps, commands, dependencies
@@ -81,8 +110,9 @@ See [Base Configuration](/server-admin/base-config) for complete documentation o
 5. **[Durable Execution](/writing-workflows/durable-execution)** - Step retries, default step retries, DAG retries
 6. **[Error Handling](/writing-workflows/error-handling)** - Continue-on behavior, handlers, notifications
 7. **[Lifecycle Handlers](/writing-workflows/lifecycle-handlers)** - Cleanup and post-run steps
-8. **[Patterns](/writing-workflows/control-flow#patterns)** - Composition patterns
-9. **[Secrets](/writing-workflows/secrets)** - External providers, resolution order, masking behavior
+8. **[Custom Step Types](/writing-workflows/custom-step-types)** - Reusable typed wrappers around builtin step types
+9. **[Patterns](/writing-workflows/control-flow#patterns)** - Composition patterns
+10. **[Secrets](/writing-workflows/secrets)** - External providers, resolution order, masking behavior
 
 ## Complete Example
 

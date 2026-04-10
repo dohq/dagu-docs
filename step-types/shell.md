@@ -43,10 +43,16 @@ Run system commands and scripts with the default step type.
       stdout: /tmp/output.log
   ```
   Instead of duplicating `env`, `working_dir`, `stdout`, `retry_policy`, `preconditions`, etc. across multiple steps, combine commands into one step.
-- **Command + args array** when you want unambiguous arguments and no shell parsing:
+- **Structured direct exec** when you want unambiguous arguments and no shell parsing:
   ```yaml
   steps:
-    - command: [python3, -u, app.py, --limit, "10"]
+    - exec:
+        command: /usr/bin/python3
+        args:
+          - -u
+          - app.py
+          - --limit
+          - 10
   ```
 - **Script block** for multi-line scripts:
   ```yaml
@@ -65,13 +71,7 @@ Run system commands and scripts with the default step type.
         import sys
         print("Args:", sys.argv)
   ```
-- **Direct execution (no shell parsing)**:
-  ```yaml
-  steps:
-    - shell: direct
-      command: [/usr/bin/python3, -u, script.py]
-  ```
-- **Working directory and env**: set `working_dir`/`dir` and `env` on the step (or DAG defaults) to control context.
+- **Working directory and env**: set `working_dir` and `env` on the step (or DAG defaults) to control context.
 
 ## Script Behavior
 
@@ -80,6 +80,7 @@ Run system commands and scripts with the default step type.
 - Without a shebang, the resolved shell runs the script file. When Dagu provides the default Unix shell, it appends `-e` so the script stops on the first failing command (step-level shells are left unchanged).
 - When you set both `command` and `script`, the `command` acts as the interpreter and receives the script path (no shell wrapper) — ideal for `command: python3` with inline code.
 - Multi-line `command` strings (using YAML `|` block) are treated the same as `script:`: they are saved to a temp file and executed as a script rather than split into args.
+- `exec:` bypasses shell parsing entirely. It cannot be combined with `command`, `script`, `shell`, or `shell_packages`.
 
 ## Built-in Safety Defaults
 

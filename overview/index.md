@@ -9,6 +9,7 @@ Dagu is a local-first workflow engine. It is declarative, file-based, self-conta
 ## Key Capabilities
 
 - **Declarative YAML** - JSON Schema validation with clear error messages
+- **Custom step types** - Reusable wrappers around builtin step types with JSON Schema-validated input
 - **Composable workflows** - Nest sub-DAGs with parameters (depth limited only by available memory)
 - **Distributed execution** - Route tasks to workers via labels (GPU, region, etc.)
 - **Scheduler** - Cron expressions with start/stop/restart support
@@ -163,17 +164,24 @@ See [Architecture](/overview/architecture) for details.
 | `command` | Shell commands (bash, sh, PowerShell, cmd) |
 | `agent` | LLM-powered agent with tool-calling loop |
 | `ssh` | Remote command execution via SSH |
+| `sftp` | Remote file transfer via SFTP |
 | `docker` | Container execution with volume mounts and registry auth |
 | `k8s`, `kubernetes` | Run a step as a Kubernetes Job with DAG-level defaults |
+| `harness` | Run CLI-based coding agents and custom harness adapters |
 | `http` | HTTP/REST API requests |
-| `approval` | Human approval gate (field on any step type) |
 | `jq` | JSON query and transformation |
 | `template` | Text rendering with Go templates and structured data |
 | `mail` | Email notifications with attachments |
 | `dag` | Sub-workflow execution (hierarchical composition) |
-| `harness` | Run coding agent CLIs (Claude Code, Codex, Copilot, OpenCode, Pi) |
+| `router` | Route execution by evaluated value |
+| `postgres`, `sqlite` | SQL queries |
+| `redis` | Redis commands and scripts |
+| `s3` | S3 object operations |
+| `chat` | LLM chat completion |
 
-See [Step Types Reference](/step-types/shell) for configuration details.
+`approval` is not a step type. It is a field available on steps to pause a workflow for human review. See [Approval](/writing-workflows/approval).
+
+You can also define reusable `step_types` in a DAG or base config. See [Custom Step Types](/writing-workflows/custom-step-types) and [Step Types Reference](/step-types/shell) for the exact configuration surface.
 
 ## Learn More
 

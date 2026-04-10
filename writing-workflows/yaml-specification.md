@@ -256,6 +256,23 @@ steps:
 
 See [Step Defaults](/writing-workflows/step-defaults) for detailed documentation and examples.
 
+### Custom Step Types
+
+| Field | Type | Description | Default |
+|-------|------|-------------|---------|
+| `step_types` | object | Reusable custom step type definitions for this YAML document. Merged with base-config `step_types` per document. Duplicate names across scopes are rejected. | - |
+
+Custom step types expand to builtin-backed steps during DAG load. They are not runtime plugins.
+
+Each definition accepts:
+
+- `type`: required builtin step type or builtin alias
+- `input_schema`: required inline JSON Schema object, which must resolve to an object schema
+- `template`: required step fragment expanded at build time
+- `description`: optional fallback description for the expanded step
+
+See [Custom Step Types](/writing-workflows/custom-step-types) for the full definition rules, template rendering behavior, and call-site restrictions.
+
 ### Data Fields
 
 | Field | Type | Description | Default |
@@ -626,6 +643,8 @@ Flag generation rules:
 - built-in providers and custom `arg` / `flag` definitions pass `command` on argv and pipe `script` to stdin
 - custom `stdin` definitions put the prompt on stdin; if both `command` and `script` are present, stdin is `prompt + "\n\n" + script`
 
+Harness steps accept one prompt command. Multiple command arrays are rejected.
+
 See [Harness Step](/step-types/harness) for provider details, fallback behavior, and examples.
 
 ### Redis Configuration
@@ -920,7 +939,9 @@ Each step in the `steps` array can have these fields:
 | Field | Type | Description | Default |
 |-------|------|-------------|---------|
 | `name` | string | Step name (optional - auto-generated if not provided) | Auto-generated |
+| `id` | string | Optional stable identifier for references and dependencies | - |
 | `command` | string/array | Command to execute. Can be a string (single command), array of strings (multiple commands executed sequentially), or multi-line string (runs as inline script). | - |
+| `exec` | object | Direct binary execution with explicit argv and no shell parsing | - |
 | `script` | string | Inline script (alternative to command). Honors shebang when no shell is set. | - |
 | `depends` | string/array | Step dependencies | - |
 
@@ -952,6 +973,28 @@ Commands run in order and stop on first failure. Retries restart from the first 
 
 These step types do not support multi-command arrays. Use `script:` for `template` steps. Unsupported configurations are rejected at parse time.
 
+#### Direct Exec
+
+`exec` runs a binary with explicit argv and no shell parsing.
+
+```yaml
+steps:
+  - exec:
+      command: /usr/bin/python3
+      args:
+        - -u
+        - app.py
+        - --limit
+        - 10
+```
+
+Rules:
+
+- `exec.command` is required.
+- `exec.args` accepts strings, numbers, and booleans.
+- `exec` cannot be combined with `command`, `script`, `shell`, or `shell_packages`.
+- `working_dir`, `env`, `stdout`, `stderr`, `retry_policy`, `output`, and other normal orchestration fields still apply.
+
 ### Step Definition Formats
 
 Steps can be defined in multiple formats:
@@ -981,7 +1024,7 @@ steps:
 | `output` | string/object | Capture output to a variable. Object form supports `name`, `key`, `omit`, and `schema`. | - |
 | `env` | array/object | Step-specific environment variables (overrides DAG-level) | - |
 | `call` | string | Name of a DAG to execute as a sub DAG-run | - |
-| `params` | string/object | Parameters passed to sub DAGs or executor-specific inputs | - |
+| `params` | string/object | Parameters passed to sub DAGs | - |
 
 `shell` accepts either a string (e.g., `"bash -e"`) or an array (e.g., `["bash", "-e"]`). DAG-level values expand environment variables when the workflow loads; step-level values are evaluated at runtime so you can reference parameters, secrets, or previous outputs.
 
@@ -1183,8 +1226,8 @@ When using `container`, you cannot use `executor` or `script` fields on the same
 
 | Field | Type | Description | Default |
 |-------|------|-------------|---------|
-| `type` | string | Step type (ssh, http, jq, mail, harness, etc.) | shell |
-| `config` | object | Step type-specific configuration | - |
+| `type` | string | Builtin step type or custom step type name declared in `step_types` or base config | Inferred from other step fields when omitted |
+| `config` | object | Builtin executor configuration, or validated input for a custom step type definition | - |
 
 ```yaml
 steps:
@@ -1194,6 +1237,10 @@ steps:
       destination: ./assets
     command: extract
 ```
+
+If `type` refers to a custom step type, `config` is validated against that definition's `input_schema` and then used to render its `template`. Custom step call sites can still set orchestration fields such as `depends`, `retry_policy`, `env`, `timeout_sec`, `output`, and `approval`, but action-defining fields such as `command`, `exec`, `script`, `shell`, `call`, `parallel`, `container`, `llm`, `messages`, `agent`, and `routes` are rejected at the call site.
+
+See [Custom Step Types](/writing-workflows/custom-step-types) for the exact allowed field set.
 
 ### Chat (LLM)
 
