@@ -1241,6 +1241,8 @@ steps:
 
 If `type` refers to a custom step type, schema defaults are applied to `config`, the result is validated against that definition's `input_schema`, and then it is used to render the definition's `template`. Custom step call sites can still set orchestration fields such as `depends`, `retry_policy`, `env`, `timeout_sec`, `output`, and `approval`, but action-defining fields such as `command`, `exec`, `script`, `shell`, `shell_packages`, `working_dir`, `call`, `params`, `parallel`, `container`, `llm`, `messages`, `agent`, `value`, and `routes` are rejected at the call site.
 
+Custom-step precedence is `call site > template > defaults` for replacement fields. For additive fields, `env` and `preconditions` compose as `defaults -> template -> call site`.
+
 See [Custom Step Types](/writing-workflows/custom-step-types) for the exact allowed field set.
 
 ### Chat (LLM)

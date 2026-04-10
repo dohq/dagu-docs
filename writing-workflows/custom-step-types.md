@@ -140,6 +140,17 @@ Rejected call-site fields:
 
 If you need one of the rejected fields, put it in `template`.
 
+Precedence for custom step expansion is:
+
+- Explicit allowed call-site fields override the rendered template.
+- Explicit fields in the rendered template override DAG or base-config `defaults`.
+- Additive fields compose in this order: `defaults`, then `template`, then explicit call-site values.
+
+For additive fields, this means:
+
+- `env` entries from `defaults` are prepended before `template.env`, and explicit call-site `env` entries are appended last.
+- `preconditions` from `defaults` run before `template.preconditions`, and explicit call-site `preconditions` run last.
+
 ## Base Config Example
 
 `base.yaml`
