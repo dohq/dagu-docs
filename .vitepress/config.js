@@ -117,6 +117,7 @@ const fullSidebar = [
           { text: "Overview", link: "/features/bots/" },
           { text: "Telegram", link: "/features/bots/telegram" },
           { text: "Slack", link: "/features/bots/slack" },
+          { text: "Discord", link: "/features/bots/discord" },
         ],
       },
     ],
