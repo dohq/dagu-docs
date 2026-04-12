@@ -364,7 +364,7 @@ See [Examples](/writing-workflows/examples) for more patterns.
 
 ## Version-Controlled Workflows
 
-Dagu supports Git sync to keep DAG definitions version-controlled. Enable `DAGU_GITSYNC_ENABLED=true` with a repository URL, and Dagu pulls DAG definitions from a Git branch. Optional auto-sync polls the repository at a configurable interval (default 300s). Supports token and SSH authentication.
+Dagu supports Git sync to keep DAG definitions, agent markdown files, and managed documents version-controlled. Enable `DAGU_GITSYNC_ENABLED=true` with a repository URL, and Dagu pulls tracked files from a Git branch. Optional auto-sync polls the repository at a configurable interval (default 300s). Supports token and SSH authentication.
 
 See [Git Sync](/server-admin/git-sync) for configuration.
 

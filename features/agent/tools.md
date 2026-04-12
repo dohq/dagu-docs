@@ -142,7 +142,7 @@ Spawn sub-agents that execute tasks in parallel.
 
 Each sub-agent:
 - Runs in a separate session linked to the parent via `ParentSessionID`
-- Receives the same system prompt and all tools except `delegate`, `ask_user`, and `navigate`
+- Receives the same system prompt and all tools except `delegate`, `ask_user`, `navigate`, `remote_agent`, and `list_contexts`
 - Does not receive the parent conversation history
 - Executes its full tool-calling loop, then returns its last assistant text response as a summary to the parent
 
@@ -197,14 +197,14 @@ Task descriptions in the output are truncated to 60 characters.
 
 ## remote_agent
 
-Send a task to a configured remote node.
+Send a task through a configured remote CLI context.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `context` | string | Yes | Remote node name |
+| `context` | string | Yes | Remote CLI context name |
 | `message` | string | Yes | Task or prompt to send to the remote agent |
 
-**Availability**: Only shown when remote nodes are configured.
+**Availability**: Only shown when remote contexts are configured.
 
 **Behavior**:
 - Requires execute permission
@@ -216,12 +216,15 @@ Send a task to a configured remote node.
 
 ## list_contexts
 
-List remote nodes available to `remote_agent`.
+List remote CLI contexts available to `remote_agent`.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `name_filter` | string | No | Optional substring filter for node names |
+| `name_filter` | string | No | Optional substring filter for context names |
 
-**Availability**: Only shown when remote nodes are configured.
+**Availability**: Only shown when remote contexts are configured.
 
-**Output**: A markdown list of matching node names and descriptions.
+**Behavior**:
+- Requires execute permission
+
+**Output**: A markdown list of matching context names and descriptions.

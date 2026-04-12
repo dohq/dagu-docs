@@ -1,5 +1,33 @@
 # Changelog
 
+## v2.5.0 (2026-04-12)
+
+### Added
+
+- feat: add DAG run artifacts support ([#1998](https://github.com/dagucloud/dagu/pull/1998))
+- feat(spec): add build-time custom step types ([#1987](https://github.com/dagucloud/dagu/pull/1987))
+- feat: add harness executor for coding agent CLI orchestration ([#1978](https://github.com/dagucloud/dagu/pull/1978))
+- feat: add definition page link to DAG run details header ([#1977](https://github.com/dagucloud/dagu/pull/1977))
+
+### Fixed
+
+- fix: improve git sync publish and filtering ([#1971](https://github.com/dagucloud/dagu/pull/1971))
+- fix: return DAG with errors instead of 404 for invalid YAML files ([#1975](https://github.com/dagucloud/dagu/pull/1975))
+- fix: re-fetch auth providers after setup step 1 authentication ([#1974](https://github.com/dagucloud/dagu/pull/1974))
+- fix: generate coordinator proto in hybrid mode ([#1970](https://github.com/dagucloud/dagu/pull/1970))
+- fix: make agent chat working state optimistic in web UI ([#1972](https://github.com/dagucloud/dagu/pull/1972))
+- fix: honor inherited DAG type during validation ([#1981](https://github.com/dagucloud/dagu/pull/1981))
+- fix: expire stale pending dispatch reservations ([#1982](https://github.com/dagucloud/dagu/pull/1982))
+- fix: distribute agent snapshots to shared-nothing workers ([#1986](https://github.com/dagucloud/dagu/pull/1986))
+- fix: remove third-party skill installation from embedded AI agent ([#1988](https://github.com/dagucloud/dagu/pull/1988))
+- fix: correct queue counts for distributed runs ([#1992](https://github.com/dagucloud/dagu/pull/1992))
+- fix: route local dag-run stop correctly ([#1993](https://github.com/dagucloud/dagu/pull/1993))
+- fix(config): whitelist common Windows profile env vars (#1991, [#1995](https://github.com/dagucloud/dagu/pull/1995))
+- fix(agent): add Windows fallback for bash tool ([#1999](https://github.com/dagucloud/dagu/pull/1999))
+- fix(auth): align gated features with current license state ([#2000](https://github.com/dagucloud/dagu/pull/2000))
+
+**Full Changelog**: [v2.4.3...v2.5.0](https://github.com/dagucloud/dagu/compare/v2.4.3...v2.5.0)
+
 ## v2.4.3 (2026-04-05)
 
 ### Fixed

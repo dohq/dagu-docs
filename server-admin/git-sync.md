@@ -1,6 +1,6 @@
 # Git Sync
 
-Git Sync synchronizes local DAG files and agent files (memory, souls) with a remote Git repository.
+Git Sync synchronizes local DAG files plus markdown-backed agent files (`memory/`, `skills/`, `souls/`) and documents under `docs/` with a remote Git repository.
 
 ## Tracked Files and Item IDs
 
@@ -12,7 +12,9 @@ Git Sync tracks items by `itemId` — the file path relative to the DAGs directo
 | `subdir/report.yml` | `subdir/report` | `dag` |
 | `memory/MEMORY.md` | `memory/MEMORY` | `memory` |
 | `memory/dags/my-dag/MEMORY.md` | `memory/dags/my-dag/MEMORY` | `memory` |
+| `skills/review/SKILL.md` | `skills/review/SKILL` | `skill` |
 | `souls/persona.md` | `souls/persona` | `soul` |
+| `docs/runbooks/deployment.md` | `docs/runbooks/deployment` | `doc` |
 
 ## File Scanning Rules
 
@@ -20,7 +22,7 @@ Implemented in `internal/gitsync/service.go`.
 
 ### Remote scan
 
-Includes files with extensions `.yaml`, `.yml`, and `.md`. Files with `.md` extension are only accepted when the item ID starts with `memory/` or `souls/`.
+Includes files with extensions `.yaml`, `.yml`, and `.md`. Files with `.md` extension are only accepted when the item ID starts with `memory/`, `skills/`, `souls/`, or `docs/`.
 
 ### Local untracked scan
 
@@ -28,7 +30,9 @@ Discovers local files not yet in sync state:
 
 - **DAGs**: `.yaml` and `.yml` files in the root of `{dags_dir}/`. Flat scan, not recursive.
 - **Memory**: any `.md` file under `memory/`. Recursive walk through all subdirectories.
+- **Skills**: `skills/<name>/SKILL.md`. The scan is one directory level under `skills/`; only `SKILL.md` is tracked for each skill.
 - **Souls**: `souls/*.md`. Flat scan, not recursive.
+- **Docs**: any `.md` file under `docs/`. Recursive walk through all subdirectories.
 
 ## Configuration
 
@@ -268,6 +272,8 @@ Two modes:
 - **Preemptive**: source file exists on disk. Reads it, writes to new location, stages removal+addition in repo, commits and pushes.
 - **Retroactive**: source is missing but the new file already exists at destination. Reads new file, stages old removal + new addition, commits and pushes.
 
+For `kind=skill`, a preemptive move renames the whole `skills/<name>/` directory so companion files move with `SKILL.md`.
+
 ## REST API
 
 ### Endpoints
@@ -331,7 +337,7 @@ Response:
 
 - `items` are sorted by `filePath`.
 - For `kind=dag`, `filePath` is `itemId + ".yaml"`.
-- For `kind=memory` or `kind=soul`, `filePath` is `itemId + ".md"`.
+- For `kind=memory`, `kind=skill`, `kind=soul`, or `kind=doc`, `filePath` is `itemId + ".md"`.
 - `displayName` equals `filePath`.
 
 ### Diff

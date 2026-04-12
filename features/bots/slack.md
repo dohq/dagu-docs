@@ -223,12 +223,14 @@ If the prompt allows free text (`AllowFreeText: true`), the user can also reply 
 
 ## Session Rotation
 
-The bot tracks token usage across all messages in a session. When total tokens exceed 50% of the assumed context limit (200,000 tokens), the bot automatically:
+When the current session is idle and has no pending prompt, Dagu checks the latest assistant-reported prompt token count. If it reaches 80% of the model context window, Dagu compacts the session. If the model does not declare a context window, Dagu uses a fallback of 200,000 tokens.
 
-1. Collects the last 3 user/assistant exchanges from the old session (each truncated to 200/300 characters respectively)
-2. Resets the chat state
-3. Creates a new session with the summary prepended to the user's message
-4. Sends a notice: `(Session context limit reached — continuing with recent context carried forward)`
+1. Builds a transcript from prior user, assistant, error, and prompt messages.
+2. Asks the model for a handoff summary.
+3. Creates a continuation session and stores that summary as an assistant message prefixed with `Session handoff summary:\n`.
+4. Switches the conversation to the new session.
+
+The stored handoff summary is marked as already delivered for chat bridges, so Slack does not replay it as a visible message.
 
 ## DAG Run Notifications
 
@@ -249,8 +251,8 @@ Notifications are sent for these DAG run statuses:
 
 1. The monitor polls the event store every **10 seconds** and reads only new DAG-run events, using durable on-disk state so restarts do not lose pending notifications.
 2. On first startup, it seeds its cursor at the current event-store head, so existing channels only receive future events.
-3. For each new completion, it creates a **dedicated agent session** per allowed channel, sends a structured prompt with the run details (DAG name, status, error, start/finish times, step results), and waits for the agent to generate a notification message (up to **10 minutes**).
-4. The notification session is **adopted** as the channel's active session, so users can send follow-up messages like "show me the logs" or "retry it".
+3. For each destination, it batches pending DAG-run notifications. Urgent single-run batches try to generate the message with the agent; all other batches use deterministic formatting. Batch delivery uses a **30-second** flush timeout.
+4. For direct-message destinations, the notification is appended to the DM-scoped session. For channel destinations, Slack posts a new thread root message and binds that thread to a session so follow-up replies continue there.
 5. Delivered entries are retained for **2 hours** to suppress duplicate event replays, while failed deliveries remain pending and are retried.
 
 ### Fallback
