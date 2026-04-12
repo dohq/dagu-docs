@@ -29,33 +29,40 @@ const fullSidebar = [
   {
     text: "Writing Workflows",
     items: [
+      // Core foundations
       { text: "Introduction", link: "/writing-workflows/" },
       { text: "Basics", link: "/writing-workflows/basics" },
       { text: "Parameters", link: "/writing-workflows/parameters" },
       { text: "Environment Variables", link: "/writing-workflows/environment-variables" },
       { text: "Secrets", link: "/writing-workflows/secrets" },
+      // Variables & data
+      { text: "Template Variables", link: "/writing-workflows/template-variables" },
+      { text: "Runtime Variables", link: "/writing-workflows/runtime-variables" },
       { text: "Data & Variables", link: "/writing-workflows/data-variables" },
-      { text: "Control Flow", link: "/writing-workflows/control-flow" },
-      { text: "Scheduling", link: "/writing-workflows/scheduling" },
-      { text: "Execution Control", link: "/writing-workflows/execution-control" },
-      { text: "Durable Execution", link: "/writing-workflows/durable-execution" },
-      { text: "Queue Assignment", link: "/writing-workflows/queues" },
-      { text: "Approval Gates", link: "/writing-workflows/approval" },
-      { text: "Error Handling", link: "/writing-workflows/error-handling" },
-      { text: "Continue On", link: "/writing-workflows/continue-on" },
-      { text: "Lifecycle Handlers", link: "/writing-workflows/lifecycle-handlers" },
-      { text: "Email Notifications", link: "/writing-workflows/email-notifications" },
-      { text: "Step Defaults", link: "/writing-workflows/step-defaults" },
-      { text: "Resource Limits", link: "/writing-workflows/resource-limits" },
-      { text: "Container", link: "/writing-workflows/container" },
       { text: "Data Flow", link: "/writing-workflows/data-flow" },
       { text: "Outputs", link: "/writing-workflows/outputs" },
       { text: "Artifacts", link: "/writing-workflows/artifacts" },
+      // Flow control
+      { text: "Control Flow", link: "/writing-workflows/control-flow" },
+      { text: "Scheduling", link: "/writing-workflows/scheduling" },
+      { text: "Execution Control", link: "/writing-workflows/execution-control" },
+      // Reliability & error handling
+      { text: "Error Handling", link: "/writing-workflows/error-handling" },
+      { text: "Continue On", link: "/writing-workflows/continue-on" },
+      { text: "Durable Execution", link: "/writing-workflows/durable-execution" },
+      // Advanced execution
+      { text: "Queue Assignment", link: "/writing-workflows/queues" },
+      { text: "Approval Gates", link: "/writing-workflows/approval" },
+      { text: "Lifecycle Handlers", link: "/writing-workflows/lifecycle-handlers" },
+      { text: "Email Notifications", link: "/writing-workflows/email-notifications" },
+      // Configuration
+      { text: "Step Defaults", link: "/writing-workflows/step-defaults" },
+      { text: "Resource Limits", link: "/writing-workflows/resource-limits" },
+      { text: "Container", link: "/writing-workflows/container" },
       { text: "Tags", link: "/writing-workflows/tags" },
+      // Reference
       { text: "Examples", link: "/writing-workflows/examples/" },
       { text: "YAML Specification", link: "/writing-workflows/yaml-specification" },
-      { text: "Template Variables", link: "/writing-workflows/template-variables" },
-      { text: "Runtime Variables", link: "/writing-workflows/runtime-variables" },
     ],
   },
   {
