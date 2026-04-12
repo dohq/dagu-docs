@@ -4,27 +4,49 @@
 
 ### Added
 
-- feat: add DAG run artifacts support ([#1998](https://github.com/dagucloud/dagu/pull/1998))
-- feat(spec): add build-time custom step types ([#1987](https://github.com/dagucloud/dagu/pull/1987))
-- feat: add harness executor for coding agent CLI orchestration ([#1978](https://github.com/dagucloud/dagu/pull/1978))
-- feat: add definition page link to DAG run details header ([#1977](https://github.com/dagucloud/dagu/pull/1977))
+- feat: add definition page link to DAG run details header ([#1977](https://github.com/dagu-org/dagu/pull/1977)) [@yottahmd](https://github.com/yottahmd)
+- feat: add harness executor for coding agent CLI orchestration ([#1978](https://github.com/dagu-org/dagu/pull/1978)) [@yottahmd](https://github.com/yottahmd)
+- feat: add DAG definition improvement flow from the spec editor ([#1980](https://github.com/dagu-org/dagu/pull/1980)) [@yottahmd](https://github.com/yottahmd)
+- feat(spec): add build-time custom step types ([#1987](https://github.com/dagu-org/dagu/pull/1987)) [@yottahmd](https://github.com/yottahmd)
+- feat(ui): add custom step editor autocomplete ([#1989](https://github.com/dagu-org/dagu/pull/1989)) [@yottahmd](https://github.com/yottahmd)
+- feat(bots): add Discord bot integration ([#1990](https://github.com/dagu-org/dagu/pull/1990)) [@yottahmd](https://github.com/yottahmd)
+- feat(ui): add inherited custom step editor hints ([#1994](https://github.com/dagu-org/dagu/pull/1994)) [@yottahmd](https://github.com/yottahmd)
+- feat: add DAG run artifacts support ([#1998](https://github.com/dagu-org/dagu/pull/1998)) [@yottahmd](https://github.com/yottahmd)
+
+### Changed
+
+- chore: remove experimental gha (GitHub Actions) executor ([#1983](https://github.com/dagu-org/dagu/pull/1983)) [@yottahmd](https://github.com/yottahmd)
+- chore(deps): bump go-jose and otel to fix Trivy HIGH CVEs ([#1984](https://github.com/dagu-org/dagu/pull/1984)) [@yottahmd](https://github.com/yottahmd)
+- chore: pin GitHub Actions to commit SHAs and update to latest versions ([#1985](https://github.com/dagu-org/dagu/pull/1985)) [@yottahmd](https://github.com/yottahmd)
+- test(e2e): add distributed stack Playwright harness ([#1996](https://github.com/dagu-org/dagu/pull/1996)) [@yottahmd](https://github.com/yottahmd)
 
 ### Fixed
 
-- fix: improve git sync publish and filtering ([#1971](https://github.com/dagucloud/dagu/pull/1971))
-- fix: return DAG with errors instead of 404 for invalid YAML files ([#1975](https://github.com/dagucloud/dagu/pull/1975))
-- fix: re-fetch auth providers after setup step 1 authentication ([#1974](https://github.com/dagucloud/dagu/pull/1974))
-- fix: generate coordinator proto in hybrid mode ([#1970](https://github.com/dagucloud/dagu/pull/1970))
-- fix: make agent chat working state optimistic in web UI ([#1972](https://github.com/dagucloud/dagu/pull/1972))
-- fix: honor inherited DAG type during validation ([#1981](https://github.com/dagucloud/dagu/pull/1981))
-- fix: expire stale pending dispatch reservations ([#1982](https://github.com/dagucloud/dagu/pull/1982))
-- fix: distribute agent snapshots to shared-nothing workers ([#1986](https://github.com/dagucloud/dagu/pull/1986))
-- fix: remove third-party skill installation from embedded AI agent ([#1988](https://github.com/dagucloud/dagu/pull/1988))
-- fix: correct queue counts for distributed runs ([#1992](https://github.com/dagucloud/dagu/pull/1992))
-- fix: route local dag-run stop correctly ([#1993](https://github.com/dagucloud/dagu/pull/1993))
-- fix(config): whitelist common Windows profile env vars (#1991, [#1995](https://github.com/dagucloud/dagu/pull/1995))
-- fix(agent): add Windows fallback for bash tool ([#1999](https://github.com/dagucloud/dagu/pull/1999))
-- fix(auth): align gated features with current license state ([#2000](https://github.com/dagucloud/dagu/pull/2000))
+- fix: generate coordinator proto in hybrid mode ([#1970](https://github.com/dagu-org/dagu/pull/1970)) [@yottahmd](https://github.com/yottahmd)
+- fix: improve git sync publish and filtering ([#1971](https://github.com/dagu-org/dagu/pull/1971)) [@yottahmd](https://github.com/yottahmd)
+- fix: make agent chat working state optimistic in web UI ([#1972](https://github.com/dagu-org/dagu/pull/1972)) [@yottahmd](https://github.com/yottahmd)
+- fix: replace time.Sleep with deterministic synchronization in tests ([#1973](https://github.com/dagu-org/dagu/pull/1973)) [@yottahmd](https://github.com/yottahmd)
+- fix: re-fetch auth providers after setup step 1 authentication ([#1974](https://github.com/dagu-org/dagu/pull/1974)) [@yottahmd](https://github.com/yottahmd)
+- fix: return DAG with errors instead of 404 for invalid YAML files ([#1975](https://github.com/dagu-org/dagu/pull/1975)) [@yottahmd](https://github.com/yottahmd)
+- fix: honor inherited DAG type during validation ([#1981](https://github.com/dagu-org/dagu/pull/1981)) [@yottahmd](https://github.com/yottahmd)
+- fix: expire stale pending dispatch reservations ([#1982](https://github.com/dagu-org/dagu/pull/1982)) [@yottahmd](https://github.com/yottahmd)
+- fix: distribute agent snapshots to shared-nothing workers ([#1986](https://github.com/dagu-org/dagu/pull/1986)) [@yottahmd](https://github.com/yottahmd)
+- fix: remove third-party skill installation from embedded AI agent ([#1988](https://github.com/dagu-org/dagu/pull/1988)) [@yottahmd](https://github.com/yottahmd)
+- fix: correct queue counts for distributed runs ([#1992](https://github.com/dagu-org/dagu/pull/1992)) [@yottahmd](https://github.com/yottahmd)
+- fix: route local dag-run stop correctly ([#1993](https://github.com/dagu-org/dagu/pull/1993)) [@yottahmd](https://github.com/yottahmd)
+- fix(config): whitelist common Windows profile env vars (#1991) ([#1995](https://github.com/dagu-org/dagu/pull/1995)) [@yottahmd](https://github.com/yottahmd)
+- fix(agent): add Windows fallback for bash tool ([#1999](https://github.com/dagu-org/dagu/pull/1999)) [@yottahmd](https://github.com/yottahmd)
+- fix(auth): align gated features with current license state ([#2000](https://github.com/dagu-org/dagu/pull/2000)) [@yottahmd](https://github.com/yottahmd)
+
+### Contributors
+
+Thanks to our contributors for this release:
+
+| Contribution | Contributor |
+| --- | --- |
+| Type inheritance for base config still fails validation in v2.4.3 ([#1979](https://github.com/dagu-org/dagu/issues/1979)) | [@bagemt](https://github.com/bagemt) (report) |
+| Bug: some scheduled tasks are queued but not run ([#1837](https://github.com/dagu-org/dagu/issues/1837)) | [@jonasban](https://github.com/jonasban) (report) |
+| Suggestion for Windows: Add more Windows' default environment variables to the whitelist ([#1991](https://github.com/dagu-org/dagu/issues/1991)) | [@ruxo](https://github.com/ruxo) (report) |
 
 **Full Changelog**: [v2.4.3...v2.5.0](https://github.com/dagucloud/dagu/compare/v2.4.3...v2.5.0)
 
