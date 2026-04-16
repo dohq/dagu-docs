@@ -497,7 +497,7 @@ preconditions:
 
 ### Secrets
 
-Reference external secrets. Built-in providers are `env`, `file`, and `vault`; provider-specific behavior is documented in [Secrets](/writing-workflows/secrets).
+Reference external secrets. Built-in providers are `env`, `file`, `kubernetes`, and `vault`; provider-specific behavior is documented in [Secrets](/writing-workflows/secrets).
 
 ```yaml
 # base.yaml

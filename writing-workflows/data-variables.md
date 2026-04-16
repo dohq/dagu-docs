@@ -189,6 +189,7 @@ steps:
 
 - `env` reads from existing environment variables. Use it when CI/CD or your process manager injects secrets into the runtime environment.
 - `file` reads from files. Relative paths first try the DAG’s `working_dir`, then fall back to the directory containing the DAG file.
+- `kubernetes` reads one data key from a Kubernetes Secret resource.
 - `vault` reads one field from a HashiCorp Vault secret response.
 
 Providers can expose additional configuration through the optional `options` map. Values must be strings so they can be forwarded to provider-specific clients.

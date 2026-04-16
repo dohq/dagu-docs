@@ -381,6 +381,9 @@ Legacy YAML keys `scheduler.heartbeat_interval`, `scheduler.heartbeat_sync_inter
 ### External Secrets
 - `DAGU_SECRETS_VAULT_ADDRESS` - Default Vault server address for the `vault` secret provider
 - `DAGU_SECRETS_VAULT_TOKEN` - Default Vault token for the `vault` secret provider
+- `DAGU_SECRETS_KUBERNETES_NAMESPACE` - Default namespace for the `kubernetes` secret provider
+- `DAGU_SECRETS_KUBERNETES_KUBECONFIG` - Default kubeconfig path for the `kubernetes` secret provider
+- `DAGU_SECRETS_KUBERNETES_CONTEXT` - Default kubeconfig context for the `kubernetes` secret provider
 
 ### Git Sync
 - `DAGU_GITSYNC_ENABLED` - Enable git sync (default: `false`)

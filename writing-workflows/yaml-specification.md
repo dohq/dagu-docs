@@ -483,8 +483,8 @@ The `secrets` block defines environment variables whose values are fetched at ru
 | Field | Type | Description |
 |-------|------|-------------|
 | `name` | string | Environment variable name exposed to steps (required) |
-| `provider` | string | Secret provider identifier (required). Built-in providers are `env`, `file`, and `vault`. |
-| `key` | string | Provider-specific key (required). For `env` this is the source variable name. For `file` this is a path. For `vault` this is a Vault path or a `path/field` pair, depending on `options.field`. |
+| `provider` | string | Secret provider identifier (required). Built-in providers are `env`, `file`, `kubernetes`, and `vault`. |
+| `key` | string | Provider-specific key (required). For `env` this is the source variable name. For `file` this is a path. For `kubernetes` this is a `secret-name/data-key` pair unless `options.secret_name` is set. For `vault` this is a Vault path or a `path/field` pair, depending on `options.field`. |
 | `options` | object | Provider-specific options (optional). Values must be strings. |
 
 `key` and `options` are literal provider inputs. Dagu does not expand `${...}` expressions inside them.
@@ -499,6 +499,11 @@ secrets:
   - name: API_TOKEN
     provider: file
     key: ../secrets/api-token    # Relative paths resolve using working_dir then DAG file directory
+  - name: DB_PASSWORD
+    provider: kubernetes
+    key: app-secrets/db-password
+    options:
+      namespace: production
 ```
 
 Secret values are injected after DAG-level variables and built-in runtime variables, meaning they take precedence over everything except step-level overrides. Dagu masks resolved secret values in its managed logs and captured outputs, but workflow code can still write those values elsewhere.

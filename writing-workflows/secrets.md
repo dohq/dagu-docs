@@ -8,6 +8,7 @@ The current built-in resolver registry contains exactly these providers:
 |----------|--------|
 | `env` | A variable from the context environment scope, an internal Dagu transport variable, or the Dagu process environment |
 | `file` | The complete contents of one local file |
+| `kubernetes` | One data key from a Kubernetes Secret resource |
 | `vault` | One field from a HashiCorp Vault secret response |
 
 `dotenv:` is related, but it is not a secret provider. Dotenv files load normal DAG environment variables. A dotenv value becomes a masked secret only when a `secrets:` entry reads it through `provider: env`.
@@ -28,7 +29,7 @@ secrets:
 | Field | Required | Meaning |
 |-------|----------|---------|
 | `name` | Yes | Target environment variable name injected into the run |
-| `provider` | Yes | Resolver name. Built-in values are `env`, `file`, and `vault` |
+| `provider` | Yes | Resolver name. Built-in values are `env`, `file`, `kubernetes`, and `vault` |
 | `key` | Yes | Provider-specific lookup key |
 | `options` | No | Provider-specific string map |
 
@@ -130,6 +131,7 @@ Masking is not a process sandbox. The step process receives the raw secret in it
 - [Dotenv Loading](/writing-workflows/secrets/dotenv)
 - [`env` Provider](/writing-workflows/secrets/env-provider)
 - [`file` Provider](/writing-workflows/secrets/file-provider)
+- [Kubernetes Provider](/writing-workflows/secrets/kubernetes-provider)
 - [HashiCorp Vault Provider](/writing-workflows/secrets/vault-provider)
 
 ## Complete Example
@@ -153,6 +155,11 @@ secrets:
   - name: API_KEY
     provider: vault
     key: kv/data/prod/api/key
+  - name: STRIPE_WEBHOOK_SECRET
+    provider: kubernetes
+    key: payments/stripe-webhook-secret
+    options:
+      namespace: prod
 
 steps:
   - name: deploy
