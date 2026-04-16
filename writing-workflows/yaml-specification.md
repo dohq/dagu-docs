@@ -1266,7 +1266,7 @@ steps:
     command: extract
 ```
 
-If `type` refers to a custom step type, schema defaults are applied to `config`, the result is validated against that definition's `input_schema`, and then it is used to render the definition's `template` during DAG load. Runtime expressions can be used in custom `config` as scalar leaves: string schema fields may contain embedded expressions, while integer, number, boolean, and scalar enum fields require the expression to be the whole value, such as `${COUNT}`. The template is not rendered again when the step executes.
+If `type` refers to a custom step type, schema defaults are applied to `config`, the result is validated against that definition's `input_schema`, and then it is used to render the definition's `template` during DAG load. Runtime expressions can be written directly in `template` strings or used in custom `config` as scalar leaves. Direct template expressions such as `${COUNT}` are preserved by custom template rendering and expand later only if the expanded builtin step field is runtime-evaluated. For custom `config`, string schema fields may contain embedded expressions, while integer, number, boolean, and scalar enum fields require the expression to be the whole value. The template is not rendered again when the step executes.
 
 Custom step call sites can still set orchestration fields such as `depends`, `retry_policy`, `env`, `timeout_sec`, `output`, and `approval`, but action-defining fields such as `command`, `exec`, `script`, `shell`, `shell_packages`, `working_dir`, `call`, `params`, `parallel`, `container`, `llm`, `messages`, `agent`, `value`, and `routes` are rejected at the call site.
 

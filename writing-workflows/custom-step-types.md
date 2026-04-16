@@ -96,11 +96,44 @@ template:
 
 `$input` path resolution supports dotted object fields and numeric array indexes such as `items.0.name`.
 
-## Runtime Expressions in Config
+## Runtime Expressions
 
 Custom step templates are rendered while the DAG is loaded, before a step starts running. They are not rendered again when the step executes. This means runtime values cannot change Go template control flow and cannot change the static step graph.
 
-Runtime expressions are still valid custom-step inputs when they are passed through into fields that Dagu evaluates at execution time, such as command strings, command arguments, scripts, or executor config strings.
+Runtime expressions are still valid when they end up in fields that Dagu evaluates at execution time, such as command strings, command arguments, scripts, or executor config strings.
+
+If a runtime expression is written directly in `template`, it is ordinary text during custom template rendering. For example, `${COUNT}` is not Go template syntax, so it stays `${COUNT}` in the expanded builtin step. It expands later when that builtin step executes, provided it is in a runtime-evaluated field.
+
+```yaml
+type: graph
+
+step_types:
+  echo_count:
+    type: command
+    input_schema:
+      type: object
+      additionalProperties: false
+      properties: {}
+    template:
+      exec:
+        command: /bin/echo
+        args:
+          - ${COUNT}
+
+steps:
+  - id: produce
+    exec:
+      command: /bin/echo
+      args: [7]
+    output: COUNT
+
+  - id: consume
+    depends: [produce]
+    type: echo_count
+    output: OUT
+```
+
+Runtime expressions can also come from custom-step `config` and be passed through the template:
 
 ```yaml
 type: graph
