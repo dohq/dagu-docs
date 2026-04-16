@@ -82,7 +82,7 @@ Rules:
 
 - Missing template keys are errors.
 - The only built-in helper is `json`.
-- Schema defaults are applied to `config`, then the result is validated, then the template is rendered.
+- Schema defaults are applied to `config`, then the result is validated, then the template is rendered during DAG load.
 - Use `{$input: path.to.value}` for typed injection without string conversion.
 
 ```yaml
@@ -95,6 +95,56 @@ template:
 ```
 
 `$input` path resolution supports dotted object fields and numeric array indexes such as `items.0.name`.
+
+## Runtime Expressions in Config
+
+Custom step templates are rendered while the DAG is loaded, before a step starts running. They are not rendered again when the step executes. This means runtime values cannot change Go template control flow and cannot change the static step graph.
+
+Runtime expressions are still valid custom-step inputs when they are passed through into fields that Dagu evaluates at execution time, such as command strings, command arguments, scripts, or executor config strings.
+
+```yaml
+type: graph
+
+step_types:
+  repeat:
+    type: command
+    input_schema:
+      type: object
+      additionalProperties: false
+      required: [count]
+      properties:
+        count:
+          type: integer
+    template:
+      exec:
+        command: /bin/echo
+        args:
+          - {$input: count}
+
+steps:
+  - id: produce
+    exec:
+      command: /bin/echo
+      args: [3]
+    output: COUNT
+
+  - id: consume
+    depends: [produce]
+    type: repeat
+    config:
+      count: ${COUNT}
+    output: OUT
+```
+
+In this example, `config.count` is declared as an integer, but `${COUNT}` is accepted by load/save validation because it is a whole runtime expression. The template injects the literal string `${COUNT}` into the expanded builtin step. The command executor evaluates it when `consume` runs, after `produce` has written `COUNT`.
+
+Validation rules for runtime expressions in custom `config` are intentionally narrow:
+
+- String schema fields can contain embedded runtime expressions, such as `prefix-${NAME}`.
+- Integer, number, boolean, and scalar enum fields can use a runtime expression only as the whole value, such as `${COUNT}`, `$COUNT`, or `` `cat count.txt` ``.
+- Nested object properties and array items follow the same rule when their schema declares one of those scalar forms.
+- Unknown fields, missing required fields, invalid additional properties, and non-runtime invalid values are still rejected.
+- Custom input schema validation is not repeated after the runtime expression expands. The expanded builtin step and executor handle the final runtime value.
 
 ## Script Templates
 
