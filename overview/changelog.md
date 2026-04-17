@@ -2809,6 +2809,6 @@ None in v1.16.0
 
 ## See Also
 
-- [Installation Guide](/getting-started/installation) - Upgrade instructions
+- [Installation Guide](/getting-started/installation/) - Upgrade instructions
 - [Configuration Reference](/server-admin/reference) - New configuration options
 - [Examples](/writing-workflows/examples) - New feature examples

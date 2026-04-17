@@ -1,28 +1,17 @@
-# Quick Start
+# Quickstart
 
-Get up and running with Dagu in under 2 minutes.
+From zero to a running workflow in under five minutes.
 
-## Install Dagu
+## 1. Install
 
 ::: code-group
 
 ```bash [macOS/Linux]
-# Install to ~/.local/bin (default, no sudo required)
 curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.sh | bash
-
-# Install specific version
-curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.sh | bash -s -- --version vX.Y.Z
-
-# Install to custom directory
-curl -fsSL https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.sh | bash -s -- --install-dir /usr/local/bin
 ```
 
 ```powershell [Windows]
-# Open the guided installer with recommended defaults
 irm https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.ps1 | iex
-
-# Install specific version
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/dagucloud/dagu/main/scripts/installer.ps1))) -Version vX.Y.Z
 ```
 
 ```bash [Docker]
@@ -39,84 +28,36 @@ npm install -g --ignore-scripts=false @dagucloud/dagu
 
 :::
 
-The script installers open a guided wizard. They can install Dagu, add it to your PATH, set it up as a background service, create the first admin account, and install the Dagu AI skill when a supported AI tool is detected. Homebrew, npm, and Docker remain available, but they do not include the guided setup flow.
+The script installers run a guided wizard: PATH setup, background service, first admin account, and — if a supported AI coding tool is detected — the Dagu AI skill. Homebrew, npm, and Docker install the binary only.
 
-See [Installation Guide](/getting-started/installation) for more options.
+Full options (specific versions, custom directories, service scope, uninstall, CI/non-interactive): [Installation Guide](/getting-started/installation/).
 
-## AI-Assisted Workflow Authoring
-
-If you use an AI coding tool (Claude Code, Codex, OpenCode, Gemini CLI, or Copilot CLI), install the Dagu skill so the AI knows how to write correct DAG YAML files.
-
-If you installed Dagu with Homebrew, npm, or a manual binary download, run this after `dagu` is available on your PATH. The guided installer can offer the same step automatically.
-
-Use Dagu's built-in installer:
+Verify:
 
 ```bash
-dagu ai install --yes
+dagu version
 ```
 
-Fallback via the shared `skills` CLI:
+## 2. Write your first workflow
 
-```bash
-npx skills add https://github.com/dagucloud/dagu --skill dagu
-```
+A DAG is a YAML file. Save the following as `hello.yaml`:
 
-For explicit skills directories, see the [Installation Guide](/getting-started/installation) and [CLI Commands](/getting-started/cli#ai).
-
-After installation, your AI coding tool can generate, edit, and debug Dagu DAG definitions with knowledge of the full YAML schema, all 18+ executor types, CLI commands, environment variables, and common pitfalls.
-
-## Your First Workflow
-
-::: info Example DAGs
-When you first start Dagu with an empty DAGs directory, it automatically creates several example workflows to help you get started:
-- `example-01-basic-sequential.yaml` - Basic sequential execution
-- `example-02-parallel-execution.yaml` - Parallel task execution
-- `example-03-complex-dependencies.yaml` - Complex dependency graphs
-- `example-04-scheduling.yaml` - Scheduled workflows
-- `example-05-nested-workflows.yaml` - Nested sub-workflows
-- `example-06-container-workflow.yaml` - Container-based workflows
-
-To skip creating these examples, set `DAGU_SKIP_EXAMPLES=true` or add `skip_examples: true` to your config file.
-:::
-
-### 1. Create a workflow
-
-::: code-group
-
-```bash [Binary]
-mkdir -p ~/.config/dagu/dags && cat > ~/.config/dagu/dags/hello.yaml << 'EOF'
+```yaml
 steps:
   - echo "Hello from Dagu!"
   - echo "Running step 2"
-EOF
 ```
 
-```bash [Docker]
-mkdir -p ~/.dagu/dags && cat > ~/.dagu/dags/hello.yaml << 'EOF'
-steps:
-  - echo "Hello from Dagu!"
-  - echo "Running step 2"
-EOF
+Steps run sequentially by default. Each step is a shell command.
+
+## 3. Run it
+
+```bash
+dagu start hello.yaml
 ```
-
-### 2. Run it
-
-::: code-group
-
-```bash [Binary]
-dagu start hello
-```
-
-```bash [Docker]
-docker run --rm \
-  -v ~/.dagu:/var/lib/dagu \
-  ghcr.io/dagucloud/dagu:latest \
-  dagu start hello
-```
-
-:::
 
 Output:
+
 ```
 ┌─ DAG: hello ─────────────────────────────────────────────────────┐
 │ Status: Success ✓           | Started: 23:34:57 | Elapsed: 471ms │
@@ -125,155 +66,71 @@ Output:
 Progress: ████████████████████████████████████████ 100% (2/2 steps)
 ```
 
-*Note: The output may vary if you are using Docker.*
-
-### 2.5. Validate (optional)
-
-Before running, you can validate the DAG structure without executing it:
+Other useful commands:
 
 ```bash
-dagu validate ~/.config/dagu/dags/hello.yaml
+dagu validate hello.yaml   # Check syntax without running
+dagu dry hello.yaml        # Show execution plan
+dagu status hello          # Last run status
+dagu history hello         # Recent runs
 ```
 
-If there are issues, the command prints human‑readable errors and exits with code 1.
+Run with Docker instead:
 
-### 3. Check the status
-
-::: code-group
-
-```bash [Binary]
-dagu status hello
+```bash
+mkdir -p ~/.dagu/dags && cp hello.yaml ~/.dagu/dags/
+docker run --rm -v ~/.dagu:/var/lib/dagu ghcr.io/dagucloud/dagu:latest \
+  dagu start hello
 ```
 
-```bash [Docker]
-docker run --rm \
-  -v ~/.dagu:/var/lib/dagu \
-  ghcr.io/dagucloud/dagu:latest \
-  dagu status hello
-```
+## 4. Open the web UI
 
-:::
-
-### 4. View Execution History
-
-Check past runs of your workflow:
-
-::: code-group
-
-```bash [Binary]
-# View recent runs
-dagu history hello
-
-# View last 50 runs
-dagu history hello --limit 50
-
-# Export to JSON
-dagu history hello --format json
-
-# Export to CSV
-dagu history hello --format csv
-```
-
-```bash [Docker]
-# View recent runs
-docker run --rm \
-  -v ~/.dagu:/var/lib/dagu \
-  ghcr.io/dagucloud/dagu:latest \
-  dagu history hello
-```
-
-:::
-
-The history command shows:
-- Run ID (never truncated - safe to copy-paste)
-- Status (succeeded, failed, running, etc.)
-- Start time (UTC)
-- Duration
-- Parameters
-
-For more filtering options, see the [CLI reference](/getting-started/cli#history).
-
-### 5. View in the UI
-
-::: code-group
-
-```bash [Binary]
+```bash
 dagu start-all
 ```
 
-```bash [Docker]
-docker run -d \
-  -p 8080:8080 \
-  -v ~/.dagu:/var/lib/dagu \
-  ghcr.io/dagucloud/dagu:latest \
-  dagu start-all
-```
+Visit <http://localhost:8080>. The UI shows live run status, logs per step, execution history, and a YAML editor.
 
-:::
+On first launch against an empty DAGs directory (`~/.config/dagu/dags/`), Dagu creates a set of example workflows (`example-01-basic-sequential.yaml` through `example-06-container-workflow.yaml`). Set `DAGU_SKIP_EXAMPLES=true` or `skip_examples: true` in `config.yaml` to disable.
 
-Open [http://localhost:8080](http://localhost:8080)
+## Core pieces
 
-## Understanding Workflows
-
-A workflow is a YAML file that defines steps and their dependencies:
+### Dependencies
 
 ```yaml
+type: graph
 steps:
-  - command: echo "First step"
-  - command: echo "Second step"  # Runs after first step automatically
+  - id: extract
+    command: ./extract.sh
+  - id: transform_a
+    command: ./transform_a.sh
+    depends: extract
+  - id: transform_b
+    command: ./transform_b.sh
+    depends: extract
+  - id: load
+    command: ./load.sh
+    depends: [transform_a, transform_b]
 ```
 
-Key concepts:
-- **Steps**: Individual tasks that run commands
-- **Dependencies**: Control execution order
-- **Commands**: Any shell command you can run
+`type: graph` enables parallel execution via `depends`. `type: chain` (the default) runs steps in the order they appear.
 
-## Working Directory
-
-By default, DAGs execute in the directory where the YAML file is located. You can override this with `working_dir`:
+### Parameters
 
 ```yaml
-# All relative paths are resolved from working_dir
-working_dir: /app/project
-dotenv: .env          # Loads /app/project/.env
-steps:
-  - command: ls -la            # Lists files in /app/project
-  - command: cat ./config.yml  # Reads /app/project/config.yml
-```
-
-## Parameters
-
-You can define parameters for workflows to make them reusable:
-
-```yaml
-# backup.yaml
-env:
-  - TS: "`date +%Y%m%d_%H%M%S`"
-
 params:
-  - name: SOURCE
-    default: /data
-    description: Source directory to archive
-  - name: DEST
-    default: /backup
-    description: Destination directory for archives
+  - SOURCE: /data
+  - DEST: /backup
 
 steps:
-  # Backup files
-  - command: tar -czf ${DEST}/backup_${TS}.tar.gz ${SOURCE}
-  # Clean old backups
-  - command: find ${DEST} -name "backup_*.tar.gz" -mtime +7 -delete
+  - command: tar -czf ${DEST}/backup.tar.gz ${SOURCE}
 ```
-
-Run with parameters:
 
 ```bash
-dagu start backup.yaml -- SOURCE=/important/data DEST=/backups
+dagu start backup.yaml -- SOURCE=/important DEST=/backups
 ```
 
-## Error Handling
-
-Add retries and error handlers:
+### Retries and error handling
 
 ```yaml
 steps:
@@ -281,49 +138,77 @@ steps:
     retry_policy:
       limit: 3
       interval_sec: 30
-      
-  - command: echo "Unzipping data and processing"
-    continue_on: failed  # Continue even if this fails (DAG ends as partially_succeeded)
-      
+
+  - command: ./process.sh data.zip
+    continue_on:
+      failure: true
+
 handler_on:
   failure:
-    command: echo "Workflow failed!" | mail -s "Alert" admin@example.com
-  success:
-    command: echo "Success at $(date)"
+    command: echo "run failed" | mail -s "alert" admin@example.com
+  exit:
+    command: rm -f data.zip
 ```
 
-## Using Containers
+### Containers
 
-Run all steps in Docker containers:
+Run every step in the same container:
 
 ```yaml
-# Using a container for all steps
 container:
   image: python:3.11
   volumes:
     - ./data:/data
 steps:
-  # write data to a file
-  - command: python -c "with open('/data/output.txt', 'w') as f: f.write('Hello from Dagu!')"
-  # read data from the file
-  - command: python -c "with open('/data/output.txt') as f: print(f.read())"
+  - command: python -c "open('/data/out.txt','w').write('hi')"
+  - command: python -c "print(open('/data/out.txt').read())"
 ```
 
-## Scheduling
-
-Run workflows automatically:
+Or run a single step in its own container:
 
 ```yaml
-schedule: "0 2 * * *"  # 2 AM daily
 steps:
-  - command: echo "Running nightly process"
+  - name: build
+    container:
+      image: node:20-alpine
+    command: npm run build
 ```
 
-The workflow will execute every day at 2 AM.
+### Scheduling
 
-## What's Next?
+```yaml
+schedule: "0 2 * * *"      # 2 AM daily
+overlap_policy: skip        # drop new runs while one is active
+timeout_sec: 3600
+steps:
+  - command: ./nightly.sh
+```
 
-- [Core Concepts](/getting-started/concepts) - Understand Dagu's architecture
-- [Writing Workflows](/writing-workflows/) - Learn advanced features
-- [Examples](/writing-workflows/examples) - Ready-to-use workflow patterns
-- [CLI Reference](/getting-started/cli) - All command options
+### Working directory
+
+DAGs execute in the directory of the YAML file by default. Override with `working_dir`:
+
+```yaml
+working_dir: /app/project
+dotenv: .env                 # resolved from working_dir
+steps:
+  - command: ls -la
+```
+
+## AI-assisted authoring
+
+If you use Claude Code, Codex, OpenCode, Gemini CLI, or Copilot CLI, install the Dagu skill so the assistant knows the full DAG schema, all 18 executor types, and common pitfalls:
+
+```bash
+dagu ai install --yes
+```
+
+The guided installer can do this automatically when it detects a supported tool. See [AI Agent](/getting-started/ai-agent) for details.
+
+## Next steps
+
+- [Core Concepts](/getting-started/concepts) — steps, dependencies, execution model
+- [Writing Workflows](/writing-workflows/) — full YAML surface
+- [Step Types](/step-types/shell) — all 18 executors (docker, ssh, http, sql, s3, sub-DAG, …)
+- [Examples](/writing-workflows/examples) — ready-to-adapt patterns
+- [CLI Reference](/getting-started/cli) — every command and flag

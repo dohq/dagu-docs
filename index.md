@@ -123,7 +123,7 @@ helm install dagu dagu/dagu --set persistence.storageClass=<your-rwx-storage-cla
 
 :::
 
-The script installers run a guided wizard that installs Dagu, adds it to your PATH, sets up a background service, and creates the initial admin account. Homebrew, Docker, and Helm install without the wizard. See the [Installation Guide](/getting-started/installation) for all options.
+The script installers run a guided wizard that installs Dagu, adds it to your PATH, sets up a background service, and creates the initial admin account. Homebrew, Docker, and Helm install without the wizard. See the [Installation Guide](/getting-started/installation/) for all options.
 
 ### Create and Run a Workflow
 
@@ -305,12 +305,12 @@ steps:
 steps:
   - name: flaky-api-call
     command: curl -f https://api.example.com/data
-    retryPolicy:
+    retry_policy:
       limit: 3
-      intervalSec: 10
+      interval_sec: 10
       backoff: 2
-      maxIntervalSec: 120
-    continueOn:
+      max_interval_sec: 120
+    continue_on:
       failure: true
 ```
 
@@ -319,9 +319,9 @@ steps:
 ```yaml
 schedule:
   - "0 */6 * * *"
-overlapPolicy: skip
-timeoutSec: 3600
-handlerOn:
+overlap_policy: skip
+timeout_sec: 3600
+handler_on:
   failure:
     command: notify-team.sh
   exit:

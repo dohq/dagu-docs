@@ -20,7 +20,22 @@ const fullSidebar = [
     text: "Getting Started",
     items: [
       { text: "Quickstart", link: "/getting-started/quickstart" },
-      { text: "Installation", link: "/getting-started/installation" },
+      {
+        text: "Installation",
+        link: "/getting-started/installation/",
+        collapsed: true,
+        items: [
+          { text: "Overview", link: "/getting-started/installation/" },
+          { text: "macOS", link: "/getting-started/installation/macos" },
+          { text: "Linux", link: "/getting-started/installation/linux" },
+          { text: "Windows", link: "/getting-started/installation/windows" },
+          { text: "Docker", link: "/getting-started/installation/docker" },
+          { text: "Kubernetes", link: "/getting-started/installation/kubernetes" },
+          { text: "npm", link: "/getting-started/installation/npm" },
+          { text: "Build from source", link: "/getting-started/installation/source" },
+          { text: "Uninstall", link: "/getting-started/installation/uninstall" },
+        ],
+      },
       { text: "Core Concepts", link: "/getting-started/concepts" },
       { text: "CLI Commands", link: "/getting-started/cli" },
       { text: "AI Agent", link: "/getting-started/ai-agent" },
