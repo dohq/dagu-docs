@@ -1,4 +1,6 @@
-# What is Dagu?
+---
+title: What is Dagu?
+---
 
 <div class="overview-hero">
   <div class="overview-hero-copy">
