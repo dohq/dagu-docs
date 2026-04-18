@@ -30,17 +30,52 @@ Dagu is a workflow orchestration engine that runs as a single binary with no ext
 
 All state is stored in local files by default. There is nothing to install besides the binary itself.
 
-## Production Use Cases
+## Real-World Use Cases
 
-**Data pipeline orchestration.** Define ETL/ELT workflows as DAGs with parallel and sequential steps. Use the built-in SQL executor to query PostgreSQL or SQLite, the S3 executor to move files to/from object storage, the `jq` executor for JSON transformation, and sub-DAG composition to break large pipelines into reusable stages. Steps can pass outputs to downstream steps via environment variables.
+Dagu is useful when scripts, containers, server jobs, or data tasks need visible dependencies, schedules, logs, retries, and a simple way to operate them.
 
-**Infrastructure automation.** Run commands on remote machines via the SSH executor with key-based authentication. Execute containers via the Docker or Kubernetes executor. Use preconditions to gate steps on environment checks, and lifecycle hooks (`onSuccess`, `onFailure`, `onExit`) to handle cleanup or notifications.
-
-**Scheduled job management.** Replace crontab with DAGs that have cron scheduling, timezone support, retry policies, overlap control (`skip`, `all`, `latest`), and a web UI showing execution history, logs, and real-time status. Zombie detection automatically identifies and handles stalled runs.
-
-**Batch processing at scale.** Distribute compute-heavy workloads across a pool of workers using the coordinator/worker architecture. Workers connect to a coordinator over gRPC, pull tasks from a queue, and report status back. Workers support label-based routing (e.g., `gpu=true`, `region=us-east-1`) so DAGs target specific machine capabilities.
-
-**Legacy script orchestration.** Wrap existing shell scripts, Python scripts, HTTP calls, or any executable into workflow steps without modifying them. Dagu orchestrates execution order, captures stdout/stderr per step, and handles retries and error propagation around your existing code.
+<div class="real-world-usecases">
+  <div class="real-world-usecase">
+    <h3>Cron and Legacy Script Management</h3>
+    <p><strong>Run:</strong> existing shell scripts, Python scripts, HTTP calls, and scheduled jobs without rewriting them.</p>
+    <p><strong>Why Dagu fits:</strong> dependencies, run status, logs, retries, and history become visible in the Web UI instead of being hidden across crontabs and server log files.</p>
+  </div>
+  <div class="real-world-usecase">
+    <h3>ETL and Data Operations</h3>
+    <p><strong>Run:</strong> PostgreSQL or SQLite queries, S3 transfers, <code>jq</code> transforms, validation steps, and reusable sub-workflows.</p>
+    <p><strong>Why Dagu fits:</strong> daily data workflows stay declarative, observable, and easy to retry when one step fails.</p>
+  </div>
+  <div class="real-world-usecase">
+    <h3>Media Conversion</h3>
+    <p><strong>Run:</strong> <code>ffmpeg</code>, thumbnail extraction, audio normalization, image processing, and other compute-heavy jobs.</p>
+    <p><strong>Why Dagu fits:</strong> conversion work can run across distributed workers while status, history, logs, and artifacts stay in one persistence layer for monitoring, debugging, and retries.</p>
+  </div>
+  <div class="real-world-usecase">
+    <h3>Infrastructure and Server Automation</h3>
+    <p><strong>Run:</strong> SSH backups, cleanup jobs, deploy scripts, patch windows, precondition checks, and lifecycle hooks.</p>
+    <p><strong>Why Dagu fits:</strong> remote operations get schedules, retries, notifications, and per-step logs without requiring operators to SSH into servers for every recovery.</p>
+  </div>
+  <div class="real-world-usecase">
+    <h3>Container and Kubernetes Workflows</h3>
+    <p><strong>Run:</strong> Docker images, Kubernetes Jobs, shell glue, and follow-up validation steps.</p>
+    <p><strong>Why Dagu fits:</strong> teams can compose image-based tasks and route them to the right workers without building a custom control plane.</p>
+  </div>
+  <div class="real-world-usecase">
+    <h3>Customer Support Automation</h3>
+    <p><strong>Run:</strong> diagnostics, account repair jobs, data checks, and approval-gated support actions.</p>
+    <p><strong>Why Dagu fits:</strong> non-engineers can run reviewed workflows from the Web UI while engineers keep commands, logs, and results traceable.</p>
+  </div>
+  <div class="real-world-usecase">
+    <h3>IoT and Edge Workflows</h3>
+    <p><strong>Run:</strong> sensor polling, local cleanup, offline sync, health checks, and device maintenance jobs.</p>
+    <p><strong>Why Dagu fits:</strong> the single binary and file-backed state work well on small devices while still providing visibility through the Web UI.</p>
+  </div>
+  <div class="real-world-usecase">
+    <h3>AI Agent Automation</h3>
+    <p><strong>Run:</strong> agent-authored YAML workflows, log analysis, repair steps, and human-reviewed automation.</p>
+    <p><strong>Why Dagu fits:</strong> workflows are plain YAML files, so agents can create and debug them while humans review the definition and run history.</p>
+  </div>
+</div>
 
 ## Architecture
 
