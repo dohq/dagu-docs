@@ -1272,6 +1272,96 @@ steps:
 
 <div class="example-card">
 
+### Custom Step Type
+
+```yaml
+step_types:
+  say:
+    type: command
+    description: Print a reusable message
+    input_schema:
+      type: object
+      additionalProperties: false
+      required: [message]
+      properties:
+        message:
+          type: string
+    template:
+      exec:
+        command: echo
+        args:
+          - {$input: message}
+
+steps:
+  - type: say
+    config:
+      message: "build finished"
+```
+
+`config` is validated by `input_schema`; the rendered template runs as a builtin `command` step.
+
+<a href="/writing-workflows/custom-step-types" class="learn-more">Learn more →</a>
+
+</div>
+
+<div class="example-card">
+
+### Harness Step Type
+
+> Requires the selected provider CLI (`codex` here) to be installed and available in `PATH`.
+
+```yaml
+steps:
+  - type: harness
+    command: 'Review "quoted" text and list issues'
+    config:
+      provider: codex
+```
+
+The `command` field is the harness prompt; the harness executor invokes the provider when the step runs.
+
+<a href="/step-types/harness" class="learn-more">Learn more →</a>
+
+</div>
+
+<div class="example-card">
+
+### Custom Harness Step Type
+
+> Requires the selected provider CLI (`codex` here) to be installed and available in `PATH`.
+
+```yaml
+step_types:
+  codex_task:
+    type: harness
+    description: Run a Codex prompt
+    input_schema:
+      type: object
+      additionalProperties: false
+      required: [prompt]
+      properties:
+        prompt:
+          type: string
+    template:
+      command:
+        $input: prompt
+      config:
+        provider: codex
+
+steps:
+  - type: codex_task
+    config:
+      prompt: 'Review "quoted" text and list issues'
+```
+
+`$input` copies the prompt as a value, so quotes inside the prompt are not parsed as template syntax.
+
+<a href="/step-types/harness" class="learn-more">Learn more →</a>
+
+</div>
+
+<div class="example-card">
+
 ### Container Workflow
 
 ```yaml

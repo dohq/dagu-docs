@@ -55,6 +55,17 @@ This expands to a builtin `command` step at load time. `config.repeat` defaults 
 ## Template Rendering
 
 String values inside `template` are rendered with Go `text/template` using `.input` as the template data.
+Custom step templates expose the same hermetic slim-sprig function set as the [Template step](/step-types/template#template-functions), plus a `json` helper that returns the JSON encoding of a value.
+
+### Available Functions
+
+Custom step templates can use:
+
+- Dagu pipeline-friendly functions documented for the template executor: `split`, `join`, `count`, `add`, `empty`, `upper`, `lower`, `trim`, and `default`
+- Hermetic slim-sprig functions documented on the [Template step](/step-types/template#selected-slim-sprig-functions), including functions such as `replace`, `contains`, `hasPrefix`, `hasSuffix`, `list`, `uniq`, `sortAlpha`, `toJson`, `fromJson`, `quote`, and regex helpers
+- `json`, which is specific to custom step templates and returns the JSON encoding of a value
+
+Functions that read environment variables, perform network lookups, use current time, generate random values, or generate crypto keys are not available.
 
 ```yaml
 step_types:
@@ -81,9 +92,23 @@ step_types:
 Rules:
 
 - Missing template keys are errors.
-- The only built-in helper is `json`.
+- Template functions are hermetic; functions for environment access, network lookup, time, randomness, and crypto key generation are not available.
 - Schema defaults are applied to `config`, then the result is validated, then the template is rendered during DAG load.
-- Use `{$input: path.to.value}` for typed injection without string conversion.
+
+### Typed Input Injection
+
+Use `$input` when a rendered field should be copied directly from custom-step `config` instead of rendered as a string template.
+
+At the call site, `config` becomes the custom step input:
+
+```yaml
+steps:
+  - type: say
+    config:
+      message: 'Review "quoted" text'
+```
+
+Inside `template`, this copies the validated `message` value into the rendered step:
 
 ```yaml
 template:
@@ -91,14 +116,30 @@ template:
     command: /bin/echo
     args:
       - {$input: message}
-      - {$input: repeat}
 ```
 
-`$input` path resolution supports dotted object fields and numeric array indexes such as `items.0.name`.
+The expanded builtin step receives:
+
+```yaml
+exec:
+  command: /bin/echo
+  args:
+    - 'Review "quoted" text'
+```
+
+`$input` path resolution is relative to the validated input object after schema defaults are applied. It supports dotted object fields and numeric array indexes such as `items.0.name`.
+
+Use `$input` for whole-field values such as argv entries, prompts, booleans, numbers, arrays, or objects. The copied value keeps its type and is not parsed as Go template text. For embedded text, use normal Go template syntax inside a string field.
 
 ## Runtime Expressions
 
 Custom step templates are rendered while the DAG is loaded, before a step starts running. They are not rendered again when the step executes. This means runtime values cannot change Go template control flow and cannot change the static step graph.
+
+Rule of thumb:
+
+- Go template actions are custom-step template rendering at DAG load time.
+- `${...}`, `$VAR`, and backtick expressions are Dagu runtime expressions evaluated later by the expanded builtin step.
+- Runtime expressions can be passed through custom step templates, but they cannot control Go template `if`, `range`, or other load-time template logic.
 
 Runtime expressions are still valid when they end up in fields that Dagu evaluates at execution time, such as command strings, command arguments, scripts, or executor config strings.
 
