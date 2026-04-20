@@ -94,7 +94,7 @@ steps:
 
 ## Template Functions
 
-The template executor provides functions from [slim-sprig](https://go-task.github.io/slim-sprig/) (the hermetic subset — no env, network, or random access) plus Dagu-specific overrides. All functions use pipeline-compatible argument order (the pipeline value is the last argument).
+The template executor provides Dagu-specific functions plus functions from [slim-sprig](https://go-task.github.io/slim-sprig/)'s hermetic text-template function map. Dagu removes functions for environment access, network lookup, current time, random generation, and crypto key generation. The Dagu-specific functions use pipeline-compatible argument order, where the pipeline value is the last argument.
 
 ### Dagu-specific functions
 
@@ -112,36 +112,35 @@ These override or extend slim-sprig with pipeline-friendly argument order:
 | `trim` | `trim s` | Trim whitespace from both ends. |
 | `default` | `default def val` | Returns `def` if `val` is empty/nil/zero; otherwise returns `val`. |
 
-### Selected slim-sprig functions
+<a id="selected-slim-sprig-functions"></a>
 
-These come directly from slim-sprig and work as documented in the [slim-sprig docs](https://go-task.github.io/slim-sprig/):
+### Available slim-sprig functions
 
-| Function | Example |
-|----------|---------|
-| `replace` | `{{ "hello world" \| replace "world" "dagu" }}` → `hello dagu` |
-| `contains` | `{{ contains "ell" "hello" }}` → `true` |
-| `hasPrefix` / `hasSuffix` | `{{ hasPrefix "hel" "hello" }}` → `true` |
-| `list` | `{{ list "a" "b" "c" }}` → creates a list |
-| `uniq` | `{{ .items \| uniq }}` → deduplicate |
-| `sortAlpha` | `{{ .items \| sortAlpha }}` → sort strings |
-| `dict` | `{{ $d := dict "key" "value" }}` → create a map |
-| `get` | `{{ get .map "key" }}` → safe map access (returns `""` if missing) |
-| `dig` | `{{ dig "a" "b" "fallback" .data }}` → nested map access |
-| `has` | `{{ list "a" "b" \| has "a" }}` → `true` |
-| `toJson` / `toPrettyJson` | Serialize to JSON |
-| `regexMatch` / `regexFind` | Regex operations |
-| `toString` | `{{ 42 \| toString }}` → `"42"` |
-| `substr` | `{{ substr 0 5 "hello world" }}` → `hello` |
+These non-overridden names come directly from slim-sprig and work as documented in the [slim-sprig docs](https://go-task.github.io/slim-sprig/):
+
+- Misc: `hello`
+- Strings: `adler32sum`, `cat`, `contains`, `hasPrefix`, `hasSuffix`, `indent`, `nindent`, `plural`, `quote`, `repeat`, `replace`, `sha1sum`, `sha256sum`, `splitList`, `splitn`, `squote`, `substr`, `title`, `toString`, `toStrings`, `trimAll`, `trimPrefix`, `trimSuffix`, `trimall`, and `trunc`
+- Numeric and conversion: `add1`, `atoi`, `biggest`, `ceil`, `div`, `float64`, `floor`, `int`, `int64`, `max`, `maxf`, `min`, `minf`, `mod`, `mul`, `round`, `seq`, `sub`, `toDecimal`, `until`, and `untilStep`
+- Defaults and JSON: `all`, `any`, `coalesce`, `compact`, `fromJson`, `mustCompact`, `mustFromJson`, `mustToJson`, `mustToPrettyJson`, `mustToRawJson`, `ternary`, `toJson`, `toPrettyJson`, and `toRawJson`
+- Reflection: `deepEqual`, `kindIs`, `kindOf`, `typeIs`, `typeIsLike`, and `typeOf`
+- Paths and file paths: `base`, `clean`, `dir`, `ext`, `isAbs`, `osBase`, `osClean`, `osDir`, `osExt`, and `osIsAbs`
+- Encoding: `b32dec`, `b32enc`, `b64dec`, and `b64enc`
+- Collections and dictionaries: `append`, `chunk`, `concat`, `dict`, `dig`, `first`, `get`, `has`, `hasKey`, `initial`, `keys`, `last`, `list`, `mustAppend`, `mustChunk`, `mustFirst`, `mustHas`, `mustInitial`, `mustLast`, `mustPrepend`, `mustPush`, `mustRest`, `mustReverse`, `mustSlice`, `mustUniq`, `mustWithout`, `omit`, `pick`, `pluck`, `prepend`, `push`, `rest`, `reverse`, `set`, `slice`, `sortAlpha`, `tuple`, `uniq`, `unset`, `values`, and `without`
+- Flow control: `fail`
+- Regex: `mustRegexFind`, `mustRegexFindAll`, `mustRegexMatch`, `mustRegexReplaceAll`, `mustRegexReplaceAllLiteral`, `mustRegexSplit`, `regexFind`, `regexFindAll`, `regexMatch`, `regexQuoteMeta`, `regexReplaceAll`, `regexReplaceAllLiteral`, and `regexSplit`
+- URLs: `urlJoin` and `urlParse`
+
+The names `split`, `join`, `add`, `empty`, `lower`, `upper`, `trim`, and `default` are available, but Dagu overrides the slim-sprig implementation with the behavior documented in the Dagu-specific table above.
 
 ### Blocked functions
 
-These functions are removed for safety — they will cause a template parse error if used:
+These function names are not available and will cause a template parse error if used:
 
-- **Environment access:** `env`, `expandenv`
-- **Network I/O:** `getHostByName`
-- **Non-deterministic time:** `now`, `date`, `dateInZone`, `ago`, `duration`, `unixEpoch`, etc.
-- **Crypto key generation:** `genPrivateKey`, `derivePassword`, `genCA`, `genSelfSignedCert`, `genSignedCert`, `buildCustomCert`
-- **Random generation:** `randBytes`, `randString`, `randNumeric`, `randAlphaNum`, `randAlpha`, `randAscii`, `randInt`, `uuidv4`
+- Environment access: `env`, `expandenv`
+- Network I/O: `getHostByName`
+- Current time and date helpers: `ago`, `date`, `dateInZone`, `dateModify`, `date_in_zone`, `date_modify`, `duration`, `durationRound`, `htmlDate`, `htmlDateInZone`, `mustDateModify`, `mustToDate`, `must_date_modify`, `now`, `toDate`, and `unixEpoch`
+- Crypto key generation: `buildCustomCert`, `derivePassword`, `genCA`, `genPrivateKey`, `genSelfSignedCert`, and `genSignedCert`
+- Random generation: `randAlpha`, `randAlphaNum`, `randAscii`, `randBytes`, `randInt`, `randNumeric`, `randString`, and `uuidv4`
 
 ## Missing Key Behavior
 

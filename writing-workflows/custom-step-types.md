@@ -55,17 +55,17 @@ This expands to a builtin `command` step at load time. `config.repeat` defaults 
 ## Template Rendering
 
 String values inside `template` are rendered with Go `text/template` using `.input` as the template data.
-Custom step templates expose the same hermetic slim-sprig function set as the [Template step](/step-types/template#template-functions), plus a `json` helper that returns the JSON encoding of a value.
+Custom step templates expose the same template functions as the [Template step](/step-types/template#template-functions), plus a `json` helper that returns the JSON encoding of a value.
 
 ### Available Functions
 
 Custom step templates can use:
 
 - Dagu pipeline-friendly functions documented for the template executor: `split`, `join`, `count`, `add`, `empty`, `upper`, `lower`, `trim`, and `default`
-- Hermetic slim-sprig functions documented on the [Template step](/step-types/template#selected-slim-sprig-functions), including functions such as `replace`, `contains`, `hasPrefix`, `hasSuffix`, `list`, `uniq`, `sortAlpha`, `toJson`, `fromJson`, `quote`, and regex helpers
-- `json`, which is specific to custom step templates and returns the JSON encoding of a value
+- The exact slim-sprig-derived function names listed on the [Template step](/step-types/template#available-slim-sprig-functions)
+- `json`, which is specific to custom step templates and returns the JSON encoding of a value. This helper is useful when embedding user input inside a string field such as `script` or an HTTP body.
 
-Functions that read environment variables, perform network lookups, use current time, generate random values, or generate crypto keys are not available.
+Functions that read environment variables, perform network lookups, use current time, generate random values, or generate crypto keys are not available. The exact blocked names are listed on the [Template step](/step-types/template#blocked-functions).
 
 ```yaml
 step_types:
