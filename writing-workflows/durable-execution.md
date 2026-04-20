@@ -141,7 +141,7 @@ Field behavior:
 
 | Field | Required | Notes |
 |-------|----------|-------|
-| `limit` | Yes | Positive integer or numeric string. This is the maximum number of scheduler-issued DAG retries. |
+| `limit` | Yes | Non-negative integer or numeric string. This is the maximum number of scheduler-issued DAG retries. Use `0` to disable DAG-level automatic retries, for example to override an inherited base config retry policy. |
 | `interval_sec` | No | Positive integer or numeric string. Defaults to `60`. |
 | `backoff` | No | Same parsing rules as step retry: `true` means `2.0`, numbers greater than `1.0` are allowed, `false`, `0`, or omission keeps a fixed interval. |
 | `max_interval_sec` | No | Positive integer. Defaults to `3600`. |

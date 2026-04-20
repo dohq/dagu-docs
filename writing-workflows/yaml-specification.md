@@ -174,7 +174,7 @@ See [Durable Execution](/writing-workflows/durable-execution) for the full behav
 
 | Field | Type | Description | Default |
 |-------|------|-------------|---------|
-| `limit` | integer/string | Maximum number of scheduler-issued DAG retries. Must be positive. Numeric strings are accepted. | required |
+| `limit` | integer/string | Maximum number of scheduler-issued DAG retries. Must be non-negative. Numeric strings are accepted. Use `0` to disable DAG-level automatic retries, for example to override an inherited base config retry policy. | required |
 | `interval_sec` | integer/string | Base delay before retrying, in seconds. Must be positive. Numeric strings are accepted. | `60` |
 | `backoff` | boolean/number | `true` means `2.0`. A number greater than `1.0` is used as the multiplier. `false`, `0`, or omission keeps a fixed interval. | fixed interval |
 | `max_interval_sec` | integer | Maximum retry delay in seconds. Must be positive. | `3600` |
