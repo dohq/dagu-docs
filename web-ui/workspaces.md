@@ -4,6 +4,8 @@ Workspaces group DAG definitions, DAG runs, documents, and design/search views b
 
 The workspace selector is global. It appears in the Web UI navigation above the remote node selector and applies to Dashboard, DAG Definitions, DAG Runs, Search, Design, Cockpit, and Documents.
 
+Workspaces are an organization and navigation scope inside one Dagu installation. They are not a multi-tenant isolation model and should not be treated as a hard security boundary between tenants. Use separate Dagu deployments and separate storage when you need tenant isolation.
+
 ## Workspace Scopes
 
 The selector has three kinds of values:
@@ -80,9 +82,9 @@ Files created at `$DAG_DOCS_DIR/path/to/file.md` appear in the Documents page un
 
 See [Documents](/web-ui/documents) for document storage, API, and permission details.
 
-## Access Control
+## Workspace Access
 
-Workspace visibility is controlled by the user's or API key's workspace access policy.
+Workspace access limits which workspace-scoped data a user or API key sees in list, search, and workspace-aware UI views. It works with the role model, but it does not turn workspaces into isolated tenants.
 
 - Users with `all: true` can access every workspace with their top-level role.
 - Users with selected workspace grants can access only those named workspaces with the grant role.

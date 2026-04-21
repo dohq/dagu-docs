@@ -5,7 +5,7 @@ API keys provide programmatic access to the Dagu API with role-based permissions
 ## Features
 
 - **Role-Based Access Control**: Each API key has its own role assignment (admin, manager, developer, operator, viewer)
-- **Workspace Access Control**: Each API key can access all workspaces or selected workspaces with per-workspace roles
+- **Workspace Scoping**: Each API key can use all workspaces or selected workspaces with per-workspace roles inside one Dagu installation
 - **Key Management**: Create, update, and delete API keys through the web UI or API
 - **Usage Tracking**: Track when each API key was last used
 - **Secure Storage**: Keys are hashed with bcrypt before storage; the full key is only shown once at creation
@@ -152,7 +152,7 @@ API keys inherit the same role-based permissions as users:
 | `operator` | Run and stop DAGs (execute only) |
 | `viewer` | Read-only access to DAGs and execution history |
 
-API keys use the same workspace access policy as users. `workspaceAccess.all: true` applies the key's top-level role in every workspace. For selected workspace access, use top-level role `viewer` and grant per-workspace roles:
+API keys use the same workspace access policy as users. This scopes list, search, and workspace-aware operations inside one Dagu installation; it is not tenant isolation. `workspaceAccess.all: true` applies the key's top-level role in every workspace. For selected workspace access, use top-level role `viewer` and grant per-workspace roles:
 
 ```json
 {

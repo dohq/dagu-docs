@@ -58,6 +58,8 @@ Source: `internal/auth/role.go`
 
 Users can be granted access to all workspaces or to selected workspaces.
 
+Workspace access is a scoping feature for one Dagu installation. It determines which workspace-scoped DAGs, DAG runs, documents, and search results are shown to the user, and which role applies in each named workspace. It is not a multi-tenant isolation mechanism or a replacement for separate deployments when tenants must be isolated.
+
 The Web UI labels the aggregate scope as `all`. In the API, the user object stores this as `workspaceAccess.all: true`.
 
 ```json

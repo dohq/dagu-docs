@@ -14,7 +14,7 @@ This page covers self-hosted Dagu. On self-hosted Dagu, creating, updating, and 
 - **API Key Management**: Create and manage API keys for programmatic access with role-based permissions
 - **User Management**: List and inspect users, reset passwords, and, with an active self-host license, create, update, disable, and delete users through the web UI and API
 - **Role-Based Access Control**: Five roles with different permission levels
-- **Workspace Access Management**: Grant users access to all workspaces or selected workspaces with per-workspace roles
+- **Workspace Scoping**: Show all workspaces or selected workspaces with per-workspace roles inside one Dagu installation
 - **OIDC/SSO Integration**: Add enterprise identity providers under builtin auth
 
 ## Roles
@@ -27,7 +27,7 @@ This page covers self-hosted Dagu. On self-hosted Dagu, creating, updating, and 
 | `operator` | Run and stop DAGs (execute only) |
 | `viewer` | Read-only access to DAGs and execution history |
 
-Workspace access can further scope a user to selected workspaces. Selected-workspace users keep top-level role `viewer` and receive per-workspace grants such as `developer` for `ops` and `operator` for `prod`. Resources with no workspace label are shown as `default` and remain visible through the top-level viewer role.
+Workspace access can further scope a user to selected workspaces. This is UI/API data scoping, not tenant isolation. Selected-workspace users keep top-level role `viewer` and receive per-workspace grants such as `developer` for `ops` and `operator` for `prod`. Resources with no workspace label are shown as `default` and remain visible through the top-level viewer role.
 
 See [User Management](./user-management#workspace-access) for the full workspace access rules and API schema.
 
