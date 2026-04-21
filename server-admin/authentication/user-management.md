@@ -33,6 +33,7 @@ Response:
     "id": "550e8400-e29b-41d4-a716-446655440000",
     "username": "admin",
     "role": "admin",
+    "workspaceAccess": { "all": true },
     "createdAt": "2025-01-10T12:00:00Z",
     "updatedAt": "2025-01-10T12:00:00Z"
   }
@@ -53,6 +54,47 @@ The setup endpoint always creates an `admin` role user. It returns `403` if any 
 
 Source: `internal/auth/role.go`
 
+## Workspace Access
+
+Users can be granted access to all workspaces or to selected workspaces.
+
+The Web UI labels the aggregate scope as `all`. In the API, the user object stores this as `workspaceAccess.all: true`.
+
+```json
+{
+  "workspaceAccess": {
+    "all": true
+  }
+}
+```
+
+Selected-workspace users must have top-level role `viewer`; each workspace grant carries its own role:
+
+```json
+{
+  "role": "viewer",
+  "workspaceAccess": {
+    "all": false,
+    "grants": [
+      { "workspace": "ops", "role": "developer" },
+      { "workspace": "prod", "role": "operator" }
+    ]
+  }
+}
+```
+
+Rules:
+
+- Existing users with no stored `workspaceAccess` are treated as `all` for backward compatibility.
+- New users created in the Web UI must choose `all` or at least one selected workspace.
+- Selected-workspace users must have top-level role `viewer`.
+- Grant roles can be `manager`, `developer`, `operator`, or `viewer`.
+- `admin` cannot be scoped to a workspace; use `all` for admins.
+- Grant workspace names must reference existing workspace records when the user is created or updated.
+- Resources without a workspace label are shown as `default` and remain visible to authenticated users. For selected-workspace users, the top-level `viewer` role applies to `default`.
+
+If a workspace is deleted later, user records are not rewritten automatically. Remove or update stale grants before the next user update; validation requires selected grants to reference existing workspaces.
+
 ## User Object
 
 Fields returned by the API:
@@ -62,10 +104,18 @@ Fields returned by the API:
 | `id` | string | UUID, auto-generated |
 | `username` | string | 1–64 characters, must be unique |
 | `role` | string | `admin`, `manager`, `developer`, `operator`, `viewer` |
+| `workspaceAccess` | object | Workspace access policy; omitted legacy data is treated as `all` |
 | `authProvider` | string | `builtin` or `oidc` |
 | `isDisabled` | boolean | Disabled accounts cannot log in |
 | `createdAt` | string | ISO 8601 timestamp |
 | `updatedAt` | string | ISO 8601 timestamp |
+
+`workspaceAccess` fields:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `all` | boolean | `true` means the top-level role applies in every workspace |
+| `grants` | array | Required when `all` is `false`; each item contains `workspace` and `role` |
 
 ## API
 
@@ -87,6 +137,7 @@ curl http://localhost:8080/api/v1/users \
       "id": "...",
       "username": "admin",
       "role": "admin",
+      "workspaceAccess": { "all": true },
       "authProvider": "builtin",
       "createdAt": "2025-01-01T00:00:00Z",
       "updatedAt": "2025-01-01T00:00:00Z"
@@ -99,14 +150,41 @@ curl http://localhost:8080/api/v1/users \
 
 `POST /api/v1/users`
 
+Create a user with access to all workspaces:
+
 ```bash
 curl -X POST http://localhost:8080/api/v1/users \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
-  -d '{"username": "alice", "password": "min-8-chars", "role": "developer"}'
+  -d '{
+    "username": "alice",
+    "password": "min-8-chars",
+    "role": "developer",
+    "workspaceAccess": { "all": true }
+  }'
 ```
 
-Returns `201` with `{"user": User}`. Returns `409` if username exists. Returns `400` for invalid role or weak password.
+Create a user with selected workspace access:
+
+```bash
+curl -X POST http://localhost:8080/api/v1/users \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "bob",
+    "password": "min-8-chars",
+    "role": "viewer",
+    "workspaceAccess": {
+      "all": false,
+      "grants": [
+        { "workspace": "ops", "role": "developer" },
+        { "workspace": "prod", "role": "operator" }
+      ]
+    }
+  }'
+```
+
+Returns `201` with `{"user": User}`. Returns `409` if username exists. Returns `400` for invalid role, weak password, invalid workspace access, duplicate workspace grants, or grants for unknown workspaces.
 
 ### Get User
 
@@ -123,13 +201,22 @@ Returns `200` with `{"user": User}`. Returns `404` if not found.
 
 `PATCH /api/v1/users/{userId}`
 
-All fields are optional. You cannot disable your own account.
+All fields are optional. You cannot disable your own account. When changing selected workspace grants, include `role: "viewer"` unless the user is being changed back to `workspaceAccess.all: true`.
 
 ```bash
 curl -X PATCH http://localhost:8080/api/v1/users/USER_ID \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
-  -d '{"role": "manager", "isDisabled": false}'
+  -d '{
+    "role": "viewer",
+    "workspaceAccess": {
+      "all": false,
+      "grants": [
+        { "workspace": "ops", "role": "manager" }
+      ]
+    },
+    "isDisabled": false
+  }'
 ```
 
 Returns `200` with updated user. Returns `409` if new username conflicts.

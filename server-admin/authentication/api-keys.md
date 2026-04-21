@@ -5,6 +5,7 @@ API keys provide programmatic access to the Dagu API with role-based permissions
 ## Features
 
 - **Role-Based Access Control**: Each API key has its own role assignment (admin, manager, developer, operator, viewer)
+- **Workspace Access Control**: Each API key can access all workspaces or selected workspaces with per-workspace roles
 - **Key Management**: Create, update, and delete API keys through the web UI or API
 - **Usage Tracking**: Track when each API key was last used
 - **Secure Storage**: Keys are hashed with bcrypt before storage; the full key is only shown once at creation
@@ -39,7 +40,8 @@ curl -X POST http://localhost:8080/api/v1/api-keys \
   -d '{
     "name": "ci-pipeline",
     "description": "API key for CI/CD pipeline",
-    "role": "operator"
+    "role": "operator",
+    "workspaceAccess": { "all": true }
   }'
 ```
 
@@ -149,6 +151,22 @@ API keys inherit the same role-based permissions as users:
 | `developer` | Create, edit, delete, run, and stop DAGs |
 | `operator` | Run and stop DAGs (execute only) |
 | `viewer` | Read-only access to DAGs and execution history |
+
+API keys use the same workspace access policy as users. `workspaceAccess.all: true` applies the key's top-level role in every workspace. For selected workspace access, use top-level role `viewer` and grant per-workspace roles:
+
+```json
+{
+  "role": "viewer",
+  "workspaceAccess": {
+    "all": false,
+    "grants": [
+      { "workspace": "ops", "role": "developer" }
+    ]
+  }
+}
+```
+
+See [User Management](user-management#workspace-access) for the workspace access rules.
 
 ## Managing API Keys
 

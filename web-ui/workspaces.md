@@ -1,16 +1,104 @@
 # Workspaces
 
-Named entities used to group DAG runs via label-based filtering in the Cockpit UI.
+Workspaces group DAG definitions, DAG runs, documents, and design/search views by the canonical DAG label `workspace=<name>`.
 
-## How It Works
+The workspace selector is global. It appears in the Web UI navigation above the remote node selector and applies to Dashboard, DAG Definitions, DAG Runs, Search, Design, Cockpit, and Documents.
 
-A workspace is a named record stored on the server. When a DAG run is enqueued from the Cockpit UI, a `workspace=<name>` label is injected into the in-memory YAML spec before submission. The Cockpit then filters DAG runs by this label using the `labels` query parameter on `GET /api/v1/dag-runs`.
+## Workspace Scopes
 
-Workspaces do not modify DAG definitions on disk. The label injection happens at enqueue time on a copy of the spec.
+The selector has three kinds of values:
+
+| UI label | API value | Meaning |
+|----------|-----------|---------|
+| `all` | `workspaceScope=all` | Show all data the current user or API key can access. |
+| `default` | `workspaceScope=none` | Show resources with no valid `workspace=<name>` label. This is not an automatically created workspace record. |
+| `<workspace>` | `workspaceScope=workspace&workspace=<name>` | Show one named workspace. |
+
+Missing or invalid workspace selection defaults to `all`.
+
+The selected scope is persisted in browser `localStorage` under `dagu-selected-workspace-scope`. Older keys, including `dagu-selected-workspace` and `dagu_cockpit_workspace`, are migrated and removed automatically.
+
+## Labels
+
+A named workspace is represented on DAGs and DAG runs by this label:
+
+```yaml
+labels:
+  - workspace=production
+```
+
+Only one valid workspace label should be present. A missing workspace label belongs to `default`. Invalid or conflicting workspace labels are excluded from named workspace filters.
+
+Workspace names must match:
+
+```text
+^[A-Za-z0-9_-]+$
+```
+
+The value can contain letters, numbers, underscores, and hyphens. It cannot be empty and cannot contain `/`, whitespace, dots, or other punctuation. This restriction lets the same name be used safely as a label value and filesystem path segment.
+
+## Scope Behavior
+
+List and search APIs accept:
+
+- `workspaceScope=all` for `all`
+- `workspaceScope=none` for `default`
+- `workspaceScope=workspace&workspace=<name>` for one named workspace
+
+When `workspaceScope` is omitted, list and search APIs default to `all`.
+
+Single-resource and mutation APIs use only mutable scopes:
+
+- `workspaceScope=none`
+- `workspaceScope=workspace&workspace=<name>`
+
+`workspaceScope=all` is an aggregate read scope and cannot be used as the target for creating, updating, deleting, or renaming one resource.
+
+## Documents
+
+Documents are workspace-aware when `paths.docs_dir` is configured.
+
+For a DAG with no valid workspace label, Dagu sets:
+
+```text
+DAG_DOCS_DIR=<paths.docs_dir>/<DAG name>
+```
+
+For a DAG with `workspace=<name>`, Dagu sets:
+
+```text
+DAG_DOCS_DIR=<paths.docs_dir>/<workspace>/<DAG name>
+```
+
+For example, a DAG named `daily-report` with `workspace=ops` writes workspace documents under:
+
+```text
+<paths.docs_dir>/ops/daily-report/
+```
+
+Files created at `$DAG_DOCS_DIR/path/to/file.md` appear in the Documents page under the selected `ops` workspace as `daily-report/path/to/file`.
+
+See [Documents](/web-ui/documents) for document storage, API, and permission details.
+
+## Access Control
+
+Workspace visibility is controlled by the user's or API key's workspace access policy.
+
+- Users with `all: true` can access every workspace with their top-level role.
+- Users with selected workspace grants can access only those named workspaces with the grant role.
+- Resources with no workspace label remain visible through `default`; scoped users see them through their top-level role, which is `viewer` for selected-workspace users.
+
+Existing users without a stored workspace access policy are treated as `all` for backward compatibility. New users created in the UI must explicitly choose `all` or selected workspaces.
+
+See [User Management](/server-admin/authentication/user-management) for the workspace access schema and role rules.
 
 ## Storage
 
-Each workspace is stored as a JSON file at `{workspaces_dir}/{uuid}.json`.
+Each named workspace is stored as a JSON file at:
+
+```text
+{workspaces_dir}/{uuid}.json
+```
 
 ### Configuration
 
@@ -25,6 +113,7 @@ paths:
 | `paths.workspaces_dir` | `DAGU_WORKSPACES_DIR` | `{data_dir}/workspaces` |
 
 The default `data_dir` depends on your setup:
+
 - With `DAGU_HOME` set: `{DAGU_HOME}/data`
 - XDG fallback: `~/.local/share/dagu/data`
 
@@ -42,11 +131,13 @@ The default `data_dir` depends on your setup:
 
 File permissions: `0600`. Directory permissions: `0750`.
 
-The store maintains in-memory indices (`byID` and `byName` maps) rebuilt on startup by scanning the directory for `.json` files. Thread-safe via `sync.RWMutex`.
+The store maintains in-memory indices by ID and name. They are rebuilt on startup by scanning the workspace directory for `.json` files.
 
-## Name Constraints
+## Delete Behavior
 
-Names must match `[a-zA-Z0-9_-]`. The UI strips any other characters on creation.
+Deleting a workspace removes the workspace record. It does not rewrite DAG files, historical DAG runs, generated documents, users, or API keys.
+
+If users or API keys still contain grants for a deleted workspace, update those access policies. Future create/update validation requires selected workspace grants to reference existing workspace records.
 
 ## REST API
 
@@ -54,13 +145,14 @@ All endpoints accept the `remoteNode` query parameter for routing requests to re
 
 ### List Workspaces
 
-```
+```http
 GET /api/v1/workspaces?remoteNode=<node>
 ```
 
-No specific role required (any authenticated user).
+Available to authenticated users.
 
 **Response (200)**:
+
 ```json
 {
   "workspaces": [
@@ -79,13 +171,14 @@ Returns an empty array if no workspaces exist.
 
 ### Create Workspace
 
-```
+```http
 POST /api/v1/workspaces?remoteNode=<node>
 ```
 
-Requires **developer** role or above (`requireDeveloperOrAbove`).
+Requires developer role or above.
 
 **Request**:
+
 ```json
 {
   "name": "staging",
@@ -97,23 +190,25 @@ Requires **developer** role or above (`requireDeveloperOrAbove`).
 
 **Response (201)**: The created workspace object.
 
-**Response (400)**: Name is empty.
+**Response (400)**: Name is empty or does not match `^[A-Za-z0-9_-]+$`.
+
 ```json
 { "code": "bad_request", "message": "Name is required" }
 ```
 
 **Response (409)**: A workspace with this name already exists.
+
 ```json
 { "code": "already_exists", "message": "Workspace with this name already exists" }
 ```
 
 ### Get Workspace
 
-```
+```http
 GET /api/v1/workspaces/{workspaceId}?remoteNode=<node>
 ```
 
-No specific role required (any authenticated user).
+Available to authenticated users.
 
 **Response (200)**: The workspace object.
 
@@ -121,13 +216,14 @@ No specific role required (any authenticated user).
 
 ### Update Workspace
 
-```
+```http
 PATCH /api/v1/workspaces/{workspaceId}?remoteNode=<node>
 ```
 
-Requires **developer** role or above. PATCH semantics -- only provided fields are updated.
+Requires developer role or above. PATCH semantics: only provided fields are updated.
 
 **Request**:
+
 ```json
 {
   "name": "new-name",
@@ -135,7 +231,7 @@ Requires **developer** role or above. PATCH semantics -- only provided fields ar
 }
 ```
 
-Both fields are optional. Empty string for `name` is ignored (the existing name is kept).
+Both fields are optional. Empty string for `name` is ignored and the existing name is kept.
 
 **Response (200)**: The updated workspace object.
 
@@ -145,11 +241,11 @@ Both fields are optional. Empty string for `name` is ignored (the existing name 
 
 ### Delete Workspace
 
-```
+```http
 DELETE /api/v1/workspaces/{workspaceId}?remoteNode=<node>
 ```
 
-Requires **developer** role or above.
+Requires developer role or above.
 
 **Response (204)**: No content. Workspace deleted.
 
@@ -161,7 +257,7 @@ All endpoints returning workspace data use this shape:
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `id` | string | Yes | UUID v4, generated by `github.com/google/uuid` |
+| `id` | string | Yes | UUID v4 |
 | `name` | string | Yes | Workspace name |
 | `description` | string | No | Omitted from JSON when empty |
 | `createdAt` | string (date-time) | No | UTC timestamp, omitted when zero |
@@ -169,9 +265,10 @@ All endpoints returning workspace data use this shape:
 
 ### Error Responses
 
-When the workspace store is not configured (e.g., directory creation failed on startup), all endpoints return:
+When the workspace store is not configured, endpoints return:
 
 **Response (503)**:
+
 ```json
 { "code": "internal_error", "message": "Workspace store not configured" }
 ```
@@ -188,4 +285,6 @@ All write operations are logged with category `workspace`:
 
 ## Related
 
-- [Cockpit](/web-ui/cockpit) -- the UI that uses workspaces
+- [Cockpit](/web-ui/cockpit)
+- [Documents](/web-ui/documents)
+- [User Management](/server-admin/authentication/user-management)

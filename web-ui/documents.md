@@ -1,31 +1,73 @@
 # Documents
 
-Markdown documents stored under `{DAGsDir}/docs/`, browsable and editable in the web UI, searchable via API.
+Markdown documents stored under `paths.docs_dir`, browsable and editable in the Web UI, searchable via API, and scoped by workspace.
+
+By default, `paths.docs_dir` resolves to `<paths.dags_dir>/docs`.
 
 ## Storage
 
-Documents are `.md` files under the `docs/` subdirectory of your DAGs directory:
+Documents are `.md` files under the configured docs directory:
 
-```
-{DAGsDir}/docs/
+```text
+{docs_dir}/
+├── onboarding.md
 ├── runbooks/
-│   ├── deployment.md
 │   └── rollback.md
-├── architecture/
-│   └── overview.md
-└── onboarding.md
+├── ops/
+│   └── daily-report/
+│       └── latest-run.md
+└── platform/
+    └── deployment.md
 ```
 
-The document ID is the file path relative to `docs/` without the `.md` extension. The file `docs/runbooks/deployment.md` has ID `runbooks/deployment`.
+The first path segment is treated as a workspace only when it matches an existing workspace name. In the example above:
+
+- `onboarding.md` and `runbooks/rollback.md` are `default` documents
+- `ops/daily-report/latest-run.md` belongs to the `ops` workspace
+- `platform/deployment.md` belongs to the `platform` workspace
+
+When one workspace is selected, document IDs are relative to that workspace. For example, `ops/daily-report/latest-run.md` appears in the `ops` workspace as document ID `daily-report/latest-run`.
+
+In `all`, the API can return documents from all workspaces the current identity can access and `default`. Workspace documents include their workspace metadata so the UI can disambiguate them.
+
+## Workspace Scopes
+
+The Documents page follows the global workspace selector:
+
+| UI label | API scope | Behavior |
+|----------|-----------|----------|
+| `all` | `workspaceScope=all` | Lists and searches all documents the current identity can access. |
+| `default` | `workspaceScope=none` | Lists and edits documents outside known workspace folders. |
+| `<workspace>` | `workspaceScope=workspace&workspace=<name>` | Lists and edits documents under `{docs_dir}/<workspace>/`. |
+
+Read/list/search endpoints accept all three scopes. Create, update, delete, and rename endpoints accept only `none` or `workspace`, because `all` is an aggregate view and is not a valid mutation target.
 
 ## Generating Documents from DAG Steps
 
-Dagu sets the `DAG_DOCS_DIR` environment variable to `<paths.docs_dir>/<DAG name>` for each run. Files written under this path are markdown documents that appear in the web UI automatically.
+Dagu sets `DAG_DOCS_DIR` for each run when `paths.docs_dir` is configured.
 
-For example, if `paths.docs_dir` is `/home/user/.config/dagu/dags/docs` (the default) and the DAG name is `daily-report`, then `DAG_DOCS_DIR` is `/home/user/.config/dagu/dags/docs/daily-report`.
+For a DAG with no valid workspace label:
+
+```text
+DAG_DOCS_DIR=<paths.docs_dir>/<DAG name>
+```
+
+For a DAG with exactly one valid `workspace=<name>` label:
+
+```text
+DAG_DOCS_DIR=<paths.docs_dir>/<workspace>/<DAG name>
+```
+
+For example, if `paths.docs_dir` is `/home/user/.config/dagu/dags/docs`, the DAG name is `daily-report`, and the DAG has `workspace=ops`, then:
+
+```text
+DAG_DOCS_DIR=/home/user/.config/dagu/dags/docs/ops/daily-report
+```
 
 ```yaml
 name: daily-report
+labels:
+  - workspace=ops
 steps:
   - id: generate_report
     command: |
@@ -41,9 +83,11 @@ steps:
       TEMPLATE
 ```
 
-This writes `daily-report/latest-run.md` under the docs directory. It appears in the web UI at document ID `daily-report/latest-run`.
+This writes `{docs_dir}/ops/daily-report/latest-run.md`. It appears in the `ops` workspace as document ID `daily-report/latest-run`.
 
-`DAG_DOCS_DIR` is not set when `paths.docs_dir` in the server configuration resolves to an empty string. By default it is `<paths.dags_dir>/docs`. See [Special Environment Variables](/writing-workflows/runtime-variables).
+If the DAG has no workspace label, an invalid workspace label, or conflicting workspace labels, Dagu uses `<paths.docs_dir>/<DAG name>`, which appears under `default`.
+
+`DAG_DOCS_DIR` is not set when `paths.docs_dir` resolves to an empty string. See [Special Environment Variables](/writing-workflows/runtime-variables).
 
 ## Document Format
 
@@ -63,17 +107,18 @@ title: Deployment Runbook
 
 If no `title` is present in frontmatter, the title defaults to the last segment of the document ID. For example, `runbooks/deployment` gets title `deployment`.
 
-The `content` field in API responses and requests always contains the **full file including the `---` frontmatter block**. When updating a document via the API, you must include the frontmatter if you want to preserve it.
+The `content` field in API responses and requests always contains the full file, including the `---` frontmatter block. When updating a document via the API, include the frontmatter if you want to preserve it.
 
 ## Document ID Validation
 
 IDs are validated against this regex:
 
-```
+```text
 ^[a-zA-Z0-9][a-zA-Z0-9_. -]*(/[a-zA-Z0-9][a-zA-Z0-9_. -]*)*$
 ```
 
 Rules:
+
 - Each path segment must start with an alphanumeric character
 - Segments can contain letters, digits, underscores, dots, spaces, and hyphens
 - Segments are separated by `/` for directory nesting
@@ -91,67 +136,81 @@ Examples:
 | `/leading-slash` | No | Starts with slash |
 | `path//double` | No | Empty segment |
 
-Files under `docs/` that don't match the ID pattern are silently skipped from listings and search results. A debug-level log entry is emitted for each skipped file.
+Files under `docs/` that do not match the ID pattern are skipped from listings and search results. A debug-level log entry is emitted for each skipped file.
 
 ## API
 
-All endpoints are under `/api/v1`. All accept an optional `remoteNode` query parameter (string, default: `"local"`) to target a specific remote node.
+All endpoints are under `/api/v1`. All accept an optional `remoteNode` query parameter to target a remote node.
 
 ### Endpoints
 
 | Method | Path | Description | Status Codes |
 |---|---|---|---|
-| GET | `/docs` | List documents (tree or flat) | 200 |
+| GET | `/docs` | List documents, tree or flat | 200 |
 | POST | `/docs` | Create document | 201, 400, 409 |
 | GET | `/docs/search` | Search document content | 200, 400 |
 | GET | `/docs/doc` | Get single document | 200, 404 |
 | PATCH | `/docs/doc` | Update document | 200, 404 |
 | DELETE | `/docs/doc` | Delete document | 204, 404 |
-| POST | `/docs/doc/rename` | Rename/move document | 200, 404, 409 |
+| POST | `/docs/doc/rename` | Rename or move document | 200, 404, 409 |
 
 Single-document endpoints use `/docs/doc` with a `path` query parameter rather than embedding the path in the URL.
+
+### Workspace Query Parameters
+
+Read/list/search endpoints:
+
+| Parameter | Type | Description |
+|---|---|---|
+| `workspaceScope` | `all`, `none`, `workspace` | Scope to read. Omitted defaults to `all`. |
+| `workspace` | string | Required when `workspaceScope=workspace`; omitted for `all` and `none`. |
+
+Mutation endpoints:
+
+| Parameter | Type | Description |
+|---|---|---|
+| `workspaceScope` | `none`, `workspace` | Target scope. Omitted defaults to `none`. |
+| `workspace` | string | Required when `workspaceScope=workspace`. |
 
 ### List Documents
 
 ```bash
-curl "http://localhost:8080/api/v1/docs?perPage=50"
+curl "http://localhost:8080/api/v1/docs?workspaceScope=workspace&workspace=ops&perPage=50"
 ```
 
 Query parameters:
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `page` | integer | `1` | Page number (minimum 1) |
-| `perPage` | integer | `50` | Items per page (minimum 1, maximum 1000) |
-| `flat` | boolean | `false` | If true, returns flat list instead of tree |
+| `page` | integer | `1` | Page number, minimum 1 |
+| `perPage` | integer | `50` | Items per page, minimum 1 and maximum 1000 |
+| `flat` | boolean | `false` | If true, returns a flat list instead of a tree |
+| `workspaceScope` | string | `all` | Workspace scope |
+| `workspace` | string | | Workspace name when `workspaceScope=workspace` |
 
-Tree response (default):
+Tree response:
 
 ```json
 {
   "tree": [
     {
-      "id": "runbooks",
-      "name": "runbooks",
+      "id": "daily-report",
+      "name": "daily-report",
       "type": "directory",
       "children": [
         {
-          "id": "runbooks/deployment",
-          "name": "deployment.md",
-          "title": "Deployment Runbook",
-          "type": "file"
+          "id": "daily-report/latest-run",
+          "name": "latest-run.md",
+          "title": "Latest Run Results",
+          "type": "file",
+          "workspace": "ops"
         }
-      ]
-    },
-    {
-      "id": "onboarding",
-      "name": "onboarding.md",
-      "title": "onboarding",
-      "type": "file"
+      ],
+      "workspace": "ops"
     }
   ],
   "pagination": {
-    "totalRecords": 2,
+    "totalRecords": 1,
     "currentPage": 1,
     "totalPages": 1,
     "nextPage": 1,
@@ -160,15 +219,24 @@ Tree response (default):
 }
 ```
 
-Flat response (`?flat=true`):
+Flat response with `?flat=true`:
 
 ```json
 {
   "items": [
-    { "id": "onboarding", "title": "onboarding" },
-    { "id": "runbooks/deployment", "title": "Deployment Runbook" }
+    {
+      "id": "daily-report/latest-run",
+      "title": "Latest Run Results",
+      "workspace": "ops"
+    }
   ],
-  "pagination": { "totalRecords": 2, "currentPage": 1, "totalPages": 1, "nextPage": 1, "prevPage": 1 }
+  "pagination": {
+    "totalRecords": 1,
+    "currentPage": 1,
+    "totalPages": 1,
+    "nextPage": 1,
+    "prevPage": 1
+  }
 }
 ```
 
@@ -177,32 +245,33 @@ Items in flat mode are sorted alphabetically by `id`.
 ### Get Document
 
 ```bash
-curl "http://localhost:8080/api/v1/docs/doc?path=runbooks/deployment"
+curl "http://localhost:8080/api/v1/docs/doc?path=daily-report/latest-run&workspaceScope=workspace&workspace=ops"
 ```
 
 Response:
 
 ```json
 {
-  "id": "runbooks/deployment",
-  "title": "Deployment Runbook",
-  "content": "---\ntitle: Deployment Runbook\n---\n\n## Steps\n\n1. Pull latest changes",
+  "id": "daily-report/latest-run",
+  "title": "Latest Run Results",
+  "content": "---\ntitle: Latest Run Results\n---\n\n## Results\n",
+  "workspace": "ops",
   "createdAt": "2025-06-15T10:30:00Z",
   "updatedAt": "2025-06-20T14:00:00Z"
 }
 ```
 
-The `content` field contains the full file including frontmatter. `createdAt` is the file creation time (platform-dependent). `updatedAt` is the file modification time.
+The `content` field contains the full file including frontmatter. `createdAt` is the file creation time when the platform exposes it. `updatedAt` is the file modification time.
 
-Returns `404` if the document does not exist.
+Returns `404` if the document does not exist or is outside the requested workspace scope.
 
 ### Search Documents
 
 ```bash
-curl "http://localhost:8080/api/v1/docs/search?q=deployment"
+curl "http://localhost:8080/api/v1/docs/search?q=deployment&workspaceScope=all"
 ```
 
-The `q` parameter is required. Searches across all document content using pattern matching.
+The `q` parameter is required. Searches document content within the requested workspace scope.
 
 Response:
 
@@ -212,6 +281,7 @@ Response:
     {
       "id": "runbooks/deployment",
       "title": "Deployment Runbook",
+      "workspace": "platform",
       "matches": [
         { "line": "## Deployment Steps", "lineNumber": 5, "startLine": 5 }
       ]
@@ -223,50 +293,53 @@ Response:
 ### Create Document
 
 ```bash
-curl -X POST "http://localhost:8080/api/v1/docs" \
+curl -X POST "http://localhost:8080/api/v1/docs?workspaceScope=workspace&workspace=ops" \
   -H "Content-Type: application/json" \
-  -d '{"id": "runbooks/deployment", "content": "---\ntitle: Deployment Runbook\n---\n\n## Steps\n\n1. Pull latest changes"}'
+  -d '{"id": "daily-report/latest-run", "content": "---\ntitle: Latest Run Results\n---\n\n## Results"}'
 ```
 
 Request body fields:
-- `id` (string, required) — document ID
-- `content` (string, required) — full file content including optional frontmatter
 
-Returns `201` with `{"message": "..."}` on success. Returns `409` if a document with that ID already exists.
+- `id` (string, required): document ID relative to the target scope
+- `content` (string, required): full file content including optional frontmatter
+
+Returns `201` on success. Returns `409` if a document with that ID already exists in the target scope.
 
 ### Update Document
 
 ```bash
-curl -X PATCH "http://localhost:8080/api/v1/docs/doc?path=runbooks/deployment" \
+curl -X PATCH "http://localhost:8080/api/v1/docs/doc?path=daily-report/latest-run&workspaceScope=workspace&workspace=ops" \
   -H "Content-Type: application/json" \
-  -d '{"content": "---\ntitle: Deployment Runbook\n---\n\n## Updated Steps\n\n1. Pull latest changes\n2. Run migrations"}'
+  -d '{"content": "---\ntitle: Latest Run Results\n---\n\n## Updated Results"}'
 ```
 
 Request body fields:
-- `content` (string, required) — full file content including optional frontmatter
 
-Returns `404` if the document does not exist.
+- `content` (string, required): full file content including optional frontmatter
+
+Returns `404` if the document does not exist in the requested scope.
 
 ### Delete Document
 
 ```bash
-curl -X DELETE "http://localhost:8080/api/v1/docs/doc?path=runbooks/deployment"
+curl -X DELETE "http://localhost:8080/api/v1/docs/doc?path=daily-report/latest-run&workspaceScope=workspace&workspace=ops"
 ```
 
-Returns `204` with no response body on success. Returns `404` if the document does not exist.
+Returns `204` with no response body on success. Returns `404` if the document does not exist in the requested scope.
 
 Empty parent directories are automatically removed after deletion.
 
 ### Rename Document
 
 ```bash
-curl -X POST "http://localhost:8080/api/v1/docs/doc/rename?path=runbooks/deployment" \
+curl -X POST "http://localhost:8080/api/v1/docs/doc/rename?path=daily-report/latest-run&workspaceScope=workspace&workspace=ops" \
   -H "Content-Type: application/json" \
-  -d '{"newPath": "runbooks/deploy-guide"}'
+  -d '{"newPath": "daily-report/run-summary"}'
 ```
 
 Request body fields:
-- `newPath` (string, required) — new document ID
+
+- `newPath` (string, required): new document ID relative to the same target scope
 
 Returns `404` if the source document does not exist. Returns `409` if a document already exists at the target path.
 
@@ -274,11 +347,12 @@ Empty parent directories of the old path are automatically removed.
 
 ## Permissions
 
-Read endpoints (`GET /docs`, `GET /docs/doc`, `GET /docs/search`) are available to all authenticated users.
+Read endpoints (`GET /docs`, `GET /docs/doc`, `GET /docs/search`) are available to authenticated users, limited by their workspace access policy.
 
 Write endpoints (`POST /docs`, `PATCH /docs/doc`, `DELETE /docs/doc`, `POST /docs/doc/rename`) require:
+
 1. The server-level `write_dags` permission to be enabled
-2. The user's role to satisfy `CanWrite()`: `admin`, `manager`, or `developer`
+2. The user's effective role for the target workspace to satisfy `CanWrite()`: `admin`, `manager`, or `developer`
 
 Write operations are also blocked when Git Sync is in read-only mode (`push_enabled: false`).
 
@@ -286,9 +360,11 @@ Write operations are also blocked when Git Sync is in read-only mode (`push_enab
 
 Documents are synced alongside DAGs when [Git Sync](/server-admin/git-sync) is enabled. They are tracked as the `doc` kind in the sync state. Files under `docs/` with the `.md` extension are included in sync scanning.
 
+Workspace folders are regular directories under `paths.docs_dir`, so Git Sync tracks them the same way as other document files.
+
 ## Agent Integration
 
-The AI agent can reference documents via `@` mentions in the agent chat. Typing `@` opens a doc picker that fuzzy-searches available documents. Selected documents are passed as context to the agent.
+The AI agent can reference documents via `@` mentions in the agent chat. Typing `@` opens a doc picker that fuzzy-searches available documents in the current workspace scope. Selected documents are passed as context to the agent.
 
 The agent's `navigate` tool supports `/docs` and `/docs/<doc-id>` paths to open the documents page or a specific document in the UI.
 

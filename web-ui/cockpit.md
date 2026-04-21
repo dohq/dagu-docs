@@ -2,62 +2,66 @@
 
 <img src="/cockpit-demo.gif" alt="Cockpit demo" style="width: 100%; border-radius: 8px; margin: 16px 0 24px;" />
 
-A workspace-scoped kanban view for monitoring DAG runs across dates. Available at `/cockpit` in the Web UI.
+A kanban view for monitoring DAG runs across dates. Available at `/cockpit` in the Web UI.
+
+Cockpit uses the global workspace selector in the Web UI navigation. The selector is no longer part of the Cockpit toolbar.
 
 ## Page Structure
 
-The page renders two areas unconditionally:
+The page renders two areas:
 
-1. **Toolbar** -- workspace selector, template selector
-2. **Kanban board** -- DAG runs grouped by date, split into status columns
+1. **Toolbar**: template selector and DAG preview side panel
+2. **Kanban board**: DAG runs grouped by date and split into status columns
 
-## Workspace Selector
+## Workspace Scope
 
-A dropdown listing all workspaces by name.
+Cockpit follows the global workspace scope:
 
-- **"All workspaces"** -- deselects the workspace filter, shows all DAG runs regardless of workspace label
-- **"New workspace"** -- opens an inline text input; only visible when the current user has the `canWrite` permission (checked via `useCanWrite()` from the auth context)
-- **Delete** -- trash icon next to the currently selected workspace; opens a confirmation dialog before deleting
+| UI label | Behavior |
+|----------|----------|
+| `all` | Shows DAG runs from every workspace the current identity can access, plus `default` runs. |
+| `default` | Shows DAG runs with no valid `workspace=<name>` label. |
+| `<workspace>` | Shows DAG runs for that named workspace. |
 
-The selected workspace name is persisted to `localStorage` under the key `dagu_cockpit_workspace`. On page load, the previously selected workspace is restored from this key.
+The selected scope is remembered in `localStorage` under `dagu-selected-workspace-scope`. See [Workspaces](/web-ui/workspaces) for scope semantics, storage, and permissions.
 
-Workspace names are sanitized on creation: characters not matching `[a-zA-Z0-9_-]` are stripped.
-
-See [Workspaces](/web-ui/workspaces) for the API and storage details.
+Switching workspace scope or remote node closes the open DAG preview and resets Cockpit's loaded date sections.
 
 ## Template Selector
 
-A dropdown to browse and select a DAG definition. Selecting a DAG opens the preview modal.
+A dropdown to browse and select a DAG definition. Selecting a DAG opens the preview side panel.
 
-- **Search** -- text input with 300ms debounce, queries `GET /api/v1/dags` with `name` filter and `perPage=50`
-- **Label filter** -- clickable label badges below the search input; labels with `workspace=` prefix are hidden from the filter row
-- **Grouping** -- DAGs are grouped by their `group` field, sorted alphabetically; ungrouped DAGs appear last under `(ungrouped)`
-- **Workspace filtering** -- when a workspace is selected, DAGs with a `workspace=X` label that doesn't match the selected workspace are excluded; DAGs with no `workspace=` label are always shown
-- **Keyboard** -- `ArrowDown`/`ArrowUp` to navigate, `Enter` to select, `Escape` to close and reset filters
+- **Search**: text input with debounce, queries `GET /api/v1/dags`
+- **Label filter**: clickable label badges below the search input; `workspace=` labels are hidden from the filter row
+- **Grouping**: DAGs are grouped by their `group` field, sorted alphabetically; ungrouped DAGs appear last under `(ungrouped)`
+- **Workspace filtering**: the DAG list request includes the current `workspaceScope` and optional `workspace` query parameters
+- **Keyboard**: `ArrowDown` and `ArrowUp` to navigate, `Enter` to select, `Escape` to close and reset filters
 
 Each item shows:
-- DAG name (red with warning icon if it has load errors)
-- Description (truncated to one line)
-- First 3 labels as badges, with `+N` overflow indicator
-- Parameter count (e.g., `3p`)
+
+- DAG name, with a warning icon when it has load errors
+- Description, truncated to one line
+- First three labels as badges, with a `+N` overflow indicator
+- Parameter count, for example `3p`
 
 ## Kanban Board
 
-DAG runs for each date are grouped into four columns:
+DAG runs for each date are grouped into columns:
 
 | Column | Statuses |
 |--------|----------|
 | Queued | `queued`, `not_started` |
-| Running | `running`, `waiting` |
+| Running | `running` |
+| Review | `waiting` |
 | Done | `success`, `partial_success` |
 | Failed | `failed`, `aborted`, `rejected` |
 
 ### Date Sections
 
-- **Initial load** -- today and yesterday
-- **Infinite scroll** -- scrolling to the bottom loads the previous day, up to 30 days back
-- **Real-time updates** -- today's section uses Server-Sent Events (SSE); past dates use a single REST fetch with `refreshInterval: 0` (no polling)
-- **Reset** -- switching workspaces resets to today + yesterday
+- **Initial load**: today and yesterday
+- **Infinite scroll**: scrolling to the bottom loads older days, up to 30 days back
+- **Real-time updates**: today's section uses live updates; past dates use one REST fetch without polling
+- **Reset**: switching workspace scope resets the board state
 
 ### Kanban Cards
 
@@ -66,60 +70,46 @@ Each card displays:
 | Field | Description |
 |-------|-------------|
 | Name | DAG run name, truncated |
-| Status | Color-coded status chip with label |
-| Elapsed time | Formatted as `Xs`, `Xm Ys`, or `Xh Ym`. For `running` status, a `Ticker` component re-renders every 1000ms. |
-| Parameters | First 60 characters, monospace font, truncated with `...` |
+| Status | Color-coded status chip |
+| Elapsed time | Formatted as `Xs`, `Xm Ys`, or `Xh Ym`; running cards update once per second |
+| Parameters | First 60 characters, monospace, truncated with `...` |
 
-Clicking a card opens the DAG Run Details modal (same modal used elsewhere in the UI, not the DAG Preview modal).
+Clicking a card opens the DAG Run Details modal.
 
-Cards use Framer Motion `layoutId` animations keyed by `dagRunId`.
+## DAG Preview Side Panel
 
-## DAG Preview Modal
+The preview side panel renders the same DAG details component used on the DAG details page. It fetches the full DAG details before rendering the start/enqueue form, so `runConfig`, defaults, and `paramDefs` metadata match the full DAG view.
 
-Opens as a side panel from the right edge, covering 3/4 of the viewport (`md:w-3/4`), full width on mobile. Slides in with a 150ms CSS transition.
-
-The modal renders the same `DAGDetailsContent` component used on `/dags/{fileName}/spec`, with real-time SSE updates via `useDAGSSE`.
-
-Before rendering the start/enqueue form, Cockpit fetches the full DAG details from `GET /api/v1/dags/{fileName}`. That ensures the modal uses the same `runConfig`, defaults, and `paramDefs` metadata as the full DAG details page.
-
-When `paramDefs` is present, enqueue/start controls are rendered as typed inputs, and each param `description` is shown inline below its control as help text. When it is absent, the modal falls back to the raw parameter editor.
+When `paramDefs` is present, enqueue/start controls are rendered as typed inputs. When it is absent, the modal falls back to the raw parameter editor.
 
 ### Enqueue Behavior
 
-When enqueueing a DAG from the preview modal, the workspace label `workspace=<name>` is injected into the YAML spec before submission:
+When enqueueing from Cockpit:
 
-1. The workspace name is sanitized: `name.replace(/[^a-zA-Z0-9_-]/g, '')`
-2. The label is injected into the YAML spec using string manipulation:
-   - If a `labels:` key exists with array-style values (e.g., `- tag1`), a new `- workspace=<name>` line is appended
-   - If a `labels:` key exists with scalar value (e.g., `labels: "foo,bar"`), it becomes `labels: "foo,bar,workspace=<name>"`
-   - If no `labels:` key exists, `labels:\n  - workspace=<name>\n` is appended to the end
-3. The modified spec is submitted via `POST /api/v1/dag-runs/enqueue`
+- If a named workspace is selected, Cockpit adds `workspace=<name>` to the enqueue request labels.
+- If `all` or `default` is selected, Cockpit does not add a workspace label.
+- The server merges request labels with labels defined in the DAG spec.
 
-If no workspace is selected (`selectedWorkspace` is empty), the enqueue handler returns early without submitting.
+Cockpit only adds sanitized workspace names matching `^[A-Za-z0-9_-]+$`.
 
 ### Keyboard Shortcuts
 
 | Key | Action |
 |-----|--------|
-| `Escape` | Close the modal |
+| `Escape` | Close the side panel |
 | `f` or `F` | Navigate to the DAG in fullscreen view (`/dags/{fileName}/spec`) |
-| `Cmd/Ctrl + Click` on fullscreen button | Open in new tab via `window.open` |
+| `Cmd/Ctrl + Click` on fullscreen button | Open in a new tab |
 
-Shortcuts are suppressed when focus is inside an input/textarea (checked via `shouldIgnoreKeyboardShortcuts()`), or when `Cmd`/`Ctrl` is held.
+Shortcuts are ignored while focus is inside an input or textarea.
 
 ## Data Flow
 
-```
-Workspace selected
-  -> localStorage: dagu_cockpit_workspace = <name>
-  -> Label filter: workspace=<name>
-  -> GET /api/v1/dag-runs?remoteNode=<node>&labels=workspace%3D<name>&fromDate=<unix>&toDate=<unix>
-  -> groupByStatus() -> Kanban columns
-```
-
-For today's date, SSE replaces polling:
-```
-SSE {apiURL}/events/dag-runs?remoteNode=<node>&labels=workspace%3D<name>&fromDate=<unix>&toDate=<unix>
+```text
+Global workspace selection
+  -> localStorage: dagu-selected-workspace-scope
+  -> Cockpit query: workspaceScope=<all|none|workspace>[&workspace=<name>]
+  -> GET /api/v1/dags for templates
+  -> GET /api/v1/dag-runs for kanban columns
 ```
 
-The `fromDate` and `toDate` are unix timestamps representing the start and end of the day, adjusted for the configured timezone offset (`tzOffsetInSec`).
+Date bounds are sent as Unix timestamps using the configured server timezone offset.

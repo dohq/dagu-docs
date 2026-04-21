@@ -1654,6 +1654,8 @@ Returns lightweight cursor-based DAG search results for the global search page.
 | limit | integer | Number of results to return (max 50) | No |
 | cursor | string | Opaque cursor returned by a previous response | No |
 | remoteNode | string | Remote node name | No |
+| workspaceScope | `all`, `none`, `workspace` | Workspace scope. Omitted defaults to `all`. | No |
+| workspace | string | Workspace name when `workspaceScope=workspace` | No |
 
 Each result includes preview snippets plus `hasMoreMatches` and `nextMatchesCursor` for loading more snippets from that result.
 
@@ -1693,6 +1695,8 @@ Returns lightweight cursor-based document search results for the global search p
 | limit | integer | Number of results to return (max 50) | No |
 | cursor | string | Opaque cursor returned by a previous response | No |
 | remoteNode | string | Remote node name | No |
+| workspaceScope | `all`, `none`, `workspace` | Workspace scope. Omitted defaults to `all`. | No |
+| workspace | string | Workspace name when `workspaceScope=workspace` | No |
 
 This endpoint is available only when document management is enabled.
 
@@ -1730,6 +1734,8 @@ Loads additional cursor-based snippets for one DAG search result.
 | limit | integer | Number of snippets to return (max 50) | No |
 | cursor | string | Opaque cursor returned by a previous snippet response | No |
 | remoteNode | string | Remote node name | No |
+| workspaceScope | `none`, `workspace` | Resource scope for the selected DAG result. | No |
+| workspace | string | Workspace name when `workspaceScope=workspace` | No |
 
 **Response (200)**:
 ```json
@@ -1759,6 +1765,8 @@ Loads additional cursor-based snippets for one document search result.
 | limit | integer | Number of snippets to return (max 50) | No |
 | cursor | string | Opaque cursor returned by a previous snippet response | No |
 | remoteNode | string | Remote node name | No |
+| workspaceScope | `none`, `workspace` | Resource scope for the selected document result. | No |
+| workspace | string | Workspace name when `workspaceScope=workspace` | No |
 
 ### Event Logs
 
@@ -3602,11 +3610,21 @@ curl -X POST "http://localhost:8080/api/v1/sync/cleanup"
 
 ## Workspace Endpoints
 
+Workspace-aware list and search APIs use `workspaceScope`:
+
+| Value | Meaning |
+|-------|---------|
+| `all` | All resources the current user or API key can access. |
+| `none` | Resources without a valid `workspace=<name>` label. The Web UI labels this scope as `default`. |
+| `workspace` | One named workspace, with `workspace=<name>`. |
+
+Mutation APIs use only `none` or `workspace`; `all` is an aggregate read scope.
+
 ### List Workspaces
 
 **Endpoint**: `GET /api/v1/workspaces`
 
-Retrieves all workspaces. No authentication required.
+Retrieves workspaces. Requires authentication.
 
 **Query Parameters**:
 | Parameter | Type | Description | Default |
@@ -3644,7 +3662,7 @@ Creates a new workspace. Requires **developer** role or above.
 }
 ```
 
-`name` is required. `description` is optional.
+`name` is required and must match `^[A-Za-z0-9_-]+$`. `description` is optional.
 
 **Response (201)**: The created workspace object.
 
@@ -3668,7 +3686,7 @@ Creates a new workspace. Requires **developer** role or above.
 
 **Endpoint**: `GET /api/v1/workspaces/{workspaceId}`
 
-Retrieves a single workspace by ID. No authentication required.
+Retrieves a single workspace by ID. Requires authentication.
 
 **Path Parameters**:
 | Parameter | Type | Description |
@@ -3717,6 +3735,8 @@ Both fields are optional. Empty string for `name` is ignored.
 **Endpoint**: `DELETE /api/v1/workspaces/{workspaceId}`
 
 Deletes a workspace. Requires **developer** role or above.
+
+Deleting a workspace removes the workspace record only. It does not rewrite DAG files, historical DAG runs, documents, users, or API keys.
 
 **Path Parameters**:
 | Parameter | Type | Description |

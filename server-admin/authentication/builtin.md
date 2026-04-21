@@ -14,6 +14,7 @@ This page covers self-hosted Dagu. On self-hosted Dagu, creating, updating, and 
 - **API Key Management**: Create and manage API keys for programmatic access with role-based permissions
 - **User Management**: List and inspect users, reset passwords, and, with an active self-host license, create, update, disable, and delete users through the web UI and API
 - **Role-Based Access Control**: Five roles with different permission levels
+- **Workspace Access Management**: Grant users access to all workspaces or selected workspaces with per-workspace roles
 - **OIDC/SSO Integration**: Add enterprise identity providers under builtin auth
 
 ## Roles
@@ -25,6 +26,10 @@ This page covers self-hosted Dagu. On self-hosted Dagu, creating, updating, and 
 | `developer` | Create, edit, delete, run, and stop DAGs |
 | `operator` | Run and stop DAGs (execute only) |
 | `viewer` | Read-only access to DAGs and execution history |
+
+Workspace access can further scope a user to selected workspaces. Selected-workspace users keep top-level role `viewer` and receive per-workspace grants such as `developer` for `ops` and `operator` for `prod`. Resources with no workspace label are shown as `default` and remain visible through the top-level viewer role.
+
+See [User Management](./user-management#workspace-access) for the full workspace access rules and API schema.
 
 ## Configuration
 
@@ -173,7 +178,7 @@ curl -H "Authorization: Bearer eyJhbG..." \
 curl -X POST http://localhost:8080/api/v1/users \
   -H "Authorization: Bearer eyJhbG..." \
   -H "Content-Type: application/json" \
-  -d '{"username": "newuser", "password": "secure-pass", "role": "operator"}'
+  -d '{"username": "newuser", "password": "secure-pass", "role": "operator", "workspaceAccess": {"all": true}}'
 ```
 
 ### Update User
