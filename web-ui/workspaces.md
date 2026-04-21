@@ -6,19 +6,19 @@ The workspace selector is global. It appears in the Web UI navigation above the 
 
 Workspaces are an organization and navigation scope inside one Dagu installation. They are not a multi-tenant isolation model and should not be treated as a hard security boundary between tenants. Use separate Dagu deployments and separate storage when you need tenant isolation.
 
-## Workspace Scopes
+## Workspace Selection
 
 The selector has three kinds of values:
 
 | UI label | API value | Meaning |
 |----------|-----------|---------|
-| `all` | `workspaceScope=all` | Show all data the current user or API key can access. |
-| `default` | `workspaceScope=default` | Show resources with no valid `workspace=<name>` label. This is not an automatically created workspace record. |
-| `<workspace>` | `workspaceScope=workspace&workspace=<name>` | Show one named workspace. |
+| `all` | `workspace=all` | Show all data the current user or API key can access. |
+| `default` | `workspace=default` | Show resources with no valid `workspace=<name>` label. This is not an automatically created workspace record. |
+| `<workspace>` | `workspace=<name>` | Show one named workspace. |
 
 Missing or invalid workspace selection defaults to `all`.
 
-The selected scope is persisted in browser `localStorage` under `dagu-selected-workspace-scope`. Older keys, including `dagu-selected-workspace` and `dagu_cockpit_workspace`, are migrated and removed automatically.
+The selected workspace is persisted in browser `localStorage` under `dagu-selected-workspace`. Older keys, including `dagu-selected-workspace-scope` and `dagu_cockpit_workspace`, are migrated and removed automatically.
 
 ## Labels
 
@@ -39,22 +39,22 @@ Workspace names must match:
 
 The value can contain letters, numbers, underscores, and hyphens. It cannot be empty and cannot contain `/`, whitespace, dots, or other punctuation. This restriction lets the same name be used safely as a label value and filesystem path segment.
 
-## Scope Behavior
+## API Behavior
 
-List and search APIs accept:
+List and search APIs use one optional `workspace` query parameter:
 
-- `workspaceScope=all` for `all`
-- `workspaceScope=default` for `default`
-- `workspaceScope=workspace&workspace=<name>` for one named workspace
+- `workspace=all` for `all`
+- `workspace=default` for `default`
+- `workspace=<name>` for one named workspace
 
-When `workspaceScope` is omitted, list and search APIs default to `all`.
+When `workspace` is omitted, list and search APIs default to `all`.
 
-Single-resource and mutation APIs use only mutable scopes:
+Single-resource and mutation APIs use only concrete workspace targets:
 
-- `workspaceScope=default`
-- `workspaceScope=workspace&workspace=<name>`
+- omit `workspace`, or set `workspace=default`, for resources without a workspace label
+- `workspace=<name>` for one named workspace
 
-`workspaceScope=all` is an aggregate read scope and cannot be used as the target for creating, updating, deleting, or renaming one resource.
+`workspace=all` is an aggregate read value and cannot be used as the target for creating, updating, deleting, or renaming one resource.
 
 ## Documents
 

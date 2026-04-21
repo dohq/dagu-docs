@@ -13,9 +13,9 @@ The page renders two areas:
 1. **Toolbar**: template selector and DAG preview side panel
 2. **Kanban board**: DAG runs grouped by date and split into status columns
 
-## Workspace Scope
+## Workspace Selection
 
-Cockpit follows the global workspace scope:
+Cockpit follows the global workspace selection:
 
 | UI label | Behavior |
 |----------|----------|
@@ -23,9 +23,9 @@ Cockpit follows the global workspace scope:
 | `default` | Shows DAG runs with no valid `workspace=<name>` label. |
 | `<workspace>` | Shows DAG runs for that named workspace. |
 
-The selected scope is remembered in `localStorage` under `dagu-selected-workspace-scope`. See [Workspaces](/web-ui/workspaces) for scope semantics, storage, and permissions.
+The selected workspace is remembered in `localStorage` under `dagu-selected-workspace`. See [Workspaces](/web-ui/workspaces) for workspace behavior, storage, and permissions.
 
-Switching workspace scope or remote node closes the open DAG preview and resets Cockpit's loaded date sections.
+Switching workspace or remote node closes the open DAG preview and resets Cockpit's loaded date sections.
 
 ## Template Selector
 
@@ -34,7 +34,7 @@ A dropdown to browse and select a DAG definition. Selecting a DAG opens the prev
 - **Search**: text input with debounce, queries `GET /api/v1/dags`
 - **Label filter**: clickable label badges below the search input; `workspace=` labels are hidden from the filter row
 - **Grouping**: DAGs are grouped by their `group` field, sorted alphabetically; ungrouped DAGs appear last under `(ungrouped)`
-- **Workspace filtering**: the DAG list request includes the current `workspaceScope` and optional `workspace` query parameters
+- **Workspace filtering**: the DAG list request includes the current `workspace` query parameter
 - **Keyboard**: `ArrowDown` and `ArrowUp` to navigate, `Enter` to select, `Escape` to close and reset filters
 
 Each item shows:
@@ -61,7 +61,7 @@ DAG runs for each date are grouped into columns:
 - **Initial load**: today and yesterday
 - **Infinite scroll**: scrolling to the bottom loads older days, up to 30 days back
 - **Real-time updates**: today's section uses live updates; past dates use one REST fetch without polling
-- **Reset**: switching workspace scope resets the board state
+- **Reset**: switching workspace resets the board state
 
 ### Kanban Cards
 
@@ -106,8 +106,8 @@ Shortcuts are ignored while focus is inside an input or textarea.
 
 ```text
 Global workspace selection
-  -> localStorage: dagu-selected-workspace-scope
-  -> Cockpit query: workspaceScope=<all|default|workspace>[&workspace=<name>]
+  -> localStorage: dagu-selected-workspace
+  -> Cockpit query: workspace=<all|default|name>
   -> GET /api/v1/dags for templates
   -> GET /api/v1/dag-runs for kanban columns
 ```

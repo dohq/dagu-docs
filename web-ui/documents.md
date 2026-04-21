@@ -30,17 +30,17 @@ When one workspace is selected, document IDs are relative to that workspace. For
 
 In `all`, the API can return documents from all workspaces the current identity can access and `default`. Workspace documents include their workspace metadata so the UI can disambiguate them.
 
-## Workspace Scopes
+## Workspace Selection
 
 The Documents page follows the global workspace selector:
 
-| UI label | API scope | Behavior |
+| UI label | API query | Behavior |
 |----------|-----------|----------|
-| `all` | `workspaceScope=all` | Lists and searches all documents the current identity can access. |
-| `default` | `workspaceScope=default` | Lists and edits documents outside known workspace folders. |
-| `<workspace>` | `workspaceScope=workspace&workspace=<name>` | Lists and edits documents under `{docs_dir}/<workspace>/`. |
+| `all` | `workspace=all` | Lists and searches all documents the current identity can access. |
+| `default` | `workspace=default` | Lists and edits documents outside known workspace folders. |
+| `<workspace>` | `workspace=<name>` | Lists and edits documents under `{docs_dir}/<workspace>/`. |
 
-Read/list/search endpoints accept all three scopes. Create, update, delete, and rename endpoints accept only `default` or `workspace`, because `all` is an aggregate view and is not a valid mutation target.
+Read/list/search endpoints accept all three values. Create, update, delete, and rename endpoints accept only `default` or a named workspace, because `all` is an aggregate view and is not a valid mutation target.
 
 ## Generating Documents from DAG Steps
 
@@ -156,26 +156,24 @@ All endpoints are under `/api/v1`. All accept an optional `remoteNode` query par
 
 Single-document endpoints use `/docs/doc` with a `path` query parameter rather than embedding the path in the URL.
 
-### Workspace Query Parameters
+### Workspace Query Parameter
 
 Read/list/search endpoints:
 
 | Parameter | Type | Description |
 |---|---|---|
-| `workspaceScope` | `all`, `default`, `workspace` | Scope to read. Omitted defaults to `all`. |
-| `workspace` | string | Required when `workspaceScope=workspace`; omitted for `all` and `default`. |
+| `workspace` | `all`, `default`, or workspace name | Workspace to read. Omitted defaults to `all`. |
 
 Mutation endpoints:
 
 | Parameter | Type | Description |
 |---|---|---|
-| `workspaceScope` | `default`, `workspace` | Target scope. Omitted defaults to `default`. |
-| `workspace` | string | Required when `workspaceScope=workspace`. |
+| `workspace` | `default` or workspace name | Target workspace. Omitted defaults to `default`. |
 
 ### List Documents
 
 ```bash
-curl "http://localhost:8080/api/v1/docs?workspaceScope=workspace&workspace=ops&perPage=50"
+curl "http://localhost:8080/api/v1/docs?workspace=ops&perPage=50"
 ```
 
 Query parameters:
@@ -185,8 +183,7 @@ Query parameters:
 | `page` | integer | `1` | Page number, minimum 1 |
 | `perPage` | integer | `50` | Items per page, minimum 1 and maximum 1000 |
 | `flat` | boolean | `false` | If true, returns a flat list instead of a tree |
-| `workspaceScope` | string | `all` | Workspace scope |
-| `workspace` | string | | Workspace name when `workspaceScope=workspace` |
+| `workspace` | string | `all` | `all`, `default`, or a workspace name |
 
 Tree response:
 
@@ -245,7 +242,7 @@ Items in flat mode are sorted alphabetically by `id`.
 ### Get Document
 
 ```bash
-curl "http://localhost:8080/api/v1/docs/doc?path=daily-report/latest-run&workspaceScope=workspace&workspace=ops"
+curl "http://localhost:8080/api/v1/docs/doc?path=daily-report/latest-run&workspace=ops"
 ```
 
 Response:
@@ -263,15 +260,15 @@ Response:
 
 The `content` field contains the full file including frontmatter. `createdAt` is the file creation time when the platform exposes it. `updatedAt` is the file modification time.
 
-Returns `404` if the document does not exist or is outside the requested workspace scope.
+Returns `404` if the document does not exist or is outside the requested workspace.
 
 ### Search Documents
 
 ```bash
-curl "http://localhost:8080/api/v1/docs/search?q=deployment&workspaceScope=all"
+curl "http://localhost:8080/api/v1/docs/search?q=deployment&workspace=all"
 ```
 
-The `q` parameter is required. Searches document content within the requested workspace scope.
+The `q` parameter is required. Searches document content within the requested workspace.
 
 Response:
 
@@ -293,7 +290,7 @@ Response:
 ### Create Document
 
 ```bash
-curl -X POST "http://localhost:8080/api/v1/docs?workspaceScope=workspace&workspace=ops" \
+curl -X POST "http://localhost:8080/api/v1/docs?workspace=ops" \
   -H "Content-Type: application/json" \
   -d '{"id": "daily-report/latest-run", "content": "---\ntitle: Latest Run Results\n---\n\n## Results"}'
 ```
@@ -308,7 +305,7 @@ Returns `201` on success. Returns `409` if a document with that ID already exist
 ### Update Document
 
 ```bash
-curl -X PATCH "http://localhost:8080/api/v1/docs/doc?path=daily-report/latest-run&workspaceScope=workspace&workspace=ops" \
+curl -X PATCH "http://localhost:8080/api/v1/docs/doc?path=daily-report/latest-run&workspace=ops" \
   -H "Content-Type: application/json" \
   -d '{"content": "---\ntitle: Latest Run Results\n---\n\n## Updated Results"}'
 ```
@@ -322,7 +319,7 @@ Returns `404` if the document does not exist in the requested scope.
 ### Delete Document
 
 ```bash
-curl -X DELETE "http://localhost:8080/api/v1/docs/doc?path=daily-report/latest-run&workspaceScope=workspace&workspace=ops"
+curl -X DELETE "http://localhost:8080/api/v1/docs/doc?path=daily-report/latest-run&workspace=ops"
 ```
 
 Returns `204` with no response body on success. Returns `404` if the document does not exist in the requested scope.
@@ -332,7 +329,7 @@ Empty parent directories are automatically removed after deletion.
 ### Rename Document
 
 ```bash
-curl -X POST "http://localhost:8080/api/v1/docs/doc/rename?path=daily-report/latest-run&workspaceScope=workspace&workspace=ops" \
+curl -X POST "http://localhost:8080/api/v1/docs/doc/rename?path=daily-report/latest-run&workspace=ops" \
   -H "Content-Type: application/json" \
   -d '{"newPath": "daily-report/run-summary"}'
 ```
@@ -364,7 +361,7 @@ Workspace folders are regular directories under `paths.docs_dir`, so Git Sync tr
 
 ## Agent Integration
 
-The AI agent can reference documents via `@` mentions in the agent chat. Typing `@` opens a doc picker that fuzzy-searches available documents in the current workspace scope. Selected documents are passed as context to the agent.
+The AI agent can reference documents via `@` mentions in the agent chat. Typing `@` opens a doc picker that fuzzy-searches available documents in the current workspace. Selected documents are passed as context to the agent.
 
 The agent's `navigate` tool supports `/docs` and `/docs/<doc-id>` paths to open the documents page or a specific document in the UI.
 

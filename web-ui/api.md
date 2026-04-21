@@ -1654,8 +1654,7 @@ Returns lightweight cursor-based DAG search results for the global search page.
 | limit | integer | Number of results to return (max 50) | No |
 | cursor | string | Opaque cursor returned by a previous response | No |
 | remoteNode | string | Remote node name | No |
-| workspaceScope | `all`, `default`, `workspace` | Workspace scope. Omitted defaults to `all`. | No |
-| workspace | string | Workspace name when `workspaceScope=workspace` | No |
+| workspace | `all`, `default`, or workspace name | Workspace to search. Omitted defaults to `all`. | No |
 
 Each result includes preview snippets plus `hasMoreMatches` and `nextMatchesCursor` for loading more snippets from that result.
 
@@ -1695,8 +1694,7 @@ Returns lightweight cursor-based document search results for the global search p
 | limit | integer | Number of results to return (max 50) | No |
 | cursor | string | Opaque cursor returned by a previous response | No |
 | remoteNode | string | Remote node name | No |
-| workspaceScope | `all`, `default`, `workspace` | Workspace scope. Omitted defaults to `all`. | No |
-| workspace | string | Workspace name when `workspaceScope=workspace` | No |
+| workspace | `all`, `default`, or workspace name | Workspace to search. Omitted defaults to `all`. | No |
 
 This endpoint is available only when document management is enabled.
 
@@ -1734,8 +1732,7 @@ Loads additional cursor-based snippets for one DAG search result.
 | limit | integer | Number of snippets to return (max 50) | No |
 | cursor | string | Opaque cursor returned by a previous snippet response | No |
 | remoteNode | string | Remote node name | No |
-| workspaceScope | `default`, `workspace` | Resource scope for the selected DAG result. | No |
-| workspace | string | Workspace name when `workspaceScope=workspace` | No |
+| workspace | `default` or workspace name | Workspace for the selected DAG result. Omitted defaults to `default`. | No |
 
 **Response (200)**:
 ```json
@@ -1765,8 +1762,7 @@ Loads additional cursor-based snippets for one document search result.
 | limit | integer | Number of snippets to return (max 50) | No |
 | cursor | string | Opaque cursor returned by a previous snippet response | No |
 | remoteNode | string | Remote node name | No |
-| workspaceScope | `default`, `workspace` | Resource scope for the selected document result. | No |
-| workspace | string | Workspace name when `workspaceScope=workspace` | No |
+| workspace | `default` or workspace name | Workspace for the selected document result. Omitted defaults to `default`. | No |
 
 ### Event Logs
 
@@ -3610,15 +3606,15 @@ curl -X POST "http://localhost:8080/api/v1/sync/cleanup"
 
 ## Workspace Endpoints
 
-Workspace-aware list and search APIs use `workspaceScope`:
+Workspace-aware list and search APIs use one optional `workspace` query parameter:
 
 | Value | Meaning |
 |-------|---------|
 | `all` | All resources the current user or API key can access. |
 | `default` | Resources without a valid `workspace=<name>` label. |
-| `workspace` | One named workspace, with `workspace=<name>`. |
+| `<workspace>` | One named workspace. |
 
-Mutation APIs use only `default` or `workspace`; `all` is an aggregate read scope.
+Mutation APIs use only `default` or a named workspace; `all` is an aggregate read value.
 
 ### List Workspaces
 
