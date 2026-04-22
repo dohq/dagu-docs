@@ -1,5 +1,52 @@
 # Changelog
 
+## v2.6.0 (2026-04-23)
+
+### Added
+
+- feat: add kubernetes secret provider ([#2006](https://github.com/dagu-org/dagu/pull/2006)) [@yottahmd](https://github.com/yottahmd)
+- feat: add bulk DAG-run deletion in web UI ([#2009](https://github.com/dagu-org/dagu/pull/2009)) [@yottahmd](https://github.com/yottahmd)
+- feat: add edit-and-retry DAG runs ([#2010](https://github.com/dagu-org/dagu/pull/2010)) [@yottahmd](https://github.com/yottahmd)
+- feat: add embedded Dagu API ([#2011](https://github.com/dagu-org/dagu/pull/2011)) [@yottahmd](https://github.com/yottahmd)
+- feat: add workflow design workspace ([#2012](https://github.com/dagu-org/dagu/pull/2012)) [@yottahmd](https://github.com/yottahmd)
+- feat: make DAG labels canonical ([#2013](https://github.com/dagu-org/dagu/pull/2013)) [@yottahmd](https://github.com/yottahmd)
+- feat: make workspace selection global ([#2015](https://github.com/dagu-org/dagu/pull/2015)) [@yottahmd](https://github.com/yottahmd)
+- feat: show cockpit run artifacts ([#2017](https://github.com/dagu-org/dagu/pull/2017)) [@yottahmd](https://github.com/yottahmd)
+- Allow disabling DAG retry policy ([#2018](https://github.com/dagu-org/dagu/pull/2018)) [@yottahmd](https://github.com/yottahmd)
+- feat: add workspace access and global filtering ([#2019](https://github.com/dagu-org/dagu/pull/2019)) [@yottahmd](https://github.com/yottahmd)
+- feat: support template functions in custom step types ([#2020](https://github.com/dagu-org/dagu/pull/2020)) [@yottahmd](https://github.com/yottahmd)
+- feat: add step with config alias ([#2021](https://github.com/dagu-org/dagu/pull/2021)) [@yottahmd](https://github.com/yottahmd)
+
+### Changed
+
+- ci: run tests on windows-latest ([#1997](https://github.com/dagu-org/dagu/pull/1997)) [@yottahmd](https://github.com/yottahmd)
+- ci: split ubuntu and windows tests by suite ([#2002](https://github.com/dagu-org/dagu/pull/2002)) [@yottahmd](https://github.com/yottahmd)
+- test: reduce fixed waits in slow suites ([#2003](https://github.com/dagu-org/dagu/pull/2003)) [@yottahmd](https://github.com/yottahmd)
+- ci: stop uploading Playwright reports ([#2004](https://github.com/dagu-org/dagu/pull/2004)) [@yottahmd](https://github.com/yottahmd)
+- test: stabilize distributed sub-DAG cancellation test ([#2007](https://github.com/dagu-org/dagu/pull/2007)) [@yottahmd](https://github.com/yottahmd)
+- docs: fix double-negative in comment in internal/runtime/condition.go ([#2026](https://github.com/dagu-org/dagu/pull/2026)) [@kuishou68](https://github.com/kuishou68)
+- refactor(ui): standardize component library usage ([#2030](https://github.com/dagu-org/dagu/pull/2030)) [@yottahmd](https://github.com/yottahmd)
+
+### Fixed
+
+- fix: allow runtime custom step inputs ([#2005](https://github.com/dagu-org/dagu/pull/2005)) [@yottahmd](https://github.com/yottahmd)
+- fix: align embedded engine run labels ([#2014](https://github.com/dagu-org/dagu/pull/2014)) [@yottahmd](https://github.com/yottahmd)
+- fix: validate sftp executor schema ([#2022](https://github.com/dagu-org/dagu/pull/2022)) [@yottahmd](https://github.com/yottahmd)
+- fix: handle Windows file persistence races ([#2027](https://github.com/dagu-org/dagu/pull/2027)) [@yottahmd](https://github.com/yottahmd)
+- fix: restore DAG status live updates ([#2028](https://github.com/dagu-org/dagu/pull/2028)) [@yottahmd](https://github.com/yottahmd)
+- Fix worker selector for sub-DAG calls ([#2029](https://github.com/dagu-org/dagu/pull/2029)) [@yottahmd](https://github.com/yottahmd)
+
+### Contributors
+
+Thanks to our contributors for this release:
+
+| Contribution | Contributor |
+| --- | --- |
+| Allow disabling all kinds of retries for a DAG ([#2016](https://github.com/dagu-org/dagu/issues/2016)) | [@struffel](https://github.com/struffel) (report) |
+| [BUG] - DAG Definitions - type sftp unrecognized ([#1976](https://github.com/dagu-org/dagu/issues/1976)) | [@thimuslux](https://github.com/thimuslux) (report) |
+| docs: fix double-negative in comment in internal/runtime/condition.go ([#2026](https://github.com/dagu-org/dagu/pull/2026)), docs: fix double-negative in comment in internal/runtime/condition.go ([#2025](https://github.com/dagu-org/dagu/issues/2025)) | [@kuishou68](https://github.com/kuishou68) |
+| immediate execution does not respect workerSelector ([#1638](https://github.com/dagu-org/dagu/issues/1638)) | [@scilo7](https://github.com/scilo7) (report) |
+
 ## v2.5.0 (2026-04-12)
 
 ### Added
