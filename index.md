@@ -5,8 +5,8 @@ layout: doc
 <img src="/hero-logo.webp" alt="Dagu" style="display: block; margin: 0 auto; width: 100%">
 
 <div class="tagline" style="text-align: center;">
-  <h2>Workflow Orchestration Engine</h2>
-  <p>Single binary. No external dependencies. Scales from standalone to distributed cluster over gRPC.</p>
+  <h2>The command-native workflow engine AI agents need.</h2>
+  <p>Turn scripts, containers, and agent CLIs into scheduled, observable, retryable workflows. One self-hosted binary. No database, no broker, no SDK rewrite.</p>
 </div>
 
 <div class="hero-section">
@@ -26,13 +26,13 @@ Credentials: `demouser` / `demouser`
 
 ## What Dagu Does
 
-Dagu is a workflow orchestration engine that runs as a single binary with no external databases or message brokers. Workflows are defined as DAGs (Directed Acyclic Graphs) in YAML. It supports local execution, cron scheduling, queue-based concurrency control, and distributed coordinator/worker execution across multiple machines over gRPC.
+Dagu is a command-native workflow engine that runs as a single binary with no external databases or message brokers. It turns scripts, commands, containers, server tasks, and agent CLIs into DAGs (Directed Acyclic Graphs) defined in YAML. It supports local execution, cron scheduling, queue-based concurrency control, and distributed coordinator/worker execution across multiple machines over gRPC.
 
 All state is stored in local files by default. There is nothing to install besides the binary itself.
 
 ## Real-World Use Cases
 
-Dagu is useful when scripts, containers, server jobs, or data tasks need visible dependencies, schedules, logs, retries, and a simple way to operate them.
+Dagu is useful when scripts, containers, server jobs, data tasks, or agent-driven work need visible dependencies, schedules, logs, retries, and a simple way to operate them.
 
 <div class="real-world-usecases">
   <div class="real-world-usecase">
@@ -71,9 +71,9 @@ Dagu is useful when scripts, containers, server jobs, or data tasks need visible
     <p><strong>Why Dagu fits:</strong> the single binary and file-backed state work well on small devices while still providing visibility through the Web UI.</p>
   </div>
   <div class="real-world-usecase">
-    <h3>AI Agent Automation</h3>
-    <p><strong>Run:</strong> agent-authored YAML workflows, log analysis, repair steps, and human-reviewed automation.</p>
-    <p><strong>Why Dagu fits:</strong> workflows are plain YAML files, so agents can create and debug them while humans review the definition and run history.</p>
+    <h3>AI Agent Workflows</h3>
+    <p><strong>Run:</strong> AI coding agents, agent CLIs, agent-authored YAML workflows, log analysis, repair steps, and human-reviewed automation.</p>
+    <p><strong>Why Dagu fits:</strong> workflows are commands plus plain YAML, so agents can create and debug them while humans keep dependencies, logs, approvals, and run history in one place.</p>
   </div>
 </div>
 
@@ -113,19 +113,17 @@ Distributed:
                     │  (gRPC task dispatch,   │
                     │   worker registry,      │
                     │   health monitoring)    │
-                    └────────┬────────────────┘
+                    └────────▲────────────────┘
                              │
-                   Poll (gRPC long-polling)
+                   Worker poll / task response
+                   Heartbeat / ReportStatus /
+                   StreamLogs (gRPC)
                              │
-               ┌─────────────┼─────────────┐
+               ┌─────────────┴─────────────┐
                │             │             │
-          ┌────▼───┐    ┌────▼───┐    ┌────▼───┐
+          ┌────┴───┐    ┌────┴───┐    ┌────┴───┐
           │Worker 1│    │Worker 2│    │Worker N│
-          └────┬───┘    └────┬───┘    └────┬───┘
-               │             │             │
-               └─────────────┴─────────────┘
-                 Heartbeat / ReportStatus /
-                 StreamLogs (gRPC)
+          └────────┘    └────────┘    └────────┘
 ```
 
 ## Quick Start

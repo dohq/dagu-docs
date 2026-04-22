@@ -4,12 +4,12 @@ title: What is Dagu?
 
 <div class="overview-hero">
   <div class="overview-hero-copy">
-    <h2>A simple command to run workflows defined in declarative YAML.</h2>
+    <h2>The command-native workflow engine AI agents need.</h2>
     <p>
-      Dagu runs workflows, or DAGs, from simple YAML files. A workflow can call commands, scripts, Docker images, Kubernetes Jobs, SSH tasks, HTTP calls, SQL queries, and AI agent steps.
+      Dagu turns scripts, containers, server tasks, and agent CLIs into scheduled, observable, retryable workflows defined in declarative YAML.
     </p>
     <p>
-      It gives those jobs visible dependencies, execution status, logs, retries, schedules, and Web UI controls without requiring a DBMS server or message broker.
+      A workflow can call commands, Docker images, Kubernetes Jobs, SSH tasks, HTTP calls, SQL queries, and AI agent steps without requiring a DBMS server, message broker, or SDK rewrite.
     </p>
     <div class="overview-actions">
       <a href="/getting-started/quickstart" class="overview-button overview-button-primary">Start in minutes</a>
@@ -47,15 +47,15 @@ title: What is Dagu?
 </div>
 
 <div class="overview-statement">
-  <strong>Dagu makes operational jobs visible and manageable.</strong>
-  <span>Define the DAG in YAML, run it from one binary, inspect every step in the browser, and rerun or stop workflows without SSHing into servers.</span>
+  <strong>Dagu makes command-native work visible and manageable.</strong>
+  <span>Define the DAG in YAML, run scripts, containers, and agents from one binary, inspect every step in the browser, and rerun or stop workflows without SSHing into servers.</span>
 </div>
 
 ## Motivation
 
 Many environments grow into hundreds of cron jobs and shell scripts on large servers. The jobs may be important, but their dependencies are hidden in crontabs, comments, filenames, and operator knowledge. When one job fails, it is hard to know which downstream jobs were affected, which script should be rerun, and where the relevant logs are.
 
-Dagu was built for that situation: visualize job dependencies, execution status, and logs in a web browser, then rerun or stop a workflow with clear context.
+Dagu was built for that situation, and the same shape fits AI-era automation: agents naturally produce commands, call CLIs, inspect files, and repair scripts. Dagu gives that work durable scheduling, visible dependencies, execution status, logs, retries, approvals, and Web UI controls without forcing your application logic into a workflow SDK.
 
 ## Core Terminology
 
@@ -240,7 +240,7 @@ See [Architecture](/overview/architecture) for internals, storage, coordinator/w
 
 ## Real-World Use Cases
 
-Dagu is useful anywhere a script, container, or operational task needs scheduling, visibility, retries, and a safe way for a team to run it.
+Dagu is useful anywhere a script, container, operational task, or agent-driven job needs scheduling, visibility, retries, and a safe way for a team to run it.
 
 <div class="overview-card-grid">
   <div class="overview-card overview-usecase-card">
@@ -279,19 +279,19 @@ Dagu is useful anywhere a script, container, or operational task needs schedulin
     <p><strong>Why Dagu fits:</strong> the single binary and file-backed state work well on small devices while still providing visibility through the Web UI.</p>
   </div>
   <div class="overview-card overview-usecase-card">
-    <h3>AI Agent Automation</h3>
-    <p><strong>Run:</strong> agent-authored YAML workflows, log analysis, repair steps, and human-reviewed automation.</p>
-    <p><strong>Why Dagu fits:</strong> workflows are plain YAML files, so agents can create and debug them while humans review the definition and run history.</p>
+    <h3>AI Agent Workflows</h3>
+    <p><strong>Run:</strong> AI coding agents, agent CLIs, agent-authored YAML workflows, log analysis, repair steps, and human-reviewed automation.</p>
+    <p><strong>Why Dagu fits:</strong> workflows are commands plus plain YAML, so agents can create and debug them while humans keep dependencies, logs, approvals, and run history in one place.</p>
   </div>
 </div>
 
 ::: tip
-If it can run from a shell command, Docker image, Kubernetes Job, SSH session, HTTP call, SQL query, or AI agent step, Dagu can usually orchestrate it without changing the application code.
+If it can run from a shell command, Docker image, Kubernetes Job, SSH session, HTTP call, SQL query, or AI agent CLI, Dagu can usually orchestrate it without changing the application code.
 :::
 
-## AI Agent and Workflow Operator
+## AI Agent Workflows and Workflow Operator
 
-Dagu includes AI features, but they build on the same workflow engine. The agent can read, create, update, and debug DAGs. Agent steps can also run inside workflows.
+Dagu includes AI features, but they build on the same command-native workflow engine. The agent can read, create, update, and debug DAGs. Agent steps and external agent CLIs can also run inside workflows, with the same scheduling, logs, retries, approvals, and run history as any other step.
 
 ```yaml
 steps:
