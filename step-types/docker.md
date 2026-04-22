@@ -2,6 +2,16 @@
 
 Run workflow steps in Docker containers for isolated, reproducible execution.
 
+::: warning Docker runtime required
+Docker-based step execution requires access to a Docker daemon through a local
+Docker socket or a remote daemon such as `DOCKER_HOST`.
+
+Dagu Cloud managed instances run on GKE with gVisor isolation and do not expose
+a Docker daemon or Docker socket. Docker step types are not supported inside
+managed instances. Use self-hosted Dagu, or route the workflow to a self-hosted
+worker, when a workflow needs Docker step execution.
+:::
+
 The `container` field supports two modes:
 - **Image mode**: Create a new container from a Docker image
 - **Exec mode**: Execute commands in an already-running container
