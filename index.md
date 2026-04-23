@@ -5,8 +5,9 @@ layout: doc
 <img src="/hero-logo.webp" alt="Dagu" style="display: block; margin: 0 auto; width: 100%">
 
 <div class="tagline" style="text-align: center;">
-  <h2>The command-native workflow engine AI agents need.</h2>
-  <p>Turn scripts, containers, and agent CLIs into scheduled, observable, retryable workflows. One self-hosted binary. No database, no broker, no SDK rewrite.</p>
+  <h2>Lightweight, Local-First, Declarative Workflow Engine</h2>
+  <p>Dagu is a self-contained workflow engine. Workflows are defined in YAML and can run shell commands, scripts, containers, HTTP requests, SQL queries, SSH commands, sub-workflows, and AI agent steps.</p>
+  <p>Dagu runs as a single binary and stores state in local files by default. It does not require a database, message broker, or language-specific SDK. It includes scheduling, dependencies, retries, queues, logs, a Web UI, and optional distributed workers.</p>
 </div>
 
 <div class="hero-section">
