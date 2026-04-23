@@ -5,8 +5,8 @@ layout: doc
 <img src="/hero-logo.webp" alt="Dagu" style="display: block; margin: 0 auto; width: 100%">
 
 <div class="tagline" style="text-align: center;">
-  <h2>The command-native workflow engine AI agents need.</h2>
-  <p>Turn scripts, containers, and agent CLIs into scheduled, observable, retryable workflows. One self-hosted binary. No database, no broker, no SDK rewrite.</p>
+  <h2>Lightweight, local-first, declarative workflow orchestration.</h2>
+  <p>Define workflows in plain YAML and run scripts, containers, server tasks, and AI agent steps with schedules, dependencies, retries, logs, queues, and a Web UI. One self-hosted binary. File-backed state by default. No database or broker required.</p>
 </div>
 
 <div class="hero-section">
@@ -26,7 +26,7 @@ Credentials: `demouser` / `demouser`
 
 ## What Dagu Does
 
-Dagu is a command-native workflow engine that runs as a single binary with no external databases or message brokers. It turns scripts, commands, containers, server tasks, and agent CLIs into DAGs (Directed Acyclic Graphs) defined in YAML. It supports local execution, cron scheduling, queue-based concurrency control, and distributed coordinator/worker execution across multiple machines over gRPC.
+Dagu is a lightweight, local-first, declarative workflow engine that runs as a single binary with no external databases or message brokers. Workflows are DAGs (Directed Acyclic Graphs) defined in YAML. Steps can run shell commands, scripts, containers, server tasks, HTTP calls, SQL queries, SSH commands, sub-workflows, and AI agent steps. Dagu supports local execution, cron scheduling, queue-based concurrency control, and distributed coordinator/worker execution across multiple machines over gRPC.
 
 All state is stored in local files by default. There is nothing to install besides the binary itself.
 

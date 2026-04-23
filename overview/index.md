@@ -4,12 +4,12 @@ title: What is Dagu?
 
 <div class="overview-hero">
   <div class="overview-hero-copy">
-    <h2>The command-native workflow engine AI agents need.</h2>
+    <h2>Lightweight, local-first, declarative workflow orchestration.</h2>
     <p>
-      Dagu turns scripts, containers, server tasks, and agent CLIs into scheduled, observable, retryable workflows defined in declarative YAML.
+      Dagu runs workflows defined in YAML with scheduling, dependencies, retries, logs, queues, approvals, and a Web UI.
     </p>
     <p>
-      A workflow can call commands, Docker images, Kubernetes Jobs, SSH tasks, HTTP calls, SQL queries, and AI agent steps without requiring a DBMS server, message broker, or SDK rewrite.
+      A workflow can call shell commands, scripts, Docker images, Kubernetes Jobs, SSH tasks, HTTP calls, SQL queries, sub-workflows, and AI agent steps without requiring a DBMS server, message broker, or SDK rewrite.
     </p>
     <div class="overview-actions">
       <a href="/getting-started/quickstart" class="overview-button overview-button-primary">Start in minutes</a>
@@ -47,8 +47,8 @@ title: What is Dagu?
 </div>
 
 <div class="overview-statement">
-  <strong>Dagu makes command-native work visible and manageable.</strong>
-  <span>Define the DAG in YAML, run scripts, containers, and agents from one binary, inspect every step in the browser, and rerun or stop workflows without SSHing into servers.</span>
+  <strong>Dagu keeps workflow orchestration lightweight and local-first.</strong>
+  <span>Define the DAG in YAML, run scripts, containers, and agent steps from one binary, inspect every step in the browser, and rerun or stop workflows without SSHing into servers.</span>
 </div>
 
 ## Motivation
@@ -291,7 +291,7 @@ If it can run from a shell command, Docker image, Kubernetes Job, SSH session, H
 
 ## AI Agent Workflows and Workflow Operator
 
-Dagu includes AI features, but they build on the same command-native workflow engine. The agent can read, create, update, and debug DAGs. Agent steps and external agent CLIs can also run inside workflows, with the same scheduling, logs, retries, approvals, and run history as any other step.
+Dagu includes AI features, but they build on the same declarative workflow engine. The agent can read, create, update, and debug DAGs. Agent steps and external agent CLIs can also run inside workflows, with the same scheduling, logs, retries, approvals, and run history as any other step.
 
 ```yaml
 steps:
