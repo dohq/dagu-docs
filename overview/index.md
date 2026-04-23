@@ -4,12 +4,12 @@ title: What is Dagu?
 
 <div class="overview-hero">
   <div class="overview-hero-copy">
-    <h2>Lightweight, Local-First, Declarative Workflow Engine</h2>
+    <h2>Self-Hosted Control Plane for Existing Ops Automation</h2>
     <p>
-      Dagu is a self-contained workflow engine. Workflows are defined in YAML and can run shell commands, scripts, containers, HTTP requests, SQL queries, SSH commands, sub-workflows, and AI agent steps.
+      Dagu is a self-contained workflow engine for teams that need to consolidate scripts, cron jobs, containers, HTTP tasks, SQL jobs, SSH operations, sub-workflows, and AI-assisted steps into a single workflow system.
     </p>
     <p>
-      Dagu runs as a single binary and keeps workflows, history, and logs locally by default. It does not require a database, message broker, or language-specific SDK. It includes scheduling, dependencies, retries, queues, logs, a Web UI, and optional distributed workers.
+      Dagu runs as a single binary and keeps workflows, history, and logs locally by default. It does not require a database, message broker, or language-specific SDK. It adds scheduling, dependencies, retries, queues, logs, a Web UI, and optional distributed workers around existing operations automation.
     </p>
     <div class="overview-actions">
       <a href="/getting-started/quickstart" class="overview-button overview-button-primary">Start in minutes</a>
@@ -48,15 +48,15 @@ title: What is Dagu?
 </div>
 
 <div class="overview-statement">
-  <strong>Dagu makes command-native work visible and manageable.</strong>
-  <span>Define the DAG in YAML, run scripts, containers, and agents from one binary, inspect every step in the browser, and rerun or stop workflows without SSHing into servers.</span>
+  <strong>Dagu makes existing ops automation easy to inspect, rerun, and manage.</strong>
+  <span>Define the workflow in YAML, keep the underlying scripts and commands, inspect every step in the browser, and rerun or approve operational work without SSHing into servers or chasing crontabs.</span>
 </div>
 
 ## Motivation
 
 Many environments grow into hundreds of cron jobs and shell scripts on large servers. The jobs may be important, but their dependencies are hidden in crontabs, comments, filenames, and operator knowledge. When one job fails, it is hard to know which downstream jobs were affected, which script should be rerun, and where the relevant logs are.
 
-Dagu was built for that situation, and the same shape fits AI-era automation: agents naturally produce commands, call CLIs, inspect files, and repair scripts. Dagu gives that work durable scheduling, visible dependencies, execution status, logs, retries, approvals, and Web UI controls without forcing your application logic into a workflow SDK.
+Dagu was built for teams that already have important automation but lack a practical way to manage it in one place. Instead of forcing application code into a workflow SDK, Dagu wraps existing operational work with scheduling, visible dependencies, execution status, logs, retries, approvals, and Web UI controls.
 
 ## Core Terminology
 
@@ -107,6 +107,8 @@ During a run, Dagu resolves dependencies, starts ready steps, captures stdout an
 
 ## Why Teams Choose Dagu
 
+The main reason teams choose Dagu is that it modernizes existing operations automation without turning orchestration itself into another platform project.
+
 <div class="overview-card-grid overview-strengths-grid">
   <div class="overview-card">
     <h3>Single binary</h3>
@@ -118,11 +120,11 @@ During a run, Dagu resolves dependencies, starts ready steps, captures stdout an
   </div>
   <div class="overview-card">
     <h3>Zero-invasive workflows</h3>
-    <p>Wrap existing scripts and commands instead of rewriting application code around a workflow SDK.</p>
+    <p>Wrap existing scripts, commands, SQL, containers, and operational tasks instead of rewriting application code around a workflow SDK.</p>
   </div>
   <div class="overview-card">
     <h3>Observable by default</h3>
-    <p>Every run has status, per-step logs, timing, history, artifacts, and UI controls for debugging and recovery.</p>
+    <p>Every run has status, per-step logs, timing, history, artifacts, approvals, and UI controls for debugging, recovery, and operator handoff.</p>
   </div>
   <div class="overview-card">
     <h3>Scales gradually</h3>

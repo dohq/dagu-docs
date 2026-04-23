@@ -5,9 +5,9 @@ layout: doc
 <img src="/hero-logo.webp" alt="Dagu" style="display: block; margin: 0 auto; width: 100%">
 
 <div class="tagline" style="text-align: center;">
-  <h2>Lightweight, Local-First, Declarative Workflow Engine</h2>
-  <p>Dagu is a self-contained workflow engine. Workflows are defined in YAML and can run shell commands, scripts, containers, HTTP requests, SQL queries, SSH commands, sub-workflows, and AI agent steps.</p>
-  <p>Dagu runs as a single binary and keeps workflows, history, and logs locally by default. It does not require a database, message broker, or language-specific SDK. It includes scheduling, dependencies, retries, queues, logs, a Web UI, and optional distributed workers.</p>
+  <h2>Self-Hosted Control Plane for Existing Ops Automation</h2>
+  <p>Dagu is a self-contained workflow engine for consolidating scripts, cron jobs, containers, HTTP tasks, SQL jobs, SSH operations, sub-workflows, and agent-driven steps into one place to see and manage them.</p>
+  <p>Dagu runs as a single binary and keeps workflows, history, and logs locally by default. It does not require a database, message broker, or language-specific SDK. It adds scheduling, dependencies, retries, queues, logs, a Web UI, and optional distributed workers around the automation you already run.</p>
 </div>
 
 <div class="hero-section">
@@ -28,19 +28,19 @@ Credentials: `demouser` / `demouser`
 
 ## What Dagu Does
 
-Dagu is a command-native workflow engine that runs as a single binary with no external databases or message brokers. It turns scripts, commands, containers, server tasks, and agent CLIs into DAGs (Directed Acyclic Graphs) defined in YAML. It supports local execution, cron scheduling, queue-based concurrency control, and distributed coordinator/worker execution across multiple machines over gRPC.
+Dagu is a workflow engine that helps teams consolidate existing operations automation into one self-hosted control plane. It wraps scripts, commands, containers, server tasks, SQL jobs, HTTP calls, and agent CLIs in DAGs (Directed Acyclic Graphs) defined in YAML.
 
-By default, Dagu keeps workflows, run history, and logs on local disk, so there is very little to set up besides the binary itself.
+By default, Dagu keeps workflows, run history, and logs on local disk, so teams can move from fragmented cron and scattered scripts to visible, retryable workflows without introducing a heavyweight orchestration stack.
 
 ## Real-World Use Cases
 
-Dagu is useful when scripts, containers, server jobs, data tasks, or agent-driven work need visible dependencies, schedules, logs, retries, and a simple way to operate them.
+Dagu fits teams that already have operational work spread across scripts, cron jobs, SQL tasks, HTTP automation, containers, and manual runbooks, and need one place to run, monitor, retry, and manage that work.
 
 <div class="real-world-usecases">
   <div class="real-world-usecase">
     <h3>Cron and Legacy Script Management</h3>
     <p><strong>Run:</strong> existing shell scripts, Python scripts, HTTP calls, and scheduled jobs without rewriting them.</p>
-    <p><strong>Why Dagu fits:</strong> dependencies, run status, logs, retries, and history become visible in the Web UI instead of being hidden across crontabs and server log files.</p>
+    <p><strong>Why Dagu fits:</strong> Dagu turns hidden cron jobs and scattered scripts into visible workflows with dependencies, run status, logs, retries, history, and operator controls in one place.</p>
   </div>
   <div class="real-world-usecase">
     <h3>ETL and Data Operations</h3>
