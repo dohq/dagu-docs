@@ -13,6 +13,7 @@ title: What is Dagu?
     </p>
     <div class="overview-actions">
       <a href="/getting-started/quickstart" class="overview-button overview-button-primary">Start in minutes</a>
+      <a href="/overview/deployment-models" class="overview-button overview-button-secondary">Deployment models</a>
       <a href="/writing-workflows/examples" class="overview-button overview-button-secondary">Browse examples</a>
     </div>
   </div>

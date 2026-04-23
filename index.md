@@ -13,6 +13,7 @@ layout: doc
 <div class="hero-section">
   <div class="hero-actions">
     <a href="/getting-started/quickstart" class="VPButton brand">Get Started</a>
+    <a href="/overview/deployment-models" class="VPButton alt">Deployment Models</a>
     <a href="/writing-workflows/examples" class="VPButton alt">View Examples</a>
   </div>
 </div>

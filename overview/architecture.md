@@ -6,6 +6,8 @@ Understanding how Dagu works under the hood.
 
 Dagu follows a simple philosophy: **do one thing well with minimal dependencies**.
 
+For operating choices across local, self-hosted, managed, and hybrid setups, see [Deployment Models](/overview/deployment-models).
+
 ## System Architecture
 
 ```
