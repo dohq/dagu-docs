@@ -19,7 +19,7 @@ layout: doc
 <video src="/cockpit-demo.mp4" controls preload="metadata" playsinline aria-label="Cockpit demo" style="width: 100%; border-radius: 12px; margin: 8px 0 24px;"></video>
 
 ::: tip Try It Live
-Explore without installing: [Live Demo](https://demo-instance.dagu.sh/)
+Explore without installing: [Live Demo](https://dagu-demo-f5e33d0e.dagu.sh/)
 
 Credentials: `demouser` / `demouser`
 :::
