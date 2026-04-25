@@ -1,8 +1,8 @@
 # OpenAI Subscription
 
-Use this provider when you want Dagu's built-in agent to work through a ChatGPT Plus/Pro subscription login instead of an OpenAI API key.
+Use this provider when you want Dagu's built-in steward to work through a ChatGPT Plus/Pro subscription login instead of an OpenAI API key.
 
-![Screenshot of the OpenAI Codex provider card in agent settings, showing connection status and account ID](/agent-settings-openai-codex.png)
+![Screenshot of the OpenAI Codex provider card in steward settings, showing connection status and account ID](/agent-settings-openai-codex.png)
 
 ## What Makes It Different
 
@@ -24,9 +24,9 @@ The connection is scoped to the currently selected node. If you switch to anothe
 
 ## Web UI Setup
 
-### 1. Open Agent Settings
+### 1. Open Steward Settings
 
-Go to `/agent-settings` and enable the built-in agent if it is not already enabled.
+Go to `/agent-settings` and enable the built-in steward if it is not already enabled.
 
 ### 2. Connect The Subscription
 
@@ -49,7 +49,7 @@ Create a saved model entry with values such as:
 
 ### 4. Set The Default
 
-Mark the model as the default if you want the Web UI agent to use it automatically.
+Mark the model as the default if you want the Web UI steward to use it automatically.
 
 ## Setup Wizard
 
@@ -83,4 +83,4 @@ Disconnecting the subscription does not delete the saved model entry. It only re
 ## Related Pages
 
 - [Models & Providers](/features/agent/settings/models)
-- [AI Agent](/features/agent/)
+- [Steward](/features/agent/)

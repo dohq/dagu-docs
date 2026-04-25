@@ -1,6 +1,6 @@
 # Memory
 
-Memory lets the agent keep useful long-lived context so you do not need to repeat the same background information in every conversation.
+Memory lets the steward keep useful long-lived context so you do not need to repeat the same background information in every conversation.
 
 ## What Memory Is Good For
 
@@ -25,12 +25,12 @@ As a rule, keep information as close as possible to the workflow it belongs to.
 
 ## How Users Control Memory
 
-You can tell the agent directly:
+You can tell Steward directly:
 
 - **"remember this"** when something should be kept
 - **"forget this"** when it should be removed
 
-When the agent is working with a specific DAG, it will usually prefer that DAG's memory rather than global memory.
+When Steward is working with a specific DAG, it will usually prefer that DAG's memory rather than global memory.
 
 ## What To Save
 
@@ -49,7 +49,7 @@ Avoid saving:
 
 ## Reviewing And Editing Memory
 
-Admins can review and edit agent memory from the Dagu UI and API.
+Admins can review and edit steward memory from the Dagu UI and API.
 
 | Action | Endpoint |
 |--------|----------|
@@ -75,7 +75,7 @@ steps:
         content: "Analyze the logs and update findings"
 ```
 
-This is useful when a workflow should benefit from the same long-lived context as the interactive agent.
+This is useful when a workflow should benefit from the same long-lived context as the interactive steward.
 
 ## Git Sync
 
@@ -83,6 +83,6 @@ If you use [Git Sync](/server-admin/git-sync), memory files can move through the
 
 ## Related Pages
 
-- [AI Agent](/features/agent/)
+- [Steward](/features/agent/)
 - [Agent Step](/features/agent/step)
 - [Git Sync](/server-admin/git-sync)

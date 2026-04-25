@@ -308,9 +308,9 @@ steps:
     output: ANALYSIS_RESULT
 ```
 
-Workflow Operator connects Slack or Telegram to the built-in agent, so teams can ask for run status, debug failures, re-run workflows, and approve actions from chat.
+Workflow Operator connects Slack or Telegram to the built-in steward, so teams can ask for run status, debug failures, re-run workflows, and approve actions from chat.
 
-- [Agent Overview](/features/agent/) explains interactive workflow generation and debugging.
+- [Steward Overview](/features/agent/) explains interactive workflow generation and debugging.
 - [Agent Step](/features/agent/step) explains how to run agent tasks inside DAGs.
 - [Workflow Operator](/features/bots/) explains Slack and Telegram operation.
 
@@ -338,7 +338,7 @@ Workflow Operator connects Slack or Telegram to the built-in agent, so teams can
     <p>Start from practical workflow patterns and adapt them to your environment.</p>
   </div>
   <div class="step-card">
-    <h3><a href="/features/agent/">AI Agent</a></h3>
-    <p>Use Dagu's built-in agent to create, update, and debug workflows.</p>
+    <h3><a href="/features/agent/">Steward</a></h3>
+    <p>Use Dagu's built-in steward to create, update, and debug workflows.</p>
   </div>
 </div>

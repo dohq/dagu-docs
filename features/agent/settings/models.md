@@ -1,10 +1,10 @@
 # Models & Providers
 
-This page covers the part of `/agent-settings` where you decide whether the built-in agent can run and which models it can use.
+This page covers the part of `/agent-settings` where you decide whether the built-in steward can run and which models it can use.
 
-## Enable The Agent
+## Enable Steward
 
-The **Enable Agent** toggle turns the built-in Web UI assistant on or off.
+The **Enable Steward** toggle turns the built-in Web UI assistant on or off.
 
 You can also enable it through configuration:
 
@@ -14,7 +14,7 @@ export DAGU_AGENT_ENABLED=true
 
 ## Models Table
 
-When the agent is enabled, Dagu shows a models table where you can:
+When Steward is enabled, Dagu shows a models table where you can:
 
 - add a model
 - edit an existing model
@@ -31,7 +31,7 @@ The table helps you compare:
 
 ## Default Model
 
-The default model is the one the Web UI agent uses unless you override it in a chat session.
+The default model is the one the Web UI steward uses unless you override it in a chat session.
 
 Workflow steps with `type: agent` also fall back to this default unless the step sets its own model.
 

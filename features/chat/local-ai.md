@@ -4,7 +4,7 @@ Use Dagu with local model servers such as Ollama, vLLM, or LM Studio when they e
 
 This applies to both:
 
-- the Web UI agent
+- the Web UI steward
 - workflow steps that use `type: chat`
 
 ## What Dagu Expects
@@ -32,7 +32,7 @@ Enter the **base URL**, not a full endpoint. Do not paste vendor-native endpoint
 | `http://localhost:11434/api/generate` | Wrong |
 | `http://localhost:11434/v1/chat/completions` | Wrong |
 
-## Web UI Agent Setup
+## Web UI Steward Setup
 
 1. Start your local model server
 2. Make sure the model you want is already available there
@@ -41,7 +41,7 @@ Enter the **base URL**, not a full endpoint. Do not paste vendor-native endpoint
    - **Provider**: `Local`
    - **Model**: your installed model tag
    - **Base URL**: leave empty or set `http://localhost:11434/v1`
-5. Set that model as the default if you want the built-in agent to use it
+5. Set that model as the default if you want the built-in steward to use it
 
 ### Typical Ollama Example
 
@@ -119,5 +119,5 @@ Check where Dagu is actually running. If Dagu runs in Docker, Kubernetes, or on 
 ## Related Pages
 
 - [Basic Chat](/features/chat/basics)
-- [AI Agent](/features/agent/)
+- [Steward](/features/agent/)
 - [Models & Providers](/features/agent/settings/models)

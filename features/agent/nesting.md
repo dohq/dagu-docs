@@ -15,7 +15,7 @@ Use the `call` field to invoke child DAGs that contain `type: agent` steps. This
 
 ## Prerequisites
 
-- A default model must be configured in Agent Settings (`/agent-settings`), or each agent step must specify `agent.model`
+- A default model must be configured in Steward Settings (`/agent-settings`), or each agent step must specify `agent.model`
 - Familiarity with [Agent Step](/features/agent/step) configuration
 - Familiarity with [Nested Workflows](/writing-workflows/control-flow#nested-workflows) and [Sub DAG Outputs](/writing-workflows/data-flow#sub-dag-outputs)
 

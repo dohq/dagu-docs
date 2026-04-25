@@ -1,14 +1,14 @@
 # Tool Permissions & Bash Policy
 
-This page covers the `/agent-settings` controls that limit what the built-in agent is allowed to do.
+This page covers the `/agent-settings` controls that limit what the built-in steward is allowed to do.
 
 ## Tool Permissions
 
-The settings page includes a **Tool Permissions** section listing the tools exposed by the built-in agent.
+The settings page includes a **Tool Permissions** section listing the tools exposed by the built-in steward.
 
 Each tool can be enabled or disabled individually.
 
-This affects the built-in Web UI agent and features built on top of it, including Workflow Operator.
+This affects the built-in Web UI steward and features built on top of it, including Workflow Operator.
 
 Examples include:
 
@@ -107,7 +107,7 @@ For workflow `type: agent` steps, there is no approval UI, so denied bash comman
 
 ## See Also
 
-- [Agent Settings](/features/agent/settings/)
+- [Steward Settings](/features/agent/settings/)
 - [Models & Providers](/features/agent/settings/models)
 - [Tools Reference](/features/agent/tools)
 - [Agent Step](/features/agent/step)

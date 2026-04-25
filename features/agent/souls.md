@@ -1,30 +1,30 @@
-# Souls
+# Profiles
 
-Souls let you give the built-in agent a default personality. Use them when you want the assistant to behave differently for different teams or jobs, such as concise operations help, onboarding guidance, or code-review-focused responses.
+Profiles are the Web UI name for the built-in steward's default personality. In file paths, API fields, and workflow YAML this concept still uses `soul`.
 
-You can create multiple souls and switch between them from [Personality & Web Search](/features/agent/settings/behavior).
+You can create multiple profiles and switch between them from [Personality & Web Search](/features/agent/settings/behavior).
 
 ## Quick Start
 
 1. Create a Markdown file in `{DAGsDir}/souls/`.
 2. Add a `name` and optional `description` in the YAML frontmatter.
 3. Write the instructions you want the agent to follow in the Markdown body.
-4. Open **Agent Settings** and choose that soul as the default personality.
+4. Open **Steward Settings** and choose that profile as the default personality.
 
-## What A Soul Controls
+## What A Profile Controls
 
-A soul is best for long-lived guidance such as:
+A profile is best for long-lived guidance such as:
 
 - tone and communication style
 - priorities and operating principles
 - domain focus, such as operations, support, or development
 - recurring house rules you want applied to new sessions
 
-Do not use souls for secrets, one-off tasks, or temporary instructions.
+Do not use profiles for secrets, one-off tasks, or temporary instructions.
 
-## Example Soul
+## Example Profile
 
-Soul files are Markdown files with YAML frontmatter followed by the instructions for the agent:
+Profile files are Markdown files with YAML frontmatter followed by the instructions for the steward:
 
 ```markdown
 ---
@@ -54,21 +54,21 @@ and DAG management for Dagu.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `name` | string | yes | Display name shown in the soul selector |
+| `name` | string | yes | Display name shown in the profile selector |
 | `description` | string | no | Short note shown in lists and selectors |
 
-The Markdown body becomes the soul's standing instructions for new sessions that use it.
+The Markdown body becomes the profile's standing instructions for new sessions that use it.
 
-## Soul IDs
+## Profile IDs
 
-The soul ID is derived from the filename without the `.md` extension:
+The profile ID is derived from the filename without the `.md` extension:
 
 - `default.md` → ID: `default`
 - `concise-ops.md` → ID: `concise-ops`
 
 IDs must match the pattern `[a-z0-9]+(-[a-z0-9]+)*` with a maximum of 128 characters. Only lowercase alphanumeric characters and hyphens are allowed.
 
-## Where To Put Soul Files
+## Where To Put Profile Files
 
 ```
 {DAGsDir}/souls/
@@ -77,17 +77,17 @@ IDs must match the pattern `[a-z0-9]+(-[a-z0-9]+)*` with a maximum of 128 charac
 └── verbose-teacher.md
 ```
 
-## Default Soul
+## Default Profile
 
-A `default` soul is included so the personality selector has a sensible starting point.
+A `default` soul is included so the profile selector has a sensible starting point.
 
-When no soul is selected, or the selected soul cannot be found, the agent falls back to the `default` soul.
+When no profile is selected, or the selected profile cannot be found, Steward falls back to the `default` soul.
 
-## Selecting a Soul
+## Selecting a Profile
 
 ### Via Web UI
 
-Open **Agent Settings** (`/agent-settings`) and use the **Agent Personality** selector.
+Open **Steward Settings** (`/agent-settings`) and use the **Default Profile** selector.
 
 The settings behavior is documented on [Personality & Web Search](/features/agent/settings/behavior).
 
@@ -99,26 +99,26 @@ curl -X PATCH /api/v1/settings/agent \
   -d '{ "selectedSoulId": "concise-ops" }'
 ```
 
-The selected soul takes effect on the next session creation.
+The selected profile takes effect on the next session creation.
 
 ## Safety Boundary
 
-Souls shape the assistant's identity and style, but they do not override Dagu's built-in safety rules. This means:
+Profiles shape Steward's identity and style, but they do not override Dagu's built-in safety rules. This means:
 
 - You **can** customize: identity, priorities, communication style, custom guidelines
 - You **cannot** override: safety rules, security policies, tool restrictions, data hygiene rules
 
 ## API Endpoints
 
-All soul endpoints require admin role.
+All profile endpoints require admin role.
 
 | Method | Path | Description |
 |--------|------|-------------|
-| GET | `/api/v1/settings/agent/souls` | List souls (paginated, searchable by query) |
-| POST | `/api/v1/settings/agent/souls` | Create a new soul |
-| GET | `/api/v1/settings/agent/souls/{soulId}` | Get soul by ID |
-| PATCH | `/api/v1/settings/agent/souls/{soulId}` | Update soul (partial) |
-| DELETE | `/api/v1/settings/agent/souls/{soulId}` | Delete soul |
+| GET | `/api/v1/settings/agent/souls` | List profiles (paginated, searchable by query) |
+| POST | `/api/v1/settings/agent/souls` | Create a new profile |
+| GET | `/api/v1/settings/agent/souls/{soulId}` | Get profile by ID |
+| PATCH | `/api/v1/settings/agent/souls/{soulId}` | Update profile (partial) |
+| DELETE | `/api/v1/settings/agent/souls/{soulId}` | Delete profile |
 
 ### Query Parameters for List
 
@@ -130,9 +130,9 @@ All soul endpoints require admin role.
 
 ## Git Sync
 
-Soul files are synced via [Git Sync](/server-admin/git-sync) with kind `soul`. Full conflict detection, publish, and discard operations are supported.
+Profile files are synced via [Git Sync](/server-admin/git-sync) with kind `soul`. Full conflict detection, publish, and discard operations are supported.
 
-## Example: Creating A Custom Soul
+## Example: Creating A Custom Profile
 
 Create a file `{DAGsDir}/souls/concise-ops.md`:
 
@@ -164,7 +164,7 @@ Then select it from [Personality & Web Search](/features/agent/settings/behavior
 
 ## See Also
 
-- [Agent Overview](/features/agent/) — Chat interface and configuration
-- [Personality & Web Search](/features/agent/settings/behavior) — Choose the default soul in the Web UI
-- [Agent Step](/features/agent/step) — Using souls in DAG agent steps
-- [Git Sync](/server-admin/git-sync) — Synchronizing soul files with Git
+- [Steward Overview](/features/agent/) — Chat interface and configuration
+- [Personality & Web Search](/features/agent/settings/behavior) — Choose the default profile in the Web UI
+- [Agent Step](/features/agent/step) — Using profiles (`soul`) in DAG agent steps
+- [Git Sync](/server-admin/git-sync) — Synchronizing profile files with Git

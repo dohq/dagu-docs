@@ -1,25 +1,25 @@
 # Personality & Web Search
 
-This page covers the parts of `/agent-settings` that shape how the built-in agent behaves by default.
+This page covers the parts of `/agent-settings` that shape how the built-in steward behaves by default.
 
-## Agent Personality
+## Default Profile
 
-If souls are configured, the settings page shows an **Agent Personality** selector.
+If profiles are configured, the settings page shows a **Default Profile** selector.
 
-This selects the default personality for the built-in agent.
+This selects the default personality for the built-in steward.
 
-Use souls when you want different default styles for different teams or jobs, such as concise operations help, support-oriented replies, or a stricter code-review voice.
+Use profiles when you want different default styles for different teams or jobs, such as concise operations help, support-oriented replies, or a stricter code-review voice.
 
 In the current UI:
 
-- The selector only appears when at least one soul exists
-- You can choose `Default (no soul)` or a configured soul
+- The selector only appears when at least one profile exists
+- You can choose `Default (no profile)` or a configured profile
 
-See [Souls](/features/agent/souls) for how to create and manage personalities.
+See [Profiles](/features/agent/souls) for how to create and manage personalities.
 
-## When the Selected Soul Is Used
+## When the Selected Profile Is Used
 
-The selected soul becomes the default for the built-in agent. Users can still override the soul in the chat UI for a message or session when that UI control is available.
+The selected profile becomes the default for the built-in steward. Users can still override the profile in the chat UI for a message or session when that UI control is available.
 
 ## Web Search
 
@@ -40,7 +40,7 @@ Behavior:
 
 ## Scope of This Setting
 
-This setting controls the built-in agent configuration.
+This setting controls the built-in steward configuration.
 
 Workflow `type: agent` steps can also define their own `agent.web_search` settings in DAG YAML. Those are documented separately in [Agent Step](/features/agent/step).
 
@@ -48,14 +48,14 @@ Workflow `type: agent` steps can also define their own `agent.web_search` settin
 
 Provider-native web search is different from exposing a generic "search the web" tool.
 
-In Dagu's built-in agent:
+In Dagu's built-in steward:
 
 - Web search runs through the selected model/provider
 - Tool permissions do not show it as a standalone tool
 
 ## See Also
 
-- [Agent Settings](/features/agent/settings/)
-- [Souls](/features/agent/souls)
+- [Steward Settings](/features/agent/settings/)
+- [Profiles](/features/agent/souls)
 - [Agent Step](/features/agent/step)
 - [Models & Providers](/features/agent/settings/models)

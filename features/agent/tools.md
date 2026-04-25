@@ -1,6 +1,6 @@
-# Agent Tools Reference
+# Steward Tools Reference
 
-Reference for tools available to the interactive Dagu agent in the Web UI.
+Reference for tools available to the interactive Dagu steward in the Web UI.
 
 Provider-native web search is configured in [Personality & Web Search](/features/agent/settings/behavior) and model requests; it is not exposed as a separate callable tool. Workflow agent steps also add a step-only `output` tool and omit `navigate`, `ask_user`, and `delegate`.
 

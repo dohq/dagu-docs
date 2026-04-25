@@ -1,12 +1,12 @@
-# AI Agent
+# Steward
 
-The Dagu AI Agent is the assistant built into the Web UI. It helps create workflows, explain failures, inspect files, and automate repetitive operator tasks from inside Dagu.
+Dagu Steward is the assistant built into the Web UI. It helps create workflows, explain failures, inspect files, and automate repetitive operator tasks from inside Dagu.
 
-![Agent Chat](/agent-modal.png)
+![Steward Chat](/agent-modal.png)
 
 ## Where You Use It
 
-The same agent foundation appears in three places:
+The same assistant foundation appears in three places:
 
 - the **Web UI assistant**
 - workflow steps with `type: agent`
@@ -14,16 +14,16 @@ The same agent foundation appears in three places:
 
 ## Quick Start
 
-1. Open **Agent Settings** at `/agent-settings`
-2. Enable the agent
+1. Open **Steward Settings** at `/agent-settings`
+2. Enable Steward
 3. Add at least one model and set a default
-4. Open the **Agent** button in the lower-left corner of the UI
+4. Open the **Steward** button in the lower-left corner of the UI
 
 For subscription-based Codex setup, see [OpenAI Subscription](/features/agent/settings/openai-subscription).
 
-![Agent Settings](/agent-settings-openai-codex.png)
+![Steward Settings](/agent-settings-openai-codex.png)
 
-## What The Web UI Agent Can Help With
+## What The Web UI Steward Can Help With
 
 Common uses:
 
@@ -41,14 +41,14 @@ The chat sidebar lets you reopen earlier conversations or start a new one with t
 
 ### Current DAG Context
 
-When you open the agent from a DAG or run page, Dagu automatically gives the assistant the relevant workflow context. You can also attach additional DAGs manually from the chat input.
+When you open Steward from a DAG or run page, Dagu automatically gives the assistant the relevant workflow context. You can also attach additional DAGs manually from the chat input.
 
-### Model And Soul
+### Model And Profile
 
 In the chat composer you can override:
 
 - the model used for the next request
-- the soul (personality/instructions)
+- the profile (`soul`) used for personality and instructions
 
 ### Safe Mode
 
@@ -65,7 +65,7 @@ Use these pages for detailed setup:
 
 ## Tool Access
 
-Depending on your settings, the agent can work with tools such as:
+Depending on your settings, Steward can work with tools such as:
 
 - file read and edit tools
 - bash command execution
@@ -90,7 +90,7 @@ Typical examples:
 
 - [Agent Step](/features/agent/step)
 - [Memory](/features/agent/memory)
-- [Souls](/features/agent/souls)
-- [Tools Reference](/features/agent/tools)
+- [Profiles](/features/agent/souls)
+- [Steward Tools Reference](/features/agent/tools)
 - [Workflow Operator](/features/bots/)
 - [Chat & AI Agents](/features/chat/)

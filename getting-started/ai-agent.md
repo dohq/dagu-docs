@@ -1,10 +1,10 @@
-# AI Agent
+# Steward
 
-The Dagu agent is an LLM-powered assistant integrated into the Web UI. It can read, create, and modify your workflows through a chat interface with tool-calling capabilities.
+Dagu Steward is an LLM-powered assistant integrated into the Web UI. It can read, create, and modify your workflows through a chat interface with tool-calling capabilities.
 
 ## Quick Setup
 
-1. **Enable the agent** — Toggle it on in the Web UI at `/agent-settings`, or set the environment variable `DAGU_AGENT_ENABLED=true`.
+1. **Enable Steward** — Toggle it on in the Web UI at `/agent-settings`, or set the environment variable `DAGU_AGENT_ENABLED=true`.
 
 2. **Add a model** — Click **Add Model** in the settings page and configure an LLM provider. Supported providers: `anthropic`, `openai`, `openai-codex`, `gemini`, `openrouter`, `zai`, `local` (Ollama, vLLM, etc.).
 
@@ -12,15 +12,15 @@ The Dagu agent is an LLM-powered assistant integrated into the Web UI. It can re
 
 3. **Set a default model** — Click the star icon next to a model to make it the default.
 
-Once configured, click the **Agent** button at the bottom-left corner of any page to start chatting.
+Once configured, click the **Steward** button at the bottom-left corner of any page to start chatting.
 
 If you are using Ollama or another local model server, read [Local AI](/features/chat/local-ai) before setting the `Base URL`. Dagu expects an OpenAI-compatible base such as `http://localhost:11434/v1`, not a native Ollama endpoint like `/api/generate`.
 
-For the full built-in agent configuration surface, start with [Agent Settings](/features/agent/settings/). The settings docs are split into focused pages for models, tool policy, personality, and web search.
+For the full built-in steward configuration surface, start with [Steward Settings](/features/agent/settings/). The settings docs are split into focused pages for models, tool policy, personality, and web search.
 
 ## Available Tools
 
-The agent can use these built-in tools. Some are only available when the corresponding feature is configured:
+Steward can use these built-in tools. Some are only available when the corresponding feature is configured:
 
 | Tool | Description |
 |------|-------------|
@@ -34,7 +34,7 @@ The agent can use these built-in tools. Some are only available when the corresp
 | `remote_agent` | Delegate tasks to agents on remote nodes (when remote nodes are configured) |
 | `list_contexts` | List available remote nodes for `remote_agent` (when remote nodes are configured) |
 
-Provider-native web search is configured in model and agent settings rather than exposed as a separate callable tool.
+Provider-native web search is configured in model and steward settings rather than exposed as a separate callable tool.
 
 Tools can be individually enabled or disabled in [Tool Permissions & Bash Policy](/features/agent/settings/controls).
 
@@ -94,12 +94,12 @@ See [`ai` in CLI Commands](/getting-started/cli#ai) for more details.
 
 ## See Also
 
-- [Full Agent Documentation](/features/agent/) — Complete guide to the agent's features and configuration
-- [Agent Settings](/features/agent/settings/) — Start here for the built-in Web UI agent settings
+- [Steward Documentation](/features/agent/) — Complete guide to Steward and its configuration
+- [Steward Settings](/features/agent/settings/) — Start here for the built-in Web UI steward settings
 - [Models & Providers](/features/agent/settings/models) — Add models and set the default model
 - [Tool Permissions & Bash Policy](/features/agent/settings/controls) — Control tools and bash rules
-- [Personality & Web Search](/features/agent/settings/behavior) — Configure souls and provider-native search
+- [Personality & Web Search](/features/agent/settings/behavior) — Configure profiles and provider-native search
 - [Agent Step](/features/agent/step) — Using the agent as a workflow step
-- [Tools Reference](/features/agent/tools) — Detailed tool parameter documentation
-- [Workflow Operator](/features/bots/) — Use the built-in agent from Slack or Telegram
+- [Steward Tools Reference](/features/agent/tools) — Detailed tool parameter documentation
+- [Workflow Operator](/features/bots/) — Use the built-in steward from Slack or Telegram
 - [Basic Chat](/features/chat/basics) — Single-shot LLM calls in workflows

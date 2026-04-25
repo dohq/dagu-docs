@@ -15,11 +15,11 @@ steps:
     output: ANALYSIS_RESULT
 ```
 
-The agent uses the default model configured in Agent Settings (`/agent-settings`). No per-step model configuration is needed.
+The agent uses the default model configured in Steward Settings (`/agent-settings`). No per-step model configuration is needed.
 
 ## Configuration
 
-The `agent` block is optional. When omitted, the step uses defaults from the global Agent Settings.
+The `agent` block is optional. When omitted, the step uses defaults from global Steward Settings.
 
 ```yaml
 steps:
@@ -44,9 +44,9 @@ steps:
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `model` | string | global default | Model ID from Agent Settings. Overrides the default model for this step. |
+| `model` | string | global default | Model ID from Steward Settings. Overrides the default model for this step. |
 | `tools` | object | — | Tool selection and bash policy. See [Tools](#tools). |
-| `soul` | string | — | Soul ID for this step's identity. When omitted, inherits from `defaults.agent.soul`. |
+| `soul` | string | — | Profile (`soul`) ID for this step's identity. When omitted, inherits from `defaults.agent.soul`. |
 | `memory` | object | `{ enabled: false }` | When `enabled: true`, loads global and per-DAG memory into the agent context. See [Memory](/features/agent/memory). |
 | `prompt` | string | — | Additional instructions appended to the built-in system prompt. |
 | `max_iterations` | int | `50` | Maximum tool-call rounds before the agent stops. |
@@ -55,13 +55,13 @@ steps:
 
 ## Model Resolution
 
-The agent step resolves its model from the global Agent Settings (configured at `/agent-settings`):
+The agent step resolves its model from global Steward Settings (configured at `/agent-settings`):
 
 1. If `agent.model` is set in the step, look up that model ID in the global `ModelStore`
-2. If `agent.model` is omitted, use the global default model (`DefaultModelID` from Agent Settings)
-3. If no default model is configured, the step fails with: `"no model configured; set a default model in Agent Settings or specify agent.model in the step"`
+2. If `agent.model` is omitted, use the global default model (`DefaultModelID` from Steward Settings)
+3. If no default model is configured, the step fails with: `"no model configured; set a default model in Steward Settings or specify agent.model in the step"`
 
-Model configuration (provider, API key, base URL) is managed entirely through Agent Settings. This avoids duplicating credentials in DAG files.
+Model configuration (provider, API key, base URL) is managed entirely through Steward Settings. This avoids duplicating credentials in DAG files.
 
 ## DAG-Level Defaults
 
@@ -98,7 +98,7 @@ steps:
 |-------|------|-------------|
 | `model` | string | Default model ID for agent steps |
 | `tools` | object | Default tool selection and bash policy |
-| `soul` | string | Default soul ID |
+| `soul` | string | Default profile (`soul`) ID |
 | `memory` | object | Default memory configuration |
 | `prompt` | string | Default additional system prompt instructions |
 | `max_iterations` | int | Default max tool-call rounds |
@@ -138,7 +138,7 @@ The `output` tool is always included even if not listed in `tools.enabled`.
 
 Tools are filtered in two layers:
 
-1. **Global policy** (from Agent Settings): Tools disabled in the global `ToolPolicy.Tools` are removed. You cannot re-enable a globally-disabled tool at the step level.
+1. **Global policy** (from Steward Settings): Tools disabled in the global `ToolPolicy.Tools` are removed. You cannot re-enable a globally-disabled tool at the step level.
 2. **Step-level `tools.enabled`**: If specified, only the listed tools are available (intersected with what's globally allowed).
 
 When `tools.enabled` is omitted, all globally-enabled tools are available.
@@ -152,11 +152,11 @@ agent:
       - think
 ```
 
-If `read` is disabled in global Agent Settings and the step specifies `enabled: [bash, read]`, only `bash` and `output` will be available. The step does not produce a warning for this.
+If `read` is disabled in global Steward Settings and the step specifies `enabled: [bash, read]`, only `bash` and `output` will be available. The step does not produce a warning for this.
 
 ## Bash Policy
 
-Bash command policy rules are loaded from the global Agent Settings and enforced via a `BeforeToolExecHook` on every bash tool call. Rules are evaluated in order; the first matching rule determines the action.
+Bash command policy rules are loaded from global Steward Settings and enforced via a `BeforeToolExecHook` on every bash tool call. Rules are evaluated in order; the first matching rule determines the action.
 
 Agent steps do not have an interactive approval UI. If a command is denied by policy, the step receives a policy error instead of a prompt.
 
@@ -397,8 +397,8 @@ steps:
 
 ## See Also
 
-- [Agent Overview](/features/agent/) — Web UI agent with sessions and interactive tools
-- [Tools Reference](/features/agent/tools) — Full parameter documentation for each tool
+- [Steward Overview](/features/agent/) — Web UI steward with sessions and interactive tools
+- [Steward Tools Reference](/features/agent/tools) — Full parameter documentation for each tool
 - [Chat & AI Agents](/features/chat/) — `type: chat` for simple LLM calls with DAG-based tools
 - [Approval](/writing-workflows/approval) — Human approval gates
 - [Scheduled Agents](/features/agent/scheduling) — Running agent steps on a cron schedule
