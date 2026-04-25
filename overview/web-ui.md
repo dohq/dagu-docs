@@ -130,6 +130,12 @@ The dedicated outputs view is also available inside the run screen:
 
 ![Outputs Tab](/outputs-tab.png)
 
+The same run details screen also includes an Artifacts tab for generated files. Markdown, text, and image artifacts can be previewed inline without leaving the page:
+
+![Artifacts Tab](/artifacts-tab-light.png)
+
+See [Artifacts](/writing-workflows/artifacts) for configuration, storage, and API details.
+
 ## Run History And Logs
 
 Use workflow history when you want to compare multiple attempts of the same DAG:

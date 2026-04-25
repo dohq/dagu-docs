@@ -91,9 +91,45 @@ Execution mode behavior:
 - Distributed execution with a shared filesystem also writes directly into the final artifact directory.
 - Distributed shared-nothing workers write into a worker-local staging directory first. Dagu uploads those files back to the coordinator before the run finishes.
 
+## Example: Markdown Report And Image Preview
+
+A common pattern is to write a Markdown report plus a generated chart, screenshot, or other image from the same run:
+
+```yaml
+name: nightly-audit
+
+artifacts:
+  enabled: true
+
+steps:
+  - id: build-audit-artifacts
+    command: |
+      set -eu
+      mkdir -p "${DAG_RUN_ARTIFACTS_DIR}/reports" "${DAG_RUN_ARTIFACTS_DIR}/images"
+
+      cat > "${DAG_RUN_ARTIFACTS_DIR}/reports/summary.md" <<'EOF'
+      # Nightly Audit
+
+      The audit completed successfully.
+
+      - 18 checks passed
+      - 0 drift items found
+      - Follow-up action: none
+      EOF
+
+      cp ./charts/service-latency.png "${DAG_RUN_ARTIFACTS_DIR}/images/service-latency.png"
+      printf 'status=ok\n' > "${DAG_RUN_ARTIFACTS_DIR}/reports/metadata.txt"
+```
+
+This gives the run a Markdown report, a plain-text sidecar file, and an image that operators can preview directly in the [Web UI](/overview/web-ui).
+
 ## Web UI
 
 The DAG run details page shows an **Artifacts** tab when the DAG enables artifact storage or the run already has an `archiveDir`. The tab uses a file tree on the left and a preview pane on the right.
+
+Example with a Markdown report selected while an image artifact is available in the same run:
+
+![Artifacts tab previewing a markdown artifact](/artifacts-tab-light.png)
 
 Supported actions:
 
@@ -111,6 +147,8 @@ Preview behavior:
 - Files over the inline preview limit show metadata only and must be downloaded
 
 The artifact browser ignores symlink entries.
+
+See [Web UI](/overview/web-ui) for the broader UI walkthrough.
 
 ## API
 
