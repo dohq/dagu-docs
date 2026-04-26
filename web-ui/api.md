@@ -1533,7 +1533,7 @@ Rejects a step that is in Waiting status. The step transitions to Rejected, the 
 
 **Endpoint**: `POST /api/v1/dag-runs/{name}/{dagRunId}/steps/{stepName}/push-back`
 
-Pushes back a Waiting step for re-execution with feedback. The step is reset to `NotStarted`, the `approvalIteration` counter increments, any downstream dependents are also reset, and the step re-executes with the provided inputs injected as environment variables.
+Pushes back a Waiting step for re-execution with feedback. By default, the waiting approval step itself is the restart point. If `approval.rewind_to` is configured, Dagu resets that earlier step and all of its transitive dependents to `NotStarted`. The `approvalIteration` counter increments, and every step that later re-executes within the rewound scope receives the provided inputs as environment variables plus the `DAG_PUSHBACK` JSON payload.
 
 **Request Body** (optional):
 ```json
@@ -1547,7 +1547,7 @@ Pushes back a Waiting step for re-execution with feedback. The step is reset to 
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `inputs` | object | Key-value pairs injected as environment variables when the step re-executes |
+| `inputs` | object | Key-value pairs injected as environment variables when rewound steps re-execute. If a step declares `approval.input`, only those declared keys are exposed on that step. |
 
 **Response (200)**:
 ```json

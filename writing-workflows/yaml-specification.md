@@ -1324,6 +1324,7 @@ See [Chat Executor](/features/chat/) for full documentation.
 | `approval.prompt` | string | Message displayed to the approver | - |
 | `approval.input` | string[] | Parameter names to collect from approver | - |
 | `approval.required` | string[] | Required parameters (subset of `input`) | - |
+| `approval.rewind_to` | string | Optional step name or ID to restart from on push-back | - |
 
 ```yaml
 steps:

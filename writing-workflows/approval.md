@@ -24,10 +24,13 @@ The `deploy_staging` step runs `./deploy.sh staging`, then enters `Waiting` stat
 | `prompt` | string | Message displayed to the approver |
 | `input` | string[] | Parameter names to collect from the approver |
 | `required` | string[] | Parameters that must be provided (subset of `input`) |
+| `rewind_to` | string | Optional step name or ID to restart from on push-back |
 
 All fields are optional. A bare `approval: {}` is valid — no prompt, no inputs, just a pause.
 
 Validation: every entry in `required` must also appear in `input`. The build fails otherwise.
+If `rewind_to` is set, it must reference the current step or one of its upstream dependencies.
+Push-back input names are not special-cased. `FEEDBACK` is common, but any key can be used. If `input` is omitted, Dagu preserves all provided push-back keys.
 
 ## How It Works
 
@@ -105,7 +108,7 @@ steps:
 
 ## Push-back
 
-Push-back resets a waiting step to `Not Started` and re-executes it. This is useful when a step's output needs revision — the approver provides feedback, and the step re-runs with that feedback available as environment variables.
+Push-back resets a waiting step to `Not Started` and re-executes it. By default, the approval step itself is rerun. If `approval.rewind_to` is configured, Dagu resets that earlier step and all of its transitive dependents instead. This is useful when a step's output needs revision and the reviewer wants to restart from an earlier preparation step.
 
 Push-back is only available on steps with the `approval` field.
 
@@ -113,11 +116,84 @@ Push-back is only available on steps with the `approval` field.
 
 1. A step executes and enters `Waiting`
 2. The approver reviews the output and pushes back with input parameters
-3. The step resets to `Not Started`
-4. All transitive downstream dependents also reset to `Not Started`
-5. The step re-executes with push-back inputs injected as environment variables
+3. The configured restart point resets to `Not Started`
+4. All transitive downstream dependents of that restart point also reset to `Not Started`
+5. Every step that is reset by the push-back receives push-back context when it executes again
 6. The `approvalIteration` counter increments (starts at 0, becomes 1 after first push-back)
 7. The step enters `Waiting` again — the approver can approve, push back again, or reject
+
+### Example: Rewind to an Earlier Step
+
+```yaml
+steps:
+  - id: prepare_report
+    command: ./prepare-report.sh
+  - id: draft_report
+    depends: [prepare_report]
+    command: ./draft-report.sh
+    approval:
+      prompt: "Review the draft report"
+      input: [FEEDBACK]
+      rewind_to: prepare_report
+  - id: publish_report
+    depends: [draft_report]
+    command: ./publish-report.sh
+```
+
+If the reviewer pushes `draft_report` back, Dagu resets `prepare_report`, `draft_report`, and `publish_report` to `Not Started`. `prepare_report` reruns immediately, `draft_report` reruns and waits for approval again, and `publish_report` runs later after approval is granted. Each rewound step receives the push-back context when it executes.
+
+### Push-back Environment
+
+Every step re-executed because of push-back receives:
+
+- Each provided push-back input as an environment variable, such as `FEEDBACK` or `SINCE`
+- `DAG_PUSHBACK`, a JSON payload describing the latest push-back and the full history
+
+If the current step declares `approval.input`, only those declared keys are exposed on that step. Steps without an input allowlist receive all provided push-back keys.
+
+`DAG_PUSHBACK` looks like this:
+
+```json
+{
+  "iteration": 2,
+  "by": "reviewer",
+  "at": "2026-04-26T06:18:43Z",
+  "inputs": {
+    "FEEDBACK": "Tighten the executive summary",
+    "FORMAT": "markdown"
+  },
+  "history": [
+    {
+      "iteration": 1,
+      "by": "reviewer",
+      "at": "2026-04-26T06:12:10Z",
+      "inputs": {
+        "FEEDBACK": "Add error counts",
+        "FORMAT": "markdown"
+      }
+    },
+    {
+      "iteration": 2,
+      "by": "reviewer",
+      "at": "2026-04-26T06:18:43Z",
+      "inputs": {
+        "FEEDBACK": "Tighten the executive summary",
+        "FORMAT": "markdown"
+      }
+    }
+  ]
+}
+```
+
+Field meanings:
+
+- `iteration`: Current push-back count for this run
+- `by`: Authenticated user who submitted the latest push-back, when available
+- `at`: Server-generated UTC timestamp in RFC3339 format
+- `inputs`: Latest push-back inputs visible to the current step
+- `history`: Chronological push-back history, oldest first
+
+See [Special Environment Variables](/writing-workflows/runtime-variables#push-back-context-dag_pushback) for the runtime variable reference.
 
 ### Example
 
