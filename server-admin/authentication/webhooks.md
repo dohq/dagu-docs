@@ -9,6 +9,7 @@ Webhooks provide a way for external systems to trigger DAG executions via HTTP. 
 - **Enable/Disable**: Temporarily disable webhooks without regenerating tokens
 - **Usage Tracking**: Track when each webhook was last used
 - **Secure Handling**: The full token is shown only once at creation time
+- **Optional Header Forwarding**: Allow-list selected request headers for webhook-triggered DAG runs
 
 ## Requirements
 
@@ -112,6 +113,40 @@ steps:
 ::: tip
 Dagu automatically parses the JSON payload and allows direct field access using dot notation. For arrays, use numeric indices (e.g., `.commits.0` for the first element).
 :::
+
+### Forward Selected Request Headers
+
+If your webhook integration needs request metadata such as event type,
+delivery ID, or idempotency keys, configure a header allowlist in the DAG or
+`base.yaml`:
+
+```yaml
+webhook:
+  forward_headers:
+    - X-GitHub-Event
+    - X-GitHub-Delivery
+    - Stripe-Idempotency-Key
+```
+
+The selected headers are exposed to webhook-triggered runs as the
+`WEBHOOK_HEADERS` environment variable:
+
+```yaml
+steps:
+  - id: route_event
+    command: |
+      echo "$WEBHOOK_HEADERS" | jq -r '."x-github-event"[0]'
+      echo "$WEBHOOK_HEADERS" | jq -r '."x-github-delivery"[0]'
+```
+
+Notes:
+
+- Header matching is case-insensitive.
+- Output keys are lowercase.
+- Values are always arrays of strings.
+- Only allow-listed headers are exposed.
+- `Authorization` is never forwardable.
+- Parsing the JSON string directly is the safest way to access headers with hyphenated names.
 
 ### Idempotent Requests
 
@@ -221,6 +256,7 @@ The token prefix (first 12 characters including `dagu_wh_`) is stored and displa
 | Role Support | No (execute only) | Yes (admin, manager, developer, operator, viewer) |
 | Multiple per DAG | No (one per DAG) | Yes (unlimited) |
 | Payload Support | Yes (WEBHOOK_PAYLOAD) | Via request body |
+| Header Forwarding | Allow-listed only (`WEBHOOK_HEADERS`) | Via request headers |
 | Best For | External integrations | Automation scripts, CI/CD |
 
 ## Use Cases

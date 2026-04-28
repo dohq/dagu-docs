@@ -30,6 +30,7 @@ Values are refreshed for each step, so `DAG_RUN_STEP_NAME`, `DAG_RUN_STEP_STDOUT
 | `DAG_PARAMS_JSON` | All steps & handlers | JSON string containing the resolved parameter map. Resolved DAG params are serialized as strings; if the run was started with raw JSON parameters, the original payload is preserved. Not set when the DAG has no resolved parameters. | `{"ENVIRONMENT":"prod","batchSize":"1000"}` |
 | `DAG_PUSHBACK` | Steps re-executed after approval push-back only | JSON string containing the current push-back iteration, latest inputs, authenticated actor, server timestamp, and chronological history. Not set on the initial execution. | `{"iteration":2,"by":"reviewer","at":"2026-04-26T06:18:43Z","inputs":{"FEEDBACK":"Tighten summary"},"history":[...]}` |
 | `WEBHOOK_PAYLOAD` | Webhook-triggered runs only | JSON string containing the payload from the webhook request body. Only available when the DAG was triggered via a webhook. | `{"branch":"main","commit":"abc123"}` |
+| `WEBHOOK_HEADERS` | Webhook-triggered runs only | JSON object containing the allow-listed request headers configured by `webhook.forward_headers`. Header names are lowercase and values are arrays of strings. | `{"x-github-event":["push"]}` |
 
 ## Per-Run Work Directory (`DAG_RUN_WORK_DIR`)
 
@@ -273,3 +274,31 @@ steps:
 - Maximum payload size is 1MB.
 - The variable is empty when the DAG is triggered by other means (scheduler, API, CLI).
 - Always validate the payload contents in your DAG before processing.
+
+## Webhook Headers
+
+When a webhook-triggered DAG needs request metadata such as event type or
+delivery ID, configure an allowlist under `webhook.forward_headers`. Dagu then
+exposes the selected headers through the `WEBHOOK_HEADERS` environment variable.
+
+```yaml
+webhook:
+  forward_headers:
+    - X-GitHub-Event
+    - X-GitHub-Delivery
+
+steps:
+  - id: route
+    command: |
+      echo "$WEBHOOK_HEADERS" | jq -r '."x-github-event"[0]'
+      echo "$WEBHOOK_HEADERS" | jq -r '."x-github-delivery"[0]'
+```
+
+### Notes
+
+- Header names are matched case-insensitively and emitted as lowercase keys.
+- Header values are always arrays, even when only one value is present.
+- Only headers listed in `webhook.forward_headers` are exposed.
+- `Authorization` can never be forwarded.
+- When no configured headers are present on the request, `WEBHOOK_HEADERS` is `{}`.
+- Because header names often contain hyphens, parsing the JSON string directly with `jq`, Python, Node.js, or your shell tooling is usually clearer than dot-notation access.

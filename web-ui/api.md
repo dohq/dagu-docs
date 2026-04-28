@@ -2874,6 +2874,10 @@ Webhook management endpoints require Builtin Authentication mode and admin role.
 
 Triggers a DAG execution using a webhook token. This endpoint uses webhook token authentication instead of regular API authentication.
 
+The request body is exposed to the DAG as `WEBHOOK_PAYLOAD`. If the DAG
+configures `webhook.forward_headers`, the selected request headers are exposed
+as `WEBHOOK_HEADERS`.
+
 **Path Parameters**:
 | Parameter | Type | Description |
 |-----------|------|-------------|
