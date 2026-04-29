@@ -286,6 +286,7 @@ When steps enter `Waiting` status, an **Approval** tab appears in the DAG run vi
 - The step's stdout output inline
 - **Approve** and **Retry** (push-back) buttons per step
 - The current approval iteration count (if pushed back)
+- Push-back history entries with iteration, actor, timestamp, and filtered inputs
 
 To reject all waiting steps at once, use the **Reject** button in the DAG run action bar (replaces the Stop button when the DAG is in `Waiting` status). An optional rejection reason can be provided.
 

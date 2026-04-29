@@ -313,7 +313,12 @@ dagu start workflow.yaml -- '{"environment":"prod","batch_size":50}'
 dagu start workflow.yaml -- '["input.csv",{"ENVIRONMENT":"prod"}]'
 ```
 
-The Web UI uses `paramDefs` from `GET /api/v1/dags/{fileName}` to render typed controls in the start/enqueue modal when the DAG exposes inline rich definitions, top-level inline JSON Schema metadata, or representable external schema metadata. Param descriptions are shown inline below each typed control. For named params, typed clients should submit a JSON object payload. If no typed metadata is available, the UI falls back to the raw parameter editor.
+The Web UI uses `GET /api/v1/dags/{fileName}` metadata in this order:
+
+- `paramSchema` for schema-backed object forms that are safe to render directly
+- `paramDefs` for inline rich params and other typed scalar metadata
+
+Param descriptions are shown inline below each typed control. For named params, typed clients should submit a JSON object payload. If neither `paramSchema` nor `paramDefs` is available, the UI falls back to the raw parameter editor.
 
 When a param uses `eval`, `paramDefs.default` still reflects only the literal `default` field, if one exists. Computed defaults such as `` `nproc` `` or `$BASE_DIR/out` are resolved by the server at start/enqueue time, not by the client.
 
@@ -365,6 +370,14 @@ Compatibility notes:
 - Boolean schema mode becomes active only when `values:` is present.
 - A string `schema:` value without `values:` is treated as schema mode only when it looks like a file path or URL.
 
+When the resolved schema is simple enough for direct form rendering, `GET /api/v1/dags/{fileName}` also includes `paramSchema`. In `v2.6.2`, that renderable subset is:
+
+- a root object schema with top-level `properties`
+- scalar properties of type `string`, `integer`, `number`, or `boolean`
+- fixed-choice scalar properties expressed with `enum` or `oneOf` constant options
+
+Nested objects, arrays, conditional schemas, `patternProperties`, and other unsupported constructs are still validated at runtime, but the Web UI falls back to the raw parameter editor instead of generating a form.
+
 ## Top-Level Inline JSON Schema
 
 Top-level inline JSON Schema is an alternative to `params: { schema, values }` when you want the schema itself to be the `params:` value.
@@ -391,7 +404,7 @@ params:
 Behavior:
 
 - The top-level object must include `type: object` and `properties`.
-- Metadata loads derive `paramDefs` and `defaultParams` from scalar property defaults.
+- Metadata loads derive `paramDefs`, `defaultParams`, and, when possible, a renderable `paramSchema` from scalar property defaults.
 - Runtime overrides must be named (`environment=prod`), not positional (`prod`).
 - If `additionalProperties: false` is set, unknown named overrides are rejected.
 - JSON Schema keywords outside the inline rich subset are passed through to runtime validation.

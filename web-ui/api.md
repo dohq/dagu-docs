@@ -14,7 +14,7 @@ The web UI also includes a live API docs page at `/api-docs`. It renders the sam
 The API supports multiple authentication methods:
 
 - **API Keys**: Include `Authorization: Bearer dagu_<key>` header (requires Builtin Auth)
-- **Webhooks**: Include `Authorization: Bearer dagu_wh_<token>` header for triggering specific DAGs (requires Builtin Auth)
+- **Webhooks**: Trigger endpoints use per-DAG webhook credentials. Send `Authorization: Bearer dagu_wh_<token>` (requires Builtin Auth)
 - **JWT Token**: Include `Authorization: Bearer <jwt-token>` header (from login endpoint)
 - **Basic Auth**: Include `Authorization: Basic <base64(username:password)>` header
 - **No Authentication**: When auth is disabled (default for local development)
@@ -284,7 +284,23 @@ Fetches detailed information about a specific DAG.
         "maximum": 10000
       }
     ],
-    "defaultParams": "{\"batch_size\": 1000, \"env\": \"dev\"}",
+    "paramSchema": {
+      "type": "object",
+      "required": ["env"],
+      "properties": {
+        "env": {
+          "type": "string",
+          "enum": ["dev", "staging", "prod"]
+        },
+        "batch_size": {
+          "type": "integer",
+          "default": 1000,
+          "minimum": 1,
+          "maximum": 10000
+        }
+      }
+    },
+    "defaultParams": "env=\"dev\" batch_size=\"1000\"",
     "labels": ["production", "etl", "daily"]
   },
   "localDags": [
@@ -327,9 +343,9 @@ Fetches detailed information about a specific DAG.
 }
 ```
 
-`paramDefs` is additive metadata derived from DAG-level `params:`. Typed clients can use it to render start/enqueue controls. When Dagu cannot derive a faithful typed field model, the field is omitted and clients should fall back to the raw parameter editor.
+`paramSchema` is present when Dagu can safely render a schema-backed object form directly in the start/enqueue UI. Clients should prefer `paramSchema` over `paramDefs` when both are present.
 
-`paramDefs` can be derived from inline rich params, top-level inline JSON Schema, and representable external schemas.
+`paramDefs` is additive metadata derived from DAG-level `params:`. Typed clients can use it to render scalar controls when `paramSchema` is absent. `paramDefs` can be derived from inline rich params, top-level inline JSON Schema, and representable external schemas.
 
 `defaultParams` is the resolved shell-style default parameter string, not JSON. For example: `environment="staging" batch_size="25"`.
 
@@ -2865,19 +2881,17 @@ curl -X POST http://localhost:8080/api/v1/dags/my-dag/start \
 
 ## Webhook Endpoints
 
-Webhooks allow external systems to trigger DAG executions via HTTP with DAG-specific tokens. Unlike API keys which provide general API access, webhooks are designed for integration with external services like CI/CD pipelines, GitHub, Slack, etc.
+Webhooks expose a DAG-specific trigger endpoint and a separate set of management endpoints.
 
-Webhook management endpoints require Builtin Authentication mode and admin role.
+- Trigger endpoint: `POST /api/v1/webhooks/{fileName}`
+- Management endpoints: developer, manager, or admin only when builtin auth is enabled
+- Per-DAG limit: one webhook configuration per DAG
 
 ### Trigger DAG via Webhook
 
 **Endpoint**: `POST /api/v1/webhooks/{fileName}`
 
-Triggers a DAG execution using a webhook token. This endpoint uses webhook token authentication instead of regular API authentication.
-
-The request body is exposed to the DAG as `WEBHOOK_PAYLOAD`. If the DAG
-configures `webhook.forward_headers`, the selected request headers are exposed
-as `WEBHOOK_HEADERS`.
+The trigger endpoint uses webhook-token authentication instead of regular API authentication.
 
 **Path Parameters**:
 | Parameter | Type | Description |
@@ -2887,67 +2901,110 @@ as `WEBHOOK_HEADERS`.
 **Request Headers**:
 | Header | Description |
 |--------|-------------|
-| Authorization | `Bearer <webhook-token>` |
+| Authorization | `Bearer dagu_wh_<token>` |
 
 **Request Body** (optional):
 ```json
 {
-  "dagRunId": "custom-run-id",
-  "payload": {"key": "value"}
+  "dagRunId": "deploy-abc123",
+  "payload": {
+    "branch": "main",
+    "commit": "abc123"
+  }
 }
 ```
 
 **Request Fields**:
 | Field | Type | Description | Required |
 |-------|------|-------------|----------|
-| dagRunId | string | Custom run ID for idempotency | No |
-| payload | object | Data passed to DAG as WEBHOOK_PAYLOAD env var | No |
+| dagRunId | string | Optional idempotency key. If a run with this ID already exists, the endpoint returns `409 Conflict`. | No |
+| payload | object | Arbitrary JSON exposed to the DAG as `WEBHOOK_PAYLOAD`. | No |
+
+Payload behavior is slightly broader than the schema shape:
+
+- If the request body includes a top-level `payload` field, Dagu serializes that field into `WEBHOOK_PAYLOAD`.
+- Otherwise, if the raw request body is valid JSON, Dagu serializes the entire raw body into `WEBHOOK_PAYLOAD`.
+- Otherwise `WEBHOOK_PAYLOAD` is `{}`.
+- If you want a custom `dagRunId` without mixing it into `WEBHOOK_PAYLOAD`, use the wrapper form shown above.
 
 **Response (200)**:
 ```json
 {
-  "dagRunId": "20240211_120000_abc123",
+  "dagRunId": "0196808c-04ff-73bb-a63e-83791b321ac0",
   "dagName": "my-dag"
 }
 ```
 
-**Error Response (401)** - Missing or invalid token:
+**Error Response (401)**:
 ```json
 {
   "code": "unauthorized",
-  "message": "Invalid or missing webhook token"
+  "message": "missing or invalid authorization header"
 }
 ```
 
-**Error Response (403)** - Webhook disabled:
+Another `401` response is `invalid webhook token`.
+
+**Error Response (403)**:
 ```json
 {
   "code": "forbidden",
-  "message": "Webhook is disabled"
+  "message": "webhook is disabled"
 }
 ```
 
-**Error Response (404)** - DAG or webhook not found:
+**Error Response (404)**:
 ```json
 {
   "code": "not_found",
-  "message": "DAG not found"
+  "message": "DAG my-dag not found"
 }
 ```
 
-**Error Response (409)** - Duplicate dagRunId:
+Other `404` responses include `no webhook configured for this DAG` and `webhook triggering is not configured on this server`.
+
+**Error Response (409)**:
 ```json
 {
   "code": "already_exists",
-  "message": "DAG run with this ID already exists"
+  "message": "dag-run with ID deploy-abc123 already exists"
 }
 ```
+
+**Error Response (413)**:
+```json
+{
+  "code": "bad_request",
+  "message": "webhook payload too large (max 1048576 bytes)"
+}
+```
+
+### Webhook Details Shape
+
+Webhook management endpoints return the same public webhook object:
+
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "dagName": "my-dag",
+  "tokenPrefix": "dagu_wh_7Kq9",
+  "enabled": true,
+  "createdAt": "2026-04-29T10:00:00Z",
+  "updatedAt": "2026-04-29T10:15:00Z",
+  "createdBy": "user-id",
+  "lastUsedAt": "2026-04-29T10:20:00Z"
+}
+```
+
+Notes:
+
+- `tokenPrefix` is the stored identification prefix from the full token, currently the first 12 characters when available.
 
 ### List All Webhooks
 
 **Endpoint**: `GET /api/v1/webhooks`
 
-Retrieves all webhooks. Requires admin role.
+Lists all configured webhooks across DAGs. Requires developer, manager, or admin role.
 
 **Response (200)**:
 ```json
@@ -2956,12 +3013,12 @@ Retrieves all webhooks. Requires admin role.
     {
       "id": "550e8400-e29b-41d4-a716-446655440000",
       "dagName": "my-dag",
-      "tokenPrefix": "dagu_wh_7Kq",
+      "tokenPrefix": "dagu_wh_7Kq9",
       "enabled": true,
-      "createdAt": "2024-02-11T12:00:00Z",
-      "updatedAt": "2024-02-11T12:00:00Z",
-      "createdBy": "admin-user-id",
-      "lastUsedAt": "2024-02-11T15:30:00Z"
+      "createdAt": "2026-04-29T10:00:00Z",
+      "updatedAt": "2026-04-29T10:00:00Z",
+      "createdBy": "user-id",
+      "lastUsedAt": "2026-04-29T10:20:00Z"
     }
   ]
 }
@@ -2971,27 +3028,13 @@ Retrieves all webhooks. Requires admin role.
 
 **Endpoint**: `GET /api/v1/dags/{fileName}/webhook`
 
-Retrieves the webhook for a specific DAG. Requires admin role.
-
-**Response (200)**:
-```json
-{
-  "id": "550e8400-e29b-41d4-a716-446655440000",
-  "dagName": "my-dag",
-  "tokenPrefix": "dagu_wh_7Kq",
-  "enabled": true,
-  "createdAt": "2024-02-11T12:00:00Z",
-  "updatedAt": "2024-02-11T12:00:00Z",
-  "createdBy": "admin-user-id",
-  "lastUsedAt": "2024-02-11T15:30:00Z"
-}
-```
+Returns the webhook configuration for one DAG. Requires developer, manager, or admin role.
 
 **Error Response (404)**:
 ```json
 {
   "code": "not_found",
-  "message": "Webhook not found for this DAG"
+  "message": "no webhook configured for DAG my-dag"
 }
 ```
 
@@ -2999,7 +3042,7 @@ Retrieves the webhook for a specific DAG. Requires admin role.
 
 **Endpoint**: `POST /api/v1/dags/{fileName}/webhook`
 
-Creates a webhook for a DAG. Requires admin role. Each DAG can only have one webhook.
+Creates the webhook record and returns the full token once. Requires developer, manager, or admin role.
 
 **Response (201)**:
 ```json
@@ -3007,57 +3050,23 @@ Creates a webhook for a DAG. Requires admin role. Each DAG can only have one web
   "webhook": {
     "id": "550e8400-e29b-41d4-a716-446655440000",
     "dagName": "my-dag",
-    "tokenPrefix": "dagu_wh_7Kq",
+    "tokenPrefix": "dagu_wh_7Kq9",
     "enabled": true,
-    "createdAt": "2024-02-11T12:00:00Z",
-    "updatedAt": "2024-02-11T12:00:00Z",
-    "createdBy": "admin-user-id"
+    "createdAt": "2026-04-29T10:00:00Z",
+    "updatedAt": "2026-04-29T10:00:00Z",
+    "createdBy": "user-id"
   },
   "token": "dagu_wh_7Kq9mXxN3pLwR5tY2vZa8bCdEfGhJk4n6sUwXy0zA1B"
 }
 ```
 
-::: warning
-The `token` field contains the full webhook token and is **only returned once** at creation time. Store it securely.
-:::
-
-**Error Response (404)** - DAG not found:
-```json
-{
-  "code": "not_found",
-  "message": "DAG not found"
-}
-```
-
-**Error Response (409)** - Webhook already exists:
-```json
-{
-  "code": "already_exists",
-  "message": "Webhook already exists for this DAG"
-}
-```
-
-### Delete DAG Webhook
-
-**Endpoint**: `DELETE /api/v1/dags/{fileName}/webhook`
-
-Deletes the webhook for a DAG. Requires admin role.
-
-**Response (204)**: No content
-
-**Error Response (404)**:
-```json
-{
-  "code": "not_found",
-  "message": "Webhook not found"
-}
-```
+The `token` field is returned only at creation and token-regeneration time.
 
 ### Regenerate Webhook Token
 
 **Endpoint**: `POST /api/v1/dags/{fileName}/webhook/regenerate`
 
-Regenerates the token for a webhook. The old token is immediately invalidated. Requires admin role.
+Rotates the webhook token and invalidates the old token immediately. Requires developer, manager, or admin role.
 
 **Response (200)**:
 ```json
@@ -3065,21 +3074,13 @@ Regenerates the token for a webhook. The old token is immediately invalidated. R
   "webhook": {
     "id": "550e8400-e29b-41d4-a716-446655440000",
     "dagName": "my-dag",
-    "tokenPrefix": "dagu_wh_9Xz",
+    "tokenPrefix": "dagu_wh_9XzN",
     "enabled": true,
-    "createdAt": "2024-02-11T12:00:00Z",
-    "updatedAt": "2024-02-11T16:00:00Z",
-    "createdBy": "admin-user-id"
+    "createdAt": "2026-04-29T10:00:00Z",
+    "updatedAt": "2026-04-29T10:30:00Z",
+    "createdBy": "user-id"
   },
   "token": "dagu_wh_9XzNewTokenGeneratedHereAfterRegeneration"
-}
-```
-
-**Error Response (404)**:
-```json
-{
-  "code": "not_found",
-  "message": "Webhook not found"
 }
 ```
 
@@ -3087,7 +3088,7 @@ Regenerates the token for a webhook. The old token is immediately invalidated. R
 
 **Endpoint**: `POST /api/v1/dags/{fileName}/webhook/toggle`
 
-Enables or disables a webhook without regenerating the token. Requires admin role.
+Enables or disables the webhook without rotating credentials. Requires developer, manager, or admin role.
 
 **Request Body**:
 ```json
@@ -3101,37 +3102,34 @@ Enables or disables a webhook without regenerating the token. Requires admin rol
 {
   "id": "550e8400-e29b-41d4-a716-446655440000",
   "dagName": "my-dag",
-  "tokenPrefix": "dagu_wh_7Kq",
+  "tokenPrefix": "dagu_wh_7Kq9",
   "enabled": false,
-  "createdAt": "2024-02-11T12:00:00Z",
-  "updatedAt": "2024-02-11T16:00:00Z",
-  "createdBy": "admin-user-id",
-  "lastUsedAt": "2024-02-11T15:30:00Z"
+  "createdAt": "2026-04-29T10:00:00Z",
+  "updatedAt": "2026-04-29T10:30:00Z",
+  "createdBy": "user-id",
+  "lastUsedAt": "2026-04-29T10:20:00Z"
 }
 ```
 
-**Error Response (404)**:
-```json
-{
-  "code": "not_found",
-  "message": "Webhook not found"
-}
-```
+### Delete DAG Webhook
 
+**Endpoint**: `DELETE /api/v1/dags/{fileName}/webhook`
+
+Deletes the webhook configuration. Requires developer, manager, or admin role.
+
+**Response (204)**: No content
 ### Example: Using Webhooks
 
 ```bash
-# 1. Login as admin to get JWT token
+# 1. Login with a user that has developer, manager, or admin role
 TOKEN=$(curl -s -X POST http://localhost:8080/api/v1/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"username": "admin", "password": "admin-password"}' | jq -r '.token')
+  -d '{"username": "your-username", "password": "your-password"}' | jq -r '.token')
 
 # 2. Create a webhook for a DAG
 WEBHOOK=$(curl -s -X POST http://localhost:8080/api/v1/dags/my-dag/webhook \
   -H "Authorization: Bearer $TOKEN")
-
 WEBHOOK_TOKEN=$(echo $WEBHOOK | jq -r '.token')
-echo "Webhook token: $WEBHOOK_TOKEN"
 
 # 3. Trigger the DAG using the webhook
 curl -X POST http://localhost:8080/api/v1/webhooks/my-dag \
