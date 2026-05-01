@@ -49,7 +49,7 @@ error_mail:
   to: oncall@company.com
   attach_logs: true
 
-hist_retention_days: 30 # Dagu deletes workflow history and logs older than this
+hist_retention_days: 30 # Keep workflow history and logs for 30 days by default
 queue: "default"      # Default queue for all DAGs (define in config.yaml)
 ```
 

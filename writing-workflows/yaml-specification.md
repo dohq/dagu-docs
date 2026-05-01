@@ -293,6 +293,8 @@ See [Custom Step Types](/writing-workflows/custom-step-types) for the full defin
 | `hist_retention_days` | integer | History retention days | `30` |
 | `max_output_size` | integer | Max output size per step (bytes) | `1048576` |
 
+`hist_retention_days` defaults to `30`. Setting it to `0` also uses the default `30`-day retention. Negative values disable automatic cleanup.
+
 #### `params`
 
 Top-level DAG `params:` supports:
@@ -1100,18 +1102,22 @@ steps:
 
 | Field | Type | Description | Default |
 |-------|------|-------------|---------|
-| `condition` | string | Command or expression to evaluate | - |
-| `expected` | string | Expected value or regex pattern (prefix with `re:`) | - |
+| `condition` | string | Expression or check to evaluate. If `expected` is omitted, Dagu replaces variables in this string and runs the result as a command check. | - |
+| `expected` | string | Expected value or regex pattern (prefix with `re:`). When set, Dagu compares the evaluated string result instead of using command exit status. | - |
 | `negate` | boolean | Invert the condition logic (run when condition does NOT match) | `false` |
 
 ```yaml
 steps:
   - command: echo "Deploying"
+    shell: bash
     preconditions:
       - condition: "${ENVIRONMENT}"
         expected: "production"
       - condition: "`git branch --show-current`"
         expected: "main"
+      # Shell syntax like "test ... " requires a shell.
+      # Without a shell, Dagu executes the resulting string directly.
+      - condition: "test ${DEPLOY_READY} = yes"
 
   # With negate: run only when NOT in production
   - command: echo "Running dev task"

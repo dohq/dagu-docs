@@ -225,6 +225,8 @@ steps:
 
 **Note:** Command substitution is always supported in `env:` blocks. For DAG-level `params:`, use `eval:` on an inline rich param definition when you want `$VAR` expansion or backtick command substitution. Literal `default` values and runtime overrides from the CLI, API, and sub-DAG calls remain literal.
 
+Backticks are still part of normal runtime evaluation in fields such as `command`, `stdout`, `stderr`, sub-DAG `params`, and executor `with:` config. Command-step `script` is the main exception: Dagu replaces variables there but leaves backticks for the shell.
+
 ## Output Variables
 
 ### Capturing Output

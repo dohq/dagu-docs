@@ -182,6 +182,7 @@ The preview response reports:
 | `mimeType` | Detected MIME type |
 | `size` | File size in bytes |
 | `tooLarge` | `true` when the file exceeds the inline preview limit for its kind |
+| `truncated` | `true` when inline markdown or text content was shortened for preview |
 | `content` | Inline content for markdown and text previews only |
 
 ## Cleanup

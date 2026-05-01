@@ -288,6 +288,8 @@ max_clean_up_time_sec: 60
 max_output_size: 1048576
 ```
 
+`hist_retention_days` defaults to `30`. Setting it to `0` also uses the default `30`-day retention. Negative values disable automatic cleanup.
+
 ### Custom Step Types
 
 Define reusable step types in `base.yaml` when you want every DAG to share the same abstraction:

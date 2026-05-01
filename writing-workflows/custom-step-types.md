@@ -138,10 +138,11 @@ Custom step templates are rendered while the DAG is loaded, before a step starts
 Rule of thumb:
 
 - Go template actions are custom-step template rendering at DAG load time.
-- `${...}`, `$VAR`, and backtick expressions are Dagu runtime expressions evaluated later by the expanded builtin step.
+- `${...}` and `$VAR` are Dagu runtime expressions evaluated later by the expanded builtin step.
+- Backticks survive custom-step expansion unchanged. What happens later depends on the destination field: runtime-evaluated fields still process backticks, while command-step `script` leaves them for the shell.
 - Runtime expressions can be passed through custom step templates, but they cannot control Go template `if`, `range`, or other load-time template logic.
 
-Runtime expressions are still valid when they end up in fields that Dagu evaluates at execution time, such as command strings, command arguments, scripts, or executor config strings.
+Runtime expressions are still valid when they end up in fields that Dagu evaluates at execution time. `${...}` and `$VAR` work in command strings, command arguments, scripts, and executor config strings. Backticks also continue to work in the fields that use normal runtime evaluation.
 
 If a runtime expression is written directly in `template`, it is ordinary text during custom template rendering. For example, `${COUNT}` is not Go template syntax, so it stays `${COUNT}` in the expanded builtin step. It expands later when that builtin step executes, provided it is in a runtime-evaluated field.
 

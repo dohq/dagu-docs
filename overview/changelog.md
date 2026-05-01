@@ -1,5 +1,21 @@
 # Changelog
 
+## v2.6.3 (2026-04-30)
+
+### Added
+
+- core: add run-count history retention ([#2053](https://github.com/dagu-org/dagu/pull/2053)) [@yottahmd](https://github.com/yottahmd)
+- feat: add copy and raw mode to artifact previews [@yottahmd](https://github.com/yottahmd)
+
+### Fixed
+
+- fix: align command condition expansion with shell commands ([#2076](https://github.com/dagu-org/dagu/pull/2076)) [@yottahmd](https://github.com/yottahmd)
+- fix: stop evaluating step backticks by default ([#2075](https://github.com/dagu-org/dagu/pull/2075)) [@yottahmd](https://github.com/yottahmd)
+- fix: preserve literal code fences in template config ([#2072](https://github.com/dagu-org/dagu/pull/2072)) [@yottahmd](https://github.com/yottahmd)
+- fix(config): whitelist `XDG_STATE_HOME` for forwarded Unix/macOS step environments ([#2056](https://github.com/dagu-org/dagu/issues/2056), [#2077](https://github.com/dagu-org/dagu/pull/2077)) [@yottahmd](https://github.com/yottahmd)
+- fix: preserve DAG search focus during incremental updates [@yottahmd](https://github.com/yottahmd)
+- fix: dedupe builtin harness flag aliases ([#2071](https://github.com/dagu-org/dagu/pull/2071)) [@yottahmd](https://github.com/yottahmd)
+
 ## v2.6.2 (2026-04-29)
 
 ### Added

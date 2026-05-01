@@ -347,6 +347,8 @@ Fetches detailed information about a specific DAG.
 
 `paramDefs` is additive metadata derived from DAG-level `params:`. Typed clients can use it to render scalar controls when `paramSchema` is absent. `paramDefs` can be derived from inline rich params, top-level inline JSON Schema, and representable external schemas.
 
+The DAG object also exposes `histRetentionDays` for DAG history retention.
+
 `defaultParams` is the resolved shell-style default parameter string, not JSON. For example: `environment="staging" batch_size="25"`.
 
 When an inline rich param uses `eval`, `paramDefs.default` remains only the authored literal `default`, if one exists. Clients should not evaluate template defaults locally.

@@ -130,7 +130,7 @@ The dedicated outputs view is also available inside the run screen:
 
 ![Outputs Tab](/outputs-tab.png)
 
-The same run details screen also includes an Artifacts tab for generated files. Markdown, text, and image artifacts can be previewed inline without leaving the page:
+The same run details screen also includes an Artifacts tab for generated files. Markdown, text, and image artifacts can be previewed inline without leaving the page, and files can be downloaded from the tab:
 
 ![Artifacts Tab](/artifacts-tab-light.png)
 

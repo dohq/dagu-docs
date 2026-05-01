@@ -177,6 +177,8 @@ env:
   - HOSTNAME: "`hostname -f`"
 ```
 
+This load-time substitution applies to configuration fields that Dagu evaluates as data, such as `env:`, `dotenv:` paths, and inline param `eval:` values. Runtime step fields such as `command`, `stdout`, `stderr`, sub-DAG `params`, and executor `with:` config still use normal runtime evaluation, including backticks. Command-step `script` is narrower: Dagu replaces variables there but leaves backticks for the shell.
+
 ### Referencing System Variables
 
 System environment variables are available during DAG parsing, so you can reference them in `env:` values even when they are not forwarded to the final step process environment. This is best for non-sensitive values:

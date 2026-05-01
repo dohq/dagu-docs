@@ -256,9 +256,10 @@ hist_retention_days: 7  # Keep 7 days
 hist_retention_days: 30  # Default
 ```
 
-Special values:
-- `0` - Delete after each run
-- `-1` - Keep forever
+Notes:
+- `hist_retention_days` defaults to `30`.
+- `hist_retention_days: 0` also uses the default `30`-day retention.
+- Negative values disable automatic cleanup.
 
 Deletes:
 - Execution logs

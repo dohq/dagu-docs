@@ -75,6 +75,8 @@ curl http://localhost:8080/api/v1/dags/my-dag
 
 The DAG detail response includes `paramSchema` when Dagu can safely render a schema-backed parameter form directly, and `paramDefs` for typed scalar metadata. `paramDefs` carries metadata for inline rich `params:` definitions, top-level inline JSON Schema, and representable external schemas. For named params, clients should submit a JSON object payload; JSON arrays are mainly for positional or mixed raw input.
 
+The same response also exposes `histRetentionDays` for DAG history retention.
+
 `defaultParams` is a shell-style string of resolved default pairs such as `environment="staging" batch_size="25"`. It is not JSON.
 
 When a param uses inline `eval`, `paramDefs.default` still represents only the authored literal `default`, if one exists. Computed defaults such as `${BASE_DIR}/out` or `` `nproc` `` are resolved by the server when the DAG is started.

@@ -167,6 +167,16 @@ steps:
         expected: "production"
 ```
 
+When `expected` is omitted, Dagu treats `condition` as a command check. Dagu first replaces variables in the condition string. If a shell is configured, the result runs through that shell. Without a shell, Dagu executes the resulting string directly, so shell syntax requires an active shell.
+
+```yaml
+steps:
+  - command: echo "Threshold reached"
+    shell: bash
+    preconditions:
+      - condition: "test ${DEV_PCENT} -ge ${DEV_ALERT}"
+```
+
 ### Command Output Conditions
 
 ```yaml
