@@ -1,20 +1,37 @@
 # Changelog
 
-## v2.6.3 (2026-04-30)
+## v2.6.3 (2026-05-01)
 
 ### Added
 
-- core: add run-count history retention ([#2053](https://github.com/dagu-org/dagu/pull/2053)) [@yottahmd](https://github.com/yottahmd)
-- feat: add copy and raw mode to artifact previews [@yottahmd](https://github.com/yottahmd)
+- core: add run-count history retention ([#2053](https://github.com/dagu-org/dagu/pull/2053)) [@reachyogeshp-afk](https://github.com/reachyogeshp-afk)
+
+### Changed
+
+- chore(deps): bump the go-patch group across 1 directory with 7 updates ([#2067](https://github.com/dagu-org/dagu/pull/2067)) [@dependabot](https://github.com/dependabot)
+- refactor: remove lodash from ui ([#2069](https://github.com/dagu-org/dagu/pull/2069)) [@yottahmd](https://github.com/yottahmd)
+- chore(deps): bump the ui-patch group across 1 directory with 6 updates ([#2070](https://github.com/dagu-org/dagu/pull/2070)) [@dependabot](https://github.com/dependabot)
+- chore(deps): bump the ui-security group across 1 directory with 13 updates ([#2073](https://github.com/dagu-org/dagu/pull/2073)) [@dependabot](https://github.com/dependabot)
 
 ### Fixed
 
-- fix: align command condition expansion with shell commands ([#2076](https://github.com/dagu-org/dagu/pull/2076)) [@yottahmd](https://github.com/yottahmd)
-- fix: stop evaluating step backticks by default ([#2075](https://github.com/dagu-org/dagu/pull/2075)) [@yottahmd](https://github.com/yottahmd)
-- fix: preserve literal code fences in template config ([#2072](https://github.com/dagu-org/dagu/pull/2072)) [@yottahmd](https://github.com/yottahmd)
-- fix(config): whitelist `XDG_STATE_HOME` for forwarded Unix/macOS step environments ([#2056](https://github.com/dagu-org/dagu/issues/2056), [#2077](https://github.com/dagu-org/dagu/pull/2077)) [@yottahmd](https://github.com/yottahmd)
-- fix: preserve DAG search focus during incremental updates [@yottahmd](https://github.com/yottahmd)
 - fix: dedupe builtin harness flag aliases ([#2071](https://github.com/dagu-org/dagu/pull/2071)) [@yottahmd](https://github.com/yottahmd)
+- fix: preserve literal code fences in template config ([#2072](https://github.com/dagu-org/dagu/pull/2072)) [@yottahmd](https://github.com/yottahmd)
+- fix: stop evaluating step backticks by default ([#2075](https://github.com/dagu-org/dagu/pull/2075)) [@yottahmd](https://github.com/yottahmd)
+- fix: align command condition expansion with shell commands ([#2076](https://github.com/dagu-org/dagu/pull/2076)) [@yottahmd](https://github.com/yottahmd)
+- fix(config): whitelist XDG_STATE_HOME (#2056) ([#2077](https://github.com/dagu-org/dagu/pull/2077)) [@yottahmd](https://github.com/yottahmd)
+
+### Contributors
+
+Thanks to our contributors for this release:
+
+| Contribution | Contributor |
+| --- | --- |
+| core: add run-count history retention ([#2053](https://github.com/dagu-org/dagu/pull/2053)) | [@reachyogeshp-afk](https://github.com/reachyogeshp-afk) |
+| Limit dag run history by number of runs ([#1069](https://github.com/dagu-org/dagu/issues/1069)) | [@ghansham](https://github.com/ghansham) (report) |
+| chore(deps): bump the go-patch group across 1 directory with 7 updates ([#2067](https://github.com/dagu-org/dagu/pull/2067)), chore(deps): bump the ui-patch group across 1 directory with 6 updates ([#2070](https://github.com/dagu-org/dagu/pull/2070)), chore(deps): bump the ui-security group across 1 directory with 13 updates ([#2073](https://github.com/dagu-org/dagu/pull/2073)) | [@dependabot](https://github.com/dependabot) |
+| Inconsistent behaviour between commands and preconditions ([#2057](https://github.com/dagu-org/dagu/issues/2057)), Include XDG_STATE_HOME in the default env allow list ([#2056](https://github.com/dagu-org/dagu/issues/2056)) | [@Mice7R](https://github.com/Mice7R) (report) |
+
 
 ## v2.6.2 (2026-04-29)
 
