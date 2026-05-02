@@ -259,6 +259,9 @@ This means:
 ### Workflow
 
 ```yaml
+worker_selector:
+  gpu: "true"
+
 steps:
   - id: prepare
     command: |
@@ -281,6 +284,7 @@ In this workflow, the most useful variables are usually:
 Why this is a good Dagu use case:
 
 - the job must run on your own hardware
+- the DAG can target a worker labeled `gpu=true`
 - the environment can keep large local assets, drivers, and caches
 - GitHub still gets a normal check result
 
