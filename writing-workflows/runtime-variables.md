@@ -302,3 +302,37 @@ steps:
 - `Authorization` can never be forwarded.
 - When no configured headers are present on the request, `WEBHOOK_HEADERS` is `{}`.
 - Because header names often contain hyphens, parsing the JSON string directly with `jq`, Python, Node.js, or your shell tooling is usually clearer than dot-notation access.
+
+## GitHub Integration Variables
+
+When the run comes from the Dagu Cloud GitHub App integration, the workflow receives more than the raw webhook payload.
+
+In addition to `WEBHOOK_PAYLOAD` and `WEBHOOK_HEADERS`, Dagu injects GitHub-specific convenience variables such as:
+
+- `GITHUB_EVENT_NAME`
+- `GITHUB_EVENT_ACTION`
+- `GITHUB_REPOSITORY`
+- `GITHUB_SHA`
+- `GITHUB_REF`
+- `GITHUB_ACTOR`
+- `GITHUB_PR_NUMBER`
+- `GITHUB_ISSUE_NUMBER`
+- `GITHUB_COMMAND`
+- `GITHUB_RELEASE_TAG`
+- `GITHUB_WORKFLOW`
+- `GITHUB_DISPATCH_EVENT_TYPE`
+
+Example:
+
+```yaml
+steps:
+  - id: inspect_github_context
+    command: |
+      echo "event=${GITHUB_EVENT_NAME}"
+      echo "action=${GITHUB_EVENT_ACTION}"
+      echo "repo=${GITHUB_REPOSITORY}"
+      echo "pr=${GITHUB_PR_NUMBER}"
+      echo "body=${WEBHOOK_PAYLOAD.comment.body}"
+```
+
+For the full GitHub integration model, supported triggers, binding rules, and end-to-end examples, see [GitHub Integration](/github-integration/).

@@ -114,6 +114,8 @@ The most common pattern is a `type: command` custom step with a templated `scrip
 10. **[Patterns](/writing-workflows/control-flow#patterns)** - Composition patterns
 11. **[Secrets](/writing-workflows/secrets)** - External providers, resolution order, masking behavior
 
+If your workflows are triggered from GitHub through Dagu Cloud, see the dedicated [GitHub Integration](/github-integration/) section.
+
 ## Complete Example
 
 ```yaml

@@ -134,6 +134,14 @@ const fullSidebar = [
     ],
   },
   {
+    text: "GitHub Integration",
+      items: [
+        { text: "Overview", link: "/github-integration/" },
+        { text: "Setup", link: "/github-integration/setup" },
+        { text: "Examples", link: "/github-integration/examples" },
+      ],
+  },
+  {
     text: "AI Agent",
     items: [
       { text: "Overview", link: "/features/agent/" },
@@ -345,6 +353,7 @@ export default withMermaid(
         { text: "Quickstart", link: "/getting-started/quickstart", activeMatch: "/getting-started" },
         { text: "Writing Workflows", link: "/writing-workflows/", activeMatch: "/writing-workflows/" },
         { text: "Step Types", link: "/step-types/shell", activeMatch: "/step-types/" },
+        { text: "GitHub Integration", link: "/github-integration/", activeMatch: "/github-integration/" },
         { text: "AI Agent", link: "/features/agent/", activeMatch: "/features/agent/" },
         { text: "Server Admin", link: "/server-admin/", activeMatch: "/server-admin/" },
       ],
@@ -355,6 +364,7 @@ export default withMermaid(
         "/getting-started/": fullSidebar,
         "/writing-workflows/": fullSidebar,
         "/step-types/": fullSidebar,
+        "/github-integration/": fullSidebar,
         "/features/": fullSidebar,
         "/web-ui/": fullSidebar,
         "/server-admin/": fullSidebar,

@@ -994,3 +994,69 @@
   stroke: #5c554a !important;
   stroke-width: 1.6px !important;
 }
+
+/* GitHub integration overview diagram */
+.github-overview-diagram {
+  margin: 1.5rem 0;
+}
+
+.github-overview-diagram .mermaid {
+  overflow-x: auto;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 14px;
+  background: var(--vp-c-bg-soft);
+}
+
+.github-overview-diagram .mermaid svg {
+  display: block;
+  min-width: 860px;
+  height: auto;
+}
+
+.github-overview-diagram .mermaid text,
+.github-overview-diagram .mermaid tspan {
+  font-size: 15px !important;
+}
+
+.github-overview-diagram .mermaid .actor rect,
+.github-overview-diagram .mermaid .participant rect,
+.github-overview-diagram .mermaid .participant-box,
+.github-overview-diagram .mermaid .actor-box {
+  fill: #f8fafc !important;
+  stroke: #94a3b8 !important;
+  stroke-width: 1.5px !important;
+}
+
+.github-overview-diagram .mermaid .note rect,
+.github-overview-diagram .mermaid .note-box {
+  fill: #fff7ed !important;
+  stroke: #fdba74 !important;
+  stroke-width: 1.5px !important;
+}
+
+.github-overview-diagram .mermaid .messageLine0,
+.github-overview-diagram .mermaid .messageLine1,
+.github-overview-diagram .mermaid .actor-line {
+  stroke: #64748b !important;
+}
+
+.dark .github-overview-diagram .mermaid .actor rect,
+.dark .github-overview-diagram .mermaid .participant rect,
+.dark .github-overview-diagram .mermaid .participant-box,
+.dark .github-overview-diagram .mermaid .actor-box {
+  fill: #1f2937 !important;
+  stroke: #475569 !important;
+}
+
+.dark .github-overview-diagram .mermaid .note rect,
+.dark .github-overview-diagram .mermaid .note-box {
+  fill: #3b2f1f !important;
+  stroke: #b45309 !important;
+}
+
+.dark .github-overview-diagram .mermaid .messageLine0,
+.dark .github-overview-diagram .mermaid .messageLine1,
+.dark .github-overview-diagram .mermaid .actor-line {
+  stroke: #94a3b8 !important;
+}
