@@ -4,22 +4,22 @@
 
 ### Added
 
-- core: add run-count history retention ([#2053](https://github.com/dagu-org/dagu/pull/2053)) [@reachyogeshp-afk](https://github.com/reachyogeshp-afk)
+- core: add run-count history retention ([#2053](https://github.com/dagucloud/dagu/pull/2053)) [@reachyogeshp-afk](https://github.com/reachyogeshp-afk)
 
 ### Changed
 
-- chore(deps): bump the go-patch group across 1 directory with 7 updates ([#2067](https://github.com/dagu-org/dagu/pull/2067)) [@dependabot](https://github.com/dependabot)
-- refactor: remove lodash from ui ([#2069](https://github.com/dagu-org/dagu/pull/2069)) [@yottahmd](https://github.com/yottahmd)
-- chore(deps): bump the ui-patch group across 1 directory with 6 updates ([#2070](https://github.com/dagu-org/dagu/pull/2070)) [@dependabot](https://github.com/dependabot)
-- chore(deps): bump the ui-security group across 1 directory with 13 updates ([#2073](https://github.com/dagu-org/dagu/pull/2073)) [@dependabot](https://github.com/dependabot)
+- chore(deps): bump the go-patch group across 1 directory with 7 updates ([#2067](https://github.com/dagucloud/dagu/pull/2067)) [@dependabot](https://github.com/dependabot)
+- refactor: remove lodash from ui ([#2069](https://github.com/dagucloud/dagu/pull/2069)) [@yottahmd](https://github.com/yottahmd)
+- chore(deps): bump the ui-patch group across 1 directory with 6 updates ([#2070](https://github.com/dagucloud/dagu/pull/2070)) [@dependabot](https://github.com/dependabot)
+- chore(deps): bump the ui-security group across 1 directory with 13 updates ([#2073](https://github.com/dagucloud/dagu/pull/2073)) [@dependabot](https://github.com/dependabot)
 
 ### Fixed
 
-- fix: dedupe builtin harness flag aliases ([#2071](https://github.com/dagu-org/dagu/pull/2071)) [@yottahmd](https://github.com/yottahmd)
-- fix: preserve literal code fences in template config ([#2072](https://github.com/dagu-org/dagu/pull/2072)) [@yottahmd](https://github.com/yottahmd)
-- fix: stop evaluating step backticks by default ([#2075](https://github.com/dagu-org/dagu/pull/2075)) [@yottahmd](https://github.com/yottahmd)
-- fix: align command condition expansion with shell commands ([#2076](https://github.com/dagu-org/dagu/pull/2076)) [@yottahmd](https://github.com/yottahmd)
-- fix(config): whitelist XDG_STATE_HOME (#2056) ([#2077](https://github.com/dagu-org/dagu/pull/2077)) [@yottahmd](https://github.com/yottahmd)
+- fix: dedupe builtin harness flag aliases ([#2071](https://github.com/dagucloud/dagu/pull/2071)) [@yottahmd](https://github.com/yottahmd)
+- fix: preserve literal code fences in template config ([#2072](https://github.com/dagucloud/dagu/pull/2072)) [@yottahmd](https://github.com/yottahmd)
+- fix: stop evaluating step backticks by default ([#2075](https://github.com/dagucloud/dagu/pull/2075)) [@yottahmd](https://github.com/yottahmd)
+- fix: align command condition expansion with shell commands ([#2076](https://github.com/dagucloud/dagu/pull/2076)) [@yottahmd](https://github.com/yottahmd)
+- fix(config): whitelist XDG_STATE_HOME (#2056) ([#2077](https://github.com/dagucloud/dagu/pull/2077)) [@yottahmd](https://github.com/yottahmd)
 
 ### Contributors
 
@@ -27,37 +27,37 @@ Thanks to our contributors for this release:
 
 | Contribution | Contributor |
 | --- | --- |
-| core: add run-count history retention ([#2053](https://github.com/dagu-org/dagu/pull/2053)) | [@reachyogeshp-afk](https://github.com/reachyogeshp-afk) |
-| Limit dag run history by number of runs ([#1069](https://github.com/dagu-org/dagu/issues/1069)) | [@ghansham](https://github.com/ghansham) (report) |
-| chore(deps): bump the go-patch group across 1 directory with 7 updates ([#2067](https://github.com/dagu-org/dagu/pull/2067)), chore(deps): bump the ui-patch group across 1 directory with 6 updates ([#2070](https://github.com/dagu-org/dagu/pull/2070)), chore(deps): bump the ui-security group across 1 directory with 13 updates ([#2073](https://github.com/dagu-org/dagu/pull/2073)) | [@dependabot](https://github.com/dependabot) |
-| Inconsistent behaviour between commands and preconditions ([#2057](https://github.com/dagu-org/dagu/issues/2057)), Include XDG_STATE_HOME in the default env allow list ([#2056](https://github.com/dagu-org/dagu/issues/2056)) | [@Mice7R](https://github.com/Mice7R) (report) |
+| core: add run-count history retention ([#2053](https://github.com/dagucloud/dagu/pull/2053)) | [@reachyogeshp-afk](https://github.com/reachyogeshp-afk) |
+| Limit dag run history by number of runs ([#1069](https://github.com/dagucloud/dagu/issues/1069)) | [@ghansham](https://github.com/ghansham) (report) |
+| chore(deps): bump the go-patch group across 1 directory with 7 updates ([#2067](https://github.com/dagucloud/dagu/pull/2067)), chore(deps): bump the ui-patch group across 1 directory with 6 updates ([#2070](https://github.com/dagucloud/dagu/pull/2070)), chore(deps): bump the ui-security group across 1 directory with 13 updates ([#2073](https://github.com/dagucloud/dagu/pull/2073)) | [@dependabot](https://github.com/dependabot) |
+| Inconsistent behaviour between commands and preconditions ([#2057](https://github.com/dagucloud/dagu/issues/2057)), Include XDG_STATE_HOME in the default env allow list ([#2056](https://github.com/dagucloud/dagu/issues/2056)) | [@Mice7R](https://github.com/Mice7R) (report) |
 
 
 ## v2.6.2 (2026-04-29)
 
 ### Added
 
-- feat: add approval rewind and push-back history ([#2038](https://github.com/dagu-org/dagu/pull/2038)) [@yottahmd](https://github.com/yottahmd)
-- feat: add schema-backed DAG param forms ([#2039](https://github.com/dagu-org/dagu/pull/2039)) [@yottahmd](https://github.com/yottahmd)
-- feat: add webhook HMAC authentication ([#2045](https://github.com/dagu-org/dagu/pull/2045)) [@yottahmd](https://github.com/yottahmd)
-- feat: forward selected webhook headers to DAG runs ([#2050](https://github.com/dagu-org/dagu/pull/2050)) [@yottahmd](https://github.com/yottahmd)
-- feat: expand DAG examples for template, harness, and custom step types ([#2051](https://github.com/dagu-org/dagu/pull/2051)) [@yottahmd](https://github.com/yottahmd)
-- feat: replace object output with structured step outputs ([#2052](https://github.com/dagu-org/dagu/pull/2052)) [@yottahmd](https://github.com/yottahmd)
+- feat: add approval rewind and push-back history ([#2038](https://github.com/dagucloud/dagu/pull/2038)) [@yottahmd](https://github.com/yottahmd)
+- feat: add schema-backed DAG param forms ([#2039](https://github.com/dagucloud/dagu/pull/2039)) [@yottahmd](https://github.com/yottahmd)
+- feat: add webhook HMAC authentication ([#2045](https://github.com/dagucloud/dagu/pull/2045)) [@yottahmd](https://github.com/yottahmd)
+- feat: forward selected webhook headers to DAG runs ([#2050](https://github.com/dagucloud/dagu/pull/2050)) [@yottahmd](https://github.com/yottahmd)
+- feat: expand DAG examples for template, harness, and custom step types ([#2051](https://github.com/dagucloud/dagu/pull/2051)) [@yottahmd](https://github.com/yottahmd)
+- feat: replace object output with structured step outputs ([#2052](https://github.com/dagucloud/dagu/pull/2052)) [@yottahmd](https://github.com/yottahmd)
 
 ### Changed
 
-- refactor: simplify loader and execution boundaries ([#2034](https://github.com/dagu-org/dagu/pull/2034)) [@yottahmd](https://github.com/yottahmd)
-- refactor: isolate manifest decoding and standardize local transport ([#2035](https://github.com/dagu-org/dagu/pull/2035)) [@yottahmd](https://github.com/yottahmd)
-- Update sponsorship link in README.md ([#2044](https://github.com/dagu-org/dagu/pull/2044)) [@lukasMega](https://github.com/lukasMega)
+- refactor: simplify loader and execution boundaries ([#2034](https://github.com/dagucloud/dagu/pull/2034)) [@yottahmd](https://github.com/yottahmd)
+- refactor: isolate manifest decoding and standardize local transport ([#2035](https://github.com/dagucloud/dagu/pull/2035)) [@yottahmd](https://github.com/yottahmd)
+- Update sponsorship link in README.md ([#2044](https://github.com/dagucloud/dagu/pull/2044)) [@lukasMega](https://github.com/lukasMega)
 
 ### Fixed
 
-- fix: corroborate stale distributed run repair with worker heartbeats ([#2041](https://github.com/dagu-org/dagu/pull/2041)) [@yottahmd](https://github.com/yottahmd)
-- fix: preserve edited schedules across suspension rewrites ([#2043](https://github.com/dagu-org/dagu/pull/2043)) [@yottahmd](https://github.com/yottahmd)
-- sec: harden workflow files against shell injection and over-privileged tokens ([#2046](https://github.com/dagu-org/dagu/pull/2046)) [@krlmlr](https://github.com/krlmlr)
-- fix: harden DAG param validation and artifact inference ([#2049](https://github.com/dagu-org/dagu/pull/2049)) [@yottahmd](https://github.com/yottahmd)
-- fix: suppress success digest bot notifications ([#2054](https://github.com/dagu-org/dagu/pull/2054)) [@yottahmd](https://github.com/yottahmd)
-- fix: refresh structured output examples ([#2055](https://github.com/dagu-org/dagu/pull/2055)) [@yottahmd](https://github.com/yottahmd)
+- fix: corroborate stale distributed run repair with worker heartbeats ([#2041](https://github.com/dagucloud/dagu/pull/2041)) [@yottahmd](https://github.com/yottahmd)
+- fix: preserve edited schedules across suspension rewrites ([#2043](https://github.com/dagucloud/dagu/pull/2043)) [@yottahmd](https://github.com/yottahmd)
+- sec: harden workflow files against shell injection and over-privileged tokens ([#2046](https://github.com/dagucloud/dagu/pull/2046)) [@krlmlr](https://github.com/krlmlr)
+- fix: harden DAG param validation and artifact inference ([#2049](https://github.com/dagucloud/dagu/pull/2049)) [@yottahmd](https://github.com/yottahmd)
+- fix: suppress success digest bot notifications ([#2054](https://github.com/dagucloud/dagu/pull/2054)) [@yottahmd](https://github.com/yottahmd)
+- fix: refresh structured output examples ([#2055](https://github.com/dagucloud/dagu/pull/2055)) [@yottahmd](https://github.com/yottahmd)
 
 ### Contributors
 
@@ -65,53 +65,53 @@ Thanks to our contributors for this release:
 
 | Contribution | Contributor |
 | --- | --- |
-| Feature Request: Add UI Parameter Controls (Radio Buttons & Dropdowns) for Workflow Input ([#2033](https://github.com/dagu-org/dagu/issues/2033)) | [@vit76](https://github.com/vit76) (report) |
-| Unable to stop/cancel running jobs after worker terminated by k8s ([#2040](https://github.com/dagu-org/dagu/issues/2040)) | [@pommetjehorlepiep](https://github.com/pommetjehorlepiep) (report) |
-| modify spec's schedule time but not execute ([#2042](https://github.com/dagu-org/dagu/issues/2042)) | [@zz111111](https://github.com/zz111111) (report) |
-| Update sponsorship link in README.md ([#2044](https://github.com/dagu-org/dagu/pull/2044)) | [@lukasMega](https://github.com/lukasMega) |
-| Native HMAC-SHA256 verification on webhook deliveries ([#2036](https://github.com/dagu-org/dagu/issues/2036)), sec: harden workflow files against shell injection and over-privileged tokens ([#2046](https://github.com/dagu-org/dagu/pull/2046)), Forward selected webhook request headers to triggered DAG runs ([#2037](https://github.com/dagu-org/dagu/issues/2037)) | [@krlmlr](https://github.com/krlmlr) (report) |
+| Feature Request: Add UI Parameter Controls (Radio Buttons & Dropdowns) for Workflow Input ([#2033](https://github.com/dagucloud/dagu/issues/2033)) | [@vit76](https://github.com/vit76) (report) |
+| Unable to stop/cancel running jobs after worker terminated by k8s ([#2040](https://github.com/dagucloud/dagu/issues/2040)) | [@pommetjehorlepiep](https://github.com/pommetjehorlepiep) (report) |
+| modify spec's schedule time but not execute ([#2042](https://github.com/dagucloud/dagu/issues/2042)) | [@zz111111](https://github.com/zz111111) (report) |
+| Update sponsorship link in README.md ([#2044](https://github.com/dagucloud/dagu/pull/2044)) | [@lukasMega](https://github.com/lukasMega) |
+| Native HMAC-SHA256 verification on webhook deliveries ([#2036](https://github.com/dagucloud/dagu/issues/2036)), sec: harden workflow files against shell injection and over-privileged tokens ([#2046](https://github.com/dagucloud/dagu/pull/2046)), Forward selected webhook request headers to triggered DAG runs ([#2037](https://github.com/dagucloud/dagu/issues/2037)) | [@krlmlr](https://github.com/krlmlr) (report) |
 
 ## v2.6.1 (2026-04-23)
 
 ### Fixed
 
-- fix: reduce start-all CPU usage and event-driven SSE ([#2031](https://github.com/dagu-org/dagu/pull/2031)) [@yottahmd](https://github.com/yottahmd)
+- fix: reduce start-all CPU usage and event-driven SSE ([#2031](https://github.com/dagucloud/dagu/pull/2031)) [@yottahmd](https://github.com/yottahmd)
 
 ## v2.6.0 (2026-04-23)
 
 ### Added
 
-- feat: add kubernetes secret provider ([#2006](https://github.com/dagu-org/dagu/pull/2006)) [@yottahmd](https://github.com/yottahmd)
-- feat: add bulk DAG-run deletion in web UI ([#2009](https://github.com/dagu-org/dagu/pull/2009)) [@yottahmd](https://github.com/yottahmd)
-- feat: add edit-and-retry DAG runs ([#2010](https://github.com/dagu-org/dagu/pull/2010)) [@yottahmd](https://github.com/yottahmd)
-- feat: add embedded Dagu API ([#2011](https://github.com/dagu-org/dagu/pull/2011)) [@yottahmd](https://github.com/yottahmd)
-- feat: add workflow design workspace ([#2012](https://github.com/dagu-org/dagu/pull/2012)) [@yottahmd](https://github.com/yottahmd)
-- feat: make DAG labels canonical ([#2013](https://github.com/dagu-org/dagu/pull/2013)) [@yottahmd](https://github.com/yottahmd)
-- feat: make workspace selection global ([#2015](https://github.com/dagu-org/dagu/pull/2015)) [@yottahmd](https://github.com/yottahmd)
-- feat: show cockpit run artifacts ([#2017](https://github.com/dagu-org/dagu/pull/2017)) [@yottahmd](https://github.com/yottahmd)
-- Allow disabling DAG retry policy ([#2018](https://github.com/dagu-org/dagu/pull/2018)) [@yottahmd](https://github.com/yottahmd)
-- feat: add workspace access and global filtering ([#2019](https://github.com/dagu-org/dagu/pull/2019)) [@yottahmd](https://github.com/yottahmd)
-- feat: support template functions in custom step types ([#2020](https://github.com/dagu-org/dagu/pull/2020)) [@yottahmd](https://github.com/yottahmd)
-- feat: add step with config alias ([#2021](https://github.com/dagu-org/dagu/pull/2021)) [@yottahmd](https://github.com/yottahmd)
+- feat: add kubernetes secret provider ([#2006](https://github.com/dagucloud/dagu/pull/2006)) [@yottahmd](https://github.com/yottahmd)
+- feat: add bulk DAG-run deletion in web UI ([#2009](https://github.com/dagucloud/dagu/pull/2009)) [@yottahmd](https://github.com/yottahmd)
+- feat: add edit-and-retry DAG runs ([#2010](https://github.com/dagucloud/dagu/pull/2010)) [@yottahmd](https://github.com/yottahmd)
+- feat: add embedded Dagu API ([#2011](https://github.com/dagucloud/dagu/pull/2011)) [@yottahmd](https://github.com/yottahmd)
+- feat: add workflow design workspace ([#2012](https://github.com/dagucloud/dagu/pull/2012)) [@yottahmd](https://github.com/yottahmd)
+- feat: make DAG labels canonical ([#2013](https://github.com/dagucloud/dagu/pull/2013)) [@yottahmd](https://github.com/yottahmd)
+- feat: make workspace selection global ([#2015](https://github.com/dagucloud/dagu/pull/2015)) [@yottahmd](https://github.com/yottahmd)
+- feat: show cockpit run artifacts ([#2017](https://github.com/dagucloud/dagu/pull/2017)) [@yottahmd](https://github.com/yottahmd)
+- Allow disabling DAG retry policy ([#2018](https://github.com/dagucloud/dagu/pull/2018)) [@yottahmd](https://github.com/yottahmd)
+- feat: add workspace access and global filtering ([#2019](https://github.com/dagucloud/dagu/pull/2019)) [@yottahmd](https://github.com/yottahmd)
+- feat: support template functions in custom step types ([#2020](https://github.com/dagucloud/dagu/pull/2020)) [@yottahmd](https://github.com/yottahmd)
+- feat: add step with config alias ([#2021](https://github.com/dagucloud/dagu/pull/2021)) [@yottahmd](https://github.com/yottahmd)
 
 ### Changed
 
-- ci: run tests on windows-latest ([#1997](https://github.com/dagu-org/dagu/pull/1997)) [@yottahmd](https://github.com/yottahmd)
-- ci: split ubuntu and windows tests by suite ([#2002](https://github.com/dagu-org/dagu/pull/2002)) [@yottahmd](https://github.com/yottahmd)
-- test: reduce fixed waits in slow suites ([#2003](https://github.com/dagu-org/dagu/pull/2003)) [@yottahmd](https://github.com/yottahmd)
-- ci: stop uploading Playwright reports ([#2004](https://github.com/dagu-org/dagu/pull/2004)) [@yottahmd](https://github.com/yottahmd)
-- test: stabilize distributed sub-DAG cancellation test ([#2007](https://github.com/dagu-org/dagu/pull/2007)) [@yottahmd](https://github.com/yottahmd)
-- docs: fix double-negative in comment in internal/runtime/condition.go ([#2026](https://github.com/dagu-org/dagu/pull/2026)) [@kuishou68](https://github.com/kuishou68)
-- refactor(ui): standardize component library usage ([#2030](https://github.com/dagu-org/dagu/pull/2030)) [@yottahmd](https://github.com/yottahmd)
+- ci: run tests on windows-latest ([#1997](https://github.com/dagucloud/dagu/pull/1997)) [@yottahmd](https://github.com/yottahmd)
+- ci: split ubuntu and windows tests by suite ([#2002](https://github.com/dagucloud/dagu/pull/2002)) [@yottahmd](https://github.com/yottahmd)
+- test: reduce fixed waits in slow suites ([#2003](https://github.com/dagucloud/dagu/pull/2003)) [@yottahmd](https://github.com/yottahmd)
+- ci: stop uploading Playwright reports ([#2004](https://github.com/dagucloud/dagu/pull/2004)) [@yottahmd](https://github.com/yottahmd)
+- test: stabilize distributed sub-DAG cancellation test ([#2007](https://github.com/dagucloud/dagu/pull/2007)) [@yottahmd](https://github.com/yottahmd)
+- docs: fix double-negative in comment in internal/runtime/condition.go ([#2026](https://github.com/dagucloud/dagu/pull/2026)) [@kuishou68](https://github.com/kuishou68)
+- refactor(ui): standardize component library usage ([#2030](https://github.com/dagucloud/dagu/pull/2030)) [@yottahmd](https://github.com/yottahmd)
 
 ### Fixed
 
-- fix: allow runtime custom step inputs ([#2005](https://github.com/dagu-org/dagu/pull/2005)) [@yottahmd](https://github.com/yottahmd)
-- fix: align embedded engine run labels ([#2014](https://github.com/dagu-org/dagu/pull/2014)) [@yottahmd](https://github.com/yottahmd)
-- fix: validate sftp executor schema ([#2022](https://github.com/dagu-org/dagu/pull/2022)) [@yottahmd](https://github.com/yottahmd)
-- fix: handle Windows file persistence races ([#2027](https://github.com/dagu-org/dagu/pull/2027)) [@yottahmd](https://github.com/yottahmd)
-- fix: restore DAG status live updates ([#2028](https://github.com/dagu-org/dagu/pull/2028)) [@yottahmd](https://github.com/yottahmd)
-- Fix worker selector for sub-DAG calls ([#2029](https://github.com/dagu-org/dagu/pull/2029)) [@yottahmd](https://github.com/yottahmd)
+- fix: allow runtime custom step inputs ([#2005](https://github.com/dagucloud/dagu/pull/2005)) [@yottahmd](https://github.com/yottahmd)
+- fix: align embedded engine run labels ([#2014](https://github.com/dagucloud/dagu/pull/2014)) [@yottahmd](https://github.com/yottahmd)
+- fix: validate sftp executor schema ([#2022](https://github.com/dagucloud/dagu/pull/2022)) [@yottahmd](https://github.com/yottahmd)
+- fix: handle Windows file persistence races ([#2027](https://github.com/dagucloud/dagu/pull/2027)) [@yottahmd](https://github.com/yottahmd)
+- fix: restore DAG status live updates ([#2028](https://github.com/dagucloud/dagu/pull/2028)) [@yottahmd](https://github.com/yottahmd)
+- Fix worker selector for sub-DAG calls ([#2029](https://github.com/dagucloud/dagu/pull/2029)) [@yottahmd](https://github.com/yottahmd)
 
 ### Contributors
 
@@ -119,48 +119,48 @@ Thanks to our contributors for this release:
 
 | Contribution | Contributor |
 | --- | --- |
-| Allow disabling all kinds of retries for a DAG ([#2016](https://github.com/dagu-org/dagu/issues/2016)) | [@struffel](https://github.com/struffel) (report) |
-| [BUG] - DAG Definitions - type sftp unrecognized ([#1976](https://github.com/dagu-org/dagu/issues/1976)) | [@thimuslux](https://github.com/thimuslux) (report) |
-| docs: fix double-negative in comment in internal/runtime/condition.go ([#2026](https://github.com/dagu-org/dagu/pull/2026)), docs: fix double-negative in comment in internal/runtime/condition.go ([#2025](https://github.com/dagu-org/dagu/issues/2025)) | [@kuishou68](https://github.com/kuishou68) |
-| immediate execution does not respect workerSelector ([#1638](https://github.com/dagu-org/dagu/issues/1638)) | [@scilo7](https://github.com/scilo7) (report) |
+| Allow disabling all kinds of retries for a DAG ([#2016](https://github.com/dagucloud/dagu/issues/2016)) | [@struffel](https://github.com/struffel) (report) |
+| [BUG] - DAG Definitions - type sftp unrecognized ([#1976](https://github.com/dagucloud/dagu/issues/1976)) | [@thimuslux](https://github.com/thimuslux) (report) |
+| docs: fix double-negative in comment in internal/runtime/condition.go ([#2026](https://github.com/dagucloud/dagu/pull/2026)), docs: fix double-negative in comment in internal/runtime/condition.go ([#2025](https://github.com/dagucloud/dagu/issues/2025)) | [@kuishou68](https://github.com/kuishou68) |
+| immediate execution does not respect workerSelector ([#1638](https://github.com/dagucloud/dagu/issues/1638)) | [@scilo7](https://github.com/scilo7) (report) |
 
 ## v2.5.0 (2026-04-12)
 
 ### Added
 
-- feat: add definition page link to DAG run details header ([#1977](https://github.com/dagu-org/dagu/pull/1977)) [@yottahmd](https://github.com/yottahmd)
-- feat: add harness executor for coding agent CLI orchestration ([#1978](https://github.com/dagu-org/dagu/pull/1978)) [@yottahmd](https://github.com/yottahmd)
-- feat: add DAG definition improvement flow from the spec editor ([#1980](https://github.com/dagu-org/dagu/pull/1980)) [@yottahmd](https://github.com/yottahmd)
-- feat(spec): add build-time custom step types ([#1987](https://github.com/dagu-org/dagu/pull/1987)) [@yottahmd](https://github.com/yottahmd)
-- feat(ui): add custom step editor autocomplete ([#1989](https://github.com/dagu-org/dagu/pull/1989)) [@yottahmd](https://github.com/yottahmd)
-- feat(bots): add Discord bot integration ([#1990](https://github.com/dagu-org/dagu/pull/1990)) [@yottahmd](https://github.com/yottahmd)
-- feat(ui): add inherited custom step editor hints ([#1994](https://github.com/dagu-org/dagu/pull/1994)) [@yottahmd](https://github.com/yottahmd)
-- feat: add DAG run artifacts support ([#1998](https://github.com/dagu-org/dagu/pull/1998)) [@yottahmd](https://github.com/yottahmd)
+- feat: add definition page link to DAG run details header ([#1977](https://github.com/dagucloud/dagu/pull/1977)) [@yottahmd](https://github.com/yottahmd)
+- feat: add harness executor for coding agent CLI orchestration ([#1978](https://github.com/dagucloud/dagu/pull/1978)) [@yottahmd](https://github.com/yottahmd)
+- feat: add DAG definition improvement flow from the spec editor ([#1980](https://github.com/dagucloud/dagu/pull/1980)) [@yottahmd](https://github.com/yottahmd)
+- feat(spec): add build-time custom step types ([#1987](https://github.com/dagucloud/dagu/pull/1987)) [@yottahmd](https://github.com/yottahmd)
+- feat(ui): add custom step editor autocomplete ([#1989](https://github.com/dagucloud/dagu/pull/1989)) [@yottahmd](https://github.com/yottahmd)
+- feat(bots): add Discord bot integration ([#1990](https://github.com/dagucloud/dagu/pull/1990)) [@yottahmd](https://github.com/yottahmd)
+- feat(ui): add inherited custom step editor hints ([#1994](https://github.com/dagucloud/dagu/pull/1994)) [@yottahmd](https://github.com/yottahmd)
+- feat: add DAG run artifacts support ([#1998](https://github.com/dagucloud/dagu/pull/1998)) [@yottahmd](https://github.com/yottahmd)
 
 ### Changed
 
-- chore: remove experimental gha (GitHub Actions) executor ([#1983](https://github.com/dagu-org/dagu/pull/1983)) [@yottahmd](https://github.com/yottahmd)
-- chore(deps): bump go-jose and otel to fix Trivy HIGH CVEs ([#1984](https://github.com/dagu-org/dagu/pull/1984)) [@yottahmd](https://github.com/yottahmd)
-- chore: pin GitHub Actions to commit SHAs and update to latest versions ([#1985](https://github.com/dagu-org/dagu/pull/1985)) [@yottahmd](https://github.com/yottahmd)
-- test(e2e): add distributed stack Playwright harness ([#1996](https://github.com/dagu-org/dagu/pull/1996)) [@yottahmd](https://github.com/yottahmd)
+- chore: remove experimental gha (GitHub Actions) executor ([#1983](https://github.com/dagucloud/dagu/pull/1983)) [@yottahmd](https://github.com/yottahmd)
+- chore(deps): bump go-jose and otel to fix Trivy HIGH CVEs ([#1984](https://github.com/dagucloud/dagu/pull/1984)) [@yottahmd](https://github.com/yottahmd)
+- chore: pin GitHub Actions to commit SHAs and update to latest versions ([#1985](https://github.com/dagucloud/dagu/pull/1985)) [@yottahmd](https://github.com/yottahmd)
+- test(e2e): add distributed stack Playwright harness ([#1996](https://github.com/dagucloud/dagu/pull/1996)) [@yottahmd](https://github.com/yottahmd)
 
 ### Fixed
 
-- fix: generate coordinator proto in hybrid mode ([#1970](https://github.com/dagu-org/dagu/pull/1970)) [@yottahmd](https://github.com/yottahmd)
-- fix: improve git sync publish and filtering ([#1971](https://github.com/dagu-org/dagu/pull/1971)) [@yottahmd](https://github.com/yottahmd)
-- fix: make agent chat working state optimistic in web UI ([#1972](https://github.com/dagu-org/dagu/pull/1972)) [@yottahmd](https://github.com/yottahmd)
-- fix: replace time.Sleep with deterministic synchronization in tests ([#1973](https://github.com/dagu-org/dagu/pull/1973)) [@yottahmd](https://github.com/yottahmd)
-- fix: re-fetch auth providers after setup step 1 authentication ([#1974](https://github.com/dagu-org/dagu/pull/1974)) [@yottahmd](https://github.com/yottahmd)
-- fix: return DAG with errors instead of 404 for invalid YAML files ([#1975](https://github.com/dagu-org/dagu/pull/1975)) [@yottahmd](https://github.com/yottahmd)
-- fix: honor inherited DAG type during validation ([#1981](https://github.com/dagu-org/dagu/pull/1981)) [@yottahmd](https://github.com/yottahmd)
-- fix: expire stale pending dispatch reservations ([#1982](https://github.com/dagu-org/dagu/pull/1982)) [@yottahmd](https://github.com/yottahmd)
-- fix: distribute agent snapshots to shared-nothing workers ([#1986](https://github.com/dagu-org/dagu/pull/1986)) [@yottahmd](https://github.com/yottahmd)
-- fix: remove third-party skill installation from embedded AI agent ([#1988](https://github.com/dagu-org/dagu/pull/1988)) [@yottahmd](https://github.com/yottahmd)
-- fix: correct queue counts for distributed runs ([#1992](https://github.com/dagu-org/dagu/pull/1992)) [@yottahmd](https://github.com/yottahmd)
-- fix: route local dag-run stop correctly ([#1993](https://github.com/dagu-org/dagu/pull/1993)) [@yottahmd](https://github.com/yottahmd)
-- fix(config): whitelist common Windows profile env vars (#1991) ([#1995](https://github.com/dagu-org/dagu/pull/1995)) [@yottahmd](https://github.com/yottahmd)
-- fix(agent): add Windows fallback for bash tool ([#1999](https://github.com/dagu-org/dagu/pull/1999)) [@yottahmd](https://github.com/yottahmd)
-- fix(auth): align gated features with current license state ([#2000](https://github.com/dagu-org/dagu/pull/2000)) [@yottahmd](https://github.com/yottahmd)
+- fix: generate coordinator proto in hybrid mode ([#1970](https://github.com/dagucloud/dagu/pull/1970)) [@yottahmd](https://github.com/yottahmd)
+- fix: improve git sync publish and filtering ([#1971](https://github.com/dagucloud/dagu/pull/1971)) [@yottahmd](https://github.com/yottahmd)
+- fix: make agent chat working state optimistic in web UI ([#1972](https://github.com/dagucloud/dagu/pull/1972)) [@yottahmd](https://github.com/yottahmd)
+- fix: replace time.Sleep with deterministic synchronization in tests ([#1973](https://github.com/dagucloud/dagu/pull/1973)) [@yottahmd](https://github.com/yottahmd)
+- fix: re-fetch auth providers after setup step 1 authentication ([#1974](https://github.com/dagucloud/dagu/pull/1974)) [@yottahmd](https://github.com/yottahmd)
+- fix: return DAG with errors instead of 404 for invalid YAML files ([#1975](https://github.com/dagucloud/dagu/pull/1975)) [@yottahmd](https://github.com/yottahmd)
+- fix: honor inherited DAG type during validation ([#1981](https://github.com/dagucloud/dagu/pull/1981)) [@yottahmd](https://github.com/yottahmd)
+- fix: expire stale pending dispatch reservations ([#1982](https://github.com/dagucloud/dagu/pull/1982)) [@yottahmd](https://github.com/yottahmd)
+- fix: distribute agent snapshots to shared-nothing workers ([#1986](https://github.com/dagucloud/dagu/pull/1986)) [@yottahmd](https://github.com/yottahmd)
+- fix: remove third-party skill installation from embedded AI agent ([#1988](https://github.com/dagucloud/dagu/pull/1988)) [@yottahmd](https://github.com/yottahmd)
+- fix: correct queue counts for distributed runs ([#1992](https://github.com/dagucloud/dagu/pull/1992)) [@yottahmd](https://github.com/yottahmd)
+- fix: route local dag-run stop correctly ([#1993](https://github.com/dagucloud/dagu/pull/1993)) [@yottahmd](https://github.com/yottahmd)
+- fix(config): whitelist common Windows profile env vars (#1991) ([#1995](https://github.com/dagucloud/dagu/pull/1995)) [@yottahmd](https://github.com/yottahmd)
+- fix(agent): add Windows fallback for bash tool ([#1999](https://github.com/dagucloud/dagu/pull/1999)) [@yottahmd](https://github.com/yottahmd)
+- fix(auth): align gated features with current license state ([#2000](https://github.com/dagucloud/dagu/pull/2000)) [@yottahmd](https://github.com/yottahmd)
 
 ### Contributors
 
@@ -168,9 +168,9 @@ Thanks to our contributors for this release:
 
 | Contribution | Contributor |
 | --- | --- |
-| Type inheritance for base config still fails validation in v2.4.3 ([#1979](https://github.com/dagu-org/dagu/issues/1979)) | [@bagemt](https://github.com/bagemt) (report) |
-| Bug: some scheduled tasks are queued but not run ([#1837](https://github.com/dagu-org/dagu/issues/1837)) | [@jonasban](https://github.com/jonasban) (report) |
-| Suggestion for Windows: Add more Windows' default environment variables to the whitelist ([#1991](https://github.com/dagu-org/dagu/issues/1991)) | [@ruxo](https://github.com/ruxo) (report) |
+| Type inheritance for base config still fails validation in v2.4.3 ([#1979](https://github.com/dagucloud/dagu/issues/1979)) | [@bagemt](https://github.com/bagemt) (report) |
+| Bug: some scheduled tasks are queued but not run ([#1837](https://github.com/dagucloud/dagu/issues/1837)) | [@jonasban](https://github.com/jonasban) (report) |
+| Suggestion for Windows: Add more Windows' default environment variables to the whitelist ([#1991](https://github.com/dagucloud/dagu/issues/1991)) | [@ruxo](https://github.com/ruxo) (report) |
 
 **Full Changelog**: [v2.4.3...v2.5.0](https://github.com/dagucloud/dagu/compare/v2.4.3...v2.5.0)
 

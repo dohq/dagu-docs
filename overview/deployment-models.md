@@ -2,7 +2,7 @@
 
 Dagu can run as a local single-server process, a self-hosted production server, a managed Dagu Cloud server, or a hybrid deployment. The same workflow YAML can move between these models; the main decision is where the Dagu server runs and where workflow steps execute.
 
-For the visual version on the website, see [Deployment models](https://dagu.cloud/#deployment-models). For commercial plans, see [Pricing](https://dagu.cloud/pricing).
+For the visual version on the website, see [Deployment models](https://dagu.sh/#deployment-models). For commercial plans, see [Pricing](https://dagu.sh/pricing).
 
 ## Terms
 
@@ -19,9 +19,9 @@ For the visual version on the website, see [Deployment models](https://dagu.clou
 |-------|--------------------|--------------------|----------|------------------|
 | **Local single server** | One machine you operate. | On the same machine. | Development, small internal automation, edge devices, or a first production host. | [Quickstart](/getting-started/quickstart), [Installation](/getting-started/installation/) |
 | **Self-hosted** | Your infrastructure, using the open-source Dagu server. | On the server or on workers you operate. | Teams that want Dagu inside their own network and security boundary. | [Deployment](/server-admin/deployment/), [Distributed Execution](/server-admin/distributed/) |
-| **Licensed self-hosted** | Your infrastructure, with a paid self-host license when enterprise features are needed. | On the server or on self-hosted workers. Workers are not licensed separately. | Teams that need enterprise controls such as SSO, RBAC, audit logging, and support while keeping Dagu self-hosted. | [Self-host pricing](https://dagu.cloud/pricing#self-host), [Dagu Pro](https://dagu.cloud/pro) |
-| **Dagu Cloud managed server** | A dedicated managed Dagu server operated by Dagu Cloud in an isolated gVisor instance on GKE. The managed license is included. | Directly in the managed Dagu server when the workflow fits the managed runtime boundary. | Teams that want Dagu as a full managed server instead of operating the server themselves. | [Managed pricing](https://dagu.cloud/pricing#managed), [Dagu Cloud](https://dagu.cloud/cloud) |
-| **Hybrid managed server + hybrid workers** | Dagu Cloud operates the managed Dagu server. | Hybrid workers run inside your infrastructure and connect to the managed server. | Workflows that need managed operations but must execute Docker steps, private-network jobs, custom runtime work, or data-local processing inside your environment. | [Workers](/server-admin/distributed/workers/), [Docker step type](/step-types/docker), [Deployment options](https://dagu.cloud/cloud#deployment-model) |
+| **Licensed self-hosted** | Your infrastructure, with a paid self-host license when enterprise features are needed. | On the server or on self-hosted workers. Workers are not licensed separately. | Teams that need enterprise controls such as SSO, RBAC, audit logging, and support while keeping Dagu self-hosted. | [Self-host pricing](https://dagu.sh/pricing#self-host), [Dagu Pro](https://dagu.sh/pro) |
+| **Dagu Cloud managed server** | A dedicated managed Dagu server operated by Dagu Cloud in an isolated gVisor instance on GKE. The managed license is included. | Directly in the managed Dagu server when the workflow fits the managed runtime boundary. | Teams that want Dagu as a full managed server instead of operating the server themselves. | [Managed pricing](https://dagu.sh/pricing#managed), [Dagu Cloud](https://dagu.sh/cloud) |
+| **Hybrid managed server + hybrid workers** | Dagu Cloud operates the managed Dagu server. | Hybrid workers run inside your infrastructure and connect to the managed server. | Workflows that need managed operations but must execute Docker steps, private-network jobs, custom runtime work, or data-local processing inside your environment. | [Workers](/server-admin/distributed/workers/), [Docker step type](/step-types/docker), [Deployment options](https://dagu.sh/cloud#deployment-model) |
 
 ## Common Topologies
 
@@ -73,10 +73,10 @@ Use this model when you want Dagu Cloud to operate the server but need selected 
 
 ## Pricing and Licensing Links
 
-- [Community self-host](https://dagu.cloud/pricing#self-host): open-source Dagu for self-hosted use.
-- [Paid self-host licenses](https://dagu.cloud/pricing#self-host): enterprise controls for self-hosted Dagu servers.
-- [Managed Dagu Cloud](https://dagu.cloud/pricing#managed): dedicated managed Dagu server with the managed license included.
-- [Contact](https://dagu.cloud/contact): sizing, deployment, or security review questions.
+- [Community self-host](https://dagu.sh/pricing#self-host): open-source Dagu for self-hosted use.
+- [Paid self-host licenses](https://dagu.sh/pricing#self-host): enterprise controls for self-hosted Dagu servers.
+- [Managed Dagu Cloud](https://dagu.sh/pricing#managed): dedicated managed Dagu server with the managed license included.
+- [Contact](https://dagu.sh/contact): sizing, deployment, or security review questions.
 
 For setup details and operating guides, use:
 

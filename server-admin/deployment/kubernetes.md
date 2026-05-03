@@ -45,13 +45,13 @@ The chart does not render:
 Official Helm repository URL:
 
 ```text
-https://dagu-org.github.io/dagu
+https://dagucloud.github.io/dagu
 ```
 
 Add the repository and install the chart:
 
 ```bash
-helm repo add dagu https://dagu-org.github.io/dagu
+helm repo add dagu https://dagucloud.github.io/dagu
 helm repo update
 helm install dagu dagu/dagu --set persistence.storageClass=<your-rwx-storage-class>
 ```
