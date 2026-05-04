@@ -209,7 +209,7 @@ dagu history [flags] [DAG_NAME]
 - `--from` - Start date/time in UTC (formats: `2006-01-02` or `2006-01-02T15:04:05Z`)
 - `--to` - End date/time in UTC (formats: `2006-01-02` or `2006-01-02T15:04:05Z`)
 - `--last` - Relative time period (examples: `7d`, `24h`, `1w`, `30d`). Cannot combine with `--from`/`--to`
-- `--status` - Filter by status: `running`, `succeeded`, `failed`, `aborted`, `queued`, `waiting`, `rejected`, `not_started`, `partially_succeeded`
+- `--status` - Filter by one or more statuses. Use a single status or a comma-separated list with OR logic: `running`, `succeeded`, `failed`, `aborted`, `queued`, `waiting`, `rejected`, `not_started`, `partially_succeeded`
   - Aliases: `success` (succeeded), `failure` (failed), `canceled`/`cancelled`/`cancel` (aborted)
 - `--run-id` - Filter by run ID (partial match supported)
 - `--labels` - Filter by labels, comma-separated with AND logic (e.g., `prod,critical`)
@@ -232,8 +232,8 @@ dagu history
 # Specific DAG runs
 dagu history my-workflow
 
-# Recent failures for debugging
-dagu history my-workflow --status failed --last 7d
+# Recent failures and aborted runs for debugging
+dagu history my-workflow --status failed,aborted --last 7d
 
 # Date range query
 dagu history --from 2026-01-01 --to 2026-01-31
@@ -248,7 +248,7 @@ dagu history --format csv --limit 500 > history.csv
 dagu history --labels "prod,critical"
 
 # Combined filters
-dagu history my-workflow --status failed --last 24h --limit 10
+dagu history my-workflow --status failed,partially_succeeded --last 24h --limit 10
 ```
 
 **Output (table):**
