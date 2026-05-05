@@ -2,7 +2,7 @@
 
 Dagu can run as a local single-server process, a self-hosted production server, a managed Dagu Cloud server, or a hybrid deployment. The same workflow YAML can move between these models; the main decision is where the Dagu server runs and where workflow steps execute.
 
-For the visual version on the website, see [Deployment models](https://dagu.sh/#deployment-models). For commercial plans, see [Pricing](https://dagu.sh/pricing).
+For the visual version on the website, see [Deployment models](https://dagu.sh/oss#deployment-models). For commercial plans, see [Pricing](https://dagu.sh/pricing).
 
 ## Terms
 
