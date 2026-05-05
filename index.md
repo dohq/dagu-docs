@@ -7,8 +7,6 @@ layout: doc
 <div class="tagline" style="text-align: center;">
   <h2>Local-first workflow engine for production scripts</h2>
   <p>Define workflows in simple declarative YAML syntax, execute them anywhere with a single binary, compose complex pipelines from reusable sub-workflows, and distribute tasks across workers.</p>
-  <p>The built-in Web UI eliminates the need to SSH into servers to debug failed runs, check logs, or retry steps manually, while keeping runs, step logs, artifacts, and history visible in one place.</p>
-  <p>No database required. No message broker. No code changes to your existing scripts. Run commands over SSH, Docker containers, Kubernetes jobs, and custom step types for your specific use case.</p>
 </div>
 
 <div class="hero-section">
