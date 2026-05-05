@@ -6,13 +6,13 @@ title: What is Dagu?
   <div class="overview-hero-copy">
     <h2>Local-first workflow engine for production scripts</h2>
     <p>
-      Dagu turns the commands your team already runs into scheduled, observable workflows that are safe to rerun: shell scripts, Python scripts, containers, HTTP tasks, SQL jobs, SSH operations, sub-workflows, and agent-driven steps.
+      Define workflows in simple declarative YAML syntax, execute them anywhere with a single binary, compose complex pipelines from reusable sub-workflows, and distribute tasks across workers.
     </p>
     <p>
-      Define the workflow in plain YAML, run it with one binary, and get the operational layer that cron and ad hoc scripts are missing: dependencies, retries, queues, logs, artifacts, approvals, API/webhooks, and optional distributed workers.
+      The built-in Web UI eliminates the need to SSH into servers to debug failed runs, check logs, or retry steps manually, while keeping runs, step logs, artifacts, and history visible in one place.
     </p>
     <p>
-      No database required. No message broker. No framework rewrite. No platform migration. State is file-backed by default, and a full local server starts with <code>dagu start-all</code>.
+      No database required. No message broker. No code changes to your existing scripts. Run commands over SSH, Docker containers, Kubernetes jobs, and custom step types for your specific use case.
     </p>
     <div class="overview-actions">
       <a href="/getting-started/quickstart" class="overview-button overview-button-primary">Start in minutes</a>
