@@ -252,13 +252,7 @@ Workers automatically register in the service registry system and poll the coord
 ### AI Coding Tool Integration
 
 #### Install Dagu Skill
-Use Dagu's built-in installer:
-
-```bash
-dagu ai install --skills-dir ~/.agents/skills
-```
-
-Or use GitHub CLI's skill installer:
+Use GitHub CLI's skill installer:
 
 ```bash
 gh skill install dagucloud/dagu dagu

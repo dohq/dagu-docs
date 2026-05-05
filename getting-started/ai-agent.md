@@ -78,13 +78,7 @@ steps:
 
 Install the Dagu skill for external AI coding tools (Claude Code, Codex, Gemini CLI, etc.) so they can write correct Dagu DAG files.
 
-Use Dagu's built-in installer:
-
-```bash
-dagu ai install --skills-dir ~/.agents/skills
-```
-
-Or use GitHub CLI's skill installer:
+Use GitHub CLI's skill installer:
 
 ```bash
 gh skill install dagucloud/dagu dagu

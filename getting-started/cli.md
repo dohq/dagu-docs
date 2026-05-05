@@ -698,72 +698,13 @@ dagu sync mv old-dag new-dag --dry-run
 
 AI coding tool integrations.
 
-For external AI coding tools, the fastest path is Dagu's built-in installer:
-
-```bash
-dagu ai install --skills-dir ~/.agents/skills
-```
-
-This copies the bundled skill directly and skips cloning the repository.
-
-If you prefer GitHub CLI's skill installer instead:
+Install the Dagu skill for external AI coding tools with GitHub CLI:
 
 ```bash
 gh skill install dagucloud/dagu dagu
 ```
 
-For details on the upstream installer, run `gh skill install --help`.
-
-#### `ai install`
-
-Built-in installer for environments where you want Dagu itself to copy the skill files into detected AI coding tools. The skill teaches AI tools (Claude Code, Codex, etc.) how to write correct Dagu DAG YAML files — covering executor types, schema, CLI commands, environment variables, and common pitfalls.
-
-The command auto-detects which tools are installed by checking for their configuration files, then copies the skill files into each tool's skill directory.
-
-```bash
-dagu ai install [options]
-```
-
-**Options:**
-- `--yes, -y` - Install to all detected tools without prompting
-- `--skills-dir` - Install only into the specified skills directory. Repeatable. Skips auto-detection when provided.
-
-**Supported tools and detection:**
-
-| Tool | Detection | Install location |
-|------|-----------|-----------------|
-| Claude Code | `~/.claude/.claude.json` exists | `~/.claude/skills/dagu/SKILL.md` |
-| Codex | `$AGENTS_HOME` or `~/.agents` or `$CODEX_HOME` or `~/.codex` directory exists | `<dir>/skills/dagu/SKILL.md` |
-| OpenCode | `~/.config/opencode` directory exists | `~/.config/opencode/skills/dagu/SKILL.md` |
-| Gemini CLI | `~/.gemini/GEMINI.md` exists | `~/.gemini/skills/dagu/SKILL.md` |
-| Copilot CLI | `~/.copilot/config.json` or `$XDG_CONFIG_HOME/.copilot/config.json` exists | `<dir>/copilot-instructions.md` (appended between `<!-- BEGIN DAGU -->` / `<!-- END DAGU -->` markers) |
-
-For skill-based tools, the installer copies a `SKILL.md` file and a `references/` directory containing `cli.md`, `codingagent.md`, `schema.md`, `executors.md`, `env.md`, and `pitfalls.md`. For Copilot CLI, the content is concatenated (without YAML frontmatter) and injected into `copilot-instructions.md` between marker comments. Re-running `dagu ai install` overwrites existing skill files or replaces the marked section.
-
-If you provide one or more `--skills-dir` values, Dagu skips auto-detection and installs only into those skills roots. Each skills directory receives the Dagu skill under `<dir>/dagu/SKILL.md`.
-
-```bash
-# Interactive — prompts for each detected tool
-dagu ai install
-
-# Non-interactive — installs to all detected tools
-dagu ai install --yes
-
-# Explicit — installs only into the specified skills directory
-dagu ai install --skills-dir ~/.agents/skills
-
-# Multiple explicit skills directories
-dagu ai install --skills-dir ~/.agents/skills --skills-dir ~/.config/opencode/skills
-```
-
-**Example output:**
-```
-Found 3 installation target(s)
-
-  Claude Code    ✓ installed ~/.claude/skills/dagu/SKILL.md
-  Codex          ✓ installed ~/.agents/skills/dagu/SKILL.md
-  Gemini CLI     skipped
-```
+For details, run `gh skill install --help`.
 
 ### `migrate`
 
