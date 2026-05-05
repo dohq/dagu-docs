@@ -5,7 +5,7 @@ layout: doc
 <img src="/hero-logo.webp" alt="Dagu" style="display: block; margin: 0 auto; width: 100%">
 
 <div class="tagline" style="text-align: center;">
-  <h2>Run scripts, cron jobs, and runbooks as workflows.</h2>
+  <h2>Local-first workflow engine for production scripts</h2>
   <p>Dagu turns the commands your team already runs into scheduled, observable workflows that are safe to rerun: shell scripts, Python scripts, containers, HTTP tasks, SQL jobs, SSH operations, sub-workflows, and agent-driven steps.</p>
   <p>Define the workflow in plain YAML, run it with one binary, and get the operational layer that cron and ad hoc scripts are missing: dependencies, retries, queues, logs, artifacts, approvals, API/webhooks, and optional distributed workers.</p>
   <p>No database required. No message broker. No framework rewrite. No platform migration. State is file-backed by default, and a full local server starts with <code>dagu start-all</code>.</p>

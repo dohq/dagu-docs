@@ -1,5 +1,48 @@
 # Changelog
 
+## v2.6.5 (2026-05-05)
+
+### Added
+
+- feat: improved the Web UI navigation for cleaner appearance
+
+### Fixed
+
+- fix: require DAG definition for enqueue ([#2084](https://github.com/dagu-org/dagu/pull/2084)) [@yottahmd](https://github.com/yottahmd)
+- fix: allow multiple history status filters ([#2085](https://github.com/dagu-org/dagu/pull/2085)) [@yottahmd](https://github.com/yottahmd)
+- fix: sort suspended DAGs after live next runs ([#2086](https://github.com/dagu-org/dagu/pull/2086)) [@yottahmd](https://github.com/yottahmd)
+
+### Contributors
+
+Thanks to our contributors for this release:
+
+| Contribution | Contributor |
+| --- | --- |
+| `dagu enqueue` shows go panic instead of proper error message when receiving no dag file. ([#2082](https://github.com/dagu-org/dagu/issues/2082)), Allow the `--status` parameter for `dagu history` to accept multiple values ([#2083](https://github.com/dagu-org/dagu/issues/2083)) | [@struffel](https://github.com/struffel) (report) |
+
+## v2.6.4 (2026-05-03)
+
+## Added
+
+- feat: add GitHub dispatch worker and harden agent session flows (#2081) @yottahmd
+
+## Changed
+
+- chore(deps): bump the go-patch group with 2 updates (#2078) @dependabot
+- chore(deps-dev): bump postcss from 8.5.12 to 8.5.13 in /ui in the ui-patch group (#2079) @dependabot
+
+## Fixed
+
+- fix: align precondition env with step execution (#2080) @yottahmd
+
+## Contributors
+
+Thanks to our contributors for this release:
+
+| Contribution | Contributor |
+| --- | --- |
+| chore(deps): bump the go-patch group with 2 updates (#2078), chore(deps-dev): bump postcss from 8.5.12 to 8.5.13 in /ui in the ui-patch group (#2079) | @dependabot |
+
 ## v2.6.3 (2026-05-01)
 
 ### Added

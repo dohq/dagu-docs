@@ -4,7 +4,7 @@ title: What is Dagu?
 
 <div class="overview-hero">
   <div class="overview-hero-copy">
-    <h2>Run scripts, cron jobs, and runbooks as workflows.</h2>
+    <h2>Local-first workflow engine for production scripts</h2>
     <p>
       Dagu turns the commands your team already runs into scheduled, observable workflows that are safe to rerun: shell scripts, Python scripts, containers, HTTP tasks, SQL jobs, SSH operations, sub-workflows, and agent-driven steps.
     </p>
