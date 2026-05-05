@@ -14,34 +14,6 @@ title: What is Dagu?
       <a href="/writing-workflows/examples" class="overview-button overview-button-secondary">Browse examples</a>
     </div>
   </div>
-  <div class="overview-command-card" aria-label="Example Dagu workflow">
-    <div class="overview-command-header">
-      <span>workflow.yaml</span>
-    </div>
-    <div class="overview-code-lines" aria-hidden="true">
-      <span>params:</span>
-      <span>&nbsp;&nbsp;- name: DATE</span>
-      <span>&nbsp;&nbsp;&nbsp;&nbsp;type: string</span>
-      <span>&nbsp;&nbsp;&nbsp;&nbsp;default: "2026-04-18"</span>
-      <span>&nbsp;&nbsp;- name: BUCKET</span>
-      <span>&nbsp;&nbsp;&nbsp;&nbsp;type: string</span>
-      <span>&nbsp;&nbsp;&nbsp;&nbsp;default: "s3://reports"</span>
-      <span></span>
-      <span>steps:</span>
-      <span>&nbsp;&nbsp;- id: extract</span>
-      <span>&nbsp;&nbsp;&nbsp;&nbsp;command: python extract.py --date ${DATE}</span>
-      <span></span>
-      <span>&nbsp;&nbsp;- id: transform</span>
-      <span>&nbsp;&nbsp;&nbsp;&nbsp;command: python transform.py --date ${DATE}</span>
-      <span></span>
-      <span>&nbsp;&nbsp;- id: load</span>
-      <span>&nbsp;&nbsp;&nbsp;&nbsp;type: docker</span>
-      <span>&nbsp;&nbsp;&nbsp;&nbsp;with:</span>
-      <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;image: acme/loader:v1</span>
-      <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;auto_remove: true</span>
-      <span>&nbsp;&nbsp;&nbsp;&nbsp;command: python load.py --bucket ${BUCKET}</span>
-    </div>
-  </div>
 </div>
 
 ## Motivation
