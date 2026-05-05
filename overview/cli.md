@@ -258,10 +258,10 @@ Use Dagu's built-in installer:
 dagu ai install --skills-dir ~/.agents/skills
 ```
 
-Or use the shared `skills` CLI:
+Or use GitHub CLI's skill installer:
 
 ```bash
-npx skills add https://github.com/dagucloud/dagu --skill dagu
+gh skill install dagucloud/dagu dagu
 ```
 
 See [CLI Commands](/getting-started/cli#ai) for more details.

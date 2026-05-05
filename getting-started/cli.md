@@ -706,13 +706,13 @@ dagu ai install --skills-dir ~/.agents/skills
 
 This copies the bundled skill directly and skips cloning the repository.
 
-If you prefer the shared `skills` CLI instead:
+If you prefer GitHub CLI's skill installer instead:
 
 ```bash
-npx skills add https://github.com/dagucloud/dagu --skill dagu
+gh skill install dagucloud/dagu dagu
 ```
 
-For details on the upstream shared installer, see [vercel-labs/skills](https://github.com/vercel-labs/skills).
+For details on the upstream installer, run `gh skill install --help`.
 
 #### `ai install`
 
