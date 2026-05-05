@@ -44,11 +44,6 @@ title: What is Dagu?
   </div>
 </div>
 
-<div class="overview-statement">
-  <strong>Dagu makes existing ops commands easy to inspect, rerun, and manage.</strong>
-  <span>Keep the underlying scripts and commands, define the workflow in YAML, inspect every step in the browser, and rerun or approve operational work without SSHing into servers or chasing crontabs.</span>
-</div>
-
 ## Motivation
 
 Many environments grow into hundreds of cron jobs and shell scripts on large servers. The jobs may be important, but their dependencies are hidden in crontabs, comments, filenames, and operator knowledge. When one job fails, it is hard to know which downstream jobs were affected, which script should be rerun, and where the relevant logs are.
